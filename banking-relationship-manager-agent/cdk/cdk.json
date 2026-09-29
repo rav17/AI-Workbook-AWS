@@ -1,0 +1,8 @@
+{
+  "app": "python app.py",
+  "context": {
+    "environment": "dev",
+    "account": "000000000000",
+    "region": "us-east-1"
+  }
+}

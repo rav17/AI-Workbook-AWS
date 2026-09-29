@@ -1,0 +1,20 @@
+name: aria
+version: "1.0"
+entrypoint: aria.agents.aria.agentcore_entrypoint:main
+system_prompt: aria.agents.aria.system_prompt:build_system_prompt
+runtime:
+  mode: sync
+  timeout_seconds: 30
+  max_turns: 8
+framework:
+  max_context_tokens: 4000
+  max_tool_calls: 8
+  environment: dev
+allowed_tools:
+  - crm_tool
+  - risk_tool
+  - knowledge_tool
+  - escalation_tool
+  - compliance_tool
+  - wallet_tool
+unsafe_fields: []

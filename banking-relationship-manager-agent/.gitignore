@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+.venv311/
+*.egg-info/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# CDK
+cdk.out/
+cdk/.pytest_cache/
+
+# Local Graphify output
+# Keep graphify-out/ only if the repository intentionally versions the graph.
+
+# IDE and OS
+.idea/
+.DS_Store
+Thumbs.db

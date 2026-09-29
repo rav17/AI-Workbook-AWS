@@ -1,0 +1,68 @@
+{
+  "app.py": {
+    "mtime": 1789673124.0395012,
+    "seen": 1789673278.6742358,
+    "ast_hash": "0c48fa4544e12932353388418af252ea",
+    "semantic_hash": ""
+  },
+  "cdk.context.json": {
+    "mtime": 1789673149.9680202,
+    "seen": 1789673278.6742358,
+    "ast_hash": "c443b04d0fc26b0a5a4573a78e0082a1",
+    "semantic_hash": ""
+  },
+  "cdk.json": {
+    "mtime": 1789672979.5743601,
+    "seen": 1789673278.6742358,
+    "ast_hash": "3ac0856c877abcbc15692e61a7aa9a31",
+    "semantic_hash": ""
+  },
+  "cdk.out/AriaStatefulStack.assets.json": {
+    "mtime": 1789673254.623119,
+    "seen": 1789673278.6742358,
+    "ast_hash": "44cab6080de17485a874477ecd84115a",
+    "semantic_hash": ""
+  },
+  "cdk.out/AriaStatefulStack.template.json": {
+    "mtime": 1789673254.6169999,
+    "seen": 1789673278.6742358,
+    "ast_hash": "a92d79a9ade1caabb97cadf9b6d9c20d",
+    "semantic_hash": ""
+  },
+  "cdk.out/manifest.json": {
+    "mtime": 1789673254.6390724,
+    "seen": 1789673278.6742358,
+    "ast_hash": "f802f5a19145f65ce284417d6499dea3",
+    "semantic_hash": ""
+  },
+  "cdk.out/tree.json": {
+    "mtime": 1789673254.6305401,
+    "seen": 1789673278.6742358,
+    "ast_hash": "173f2defc6f47f72507e68e841c4e2f8",
+    "semantic_hash": ""
+  },
+  "stacks/stateful_stack.py": {
+    "mtime": 1789672867.2064652,
+    "seen": 1789673278.6742358,
+    "ast_hash": "124effe5a7a8f94179d5d7d2c2c09309",
+    "semantic_hash": ""
+  },
+  "tests/test_security.py": {
+    "mtime": 1789672867.2094657,
+    "seen": 1789673278.6742358,
+    "ast_hash": "d37c0e1197d1d0b93d85393f55e25e34",
+    "semantic_hash": ""
+  },
+  "requirements-dev.txt": {
+    "mtime": 1789672979.5743601,
+    "seen": 1789673278.6742358,
+    "ast_hash": "a10d9cb43e22fd39d50ecf269cf768fc",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1789672979.5733607,
+    "seen": 1789673278.6742358,
+    "ast_hash": "df6ddd8981793205bb81b0bc3e4d0bdb",
+    "semantic_hash": ""
+  }
+}

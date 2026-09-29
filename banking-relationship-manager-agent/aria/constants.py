@@ -1,0 +1,3 @@
+APP_NAME = "aria"
+DEFAULT_ENVIRONMENT = "dev"
+MAX_TOOL_CALLS = 8

@@ -1,0 +1,14 @@
+name: framework_smoke
+version: "1.0"
+entrypoint: aria.agents.framework_smoke.agentcore_entrypoint:main
+system_prompt: aria.agents.framework_smoke.system_prompt:build_system_prompt
+runtime:
+  mode: sync
+  timeout_seconds: 15
+  max_turns: 2
+framework:
+  max_context_tokens: 1024
+  max_tool_calls: 2
+  environment: dev
+allowed_tools: []
+unsafe_fields: []

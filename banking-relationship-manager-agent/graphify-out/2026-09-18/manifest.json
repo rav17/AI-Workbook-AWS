@@ -1,0 +1,734 @@
+{
+  ".specify/init-options.json": {
+    "mtime": 1789672826.6201463,
+    "seen": 1789673429.2280257,
+    "ast_hash": "0d889e9e42b918b62d08bdb1986b639f",
+    "semantic_hash": ""
+  },
+  ".specify/integration.json": {
+    "mtime": 1789672826.5899892,
+    "seen": 1789673429.2280257,
+    "ast_hash": "bbfab875e956286b5053b706a8c1e56b",
+    "semantic_hash": ""
+  },
+  ".specify/integrations/claude.manifest.json": {
+    "mtime": 1789650283.4240086,
+    "seen": 1789673429.2280257,
+    "ast_hash": "59d067c54ebce4cfdc90b0ea8fe3eea8",
+    "semantic_hash": ""
+  },
+  ".specify/integrations/copilot.manifest.json": {
+    "mtime": 1789650491.8947072,
+    "seen": 1789673429.2280257,
+    "ast_hash": "7b979d1fa92896dd7eb968ffe6c095c6",
+    "semantic_hash": ""
+  },
+  ".specify/integrations/speckit.manifest.json": {
+    "mtime": 1789672826.5844662,
+    "seen": 1789673429.2280257,
+    "ast_hash": "6fbb2cc359837df708fa671f0cb0b753",
+    "semantic_hash": ""
+  },
+  ".specify/scripts/powershell/check-prerequisites.ps1": {
+    "mtime": 1789672826.3063715,
+    "seen": 1789673429.2280257,
+    "ast_hash": "14e6a9d0a49c8dee7276cb697e18d0d4",
+    "semantic_hash": ""
+  },
+  ".specify/scripts/powershell/common.ps1": {
+    "mtime": 1789672826.3273892,
+    "seen": 1789673429.2280257,
+    "ast_hash": "fd09e10201fab5e4181d4ed5012bc511",
+    "semantic_hash": ""
+  },
+  ".specify/scripts/powershell/create-new-feature.ps1": {
+    "mtime": 1789672826.3884227,
+    "seen": 1789673429.2280257,
+    "ast_hash": "93f858f656c4c19f8193d49ad5d2b1a3",
+    "semantic_hash": ""
+  },
+  ".specify/scripts/powershell/resolve-template.ps1": {
+    "mtime": 1789672826.4475923,
+    "seen": 1789673429.2280257,
+    "ast_hash": "645ad018c6297df6e23949ac3e915749",
+    "semantic_hash": ""
+  },
+  ".specify/scripts/powershell/setup-plan.ps1": {
+    "mtime": 1789672826.462114,
+    "seen": 1789673429.2280257,
+    "ast_hash": "d1fb3697610c8aa9ce97e00bcd073ae4",
+    "semantic_hash": ""
+  },
+  ".specify/scripts/powershell/setup-tasks.ps1": {
+    "mtime": 1789672826.4792678,
+    "seen": 1789673429.2280257,
+    "ast_hash": "9aa2f52ce7abece8476845b1f21a0ced",
+    "semantic_hash": ""
+  },
+  ".specify/workflows/workflow-registry.json": {
+    "mtime": 1789650284.0600317,
+    "seen": 1789673429.2280257,
+    "ast_hash": "46b1cf4b1ef1d0b393d00d57d0bdba2a",
+    "semantic_hash": ""
+  },
+  ".vscode/settings.json": {
+    "mtime": 1789672405.1513782,
+    "seen": 1789673429.2280257,
+    "ast_hash": "36001e2c5cb43e989a414c8e253be79a",
+    "semantic_hash": ""
+  },
+  "aria/__init__.py": {
+    "mtime": 1789667089.8173754,
+    "seen": 1789673429.2280257,
+    "ast_hash": "e1acd0ea07da9eaf4f65b69a8f2aa2c2",
+    "semantic_hash": ""
+  },
+  "aria/agent.py": {
+    "mtime": 1789669328.2199445,
+    "seen": 1789673429.2280257,
+    "ast_hash": "cdc4ef6668b1abc1f13b85dc8482d15e",
+    "semantic_hash": ""
+  },
+  "aria/agents/aria/agentcore_entrypoint.py": {
+    "mtime": 1789672197.6906161,
+    "seen": 1789673429.2280257,
+    "ast_hash": "fee6a5ef334fc1fe8358eb0b40f1d8d7",
+    "semantic_hash": ""
+  },
+  "aria/agents/aria/system_prompt.py": {
+    "mtime": 1789672197.6884568,
+    "seen": 1789673429.2280257,
+    "ast_hash": "a7a1db4ba71ba0361579469f43dc6886",
+    "semantic_hash": ""
+  },
+  "aria/agents/framework_smoke/agentcore_entrypoint.py": {
+    "mtime": 1789672248.1011136,
+    "seen": 1789673429.2280257,
+    "ast_hash": "73181196d6f13f1088f22793cd7d3f10",
+    "semantic_hash": ""
+  },
+  "aria/agents/framework_smoke/system_prompt.py": {
+    "mtime": 1789672248.1011136,
+    "seen": 1789673429.2280257,
+    "ast_hash": "2078f82043f70f4107bfbdcf7d1a7556",
+    "semantic_hash": ""
+  },
+  "aria/config.py": {
+    "mtime": 1789667185.498503,
+    "seen": 1789673429.2280257,
+    "ast_hash": "229870ca3740ee57b2cee43f0cc55af4",
+    "semantic_hash": ""
+  },
+  "aria/constants.py": {
+    "mtime": 1789667185.5024996,
+    "seen": 1789673429.2280257,
+    "ast_hash": "38c68c6a3536eec809df3a3f39d5dabb",
+    "semantic_hash": ""
+  },
+  "aria/framework/__init__.py": {
+    "mtime": 1789669543.3804395,
+    "seen": 1789673429.2280257,
+    "ast_hash": "dd321f1e2c3cce5934937bd886273119",
+    "semantic_hash": ""
+  },
+  "aria/framework/config.py": {
+    "mtime": 1789669608.7159474,
+    "seen": 1789673429.2280257,
+    "ast_hash": "7e6df05501ab974c7fe0d5e0f4cbbeb3",
+    "semantic_hash": ""
+  },
+  "aria/framework/context.py": {
+    "mtime": 1789671882.373387,
+    "seen": 1789673429.2280257,
+    "ast_hash": "b22360043458a14aee802ef7cf93d7c7",
+    "semantic_hash": ""
+  },
+  "aria/framework/contracts.py": {
+    "mtime": 1789669584.0958545,
+    "seen": 1789673429.2280257,
+    "ast_hash": "956fbbb5d1dc7c57bfcfc9651abf69b5",
+    "semantic_hash": ""
+  },
+  "aria/framework/gateway.py": {
+    "mtime": 1789669768.3501391,
+    "seen": 1789673429.2280257,
+    "ast_hash": "9587084915728fe9a9923faca41a4af4",
+    "semantic_hash": ""
+  },
+  "aria/framework/memory.py": {
+    "mtime": 1789669666.4853818,
+    "seen": 1789673429.2280257,
+    "ast_hash": "5140e30e676ce1a679741e4664fc82b1",
+    "semantic_hash": ""
+  },
+  "aria/framework/runner.py": {
+    "mtime": 1789671941.133485,
+    "seen": 1789673429.2280257,
+    "ast_hash": "079e1561d5d742cb2bd53f199097f968",
+    "semantic_hash": ""
+  },
+  "aria/guardrails/processor.py": {
+    "mtime": 1789669081.027091,
+    "seen": 1789673429.2280257,
+    "ast_hash": "9bad3b9a6a81b952b62e7af50ae53a39",
+    "semantic_hash": ""
+  },
+  "aria/models/client.py": {
+    "mtime": 1789667185.4994996,
+    "seen": 1789673429.2280257,
+    "ast_hash": "c7003062911ee556134af6c2aec7669b",
+    "semantic_hash": ""
+  },
+  "aria/models/risk.py": {
+    "mtime": 1789667980.1626644,
+    "seen": 1789673429.2280257,
+    "ast_hash": "686a566bde4b030bc1cbc49881d78470",
+    "semantic_hash": ""
+  },
+  "aria/observability.py": {
+    "mtime": 1789672054.1918352,
+    "seen": 1789673429.2280257,
+    "ast_hash": "be5e4955a8f7203bc0b9d725dd769ec9",
+    "semantic_hash": ""
+  },
+  "aria/persistence/__init__.py": {
+    "mtime": 1789672054.194347,
+    "seen": 1789673429.2280257,
+    "ast_hash": "2004162d2f17e7a79373e4b4497aca74",
+    "semantic_hash": ""
+  },
+  "aria/persistence/store.py": {
+    "mtime": 1789672054.194347,
+    "seen": 1789673429.2280257,
+    "ast_hash": "20f128382ea98b517220c231f770e58d",
+    "semantic_hash": ""
+  },
+  "aria/session/manager.py": {
+    "mtime": 1789672054.1903303,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ef242b3d3877a9c0b1e7b052542a0b2c",
+    "semantic_hash": ""
+  },
+  "aria/tools/compliance_tool.py": {
+    "mtime": 1789668415.5811627,
+    "seen": 1789673429.2280257,
+    "ast_hash": "472cbd300756ea67abf619e4f24f2a0e",
+    "semantic_hash": ""
+  },
+  "aria/tools/crm_tool.py": {
+    "mtime": 1789668192.7139704,
+    "seen": 1789673429.2280257,
+    "ast_hash": "bfc4cf8e2ec5e47dc877b11778cfec06",
+    "semantic_hash": ""
+  },
+  "aria/tools/escalation_tool.py": {
+    "mtime": 1789669002.0444977,
+    "seen": 1789673429.2280257,
+    "ast_hash": "525075d2f929423dcd594ddcd71e4991",
+    "semantic_hash": ""
+  },
+  "aria/tools/knowledge_tool.py": {
+    "mtime": 1789668667.5001497,
+    "seen": 1789673429.2280257,
+    "ast_hash": "cb9b52acafa0f47867146500867881af",
+    "semantic_hash": ""
+  },
+  "aria/tools/maturity_tool.py": {
+    "mtime": 1789669247.7407684,
+    "seen": 1789673429.2280257,
+    "ast_hash": "e235c4a740d5fc2f4c8dad69404c2d2f",
+    "semantic_hash": ""
+  },
+  "aria/tools/risk_tool.py": {
+    "mtime": 1789667980.1656919,
+    "seen": 1789673429.2280257,
+    "ast_hash": "f213c57c3fc226a2c0adbf93486c08a0",
+    "semantic_hash": ""
+  },
+  "aria/workflow/dependencies.py": {
+    "mtime": 1789671206.3383844,
+    "seen": 1789673429.2280257,
+    "ast_hash": "3dd161fb2604bc13378ed5b3c8b79d20",
+    "semantic_hash": ""
+  },
+  "aria/workflow/next_step.py": {
+    "mtime": 1789671206.341468,
+    "seen": 1789673429.2280257,
+    "ast_hash": "7e52f44a44572c937cee1b9e47451720",
+    "semantic_hash": ""
+  },
+  "aria/workflow/patch.py": {
+    "mtime": 1789667980.1636646,
+    "seen": 1789673429.2280257,
+    "ast_hash": "58d1f8a66870e685ae4a3fc0c280c52c",
+    "semantic_hash": ""
+  },
+  "aria/workflow/result.py": {
+    "mtime": 1789671762.504147,
+    "seen": 1789673429.2280257,
+    "ast_hash": "f656d865b543dfffdd1b2cfd7c55ec26",
+    "semantic_hash": ""
+  },
+  "aria/workflow/state.py": {
+    "mtime": 1789667980.1636646,
+    "seen": 1789673429.2280257,
+    "ast_hash": "efb160900c452e880b72d6562e5fb4ac",
+    "semantic_hash": ""
+  },
+  "aria/workflow/validator.py": {
+    "mtime": 1789671796.5979843,
+    "seen": 1789673429.2280257,
+    "ast_hash": "71f5ffb65915616cf0b90d0dae89197b",
+    "semantic_hash": ""
+  },
+  "cdk/app.py": {
+    "mtime": 1789673124.0395012,
+    "seen": 1789673429.2280257,
+    "ast_hash": "0c48fa4544e12932353388418af252ea",
+    "semantic_hash": ""
+  },
+  "cdk/cdk.context.json": {
+    "mtime": 1789673149.9680202,
+    "seen": 1789673429.2280257,
+    "ast_hash": "c443b04d0fc26b0a5a4573a78e0082a1",
+    "semantic_hash": ""
+  },
+  "cdk/cdk.json": {
+    "mtime": 1789672979.5743601,
+    "seen": 1789673429.2280257,
+    "ast_hash": "3ac0856c877abcbc15692e61a7aa9a31",
+    "semantic_hash": ""
+  },
+  "cdk/cdk.out/AriaStatefulStack.assets.json": {
+    "mtime": 1789673355.482042,
+    "seen": 1789673429.2280257,
+    "ast_hash": "44cab6080de17485a874477ecd84115a",
+    "semantic_hash": ""
+  },
+  "cdk/cdk.out/AriaStatefulStack.template.json": {
+    "mtime": 1789673355.4720216,
+    "seen": 1789673429.2280257,
+    "ast_hash": "a92d79a9ade1caabb97cadf9b6d9c20d",
+    "semantic_hash": ""
+  },
+  "cdk/cdk.out/manifest.json": {
+    "mtime": 1789673355.5115552,
+    "seen": 1789673429.2280257,
+    "ast_hash": "f802f5a19145f65ce284417d6499dea3",
+    "semantic_hash": ""
+  },
+  "cdk/cdk.out/tree.json": {
+    "mtime": 1789673355.4940693,
+    "seen": 1789673429.2280257,
+    "ast_hash": "173f2defc6f47f72507e68e841c4e2f8",
+    "semantic_hash": ""
+  },
+  "cdk/stacks/stateful_stack.py": {
+    "mtime": 1789673288.2901149,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ebb1477b091cbe9fb1b315150b489f59",
+    "semantic_hash": ""
+  },
+  "cdk/tests/test_security.py": {
+    "mtime": 1789673370.1064217,
+    "seen": 1789673429.2280257,
+    "ast_hash": "d762c0178d9f2d4230986a173ecc4aa1",
+    "semantic_hash": ""
+  },
+  "pyproject.toml": {
+    "mtime": 1789667028.3046572,
+    "seen": 1789673429.2280257,
+    "ast_hash": "2ffaf1de0115447be345d9aa353e9645",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1789666910.7561731,
+    "seen": 1789673429.2280257,
+    "ast_hash": "c0d958675811775e585aaaf0458514de",
+    "semantic_hash": ""
+  },
+  "tests/framework/test_agent_manifest.py": {
+    "mtime": 1789672197.6906161,
+    "seen": 1789673429.2280257,
+    "ast_hash": "9272a28fed9c7106a9c86b6449d9b679",
+    "semantic_hash": ""
+  },
+  "tests/framework/test_context_builder.py": {
+    "mtime": 1789671864.5062351,
+    "seen": 1789673429.2280257,
+    "ast_hash": "54406c1b42f496ac32a318e5bab4dcca",
+    "semantic_hash": ""
+  },
+  "tests/framework/test_framework_contracts.py": {
+    "mtime": 1789669726.4504035,
+    "seen": 1789673429.2280257,
+    "ast_hash": "6b1c8dc7b6681875527d977098667ac1",
+    "semantic_hash": ""
+  },
+  "tests/framework/test_framework_smoke_agent.py": {
+    "mtime": 1789672248.1011136,
+    "seen": 1789673429.2280257,
+    "ast_hash": "0e45fd1bd67efde0d1d4bd1496efced9",
+    "semantic_hash": ""
+  },
+  "tests/framework/test_runner_modes.py": {
+    "mtime": 1789671968.268056,
+    "seen": 1789673429.2280257,
+    "ast_hash": "177e332e3c776c785564c85acc42f61f",
+    "semantic_hash": ""
+  },
+  "tests/framework/test_runtime_and_session.py": {
+    "mtime": 1789669976.5956075,
+    "seen": 1789673429.2280257,
+    "ast_hash": "fc51cc7bfd7e2eea0a0bc35f1ff55079",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_escalation_and_kpi.py": {
+    "mtime": 1789670370.4848256,
+    "seen": 1789673429.2280257,
+    "ast_hash": "4a2c927b0b7386085f990c2a246e2531",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_foundation.py": {
+    "mtime": 1789666910.7561731,
+    "seen": 1789673429.2280257,
+    "ast_hash": "1c00d160d58a27d6be0a5e4e3d16f09e",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_p1_story.py": {
+    "mtime": 1789668125.4768276,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ce784c93f67528dd3b9b9093ed8325e4",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_persistence_and_observability.py": {
+    "mtime": 1789672054.1933403,
+    "seen": 1789673429.2280257,
+    "ast_hash": "19baef91913e5fbe35a9a443c78195c9",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_safety_escalation.py": {
+    "mtime": 1789668996.1574256,
+    "seen": 1789673429.2280257,
+    "ast_hash": "9e0e7c10db76e3033ceb0a6697aa4227",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_service_and_compliance.py": {
+    "mtime": 1789668375.290333,
+    "seen": 1789673429.2280257,
+    "ast_hash": "cae47d389fbf8fa9b4332e9f4e69c819",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_session_manager.py": {
+    "mtime": 1789671034.3642406,
+    "seen": 1789673429.2280257,
+    "ast_hash": "62bfb351ff136d1a2e6ba6e80d9bed40",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_wallet_maturity_recommendations.py": {
+    "mtime": 1789669247.7397432,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ddae68d3bf2b4d1447a78970efc83cb6",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_workflow_dependencies.py": {
+    "mtime": 1789671206.3383844,
+    "seen": 1789673429.2280257,
+    "ast_hash": "e7076b5805cba451da4e58d2408fbda7",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_workflow_result.py": {
+    "mtime": 1789671758.149431,
+    "seen": 1789673429.2280257,
+    "ast_hash": "a6ed9b24c33d189bbbf645857ccf7f0b",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_workflow_risk.py": {
+    "mtime": 1789667697.525468,
+    "seen": 1789673429.2280257,
+    "ast_hash": "a3f404d11814758477a35056ca396053",
+    "semantic_hash": ""
+  },
+  "tests/unit/test_workflow_validation.py": {
+    "mtime": 1789670478.7084632,
+    "seen": 1789673429.2280257,
+    "ast_hash": "da7063a1fad6caba715a3938aacd8ccb",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-analyze/SKILL.md": {
+    "mtime": 1789650282.9846215,
+    "seen": 1789673429.2280257,
+    "ast_hash": "7036a2e7c0c87af1263e4450c224f0e6",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-checklist/SKILL.md": {
+    "mtime": 1789650283.2792838,
+    "seen": 1789673429.2280257,
+    "ast_hash": "715b38afae5f35163d7ce5d8b9a88764",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-clarify/SKILL.md": {
+    "mtime": 1789650283.0343552,
+    "seen": 1789673429.2280257,
+    "ast_hash": "01dbc008b3aa714103b1d2b85e0ffa18",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-constitution/SKILL.md": {
+    "mtime": 1789650283.08435,
+    "seen": 1789673429.2280257,
+    "ast_hash": "544ef3c5e55032415a0a3bc434118715",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-converge/SKILL.md": {
+    "mtime": 1789650283.1845663,
+    "seen": 1789673429.2280257,
+    "ast_hash": "4ffda3010862effbda36bc381bb22f45",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-implement/SKILL.md": {
+    "mtime": 1789650283.133965,
+    "seen": 1789673429.2280257,
+    "ast_hash": "4811c189c62ff5a675605e0c8aecb077",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-plan/SKILL.md": {
+    "mtime": 1789650283.2282195,
+    "seen": 1789673429.2280257,
+    "ast_hash": "61495a6c3d0e7187f2fce361ab5d4e3e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-specify/SKILL.md": {
+    "mtime": 1789650283.321653,
+    "seen": 1789673429.2280257,
+    "ast_hash": "94a0a851520c5db65343f7619407418f",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-tasks/SKILL.md": {
+    "mtime": 1789650283.367196,
+    "seen": 1789673429.2280257,
+    "ast_hash": "b7bc55df060abd52810ad2b5b4c86c77",
+    "semantic_hash": ""
+  },
+  ".claude/skills/speckit-taskstoissues/SKILL.md": {
+    "mtime": 1789650283.4129498,
+    "seen": 1789673429.2280257,
+    "ast_hash": "bfc6999a652bfb804135caa0cefdcb41",
+    "semantic_hash": ""
+  },
+  ".github/copilot-instructions.md": {
+    "mtime": 1789650707.1976678,
+    "seen": 1789673429.2280257,
+    "ast_hash": "f63db1815ab09b52b39158c980f9500a",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-analyze/SKILL.md": {
+    "mtime": 1789650491.389988,
+    "seen": 1789673429.2280257,
+    "ast_hash": "21b3a5f415b273ad9889fae6e7f90359",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-checklist/SKILL.md": {
+    "mtime": 1789650491.6903274,
+    "seen": 1789673429.2280257,
+    "ast_hash": "c88e51b77290e657aed75ea370b148d2",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-clarify/SKILL.md": {
+    "mtime": 1789650491.437263,
+    "seen": 1789673429.2280257,
+    "ast_hash": "b5a1fe315c3983b6a735de5d9f21d502",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-constitution/SKILL.md": {
+    "mtime": 1789650491.4800458,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ab5af80b8ecf7b0f0c072ac100be6de5",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-converge/SKILL.md": {
+    "mtime": 1789650491.579214,
+    "seen": 1789673429.2280257,
+    "ast_hash": "97bcffe5b3c64605a21ec00a84db0525",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-implement/SKILL.md": {
+    "mtime": 1789650491.5291562,
+    "seen": 1789673429.2280257,
+    "ast_hash": "291e745957ada55914bfae880178855b",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-plan/SKILL.md": {
+    "mtime": 1789650491.635279,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ef90182cf3d7c605eed3638da1d2f6ed",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-specify/SKILL.md": {
+    "mtime": 1789650491.732113,
+    "seen": 1789673429.2280257,
+    "ast_hash": "74c4d6d4ecb2b364c29e945e14430a23",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-tasks/SKILL.md": {
+    "mtime": 1789650491.7770061,
+    "seen": 1789673429.2280257,
+    "ast_hash": "4b329e94b0ddfc0196c143e60d010ed7",
+    "semantic_hash": ""
+  },
+  ".github/skills/speckit-taskstoissues/SKILL.md": {
+    "mtime": 1789650491.8209198,
+    "seen": 1789673429.2280257,
+    "ast_hash": "ead7a1c3497c2f2ddef2869bc51ab906",
+    "semantic_hash": ""
+  },
+  ".kiro/specs/ai-relationship-manager/design.md": {
+    "mtime": 1785811957.837516,
+    "seen": 1789673429.2280257,
+    "ast_hash": "5f80983403b70cd4beaeb0d0cbbbee6a",
+    "semantic_hash": ""
+  },
+  ".kiro/specs/ai-relationship-manager/requirements.md": {
+    "mtime": 1785772225.704991,
+    "seen": 1789673429.2280257,
+    "ast_hash": "b1ba1588ad632c5c976ebcc6944bc591",
+    "semantic_hash": ""
+  },
+  ".kiro/specs/ai-relationship-manager/tasks.md": {
+    "mtime": 1785812167.9998305,
+    "seen": 1789673429.2280257,
+    "ast_hash": "758358c940491f402fe6ed7485298d27",
+    "semantic_hash": ""
+  },
+  ".specify/memory/constitution.md": {
+    "mtime": 1789651383.0682015,
+    "seen": 1789673429.2280257,
+    "ast_hash": "b6186754326f85be4c7e09239d044967",
+    "semantic_hash": ""
+  },
+  ".specify/templates/agent-file-template.md": {
+    "mtime": 1775247219.7782094,
+    "seen": 1789673429.2280257,
+    "ast_hash": "b8247a4214e5a2fb2468ad8dcf5fca50",
+    "semantic_hash": ""
+  },
+  ".specify/templates/checklist-template.md": {
+    "mtime": 1789672826.4918003,
+    "seen": 1789673429.2280257,
+    "ast_hash": "5af23404f7e1314e93fab2bcfcfa5c23",
+    "semantic_hash": ""
+  },
+  ".specify/templates/constitution-template.md": {
+    "mtime": 1789672826.5037537,
+    "seen": 1789673429.2280257,
+    "ast_hash": "dcefb6b60e7cb3db2e966977b6f02f18",
+    "semantic_hash": ""
+  },
+  ".specify/templates/plan-template.md": {
+    "mtime": 1789672826.5132754,
+    "seen": 1789673429.2280257,
+    "ast_hash": "311db0670c3d19d2f5b781de97529b79",
+    "semantic_hash": ""
+  },
+  ".specify/templates/spec-template.md": {
+    "mtime": 1789672826.5252826,
+    "seen": 1789673429.2280257,
+    "ast_hash": "45ac8538bc1220324c9f0d610145b53f",
+    "semantic_hash": ""
+  },
+  ".specify/templates/tasks-template.md": {
+    "mtime": 1789672826.536487,
+    "seen": 1789673429.2280257,
+    "ast_hash": "f8b4f62d384defa0a559bdbbaacb0540",
+    "semantic_hash": ""
+  },
+  ".specify/workflows/speckit/workflow.yml": {
+    "mtime": 1789650168.869853,
+    "seen": 1789673429.2280257,
+    "ast_hash": "e85bd795c8a1bad1168a223eec732604",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1789650707.1971524,
+    "seen": 1789673429.2280257,
+    "ast_hash": "44271652289bf14cd85730226b92d57b",
+    "semantic_hash": ""
+  },
+  "aria/agents/aria/agent.yaml": {
+    "mtime": 1789672197.6874545,
+    "seen": 1789673429.2280257,
+    "ast_hash": "2208caa060972beb7a68a6b37ec5f5c5",
+    "semantic_hash": ""
+  },
+  "aria/agents/framework_smoke/agent.yaml": {
+    "mtime": 1789672248.1011136,
+    "seen": 1789673429.2280257,
+    "ast_hash": "dde1a866a200c7f2ffc7a01beb82e8ec",
+    "semantic_hash": ""
+  },
+  "cdk/requirements-dev.txt": {
+    "mtime": 1789672979.5743601,
+    "seen": 1789673429.2280257,
+    "ast_hash": "a10d9cb43e22fd39d50ecf269cf768fc",
+    "semantic_hash": ""
+  },
+  "cdk/requirements.txt": {
+    "mtime": 1789672979.5733607,
+    "seen": 1789673429.2280257,
+    "ast_hash": "df6ddd8981793205bb81b0bc3e4d0bdb",
+    "semantic_hash": ""
+  },
+  "docs/agent-framework.md": {
+    "mtime": 1789672248.1011136,
+    "seen": 1789673429.2280257,
+    "ast_hash": "8319ff71d59c0b74d0deb399718b2425",
+    "semantic_hash": ""
+  },
+  "docs/infrastructure.md": {
+    "mtime": 1789673226.9801376,
+    "seen": 1789673429.2280257,
+    "ast_hash": "2b7c8c9b1147576d82149c71806dcc37",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/checklists/requirements.md": {
+    "mtime": 1789652385.8697007,
+    "seen": 1789673429.2280257,
+    "ast_hash": "44bd62cd498b9cf7aee1477e743d757d",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/data-model.md": {
+    "mtime": 1789652385.866704,
+    "seen": 1789673429.2280257,
+    "ast_hash": "34ba3a864677f8433e5005ecf325699b",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/plan.md": {
+    "mtime": 1789652385.8657012,
+    "seen": 1789673429.2280257,
+    "ast_hash": "eea7a9e1f251df29b20613756c12637b",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/quickstart.md": {
+    "mtime": 1789652385.8677044,
+    "seen": 1789673429.2280257,
+    "ast_hash": "76aa0c137196d1c58ca47876620e3a5a",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/research.md": {
+    "mtime": 1789652049.1590433,
+    "seen": 1789673429.2280257,
+    "ast_hash": "1e05b5d05957ff30199d839635c18c1a",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/spec.md": {
+    "mtime": 1789652049.1580212,
+    "seen": 1789673429.2280257,
+    "ast_hash": "3481044d40bd7eb7f4e62426df07c500",
+    "semantic_hash": ""
+  },
+  "specs/001-ai-relationship-manager/tasks.md": {
+    "mtime": 1789673226.9801376,
+    "seen": 1789673429.2280257,
+    "ast_hash": "2cff3e2289b55d2dad6a94f72e768aee",
+    "semantic_hash": ""
+  }
+}
