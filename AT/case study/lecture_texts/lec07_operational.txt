@@ -1,0 +1,1362 @@
+Operational Aspect
+Version 7
+
+---PAGE---
+
+Module outline
+→ Introduction and objectives
+↘ What is Operational Modeling (OM) and why do we need it?
+↘ How does OM evolve and how is it represented?
+↘ Constructing an Operational Model
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+2
+
+---PAGE---
+
+Learning Objective
+At the end of this module, you should be able to:
+• Understand and explain the:
+• Purpose of the operational aspect of architecture
+• Key concepts and artifacts of the operational aspect
+• Relationships between the functional aspect and the operational aspect
+• Techniques for creating Operational Models from organized sets of requirements
+• Assist an experienced Architect in constructing and documenting the Operational Model
+• Review an existing Operational Model document for completeness
+IBM Confidential © IBM Corporation 2025
+3
+
+---PAGE---
+
+Module outline
+↗ Introduction and objectives
+→ What is Operational Modeling (OM) and why do we need it?
+↘ How does OM evolve and how is it represented?
+↘ Constructing an Operational Model
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+4
+
+---PAGE---
+
+The Operational aspect is one of the two complementary aspects of architecture
+• The Functional aspect of Architecture <- Previous • The Operational aspect of Architecture <- This Module
+• Describes what runs where (component placement).
+Module
+• ...and includes the network topology (hardware nodes,
+• Describe the structure of components (of all kinds) related to
+locations, etc.),
+actual functionality,
+• It ensures the achievement of the solution's service level
+• ...their dynamic behavior (collaboration),
+characteristics (performance, availability),
+• ...and their interfaces.
+• ...and describes the management and operation of the IT
+• Embodied in the Component Model work product
+system.
+• Embodied in the Operational Model work product
+IBM Confidential © IBM Corporation 2025
+5
+
+---PAGE---
+
+Functional systems must be deployed operationally - either using new or
+an existing infrastructure/cloud services
+The design of a system’s operational aspect may be challenging to develop or understand.
+Many competing concerns must be resolved:
+• NFR's: for example, performance, availability, manageability, security
+• Constraints: for example, affordability, standards compliance, existing Infrastructure
+Multiple activities must be coordinated:
+• Detailed design: capacity planning, software and data distribution, network, hardware, service management
+• Commercial: planning, pricing, procurement, service level agreement
+The design of a system’s operational aspect may be challenging to develop or understand.
+IBM Confidential © IBM Corporation 2025
+6
+
+---PAGE---
+
+Operational Modeling helps ensure the system’s non-functional (NFR)
+requirements are delivered, within all constraints
+System Requirements System Architecture System Constraints
+UC-SEC-02 Logoff
+HBA User
+UC-SEC-01
+Logon
+UC-ACCNT-01 Manage Accounts
+What do we have to do? What is the current environment?
+How is the application
+(Use Case Model) (Current IT)
+structured?
+What is our approach?
+(Component Model & Data
+AA__OOffff--lliinnee
+CCuussttoommeerr
+✓Customer registration
+✓Customer order creation
+AA CC __ uu OO sstt nn oo ✓ ✓ -- mm ll r h C C ii e a nn u u ee g n s s i ee s d rr t t o o t l r i m mn a g te e ior r n order ✓ ✓ ✓ ✓ ✓ h C C S P D a h a u u e n o y s s li d m v p t t o ol e p i e m mn r i n y n g e e t g d r r d e l r o i e e s t r a t t g d a s il i e i s s ls r t ration ✓ &u P p rco dad atu tae clsot g ✓ ✓ ✓ ✓ C S P D h a u e o y s li m v p to e p e m r i n y n e t g d r d e l o i e s t r a t t d a s il e i s ls r handling CCee AA nntt __ rree CCaa RR llll ee pp.. (Architecture Overview) Model)
+✓Shopping lists
+✓Order exceptions ✓ ✓ P D a e y li m ve e r n y t d d e e ta ta il i s ls Ho A m m S e G y O r s o r t - d e f m e ro r m M - gt ✓eOxrcdeepr tions AA SS __ yy EE ss -- tt mm eemm aaiill
+AA ✓ ✓ O S __ u r WW d b e m r aa i s tt t rr e a ee d tu hh o s r oo de uu rs ssee ✓ ✓ ✓a O A Dr m e r r d ali e e vn n r eg s d rey m m e e n n t t s s ✓uPproddautecst ✓aCurethdoitr isations ✓ar C eur q ethu doe itrs istsation
+MMggtt SSyysstteemm AA__CCrreeddiitt
+AA FF __ uu nn llff oo iill nn llmm --ff ee oo nn oo tt dd AA__PPrroodduucctt ✓MApapinlitceantaionnc e ✓uCpadtaaltoegsue ✓dSaatlaes AAggeennccyy
+SSyysstteemm AA__AApppplliicc’’nn AA__CC SSyy aa ss ttaa ttee lloo mm gguuee AA__ SS MM yyss gg tt tt ee II mm nnffoo
+AAddmmiinniissttrraattoorr
+What other constraints are there?
+How do we fit in?
+(Standards)
+(System Context)
+Where does everything go?
+How good does it have to be? What experience do we have?
+(Operational Model)
+(NFR Requirements) (Reference Models)
+Designing for Performance and Capacity Designing for Security
+Assessing Viability
+Designing for Availability Designing for System management
+IBM Confidential © IBM Corporation 2025
+7
+Users
+Customer
+Service Representative
+Internal User
+Business Partner
+Delivery Channels
+Pervasive/ Wireless Devices
+Internet Browser
+Intranet Browser
+Internet or Extranet Browser
+e-business Services
+Registration Function
+Authentication and Authorization Function
+Enterprise Inquiry Function
+Enterprise Update Function Enterprise Reporting Function
+Messaging & Collaboration Function
+Enterprise Administration Function
+Resources
+Directory Systems
+Legacy Applications
+Database(s)
+System Monitoring
+Customer Relationshup management
+External Enterprise System
+<<component>>
+DialogueControl
+<<component>> <<component>>
+SecurityProcessingAccountProcessing
+<<component>>
+AccountMgr
+<<component>> <<component>>
+RelationalDBMS ApplicationServer <<component>>
+SecurityMgr
+Client Node
+External Systems Node
+Internet Protocol
+Firewall
+Node
+Edge
+Server Node
+RED ZONE
+Transcoder Node
+Reverse Proxy Node
+Network Intrusion Detection Node
+Domain
+Firewall
+Node
+YELLOW ZONE
+Content Directory and Management Security Node Node
+Personalization Node
+Application Integration Server Hub Node Node
+Web Portal Node
+Enterprise
+Firewall
+Node
+GREEN ZONE
+Database Server Node
+Enterprise Systems Node
+
+---PAGE---
+
+Operational Model Question
+Time for a question
+Select the correct statement from the following:
+A. The Operational Model focuses on the structure of the solution by identifying components and their collaborations.
+B. Service level requirements are delivered through the deployment of the components identified in the Operational Model.
+C. The Operational Model describes how components are supported to meet the service level requirements.
+D. The Operational Model is used as input when building the Location Model and the Node Model.
+IBM Confidential © IBM Corporation 2025
+8
+
+---PAGE---
+
+Module outline
+↗ Introduction and objectives
+↗ What is Operational Modeling (OM) and why do we need it?
+→ How does OM evolve and how is it represented?
+↘ Constructing an Operational Model
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+9
+
+---PAGE---
+
+The Operational Modelling technique consists of multiple steps
+1. Understand the non-functional requirements
+1M transactions per hour
+What NFRs need to bet met?
+Finance A
+p
+p
+l
+2. Conceptualize from an application perspective (ALOM): i
+c
+Warehouse Management a
+t
+Identify application level nodes and their placement. i
+o
+n
+Note: Application Logical Operational Model (ALOM) is not discussed in this lecture – see the
+Customer Relationship
+Operational Modelling class for details on ALOM.
+ESB
+Load balancer L
+o
+g
+i
+3. Conceptualize the Logical Operational Model (LOM): c
+a
+Database l
+• Determine where all of the logical application components are deployed.
+• Determine what logical technical components are required and where they will be deployed to
+support the logical application components
+SAP
+P
+r
+Message Broker
+e
+s
+c
+4. Transform into the Prescribed Operational Model (POM):
+r
+i
+b
+F5 BIG-IP LTM-4200v
+Determine real technologies to deliver all of these specifications. e
+d
+DB2
+IBM Confidential © IBM Corporation 2025
+10
+
+---PAGE---
+
+To achieve this goal, we need a structured, formal language to describe the
+elements featured on the Operational Model
+The Operational Model represents the system’s “infrastructure architecture” using a variety of model elements, including:
+• The geographic structure of the locations and their borders, over which the IT system will be deployed and operated
+• The placement of the system’s nodes into these locations
+• The deployment of the system’s components across these nodes, using deployment units
+• The connections between nodes
+• The organization of the system’s elements into zones
+In addition to this description of the deployed system, the OM also documents:
+• The overall prescribed configuration of the technologies and products necessary to deliver the functional and nonfunctional requirements of the IT system
+• Sizing and other hardware specifications for all the computers, storage devices, and network technologies
+IBM Confidential © IBM Corporation 2025
+11
+
+---PAGE---
+
+Operational Modeling (OM) notation used throughout this lecture and upcoming
+exercise
+Actors & Infrastructure Connections
+Type Logical Example Prescribed Example
+Location LL_Office PL_IBM Bolumbia Head
+Office
+Node LN_Mobile Workstation PN_Apple Laptop
+Human Actor
+A_Office Worker
+System Actor
+A_Respondent PC
+IBM Confidential © IBM Corporation 2025
+12
+N o p e r m i t t e d c o n n e c t i o n
+External intermittent connection
+External high speed connection
+I n t e r n a l h i g h s p e e d c o n n e c t i o n
+Capital letter = Master copy and
+Cloud
+Deployment Units
+lower case = copy
+Type Example Type Short ID Long ID
+U_<X> U_Name
+Presentation
+On-premises IaaS (Infrastructure) SaaSH Hosted
+Offering
+E_<X> E_Name
+Execution
+SaaSM (Software) Managed External/Web Resource
+I_<X> I_Name
+Installation
+SS - Standard Service Level Agreement(s)
+Support
+CS – Custom Service Level Agreement(s) D/d_<X> D_Name
+Data
+TE_<X> TE_Name
+Data E – Encrypted, NE – Non-Encrypted, AU - Audited, AR – Archiving Required Technical
+
+---PAGE---
+
+Operational Model inter-dependencies with other artefacts
+<<component>>
+DialogueControl
+<<component>> <<component>> SecurityProcessinAgccountProcessing
+<<component>> AccountMgr
+<<component>> <<component>>
+RelationalDBMS ApplicationServer <<component>> SecurityMgr
+Component Model AOD, FRs, NFR's, constraints
+2
+What do we need to deploy?
+(Deployment Unit Model)
+These contained artifacts give us a way of “building up” the
+Operational Model
+IBM Confidential © IBM Corporation 2025
+13
+Client Node
+External Systems Node
+Internet Protocol Firewall Node Edge Server Node
+RED ZONE
+Transcoder Node Reverse Proxy Node
+Network Intrusion Detection Node
+Domain Firewall Node
+YELLOW ZONE
+Content Directory and Management Security Node Node
+Personalization Node Application Integration Server Hub Node Node Web Portal Node Enterprise Firewall Node
+GREEN ZONE
+Database Server Node
+Enterprise Systems Node
+Where does everything go?
+(Operational Model)
+A
+L
+A
+L _ O f f ic e
+_ O f f ic e W
+L L _ R e m o
+_ T r a v e lle
+L L _ S e c u r
+L
+( 3 0
+o r k e
+t e (
+r
+e ( 1
+N _ S
+E _ w o
+0
+r
+2
+0
+e
+rd
+K )
+L N _ M o b ile (cid:9)
+W o r k s t a t io n
+U _ o fflin e
+d _ c o rp o ra te _ d o c _ te m p la te s
+E _ w o rd _ p ro c e s s o r
+0 0 K )
+L N _ H a n d (cid:9)H e ld (cid:9) D e v ic e
+U _ o fflin e E _ w o rd _ p ro c e s s o r
+L N _ N o t e b o o k
+U _ o n lin e
+G r e e n (cid:9)Z o 0 )
+c u r e (cid:9)D e s k t o p U _ o fflin e
+_ p ro c e s s o r I_ w o rd _ p ro c e s s o
+n
+r
+e
+L L _
+L
+L
+L
+L
+L
+L L _
+L N
+C lo u d ( 1 . . n )
+N _ S h a r e d (cid:9)S t o r a g e
+D _ c o rp o ra te _ d o c _ te m p la te s
+N _ I d e n t it y (cid:9)M a n a g e m
+D _ u s e r_ p ro file
+N _ A p p lic a t io n (cid:9)M a n a
+I_ w o rd _ p ro c e s s o r
+N _ W o r d (cid:9)P r o c e s s in g U _ E _ w o rd _ p ro c e s s o r
+N _ S e c u r e (cid:9)S h a r e d (cid:9)S t o
+D _ s e n s itiv e _ c lie n t_ d o c _ te m p a
+S e c u r e D M Z (cid:9)( 1 )
+_ G a t e w a y
+T E _ a c c e s s
+e n
+g e m
+o n lin e
+r a g
+lte s
+_ m a n
+t
+e
+a
+e
+g e
+n
+m
+t
+e n
+TS
+TS
+TS
+TS
+TC
+t
+yS
+yS
+yS
+yS
+yS
+p
+p
+p
+p
+p,
+e
+e
+e
+e
+e(cid:9)E
+S
+S
+S
+S
+S
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+S
+S
+S
+S
+S
+M
+M
+M
+M
+M
+Based on the Component Model
+3
+1
+Where should we deploy things?
+Where can we put things?
+(Node Model)
+(Location Model)
+
+---PAGE---
+
+Logical Location
+LL_Office (5) LL_Cloud (1..n)
+LL_Remote (10M)
+LL_Secure (300) LL_Secure DMZ (1)
+IBM Confidential © IBM Corporation 2025
+14
+
+---PAGE---
+
+Deployment Units represent all the bits required to bring an application component
+to life within the operational model
+Entry point used by actors to access a components functionality e.g. live web
+Presentation
+interface.
+Data The data used by components e.g. user profile.
+The runtime execution aspect of a component e.g. 3 instances of a word
+Execution
+processor running in 3 different user accounts on the same mobile workstation.
+Installation Files required to install the component e.g. executable, configuration and data.
+IBM Confidential © IBM Corporation 2025
+15
+
+---PAGE---
+
+Logical Deployment Units
+List deployment units for each component
+Component Presentation Deployment Unit Data Execution
+(from the CM) Deployment Unit Deployment Unit
+E_Update_CRM_ Data
+Customer Relationship Management U_CRM D_CRM_Data
+E_Consult_CRM_Data
+U_SMS E_Submit_Inv_Update
+Stock Management D_Inventory_Upd
+U_Inventory E_Consolidate_Inv_Update
+DUs need to be described regarding their non-functional requirements which determine their placement and grouping.
+PresentationDU Actor IT Skill level Location Frequency Type
+U_Inventory A_Inventory_Check Can be trained Mobile N/A N/A
+U_SMS A_SMS N/A N/A Weekly Batch
+Data DU Scope Volatility Size Lifetime Master or Copy
+D_inventory Store High Small <= 1 day N/A
+D_Cat Entire product range Low Large Long lived M
+Execution DU Frequency Processing Load
+E_Submit_Inv_Update Daily (once for every store) Light
+E_Consolidate Daily Heavy
+IBM Confidential © IBM Corporation 2025
+16
+
+---PAGE---
+
+Logical Node Model
+LN_Mobile Workstation LN_Shared Storage Type
+SS
+LN_Identity Management Type
+A_Office Worker SS
+LN_Application Management Type
+SS
+LN_Hand Held Device
+LN_Word Processing Type
+SS
+LN_Secure Shared Storage Type
+LN_Notebook
+A_Traveller SS
+LN_Secure Desktop
+LN_Gateway
+A_Security SME
+IBM Confidential © IBM Corporation 2025
+17
+
+---PAGE---
+
+We decide where the Deployment Units WILL go Following One of Two Paths
+Path 1 using an asset where DU’s are associated with a predefined node model and
+nodes are deployed into their locations. We will use this approach for the worked
+example.
+What do we need to deploy?
+(Deployment Unit Model)
+Path 2 forward engineered where DU’s are
+placed into locations where they are accessed
+by Actors
+Iterate!
+Where should we deploy things?
+(Node Model)
+Path 2 nodes are formed at locations that
+contain DU’s
+IBM Confidential © IBM Corporation 2025
+Where can we put things?
+18
+(Location Model)
+
+---PAGE---
+
+Logical Operational Model - shows the static relationships between nodes, DUs,
+connections and interactions on a geographic background
+LL_Office (300K) LL_Cloud (1..n)
+LN_Mobile Workstation
+LN_Shared Storage Type
+U_offline
+SS
+D_corporate_doc_templates
+A_Office Worker
+d_corporate_doc_templates
+LN_Identity Management Type
+SS
+E_word_processor
+D_user_profile
+LN_Application Management Type
+SS
+I_word_processor
+LL_Remote (200K)
+LN_Hand Held Device
+LN_Word Processing Type
+U_offline
+SS
+E_word_processor
+E_word_processor
+LN_Secure Shared Storage Type
+LN_Notebook
+A_Traveller
+SS
+U_online D_sensitive_client_doc_templates
+LL_Secure (100) LL_Secure DMZ (1)
+LN_Secure Desktop
+LN_Gateway
+I_word_processor U_offline
+E_access_management
+Green
+E_word_processor
+Zone
+A_Security SME
+IBM Confidential © IBM Corporation 2025
+19
+
+---PAGE---
+
+The Operational Modelling technique consists of multiple steps
+1. Understand the non-functional requirements
+1M transactions per hour
+What NFRs need to bet met?
+Finance A
+p
+p
+l
+2. Conceptualize from an application perspective (ALOM): i
+c
+Warehouse Management a
+t
+Identify application level nodes and their placement. i
+o
+n
+Note: Application Logical Operational Model (ALOM) is not discussed in this lecture – see the
+Customer Relationship
+Operational Modelling class for details on ALOM.
+ESB
+Load balancer L
+o
+g
+i
+3. Conceptualize the Logical Operational Model (LOM): c
+a
+Database l
+• Determine where all of the logical application components are deployed.
+• Determine what logical technical components are required and where they will be deployed to
+support the logical application components
+SAP
+P
+r
+Message Broker e
+s
+c
+4. Transform into the Prescribed Operational Model (POM): r
+i
+b
+F5 BIG-IP LTM-4200v e
+Determine real technologies to deliver all of these specifications.
+d
+DB2
+IBM Confidential © IBM Corporation 2025
+20
+
+---PAGE---
+
+The LOM documents the placement and interaction of the application’s DUs
+onto nodes distributed across the system’s locations
+Identifying potential locations and nodes where deployment units might end up being placed, and establishing where the system’s actors will be located
+Placing deployment units onto application logical nodes in locations, based on a variety of considerations such as service management
+• Presentation DUs
+• Data DUs
+• Execution DUs
+• Installation DUs
+We derive connections from the relationships (interactions) between deployment units (Confirming the design using architecturally significant walk-
+throughs)
+IBM Confidential © IBM Corporation 2025
+21
+
+---PAGE---
+
+Step 1: The overall structure of the LOM is largely based on the locations
+over which the solution will be deployed.
+The location is based on the information found in:
+• Business Roles & Locations
+• System Context Diagram
+• Current IT Environment
+Translated to locations
+Regions and HQ Stores within Regions On the Operational Model diagram
+IBM Confidential © IBM Corporation 2025
+22
+
+---PAGE---
+
+Step 2: Then identify Candidate Logical Nodes
+System Context
+Key Questions to ask for node discovery
+Use Cases
+• Is there different functionality or
+placement across locations?
+NFRs
+• Are applications accessed by actors in
+different locations?
+Component Model
+• Are there groups of applications with
+different NFRs/SLAs?
+Input
+These are NOT logical nodes
+Hardware devices e.g. routers
+Named hardware products
+LANs and WANs
+Output
+IBM Confidential © IBM Corporation 2025
+23
+
+---PAGE---
+
+Step 3: We have to understand what it is we need to deploy, via the
+DEPLOYMENT UNIT Model
+DUs give us a mechanism for: The nonfunctional requirements of the component’s interactions are
+• Understanding the nonfunctional requirements placed described in terms of DU – DU relationships.
+on the system’s components
+• Deciding where best to place the various aspects of the system’s components
+Typical relationships analyzed include:
+• Tracing the system’s requirements to its design
+• Presentation Execution
+• Execution Execution
+• Execution Data
+• Presentation Data
+Nature of Actor using Location Required Concurrent
+Presentation
+Actors Component
+Access Access Point Hours Active
+Deployment Unit:
+Point
+Execution
+Txn Usage Number 95% response time
+Execution
+n
+o Type ‘Window’ per user
+i t Deployment Unit:
+a
+t
+Users n
+e
+s
+e
+r
+P
+Size Release Frequency
+Installation
+Installation
+Deployment Unit:
+Data
+Systems
+Data Unit/ Number Volatility Currency
+Data
+Type record records
+Deployment Unit:
+Size
+IBM Confidential © IBM Corporation 2025
+24
+
+---PAGE---
+
+Question - Standards
+Time for a Question
+The typical views of an Operational Model include the Prescribed Operational Model, and the:
+1. Logical Operational Model
+2. Component Operational Model
+3. Technical Operation Model
+4. Deployment Operation Model
+IBM Confidential © IBM Corporation 2025
+25
+
+---PAGE---
+
+Example:
+Where and how do we “deploy” a Word Processor ?
+IBM Confidential © IBM Corporation 2025
+26
+
+---PAGE---
+
+What are the use cases that need to be met ?
+Story 1: Sales Manager working from an IBM office creates a statement of work using an IBM approved template.
+Uses Produces
+Word Processor
+Story 2: Project Manager while traveling creates a Project Change Request using an IBM approved template.
+Uses Produces
+Word Processor
+Story 3: Architect working from an IBM office in the public sector creates a confidential design using a template from an IBM asset that is
+not allowed to be stored outside of local country.
+Uses Produces
+Word Processor
+Simple Right?
+Let’s see…
+IBM Confidential © IBM Corporation 2025
+27
+
+---PAGE---
+
+First we model the landscape from a logical perspective and then from a prescribed
+perspective
+Logical Examples Prescribed Examples
+Functional Component
+MS Office 365
+Word Processor
+Technical Component
+MS Active Directory
+Identity Management
+Location
+IBM Head Office
+Employee Office
+Deployment Unit
+IBM Master SOW Template.docx
+Data: SOW Template
+Node
+Macbook
+Mobile Workstation
+IBM Confidential © IBM Corporation 2025
+28
+
+---PAGE---
+
+Word Processor Example - Logical Location Model
+LL_Office (300k) LL_Cloud (1..n)
+LL_Remote (200k)
+LL_Secure (100) LL_Secure DMZ (1)
+IBM Confidential © IBM Corporation 2025
+29
+
+---PAGE---
+
+Word Processor Example - Logical Node Model
+LN_Mobile Workstation LN_Shared Storage Type
+SS
+LN_Identity Management Type
+A_Office Worker SS
+LN_Application Management Type
+SS
+LN_Hand Held Device
+LN_Word Processing Type
+SS
+LN_Secure Shared Storage Type
+LN_Notebook
+A_Traveller SS
+LN_Secure Desktop
+LN_Gateway
+A_Security SME
+IBM Confidential © IBM Corporation 2025
+30
+
+---PAGE---
+
+There are many ways of deploying a single component into a simple system
+Everything on the PC…
+Option 1 Option 2
+Presentation Presentation Data
+Word, Running on
+Execution
+Execution Installation
+Data VM, standalone
+Installation
+Word, running on Win10, with remote file serving
+In this case we have 16 options in minimum How do we do this for complex systems in a
+to place DUs. In general this is: structured manner?
+(#components * #locations)^#DUs Operational Modeling
+Option 3
+Option 4
+Presentation Execution
+Execution Presentation
+Data
+Data Installation
+Installation
+Word, running in thin client with remote file serving
+Word, running on Citrix, with local data
+IBM Confidential © IBM Corporation 2025 Everything on the Server…
+31
+
+---PAGE---
+
+Based on our use cases we get these deployment units?
+Word Processor
+Presentation Data Execution
+U_offline D_corporate_doc_templates E_word_processor
+U_online
+s D_sensitive_client_doc_templates E_access_management
+t
+i
+n
+U
+t D_user_profile
+n
+e
+m
+y
+o
+l
+p Installation
+e
+D
+I_word_processor
+Things to
+consider
+IBM Confidential © IBM Corporation 2025
+32
+
+---PAGE---
+
+Worked Example – Word Processor Logical Operational Model Reference
+Architecture Asset Example showing existing nodes
+LL_Office (300k) LL_Cloud (1..n)
+LN_Mobile Workstation
+LN_Shared Storage Type
+SS
+LN_Identity Management Type
+SS
+LN_Application Management Type
+SS
+LL_Remote (200k)
+LN_Hand Held Device
+LN_Word Processing Type
+SS
+LN_Notebook
+LN_Secure Shared Storage Type
+SS
+LL_Secure (100) LL_Secure DMZ (1)
+LN_Secure Desktop
+LN_Gateway
+IBM Confidential © IBM Corporation 2025
+33
+
+---PAGE---
+
+Worked Example – Word Processor Logical Operational Model
+Place Deployment Units onto Nodes Following Asset
+LL_Office (300k) LL_Cloud (1..n)
+LN_Mobile Workstation
+LN_Shared Storage Type
+U_offline SS
+D_corporate_doc_templates
+d_corporate_doc_templates
+LN_Identity Management Type
+SS
+E_word_processor
+D_user_profile
+LN_Application Management Type
+SS
+I_word_processor
+LL_Remote (200k)
+LN_Hand Held Device
+U_offline
+LN_Word Processing Type
+SS
+E_word_processor
+E_word_processor
+LN_Notebook
+LN_Secure Shared Storage Type
+U_online SS
+D_sensitive_client_doc_templates
+LL_Secure (100) LL_Secure DMZ (1)
+LN_Secure Desktop
+LN_Gateway
+I_word_processor U_offline
+E_access_management
+Green
+E_word_processor
+Zone
+IBM Confidential © IBM Corporation 2025
+34
+
+---PAGE---
+
+Break
+IBM Confidential © IBM Corporation 2025
+35
+
+---PAGE---
+
+Topic Outline
+1. Understand the non-functional requirements
+1M transactions per hour
+What NFRs need to bet met?
+Finance A
+p
+p
+l
+2. Conceptualize from an application perspective (ALOM): i
+c
+Warehouse Management a
+t
+Identify application level nodes and their placement. i
+o
+n
+Note: Application Logical Operational Model (ALOM) is not discussed in this lecture – see the
+Customer Relationship
+Operational Modelling class for details on ALOM.
+ESB
+Load balancer L
+o
+g
+i
+3. Conceptualize the Logical Operational Model (LOM): c
+a
+Database l
+• Determine where all of the logical application components are deployed.
+• Determine what logical technical components are required and where they will be deployed to
+support the logical application components
+SAP
+P
+r
+Message Broker e
+s
+c
+4. Transform into the Prescribed Operational Model (POM): r
+i
+b
+F5 BIG-IP LTM-4200v e
+Determine real technologies to deliver all of these specifications.
+d
+DB2
+IBM Confidential © IBM Corporation 2025
+36
+
+---PAGE---
+
+The POM transforms the logical system architecture into a set of product and
+technology specifications
+The standard technique involves four steps:
+• Identifying your role in the product selection process and the definition of the selection criteria
+• Performing the necessary product selections for the nodes and connections
+• Defining the solution details and describing how technologies will be put together to deliver the specific SLAs
+• Rationalizing the solution architecture to get to a sized POM
+IBM Confidential © IBM Corporation 2025
+37
+
+---PAGE---
+
+Product selection is the most important part when we build the prescribed
+operational model.
+1. Identify the “Givens”
+• In a client engagement
+• Usually defined in the client’s IT standards, existing Technical Architectures or current IT environment. In all cases,
+from the beginning you will have ensured the LOM is capable of being implemented in these technologies
+• In an IBM proposal
+• IBM product, if they meet the requirements!
+2. Spot the “Obvious” products
+• “Easy to choose”, such as:
+• “Only one product/vendor meets the specs."
+• “We all know this will be product/vendor ABC"
+• “We could do a full vendor evaluation study, but it is more efficient to choose this product/vendor now"
+3. Look at the “Adjacent” components
+• The ones that are the most difficult to choose
+IBM Confidential © IBM Corporation 2025
+38
+
+---PAGE---
+
+What is captured in a POM?
+Prescribed Nodes
+• Hardware technologies and products
+• Overall hardware configuration
+• Hardware specifications, such as processor speed, memory, disk configuration, etc.
+• For example, SystemP, SystemX…
+• Software technologies and products
+• Software product specifications for operating system, database, middleware, directory services, security, etc.,
+including versions
+• for example AIX Version X.x, WebSphere Application Server Liberty Profile, etc...
+• Detailed configuration of software, such as the need for multiple instances of a software product on a computer
+Prescribed Connections
+• Technology specific, including
+• Prescribed networks, protocols, network bandwidth, latency, etc.
+• For example, 100BaseT, Fiber Optic, T1, T3, 1/10/100 Gbps Ethernet, TCP/IP, etc.
+IBM Confidential © IBM Corporation 2025
+39
+
+---PAGE---
+
+What is captured in a POM?
+Cloud deployment model Cloud services model
+• Public: • IaaS
+• Shared infrastructure that lowers the cost per unit for all customers. • Infrastructure as a Service - provides raw infrastructure resources in a virtualised
+environment e.g. IBM Cloud.
+• Private
+• Provides dedicated infrastructure configured for flexibility and scalability. • PaaS
+• Managed: • Platform as a Service - provides an container/runtime environment with supporting
+• Takes care of infrastructure management and maintenance tasks. services to build solutions e.g. IBM Cloud.
+• Hosted:
+• Provides flexibility to self source infrastructure management and • SaaS
+maintenance support. • Software as a Service – provides application functionality as a service e.g. IBM Verse.
+• Hybrid • BPaaS
+• Mix of using shared infrastructure and dedicated infrastructure depending on NFR’s. • Business Process as a Service – provides a means to increase organization efficacy by
+outsourcing business processes to a automated runtime e.g. through the use of IBM
+Blueworks Live
+IBM Confidential © IBM Corporation 2025
+40
+
+---PAGE---
+
+Traditional LOM to POM transformation
+IBM Confidential © IBM Corporation 2025
+41
+
+---PAGE---
+
+A distinction can be drawn between Prescribed Level Operational Models that
+emphasize
+A distinction can be drawn between Prescribed Level Operational Models that emphasize:
+• Component Selection (Unsized POM): Identifying the technologies and products, and the overall (qualitative) way in which they will be put together:
+• Identify the “givens”
+• Spot the “obvious” products
+• Look at the “adjacent” components
+• Configuration (Sized POM): Defining the (quantitative) details of the solution, including the way these technologies will be put together in order to deliver
+the specific SLRs of the OM’s specification:
+• Performance and capacity
+• Availability
+• Security
+• Service management
+IBM Confidential © IBM Corporation 2025
+42
+
+---PAGE---
+
+Rationalizing the design involves a process of SIZING the POM, so that
+performance & other characteristics can be achieved.
+For example, the “PN_Applic’n” Prescribed node will deliver: This, of course, has an influence back on the POM, through the introduction of a “LN_Dispatcher”
+logical node
+• The availability requirements of the Print Services, by being implemented as two Prescribed
+pSeries machines, with a failover capability between the “live” and “standby” machines
+• The throughput requirements of Application Services, by being implemented as TWO
+Prescribed pSeries machines, together with a “dispatcher” Prescribed node.
+IBM Confidential © IBM Corporation 2025
+43
+
+---PAGE---
+
+Cloud LOM to POM transformation
+IBM Confidential © IBM Corporation 2025
+44
+
+---PAGE---
+
+Cloud@POM - 4 Step approach to transforming a LOM to a cloud POM
+Plan Define Select Configure
+Review the Cloud reference architectures Define the type of cloud deployment Select a cloud provider that meets NFR Using NFR’s, LOM and cloud reference
+model (CDM) i.e. public, private, hybrid, architecture as inputs
+and determine if one is a good match for and CDM requirements with a
+that meets the solution NFR’s and
+the NFR requirements or tailor as required. sizing/pricing model that provides the best
+constraints. • Configure the required Prescribed cloud
+match for the solution.
+services offered within the chosen
+• Logical Service Models e.g. IaaS, PaaS,
+providers CDM.
+SaaS, BPaaS
+• Configure performance, capacity, and
+• Logical Services e.g. Middleware,
+availability by configuring Prescribed
+Database, Storage
+cloud services sizing/service level
+requirements (SLR’s)
+• Understand licensing model including
+enterprise level agreements for
+software/services installed within IaaS
+and PaaS.
+IBM Confidential © IBM Corporation 2025
+45
+
+---PAGE---
+
+Cloud@POM –Plan what kind of cloud is required for the solution
+Selecting a cloud reference architecture helps leverage lessons learnt and best practices but you may
+still need to tailor to your needs or in the case none fit the solution define your own
+Object Management Group - Cloud Standards Customer Council:
+• CLOUD CUSTOMER ARCHITECTURE FOR SECURING WORKLOADS ON CLOUD SERVICES
+• CLOUD CUSTOMER ARCHITECTURE FOR API MANAGEMENT
+• CLOUD CUSTOMER ARCHITECTURE FOR HYBRID INTEGRATION
+• CLOUD CUSTOMER ARCHITECTURE FOR ENTERPRISE SOCIAL COLLABORATION
+• CLOUD CUSTOMER ARCHITECTURE FOR E-COMMERCE
+• CLOUD CUSTOMER ARCHITECTURE FOR IOT
+• CLOUD CUSTOMER ARCHITECTURE FOR BIG DATA AND ANALYTICS V2.0
+• CLOUD CUSTOMER ARCHITECTURE FOR MOBILE
+• CLOUD CUSTOMER ARCHITECTURE FOR WEB APPLICATION HOSTING V2.0
+IBM Hybrid Cloud Architecture Center
+• https://www.ibm.com/architectures/hybrid
+IBM Confidential © IBM Corporation 2025
+46
+
+---PAGE---
+
+Deployment Model
+Architectural decisions
+Public Hybrid Private
+need to be made to
+Lower
+Control
+select the required Cost
+deployment and service
+Service Model
+model(s) based on the
+NFR’s and constraints
+SaaS PaaS IaaS Traditional In-House
+while balancing value
+Business Process Business Process Business Process Business Process
+for the Customer.
+Applications Applications Applications Applications
+Data Data Data Data
+Runtime Runtime Runtime Runtime
+Middleware Middleware Middleware Middleware
+O/S O/S O/S O/S
+Client manages
+Virtualisation Virtualisation Virtualisation Virtualisation
+Servers Servers Servers Servers
+Cloud manages
+Storage Storage Storage Storage
+Networking Networking Networking Networking
+47
+
+---PAGE---
+
+Cloud@POM – Selecting cloud providers
+• Some considerations include:
+• Availability of the cloud platform within the client’s jurisdiction.
+• Enterprise strength of the services offered by cloud providers, in particular security,
+availability, backup and disaster recovery.
+• The level of support offered by the cloud provider
+• Network connectivity to the cloud provider’s data centre. One of the disadvantages of a
+cloud based solution is the potential for increased latency.
+• Content of the cloud provider’s service catalogue (e.g. operating system, databases,
+?
+middleware, ect).
+Many others!
+IBM Confidential © IBM Corporation 2025
+48
+
+---PAGE---
+
+Cloud@POM – Configure the cloud to meet the NFR‘s
+1. Need to select a Prescribed service for each logical services identified in the LOM i.e. Database ->
+DashDB
+IBM Example
+2. Define the size of the cloud services and as you can see the major cloud providers use a T-shirt
+sizing model and you need to consider the NFR’s to select the “T-shirt” the best fits the solution
+while keeping customer value in mind
+Microsoft Example
+SAP Example
+IBM Confidential © IBM Corporation 2025
+49
+
+---PAGE---
+
+The review process leverages transaction walkthroughs to test the solution’s
+robustness
+At every level of the OM, “transaction walkthroughs” using the OM walkthrough diagram are a powerful means of verifying whether the
+OM will work
+• Analyze each transaction from start to finish following the flow of information through each Prescribed node and connection
+• Visualize what would happen if there was a failure on some part of the system:
+• Would the failure be detected?
+• Would the end user be notified of the failure?
+• How will the transactions and data be recovered?
+• Who will be responsible for repair of the component?
+• Analyze how the failure would impact Service Level Agreements
+IBM Confidential © IBM Corporation 2025
+50
+
+---PAGE---
+
+Module outline
+↘ Introduction and objectives
+↘ What is Operational Modeling (OM) and why do we need it?
+↘ How does OM evolve and how is it represented?
+→ Constructing an Operational Model
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+51
+
+---PAGE---
+
+Lets transform our LOM to POM
+IBM Confidential © IBM Corporation 2025
+52
+
+---PAGE---
+
+Worked Example – Word Processor Prescribed Operational Model
+IBM Confidential © IBM Corporation 2025
+53
+
+---PAGE---
+
+Module outline
+↘ Introduction and objectives
+↘ What is Operational Modeling (OM) and why do we need it?
+↘ How does OM evolve and how is it represented?
+↘ Constructing an Operational Model
+→ Summary and references
+IBM Confidential © IBM Corporation 2025
+54
+
+---PAGE---
+
+Summary
+The operational aspect of architecture:
+• Focuses on the placement of the solution's DUs across the organization to achieve the business requirements
+of performance, availability, and other nonfunctional requirements
+• Is addressed through the creation of the Operational Model at 2 different viewpoints:
+• The Logical Operational Model, which focuses on the distribution style of the application and the
+technical components required to support the application components
+• The Prescribed Operational Model, which details which combination of products, hardware and or cloud
+based services would deliver on the specification defined through the LOM
+IBM Confidential © IBM Corporation 2025
+55
+
+---PAGE---
+
+References
+Enterprise Solutions Structure – ESS
+http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5387080
+Cloud Computing
+https://www.ibm.com/developerworks/learn/cloud/index.html
+Cloud council
+http://www.cloud-council.org/
+Object Management Group (OMG) – Cloud Reference Architectures
+https://www.omg.org/cloud/deliverables/
+IBM Confidential © IBM Corporation 2025
+56
+
+---PAGE---
+
+References (continued)
+A number of supporting documents can be found on MethodWeb including:
+• Guidance / Technique Papers
+–Developing the logical application operational model
+–Developing the logical operational model
+–Developing the Prescribed operational model
+–Designing for Availability
+–Designing for Performance and Capacity
+–Designing for Security
+–Designing for Systems Management
+• Architecture Domain and related Work Product (WP) Descriptions
+• Other background papers on w3 from various sources
+IBM Confidential © IBM Corporation 2025
+57
+
+---PAGE---
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+58
+
+---PAGE---
+

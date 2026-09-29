@@ -1,0 +1,223 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="du-model" name="Deployment Unit Model">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="Exercise 4: Deployment Unit Model — ECS" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="10" width="500" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="List deployment units for each component (from the Component Model)" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="40" width="600" height="25" as="geometry" />
+        </mxCell>
+        <!-- DU Matrix Table Header -->
+        <mxCell id="hdr_comp" value="Component&#xa;(from CM)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#FFFFFF;strokeColor=#1B3A6B;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="90" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_pres" value="Presentation&#xa;Deployment Unit (U_)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#FFFFFF;strokeColor=#1B3A6B;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="90" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_data" value="Data&#xa;Deployment Unit (D_)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#FFFFFF;strokeColor=#1B3A6B;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="90" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_exec" value="Execution&#xa;Deployment Unit (E_)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#FFFFFF;strokeColor=#1B3A6B;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="90" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_inst" value="Installation&#xa;Deployment Unit (I_)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#FFFFFF;strokeColor=#1B3A6B;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="90" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 1: Presentation Manager -->
+        <mxCell id="r1_comp" value="Presentation Manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="140" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_pres" value="U_Census_Web_UI&#xa;U_Census_Mobile_UI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="140" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_data" value="—" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="450" y="140" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_exec" value="E_Render_Pages&#xa;E_Handle_Navigation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="140" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_inst" value="I_Web_App_Package" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="140" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 2: Authentication Manager -->
+        <mxCell id="r2_comp" value="Authentication Manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="190" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_pres" value="U_Logon_Page" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="190" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_data" value="D_Credentials_Store&#xa;(CFN + ECN pairs)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="450" y="190" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_exec" value="E_Validate_Credentials&#xa;E_Rate_Limit_Check" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="190" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_inst" value="I_Auth_Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="190" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 3: Form Manager -->
+        <mxCell id="r3_comp" value="Form Manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="240" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_pres" value="U_Form_Pages" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="240" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_data" value="D_Census_Responses&#xa;D_Form_Definitions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="450" y="240" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_exec" value="E_Save_Progress&#xa;E_Submit_Form&#xa;E_Generate_Receipt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="240" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_inst" value="I_Form_Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="240" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 4: Validation Engine -->
+        <mxCell id="r4_comp" value="Validation Engine" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="290" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_pres" value="—" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="290" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_data" value="D_Validation_Rules" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="450" y="290" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_exec" value="E_Validate_Field&#xa;E_Validate_CrossField" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="290" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_inst" value="I_Validation_Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="290" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 5: Data Access Manager -->
+        <mxCell id="r5_comp" value="Data Access Manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="340" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r5_pres" value="—" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="340" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r5_data" value="D_Census_DB&#xa;D_Session_Cache" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="450" y="340" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r5_exec" value="E_Read_Write_Data&#xa;E_Cache_Session" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="340" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r5_inst" value="I_DB_Schema&#xa;I_Cache_Config" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="900" y="340" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 6: Integration Manager -->
+        <mxCell id="r6_comp" value="Integration Manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="390" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r6_pres" value="—" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="390" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r6_data" value="D_Transfer_Queue&#xa;D_Transfer_Log" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="450" y="390" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r6_exec" value="E_Transfer_To_DoS&#xa;E_Retry_Failed_Transfer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="390" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r6_inst" value="I_Integration_Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="390" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 7: Notification Service -->
+        <mxCell id="r7_comp" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="440" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r7_pres" value="—" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="440" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r7_data" value="D_SMS_Templates" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="450" y="440" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r7_exec" value="E_Send_SMS&#xa;E_Generate_Receipt_Num" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673a6;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="440" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r7_inst" value="I_Notification_Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="440" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Row 8: Reporting Service -->
+        <mxCell id="r8_comp" value="Reporting Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="490" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r8_pres" value="U_Admin_Reports_UI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="490" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r8_data" value="D_Report_Data&#xa;D_Daily_Statistics" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="450" y="490" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r8_exec" value="E_Generate_Daily_Report&#xa;E_Generate_Statistics" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;fontSize=9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="490" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r8_inst" value="I_Reporting_Service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="490" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- DU Characterization Section Title -->
+        <mxCell id="char_title" value="DU Characterization (NFR properties that determine placement)" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="580" width="600" height="30" as="geometry" />
+        </mxCell>
+        <!-- Presentation DU Characterization Table -->
+        <mxCell id="pchar_title" value="Presentation DU Characterization" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="620" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="pchar_hdr" value="Presentation DU | Actor | Location | IT Skill | Frequency | Type" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#999;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="645" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="pchar_r1" value="U_Census_Web_UI | Respondent | Home/Office (anywhere in Bolumbia) | Low (general public) | Peak on Census Night | Interactive" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="670" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="pchar_r2" value="U_Census_Mobile_UI | Respondent | Home/Field (mobile) | Low (general public) | Peak on Census Night | Interactive" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="695" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="pchar_r3" value="U_Admin_Reports_UI | DoS Administrator | DoS Internal Network | High (trained staff) | Daily during enumeration | Interactive" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="720" width="900" height="25" as="geometry" />
+        </mxCell>
+        <!-- Data DU Characterization Table -->
+        <mxCell id="dchar_title" value="Data DU Characterization" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="770" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="dchar_hdr" value="Data DU | Scope | Volatility | Size | Lifetime | Master/Copy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#999;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="795" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="dchar_r1" value="D_Census_Responses | All submitted forms (~9.5M) | High (during enumeration) | Large (~29 pages × 9.5M forms) | Permanent (transferred to DoS) | Master" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="820" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="dchar_r2" value="D_Credentials_Store | All CFN+ECN pairs (~9.5M) | Low (loaded once before Census) | Medium | Duration of enumeration | Copy (master at DoS)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="845" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="dchar_r3" value="D_Session_Cache | Active sessions | Very High | Small (in-memory) | Minutes to hours | Transient (no persistence needed)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="870" width="900" height="25" as="geometry" />
+        </mxCell>
+        <!-- Execution DU Characterization Table -->
+        <mxCell id="echar_title" value="Execution DU Characterization" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="920" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="echar_hdr" value="Execution DU | Frequency | Processing Load | Concurrency | Response Time Target" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#999;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="945" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="echar_r1" value="E_Validate_Credentials | Per logon attempt | Light | Peak: thousands/min on Census Night | &lt; 1 second" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="970" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="echar_r2" value="E_Submit_Form | Per form submission | Medium (validate + persist + trigger transfer) | Peak: tens of thousands on Census Night | &lt; 3 seconds" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="995" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="echar_r3" value="E_Transfer_To_DoS | Per submitted form (async) | Heavy (large batch) | Background – not user-facing | Within 15 minutes of submission" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1020" width="900" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="echar_r4" value="E_Generate_Daily_Report | Once daily | Heavy (aggregate all submissions) | Single instance (batch job) | Complete within 1 hour" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1045" width="900" height="25" as="geometry" />
+        </mxCell>
+        <!-- Legend -->
+        <mxCell id="legend" value="DU Naming Convention:  U_ = Presentation (user-facing)  |  D_ = Data  |  E_ = Execution  |  I_ = Installation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFEE;strokeColor=#999;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1100" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="NOTE: These DU characterizations drive placement decisions in the LOM (Exercise 5).&#xa;High concurrency + fast response → needs auto-scaling nodes. Large data + permanent → needs HA database. Async + heavy → separate batch node." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF0F0;strokeColor=#C00000;fontSize=9;fontStyle=2;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1140" width="700" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

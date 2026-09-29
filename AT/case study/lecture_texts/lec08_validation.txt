@@ -1,0 +1,359 @@
+Validation and
+Viability
+Version 7
+
+---PAGE---
+
+Table of Contents
+↘ Introducing and objectives
+↘ Viability
+↘ Validation
+↘ Approaches to viability and validation
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+2
+
+---PAGE---
+
+Table of Contents
+→ Introducing and objectives
+↘ Viability
+↘ Validation
+↘ Approaches to viability and validation
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+3
+
+---PAGE---
+
+Learning objectives
+At the end of this module, you should be able to:
+• Describe
+• Technical reviews and their relationship to the quality assurance and testing processes
+• How to identify resources available to help with viability assessments and technical reviews
+• How to incorporate full life-cycle validation and verification into architectural thinking
+• Identify
+• Those who are concerned about the architecture’s quality: the Architect’s target audiences
+and stakeholders
+• How to determine the validity and viability of an architecture
+• How to deal with risk: removal, containment, and acceptance
+IBM Confidential © IBM Corporation 2025
+4
+
+---PAGE---
+
+Why are Viability and Validation important in Architectural Thinking?
+Humans are imperfect
+Reviews and
+The Unified Method The validation and
+and so are solutions
+assessments are used
+Framework work viability of the
+created by them. Fixing
+to ensure that the
+product for architecture are an
+flawed solutions at an
+architecture (and its
+documenting the important element of
+early stage of the
+documentation) is
+architecture the overall approach to
+project is much cheaper
+ready, ensuring that it:
+assessment is Viability testing across the
+than at a later stage.
+• can be implemented Assessment. whole solution life
+and delivered – cycle.
+Viability
+• satisfies the
+functional
+requirements and
+qualities – Validation
+IBM Confidential © IBM Corporation 2025
+5
+
+---PAGE---
+
+Common causes of troubled projects
+Project Design
+• Fixed price for combined phases
+• Vague or misunderstood completion criteria
+• Customer responsibilities not clearly identified and documented
+• Assumptions not clearly identified and documented
+Summary
+• Concessions during negotiations
+• Pricing concessions, “low-balling”
+The common causes for troubled projects are known, and
+• Poorly written proposals or SOWs
+almost all are avoidable.
+• Inaccurate project estimates
+• Not performing QA reviews
+Remember:
+• Lack of transition, marketing to delivery
+• Viability assessments and other forms of validation and
+QA can help prevent your project from becoming
+troubled.
+Project Delivery
+• The lists and assessments cannot help unless the
+• Project skills deficiencies
+recommended actions are taken up. As an Architect,
+• Lack of, or inadequate, project management
+take the lead.
+• Not performing QA reviews and action plans
+• Lack of line management oversight and support
+• Not implementing or exercising change control
+• Starting a phase before completing the preceding phase
+• Unplanned turnover of key project team members
+IBM Confidential © IBM Corporation 2025
+6
+
+---PAGE---
+
+Even most well thought solution are imperfect
+Cost Information
+Budgets are limited. Even if “As you know more, you
+a project starts off well- know more”. New
+funded, new cost constraints information: requirements,
+may cause solution legislation, competition
+architectures to change causes change to the
+radically from initial design. business. The architecture
+must change to
+accommodate new
+information constantly.
+Skilled resources Time
+Throughout a long-lived Architects never have
+project, staff comes and sufficient time, particularly
+goes. at the beginning of the
+project when they have the
+most influence.
+IBM Confidential © IBM Corporation 2025
+7
+
+---PAGE---
+
+Table of Contents
+Introducing and objectives
+→ Viability
+↘ Validation
+↘ Approaches to viability and validation
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+8
+
+---PAGE---
+
+How to approach the viability assessment
+Solution Architects performing the Viability Assessment1:
+• Assess the architecture. Does it fit the wider context? Does it satisfy the wider needs of the enterprise:
+• As-is operational environment
+• To-be enterprise architecture
+• Confirm that the deployed solution will be operable and maintainable with operations
+• Understand the context of the architecture. What are the key requirements and commitments?
+• Assess whether the proposed solution is possible:
+• Can it be designed and developed within the available means?
+• Will it work? Will it perform? Will it be available?
+• Determine the project team's ability to deliver.
+• Are the right resources in place to ensure success?
+• Is the necessary infrastructure in place?
+• Identify and assess technical risks.
+• What risks must be raised and formally managed? What are their probable impacts? How can these be contained?
+IBM Confidential © IBM Corporation 2025
+9
+
+---PAGE---
+
+Table of Contents
+Introducing and objectives
+Viability
+→ Validation
+↘ Approaches to viability and validation
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+10
+
+---PAGE---
+
+What is validation?
+Considerations:
+When examining an architecture’s validity, consider the following:
+• Does it do what is required of it? Does it meet the sponsor’s needs?
+• Does it do it well enough? Is it over engineered, or is it vulnerable in some way?
+Acceptance criteria
+Solution Architects ensure that the proposed solution is acceptable to the various stakeholders:
+• The key criterion is that it satisfies the Functional and Nonfunctional requirements
+• This is achieved through the use of Requirements Traceability and Verification Matrix (RTVM). RTVM is used throughout the whole project, not just at the end
+RTVM
+Requirements Traceability and Verification Matrix
+• Ensures completeness of architecture and design through mapping of the requirements (both FRs and NFRs) to the solution components
+• Provides the basis for test planning and execution
+• Provides a framework for risk management and mitigation
+• Provides the basis of clear and timely client communication with regard to schedule, risk, and financial impacts
+IBM Confidential © IBM Corporation 2025
+11
+
+---PAGE---
+
+Validation is not an after the fact concern; it is addressed throughout the project
+The testing V model and system engineering baseline reviews are a good starting point for planning validation and
+verification activities.
+The V model ensures that all tests relate to requirements, and all requirements have an associated test case.
+IBM Confidential © IBM Corporation 2025
+12
+
+---PAGE---
+
+Table of Contents
+Introducing and objectives
+Viability
+Validation
+→ Approaches to viability and validation
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+13
+
+---PAGE---
+
+IBM manages overall project viability using CVM
+TDA and ITR (for complex, cross-LOB, and/or cross-IOT deals) are quality checkpoints1
+• Validate that the integrated end-to-end proposed solution will fulfill client requirements, is technically viable, and can be delivered by IBM
+• Validate that the integrated project estimates and schedules being proposed are complete and reasonable
+• Identify and assess the technical risks, with containment plans in place to mitigate the technical risks
+• Led by an Architect within the cross-LOB Solution Design Architect community
+1These are not mandatory. Some business units mandate them if the engagement size exceeds certain clip level.
+IBM Confidential © IBM Corporation 2025
+14
+
+---PAGE---
+
+An approach to risk assessment: IBM GSRisk tool
+IBM GS Risk is a risk management tool that is available for all
+IBMers through w3. Originally developed for IBM Consulting
+engagements, GS Risk asks a large number of questions relating
+to the technical and delivery elements of the proposed solution:
+• Team Skills: Has the team used the proposed toolset before?
+• Requirements: Did IBM develop the requirements or are we
+relying on the customer or a third party to develop them?
+• Technologies: Are the proposed technologies mature? Are we
+relying on third-party hardware or software for all or part of
+the solution?
+GS Risk then assigns a risk assessment for the proposal that is
+Sample question in a GS Risk
+used as input to the pricing process
+assessment for an AMS project
+• Risk assessment is one of the key inputs to pricing
+considerations. High risk attracts a higher price category.
+• Don’t be afraid of medium to high risk. IBM Consulting
+projects come under the medium or higher risk categories
+when first assessed.
+IBM Confidential © IBM Corporation 2025
+15
+
+---PAGE---
+
+Assessments should also address assumptions, issues, risks and dependencies: RAID
+Assumption
+Risk
+Things that the Solution Architect has taken on faith or
+A possibility of something (usually negative) happening within the
+otherwise have no direct reason to be thought of as true.
+duration of a project
+Often, assumptions are implicit but are not recognized as such
+• Assumptions have to be verified and then become
+requirements or constraints. If found to be incorrect, the
+solution needs to be re-assessed.
+Dependency
+Issue
+Something that is causing or will cause the solution to deviate
+Something that a project expects to be in place or resolved
+from the requirements baseline
+before the project completes. Dependencies may be:
+• Issues have to be addressed, and recommendations for their
+• Business-centric: “The market will be ready for this project.”
+resolution have to be established, agreed, and acted upon.
+“The legislator will clarify that this approach to data sharing is
+legal.”
+• IT-centric: “IBM will fix this bug.” “We’ll find a way of
+synchronizing these databases.”
+• Solution-centric: “The security server has the capacity to take
+our extra load.” “The warehouse management system will be
+IBM Confidential © IBM Corporation 2025 ready in time.”
+16
+
+---PAGE---
+
+Table of Contents
+Introducing and objectives
+Viability
+Validation
+Approaches to viability and validation
+→ Summary and references
+IBM Confidential © IBM Corporation 2025
+17
+
+---PAGE---
+
+Summary
+A “good” architecture Architectural Validity and viability Assessments can follow a
+well-known approach: Issues,
+must be valid – i.e. assessment includes must be assessed
+Risks, Dependencies and
+solution to satisfy the asking questions to throughout the project,
+assumptions:
+requirements, and be challenge the as well as before
+viable – can be architecture and (presales), and after • Issues need to be resolved,
+or architecture needs to be
+delivered and will work. associated delivery (operations).
+re-assessed.
+approach. A working
+• Risks that are of high
+architectural process
+probability and/or high
+delivers the base for a impact must be removed,
+contained, or accepted.
+viable solution and its
+• Dependencies need to be
+assessment.
+documented and managed
+during solution delivery.
+IBM Confidential © IBM Corporation 2025
+18
+
+---PAGE---
+
+References for viability and risk assessment
+IBM Unified Method Framework: https://yourlearning.ibm.com/activity/PLAN-9740404306B5
+• Viability Assessment guidelines from method
+• RTVM guidelines from method
+• Solution Assurance: https://yourlearning.ibm.com/activity/LT-4616
+Quality Assurance
+• IBM Global Services Worldwide Quality Assurance Course https://yourlearning.ibm.com/activity/ALM-
+COURSE_3954973
+Risk assessment
+• GS Risk tool: https://w3.ibm.com/#/apps/gsrisk
+• Managing Risk: Methods for Software Development, Hall E., Addison-Wesley, 1998, ISBN 0-201-25592-8
+IBM Confidential © IBM Corporation 2025
+19
+
+---PAGE---
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or ), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information"
+at [OMG-SPEM06]
+www.ibm.com/legal/copytrade.shtml.
+Other company, product, or service names may be
+trademarks or service marks of others.
+20
+
+---PAGE---
+

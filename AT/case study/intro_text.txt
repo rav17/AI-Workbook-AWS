@@ -1,0 +1,206 @@
+Architectural Thinking Workshop
+Case Study Introduction – Electronic Census System (ECS)
+IBM Professional Series: Architectural Thinking Workshop
+IBM Client Education Version 7 IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This
+document may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Contents
+• Case Study Objectives
+• Client and project background
+• Business requirements
+• Case Study Approach
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+2 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Case study objectives
+The objectives of this case study are to give you:
+A clearer, more thorough understanding of what it means to think
+•
+architecturally, from all perspectives, about the IT solution design to a
+specific business problem, and therefore allow you to gain confidence in
+your own ability to think the right way
+A safe environment in which to experiment with various approaches to
+•
+thinking this way, thus reinforcing the knowledge and skills you’ve gained
+from this course
+The opportunity to learn from others on your team through sharing
+•
+knowledge
+An appreciation of how, even at the earliest stages of a project, important
+•
+design decisions and trade-offs almost always occur
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+3 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Client and project background
+Republic of Bolumbia
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+4 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+The client
+~ 23 Million People
+~ 9.5 Million Dwellings
+Department of Statistics (DoS)
+Republic of Bolumbia
+Collects and analyses information about various
+aspects of the country including its population,
+society, health and the economy to name the key
+areas
+The department has been running a Population
+and Housing Census for over 100 years and in
+recent history the Census has run every 5 years,
+the next census being 3 year from now.
+DoS Mission:
+• Assist and encourage informed decision
+making;
+• Research and discussion within
+government and the community, by leading
+a high quality, objective and responsive
+national statistical service.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+5 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Business need and project objectives
+• Business need
+• The Census of Population and Housing is the largest statistical collection undertaken by the DoS and
+one of the most important.
+• Its objective is to accurately measure the number and key characteristics of people who are in Bolumbia on
+Census Night, and of the dwellings in which they live.
+• To date the Census has been done manually distributing and collecting paper forms from each household
+and business in the country before entering this information into a computer system.
+• In line with DoS’ continual improvements program, effort has been expended in order to improve and
+expand communications channels to, and from the public. The ECS initiative represents a significant
+step in this process as it embraces the internet as a viable, and powerful, communications medium.
+• Project objectives
+• The ECS initiative is to provide the Bolumbian population with the ability to complete the next Census
+questionnaire electronically over the Internet and must address the following DoS objectives:
+• Responds to public requests for increased flexibility in methods of completing Census materials.
+• Capitalizes on the internet as a viable communications channel.
+• Meets DoS obligations under the Electronic Transactions Act 2009.
+• Provides online support of the next Census.
+• Maintains the privacy & perception of privacy, in that DoS holds a unique security access key to the
+managed data, and only staff employed under the Statistics Act can access the raw respondent data.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+6 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+ECS Project scope
+• The ECS proposal that you are being asked to respond to includes the following
+elements:
+• Definition of a solution for capturing Census information electronically via the internet through
+the Census period of one week
+• Implementation of the solution including testing and production deployment
+• Hosting services during the length of the project (i.e. through development and production)
+• Supporting the application and infrastructure (i.e. full support for the overall solution)
+• The ECS proposal does not include:
+• Systems to analyze Census information collected (this is the subject of another proposal)
+• Non-private dwellings: These responses will be paper-based for this first release of ECS.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+7 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Business Process
+DoS
+10
+8
+Census forms Census Help Desk
+Forms
+Processing
+SMS message Data
+Census
+Electronic
+Collector 6
+2 Census
+Processing
+Census form
+delivery Mobile
+phone network
+11
+5 7
+3 Production
+4
+Internet ECS
+Optional ECS
+Respondent response
+Dwelling (1 of 9,500,000)
+1
+9
+Organisational information (documents etc.)
+Developer Tester
+Paper forms and related data Application Support Staff
+development Support
+Collector notification data
+ECS respondent and management data New ECS Hosting
+Broken line (any colour) represents optional path Environment
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+8 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Census form structure
+Census Form
+Address Person Dwelling Feedback
+Section Section Section Section
+Person Pages Dwelling Feedback
+Address Page
+P P e e r(s r2o s1o n)n P P a a g g e e DPwaeglelins g(6 P)age Page
+Person Page
+Person Page
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+9 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Case Study Approach
+• Over the next few days, we’ll use Electronic Census System
+(ECS) to explore architectural thinking.
+• We’ll do this using a repeating cycle:
+• Lectures on an aspect of architecture
+• An exercise
+– Working in teams
+• Presentation and review
+• Discussion on key learning points
+– and presentation of sample answer
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+10 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Exercise Approach
+Exercise 01
+Case Study Create Use Case
+Background Model; Develop
+System Context
+and Initial NFRs
+Requirements
+Spec Model Answer
+Exercise 02
+Develop
+Architecture
+Overview Diagram
+(AOD)
+AOD Model Answer
+Exercise 03 Exercise 04 & 05
+AOD & CM
+Develop Develop Operational
+Model Answer
+Component Model Model (LOM & POM)
+Exercise 06
+Determine Hot
+Spots Complete SAD
+Model Answer
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+11 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Questions?
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+12 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+THANK YOU
+IBM, the IBM logo, and ibm.com are trademarks or registered trademarks of International Business Machines Corporation in the
+United States, other countries, or both. If these and other IBM trademarked terms are marked on their first occurrence in this
+information with a trademark symbol (® or ™), these symbols indicate U.S. registered or common law trademarks owned by IBM at
+the time this information was published. Such trademarks may also be registered or common law trademarks in other countries. A
+current list of IBM trademarks is available on the Web at "Copyright and trademark information.“ Java and all Java-based
+trademarks and logos are trademarks or registered trademarks of Oracle and its affiliates.
+Linux is a trademark of Linus Torvalds in the United States, or other countries, or both. Microsoft, Excel, PowerPoint, Project,
+Visio, Word, and Windows are trademarks of the Microsoft Corporation in the United States, other countries, or both. UML is a
+registered trademark of Object Management Group, Inc. in the United States and/or other countries. TOGAF and UNIX are
+registered trademarks of The Open Group in the United States and other countries. Other company, product, and service names
+may be trademarks of IBM or other companies. Citrix is a trademark of Citrix Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and Trademark Office and in other countries.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+13 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+

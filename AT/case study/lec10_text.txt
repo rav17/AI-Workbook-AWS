@@ -1,0 +1,252 @@
+Summary and close
+Architectural Thinking
+
+Module outline
+↘ Course objectives
+↘ Educational opportunities
+↘ Information sources
+↘ Closing session
+↘ Instructors’ key messages
+↘ Q&A
+↘ Feedback
+↘ Close
+IBM Confidential © IBM Corporation 2025
+2
+
+Module outline
+→ Course objectives
+↘ Educational opportunities
+↘ Information sources
+↘ Closing session
+↘ Instructors’ key messages
+↘ Q&A
+↘ Feedback
+↘ Close
+IBM Confidential © IBM Corporation 2025
+3
+
+Course objectives: rear mirror
+At the beginning of this course, we said that this course would enable you to:
+• Describe architecture.
+• Understand how to elicit and analyze requirements.
+• Define and classify nonfunctional requirements.
+• Explain an Architecture Overview and how it fits with the Component and Operational Models.
+• Define architectural decisions.
+• Understand and apply architectural principles, such as loose coupling and strong cohesion.
+• Identify the functional aspects of an IT architecture.
+• Explain the approach, steps and artifacts used to define an Operational Model.
+• Describe technical reviews and how to incorporate full life cycle validation and verification into
+architectural thinking.
+• Understand how architects operate within agile teams and how agile frameworks and
+approaches affect architectural styles.
+IBM Confidential © IBM Corporation 2025
+4
+
+The architectural thinking process
+What’s the IT system got to do?
+How should the IT system behave?
+These are the system’s parts,
+and this is how it works
+Requirements
+together.
+What is to be solved?
+Qualities
+Architecture
+How “good” is it?
+Assets
+What is available?
+Viability
+After all that, will it work?
+Is there anything that’s done
+this before?
+IBM Confidential © IBM Corporation 2025
+5
+
+Module outline
+↗ Course objectives
+→ Educational opportunities
+↘ Information sources
+↘ Closing session
+↘ Instructors’ key messages
+↘ Q&A
+↘ Feedback
+↘ Close
+IBM Confidential © IBM Corporation 2025
+6
+
+The IBM architect career path
+IBM Fellow
+Distinguished Engineer
+Band and title*
+Certification Capability
+10 Executive Architect
+Level 3 certification Thought Leader
+9 Senior Architect
+Transition process for Certified Tech Specialists
+Level 2 certification Expert
+8 Advisory Architect
+Level 1 certification Experienced
+Typical transition point to career
+7 Associate Architect
+Entry point to career
+* Promotion guidelines determined by BU and GEO; one can continue to grow in certifications not withstanding band level.
+IBM Confidential © IBM Corporation 2025
+7
+
+IBM Architect model Certification roadmap
+Level 1 Level 2 Level 3
+Experienced Expert Thought Leader
+Visit the Certification
+roadmap in the Architect
+profession site for the most
+The IBM Experienced Certified The IBM Expert Certified The IBM Thought Leader
+up to date version of the
+Architect works independently Architect is a lead architect, Certified Architect provides
+roadmap.
+to apply their skills and recognized as an SME, and innovative ideas and strategic
+competencies to provide value teaches others in their work. direction, working across
+to clients. multiple business units and
+geographies.
+IBM Confidential © IBM Corporation 2025
+8
+
+All senior roles involve a critical nontechnical skill: Leadership
+Architects are important leaders on any project.
+Study topics in leadership:
+• Books on leadership can usually be found in the business section of your local bookstores.
+• Read autobiographies of leaders to learn their leadership techniques.
+• Courses in leadership are available (in Your Learning and external learning platforms).
+• Use IBM Leadership Academy materials
+Becoming an effective leader requires a commitment to lifelong learning.
+To be a leader is to be a teacher.
+IBM Confidential © IBM Corporation 2025
+9
+
+Here are some other educational opportunities
+Here are just a few suggestions to start with:
+• Design Thinking
+• Team Solution Design (or TeamSD - a pre-sales version of the Architecture Method)
+• Operational Modeling
+• Component Modeling
+• Use Case Modeling
+• Performance Engineering
+• Solution Optimization (SOP) Techniques
+• Business Architecture Fundamentals
+• Enterprise Architecture
+Review the IBM Architectures website and consult IBM YourLearning to search for learning activities.
+IBM Confidential © IBM Corporation 2025
+10
+
+Module outline
+↗ Course objectives
+↗ Educational opportunities
+→ Information sources
+↘ Closing session
+↘ Instructors’ key messages
+↘ Q&A
+↘ Feedback
+↘ Close
+IBM Confidential © IBM Corporation 2025
+11
+
+What are the key information sources?
+Intellectual capital within IBM.
+• The IBM Architectures website
+• The Method Workspace (including UMF, TeamSD and more).
+• IBM Lighthouse
+• Github @ IBM
+And many more!
+IBM Confidential © IBM Corporation 2025
+12
+
+Other key information sources
+Books:
+• N.Rozanski, E.Woods., Software Systems Architecture: Working With Stakeholders
+Using Viewpoints and Perspectives (2nd Edition), ISBN-13: 978-0321718334
+• Bass et al, Software Architecture in Practice, ISBN 0-201-19930-0
+• Brown et al, Anti-Patterns, ISBN 0-471-19713-0
+• Hohmann, Journey of the Software Professional, ISBN 0-132-36613-4
+• Module references included in course materials
+People:
+• Find a mentor (either using Your Guides at IBM or the slack channel #ibm-architect)
+• Technical Leadership Exchange
+IBM Confidential © IBM Corporation 2025
+13
+
+Module outline
+↗ Course objectives
+↗ Educational opportunities
+↗ Information sources
+→ Closing session
+→ Instructors’ key messages
+→ Q&A
+→ Feedback
+↘ Close
+IBM Confidential © IBM Corporation 2025
+14
+
+Let us hear what you think
+Closing Session
+• What did you like about the course?
+• What could be improved?
+• Personal Views of the Instructor Team
+Q&A with Instructor Team
+Course Evaluation
+IBM Confidential © IBM Corporation 2025
+15
+
+Module outline
+↗ Course objectives
+↗ Educational opportunities
+↗ Information sources
+↗ Closing session
+↗ Instructors’ key messages
+↗ Q&A
+↗ Feedback
+→ Close
+IBM Confidential © IBM Corporation 2025
+16
+
+Some final thoughts
+We do not expect you to be a “master IT Solution Architect” after attending this course.
+You need to put into practice what you have learned here and continue to “think like an Architect.”
+Follow up on the references you have been given.
+Find a mentor to help you.
+Start your journey towards Certification.
+IBM Confidential © IBM Corporation 2025
+17
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+18
+
+19
+

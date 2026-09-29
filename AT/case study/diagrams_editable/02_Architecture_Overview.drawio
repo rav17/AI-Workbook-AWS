@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="aod" name="Architecture Overview Diagram">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Exercise 2: Architecture Overview Diagram - ECS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="10" width="600" height="40" as="geometry" />
+        </mxCell>
+        <!-- Users -->
+        <mxCell id="desktop" value="Desktop Browser" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=none;strokeWidth=2;outlineConnect=0;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="200" y="60" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mobile" value="Mobile Device" style="shape=mxgraph.android.phone2;html=1;pointerEvents=1;dashed=0;fillColor=#036897;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="450" y="60" width="30" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="collectoruser" value="Census Collector&#xa;(receives SMS)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="60" width="30" height="50" as="geometry" />
+        </mxCell>
+        <!-- Internet -->
+        <mxCell id="internet" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="250" y="160" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- Cloud Hosting Boundary -->
+        <mxCell id="cloudboundary" value="Cloud Hosting Environment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;verticalAlign=top;fontSize=13;fontStyle=1;arcSize=5;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="280" width="1000" height="700" as="geometry" />
+        </mxCell>
+        <!-- Tiers -->
+        <mxCell id="tier1" value="CDN / WAF / Load Balancer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="320" width="500" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tier2" value="Web + Application Tier&#xa;(Responsive UI, Business Logic, Authentication, Form Management, Validation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="420" width="500" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="tier3" value="Data Tier&#xa;(Census Database + Session Cache)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="540" width="500" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tier4" value="Integration Tier&#xa;(Data Transfer to DoS + SMS Notifications + Reporting)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="650" width="500" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tier5" value="Monitoring &amp; Support Tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="350" y="760" width="500" height="50" as="geometry" />
+        </mxCell>
+        <!-- External Systems -->
+        <mxCell id="dosext" value="DoS Electronic&#xa;Census Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="550" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sms" value="SMS Gateway&#xa;(Mobile Network)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="680" width="200" height="60" as="geometry" />
+        </mxCell>
+        <!-- Arrows -->
+        <mxCell id="ea1" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=2;strokeColor=#2F5496;" edge="1" source="desktop" target="internet" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea2" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=2;strokeColor=#2F5496;" edge="1" source="mobile" target="internet" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea3" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=2;strokeColor=#2F5496;" edge="1" source="internet" target="tier1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea3l" value="HTTPS" style="edgeLabel;html=1;fontSize=9;" vertex="1" connectable="0" parent="ea3"><mxGeometry relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="ea4" style="strokeWidth=1.5;" edge="1" source="tier1" target="tier2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea5" style="strokeWidth=1.5;" edge="1" source="tier2" target="tier3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea6" style="strokeWidth=1.5;" edge="1" source="tier2" target="tier4" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea7" style="strokeWidth=2;strokeColor=#C00000;" edge="1" source="tier4" target="dosext" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea7l" value="Secure Data Transfer" style="edgeLabel;html=1;fontSize=9;fontColor=#C00000;" vertex="1" connectable="0" parent="ea7"><mxGeometry relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="ea8" style="strokeWidth=2;strokeColor=#ED7D31;" edge="1" source="tier4" target="sms" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ea8l" value="SMS API" style="edgeLabel;html=1;fontSize=9;fontColor=#ED7D31;" vertex="1" connectable="0" parent="ea8"><mxGeometry relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry></mxCell>
+        <mxCell id="ea9" style="strokeWidth=1.5;strokeColor=#ED7D31;dashed=1;" edge="1" source="sms" target="collectoruser" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-15T10:00:00.000Z" agent="Kiro" version="22.1.0" type="device">
+  <diagram id="aod-ecs-exercise2" name="Architecture Overview">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title1" value="Exercise 2: Architecture Overview Diagram - ECS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#1B3A5C;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitle -->
+        <mxCell id="subtitle1" value="Audience: Business and IT stakeholders | Lifecycle: Day 1 | Duration: Project lifetime" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="430" y="55" width="540" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== USERS / CHANNELS (Top) ===== -->
+
+        <!-- Desktop Browser -->
+        <mxCell id="user_desktop" value="Desktop&#xa;Browser" style="shape=mxgraph.cisco.computers_and_peripherals.pc;html=1;whiteSpace=wrap;align=center;verticalLabelPosition=bottom;verticalAlign=top;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="350" y="100" width="50" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Mobile Device -->
+        <mxCell id="user_mobile" value="Mobile&#xa;Device" style="shape=mxgraph.ios7.icons.smartphone;html=1;whiteSpace=wrap;align=center;verticalLabelPosition=bottom;verticalAlign=top;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="550" y="100" width="30" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Census Collector -->
+        <mxCell id="user_collector" value="Census&#xa;Collector" style="shape=mxgraph.basic.person;html=1;whiteSpace=wrap;align=center;verticalLabelPosition=bottom;verticalAlign=top;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="730" y="100" width="40" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===== INTERNET CLOUD ===== -->
+        <mxCell id="internet" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="200" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== CLOUD HOSTING ENVIRONMENT (large boundary) ===== -->
+        <mxCell id="hosting_env" value="Cloud Hosting Environment" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=5 5;fillColor=none;strokeColor=#1B3A5C;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=10;fontSize=13;fontStyle=1;fontColor=#1B3A5C;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="200" y="320" width="640" height="560" as="geometry" />
+        </mxCell>
+
+        <!-- CDN / WAF / Load Balancer -->
+        <mxCell id="tier_cdn" value="CDN / WAF / Load Balancer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="360" width="420" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Web + Application Tier -->
+        <mxCell id="tier_webapp" value="&lt;b&gt;Web + Application Tier&lt;/b&gt;&lt;br&gt;Responsive UI, Business Logic, Authentication,&lt;br&gt;Form Management, Validation, Session Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="280" y="440" width="480" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Data Tier -->
+        <mxCell id="tier_data" value="&lt;b&gt;Data Tier&lt;/b&gt;&lt;br&gt;Census Database + Session Cache + Credentials Store" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="550" width="420" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Integration Tier -->
+        <mxCell id="tier_integration" value="&lt;b&gt;Integration Tier&lt;/b&gt;&lt;br&gt;Data Transfer to DoS + SMS Notifications + Mobile Replication" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="640" width="420" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Monitoring & Support Tools -->
+        <mxCell id="tier_monitoring" value="&lt;b&gt;Monitoring &amp; Support Tools&lt;/b&gt;&lt;br&gt;Logging, Alerting, Performance Monitoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="730" width="420" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== EXTERNAL SYSTEMS (Right side) ===== -->
+
+        <!-- DoS Electronic Census Processing -->
+        <mxCell id="ext_dos" value="DoS Electronic&#xa;Census Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6961e;fontSize=11;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="960" y="600" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- SMS Gateway -->
+        <mxCell id="ext_sms" value="SMS Gateway /&#xa;Mobile Network" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6961e;fontSize=11;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="960" y="700" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== INTERNAL ACTORS (Bottom-right) ===== -->
+
+        <!-- DoS Administrator -->
+        <mxCell id="actor_admin" value="DoS&#xa;Administrator" style="shape=mxgraph.basic.person;html=1;whiteSpace=wrap;align=center;verticalLabelPosition=bottom;verticalAlign=top;fontSize=10;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="970" y="820" width="40" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Help Desk -->
+        <mxCell id="actor_helpdesk" value="Help Desk" style="shape=mxgraph.basic.person;html=1;whiteSpace=wrap;align=center;verticalLabelPosition=bottom;verticalAlign=top;fontSize=10;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="820" width="40" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===== CONNECTIONS ===== -->
+
+        <!-- Desktop → Internet -->
+        <mxCell id="conn1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.3;entryY=0.3;entryPerimeter=0;strokeColor=#333333;" edge="1" source="user_desktop" target="internet" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Mobile → Internet -->
+        <mxCell id="conn2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;entryPerimeter=0;strokeColor=#333333;" edge="1" source="user_mobile" target="internet" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Internet → CDN/WAF/LB (labeled HTTPS) -->
+        <mxCell id="conn3" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;strokeColor=#333333;fontStyle=1;fontSize=10;" edge="1" source="internet" target="tier_cdn" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CDN → Web/App Tier -->
+        <mxCell id="conn4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#333333;" edge="1" source="tier_cdn" target="tier_webapp" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Web/App → Data Tier -->
+        <mxCell id="conn5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#333333;" edge="1" source="tier_webapp" target="tier_data" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Web/App → Integration Tier -->
+        <mxCell id="conn6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.7;exitY=1;entryX=0.5;entryY=0;strokeColor=#333333;" edge="1" source="tier_webapp" target="tier_integration" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Integration → DoS Processing (labeled Secure Data Transfer) -->
+        <mxCell id="conn7" value="Secure Data Transfer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.3;entryX=0;entryY=0.5;strokeColor=#333333;fontSize=10;" edge="1" source="tier_integration" target="ext_dos" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Integration → SMS Gateway (labeled SMS API) -->
+        <mxCell id="conn8" value="SMS API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.7;entryX=0;entryY=0.5;strokeColor=#333333;fontSize=10;" edge="1" source="tier_integration" target="ext_sms" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SMS Gateway → Census Collector (dashed, labeled SMS) -->
+        <mxCell id="conn9" value="SMS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;entryX=1;entryY=0.5;dashed=1;strokeColor=#333333;fontSize=10;" edge="1" source="ext_sms" target="user_collector" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1045" y="125" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Admin → Monitoring -->
+        <mxCell id="conn10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#666666;dashed=1;" edge="1" source="actor_admin" target="tier_monitoring" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Help Desk → Web/App Tier -->
+        <mxCell id="conn11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#666666;dashed=1;" edge="1" source="actor_helpdesk" target="tier_webapp" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="845" />
+              <mxPoint x="900" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

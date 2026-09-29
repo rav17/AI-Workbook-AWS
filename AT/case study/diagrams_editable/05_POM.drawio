@@ -1,0 +1,99 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="pom" name="Physical Operational Model">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Exercise 5: Physical Operational Model (POM) - ECS" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="600" height="40" as="geometry" />
+        </mxCell>
+        <!-- Primary Region -->
+        <mxCell id="primary" value="PRIMARY REGION (Cloud)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;verticalAlign=top;fontSize=14;fontStyle=1;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="50" y="70" width="1050" height="1070" as="geometry" />
+        </mxCell>
+        <!-- DMZ -->
+        <mxCell id="pn_cdn" value="PN: CDN Edge Nodes (Global)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdd7ee;strokeColor=#2F5496;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="130" width="300" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_waf" value="PN: WAF + DDoS Protection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdd7ee;strokeColor=#2F5496;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="130" width="300" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_lb" value="PN: Load Balancer x2 (Active-Active)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdd7ee;strokeColor=#2F5496;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="210" width="350" height="45" as="geometry" />
+        </mxCell>
+        <!-- Web Tier -->
+        <mxCell id="pn_web" value="PN: Web Servers x4+ (Auto-scaling Group)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c6efce;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="310" width="400" height="55" as="geometry" />
+        </mxCell>
+        <!-- App Tier -->
+        <mxCell id="pn_app" value="PN: Application Servers x8+ (Auto-scaling Group)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c6efce;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="420" width="400" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_cache" value="PN: Session Cache Cluster x3&#xa;(Redis)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2efda;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="700" y="420" width="250" height="55" as="geometry" />
+        </mxCell>
+        <!-- Data Tier -->
+        <mxCell id="pn_db" value="PN: Primary Database&#xa;(HA Active/Standby Cluster)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="540" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_replica" value="PN: Read Replicas x2" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="540" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- Integration Tier -->
+        <mxCell id="pn_int" value="PN: Integration Servers x2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="680" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_mq" value="PN: Message Queue&#xa;(Async Processing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="680" width="250" height="50" as="geometry" />
+        </mxCell>
+        <!-- Operations -->
+        <mxCell id="pn_mon" value="PN: Monitoring Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="200" y="800" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_log" value="PN: Log Aggregation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="460" y="800" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pn_bastion" value="PN: Bastion/Jump Host" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="720" y="800" width="220" height="40" as="geometry" />
+        </mxCell>
+        <!-- DR Region -->
+        <mxCell id="drregion" value="DR REGION (Warm Standby)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=3;verticalAlign=top;fontSize=12;fontStyle=1;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="300" width="350" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="dr_web" value="PN: Web/App Servers&#xa;(Scaled down, auto-scale on failover)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0e0;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="370" width="250" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="dr_db" value="PN: DB Replica&#xa;(Async replication from Primary)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffe0e0;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1225" y="460" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dr_int" value="PN: Integration (Standby)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0e0;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1225" y="560" width="200" height="45" as="geometry" />
+        </mxCell>
+        <!-- Replication Arrow -->
+        <mxCell id="repl" value="Async Replication" style="strokeWidth=2;strokeColor=#C00000;dashed=1;fontSize=9;fontColor=#C00000;" edge="1" source="pn_db" target="dr_db" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- Flow arrows within primary -->
+        <mxCell id="f1" style="strokeWidth=1.2;" edge="1" source="pn_cdn" target="pn_lb" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f2" style="strokeWidth=1.2;" edge="1" source="pn_waf" target="pn_lb" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f3" style="strokeWidth=1.2;" edge="1" source="pn_lb" target="pn_web" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f4" style="strokeWidth=1.2;" edge="1" source="pn_web" target="pn_app" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f5" style="strokeWidth=1.2;" edge="1" source="pn_app" target="pn_cache" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f6" style="strokeWidth=1.2;" edge="1" source="pn_app" target="pn_db" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f7" style="strokeWidth=1.2;" edge="1" source="pn_app" target="pn_int" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f8" style="strokeWidth=1.2;" edge="1" source="pn_int" target="pn_mq" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- NFR annotations -->
+        <mxCell id="nfr1" value="NFR: Scalability → Auto-scaling groups" style="text;html=1;align=left;fontSize=9;fontStyle=2;fontColor=#C00000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="920" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nfr2" value="NFR: Availability → HA clusters, Multi-AZ, DR region" style="text;html=1;align=left;fontSize=9;fontStyle=2;fontColor=#C00000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="945" width="350" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nfr3" value="NFR: Security → WAF, DDoS, network segmentation, encryption" style="text;html=1;align=left;fontSize=9;fontStyle=2;fontColor=#C00000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="970" width="400" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nfr4" value="NFR: Performance → CDN, caching, read replicas, MQ" style="text;html=1;align=left;fontSize=9;fontStyle=2;fontColor=#C00000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="995" width="350" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

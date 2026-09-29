@@ -1,0 +1,67 @@
+<mxfile host="Electron" agent="Kiro">
+  <diagram id="location" name="Location Model">
+    <mxGraphModel dx="1760" dy="831" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;" value="ECS - Logical Location Model" vertex="1">
+          <mxGeometry height="40" width="500" x="30" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_respondent" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#000000;strokeWidth=1;verticalAlign=top;align=left;fontSize=12;fontStyle=1;spacingLeft=8;spacingTop=4;" value="LL_Respondent (9.5M)&lt;div&gt;Respondent Location&lt;br&gt;(Homes/Offices across Bolumbia)&lt;div&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="200" width="520" x="41" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_respondent" parent="1" style="shape=mxgraph.floorplan.wall.wall;fillColor=#2F5496;strokeColor=#2F5496;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="490" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_cloud" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#000000;strokeWidth=1;verticalAlign=top;align=left;fontSize=12;fontStyle=1;spacingLeft=8;spacingTop=4;" value="LL_Cloud (1..n)&lt;div&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;Cloud Hosting Environment&lt;/span&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;(Cloud Provider Data Center)&lt;/span&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;Primary Region&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="200" width="480" x="580" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_cloud" parent="1" style="ellipse;shape=cloud;fillColor=#2F5496;strokeColor=#2F5496;fontSize=10;fontColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="40" width="50" x="990" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="vline_top" edge="1" parent="1" style="endArrow=none;dashed=1;dashPattern=8 8;strokeColor=#FF0000;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="60" as="sourcePoint" />
+            <mxPoint x="570" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hline1" edge="1" parent="1" style="endArrow=none;dashed=0;strokeColor=#FF0000;strokeWidth=3;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="270" as="sourcePoint" />
+            <mxPoint x="560" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_collector" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#000000;strokeWidth=1;verticalAlign=top;align=left;fontSize=12;fontStyle=1;spacingLeft=8;spacingTop=4;" value="LL_Collector (27k)&lt;div&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;(Mobile Devices)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="190" width="520" x="40" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_collector" parent="1" style="shape=mxgraph.android.phone2;fillColor=#2F5496;strokeColor=#2F5496;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="50" width="30" x="495" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="hline2" edge="1" parent="1" style="endArrow=none;dashed=0;strokeColor=#FF0000;strokeWidth=3;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="480" as="sourcePoint" />
+            <mxPoint x="1060" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_dos_dc" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#FF0000;strokeWidth=2;dashed=1;dashPattern=8 8;verticalAlign=top;align=left;fontSize=12;fontStyle=1;spacingLeft=8;spacingTop=4;" value="LL_DoS_DC (1)&lt;div&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;DoS Data Center&lt;/span&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;(Government Premises)&lt;/span&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;Secure / Restricted&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="250" width="520" x="580" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_dos_dc" parent="1" style="shape=mxgraph.signs.safety.padlock,locked;fillColor=#2F5496;strokeColor=#2F5496;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="50" width="40" x="490" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="vline_bottom" edge="1" parent="1" style="endArrow=none;dashed=1;dashPattern=8 8;strokeColor=#FF0000;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="480" as="sourcePoint" />
+            <mxPoint x="570" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_dos_internal" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#FF0000;strokeWidth=2;dashed=1;dashPattern=8 8;verticalAlign=top;align=left;fontSize=12;fontStyle=1;spacingLeft=8;spacingTop=4;" value="LL_DoS_Internal (1)&lt;div&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;DoS Internal Network&lt;/span&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;(Help Desk)&lt;/span&gt;&lt;br style=&quot;font-size: 11px; text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 11px; text-align: center;&quot;&gt;Government Internal&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="250" width="480" x="60" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="icon_dos_internal" parent="1" style="shape=mxgraph.cisco.servers.standard_server;fillColor=#2F5496;strokeColor=#2F5496;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="990" y="500" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

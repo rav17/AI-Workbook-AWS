@@ -1,0 +1,255 @@
+Architecture
+Overview
+
+Table of Contents
+→ Introduction and objectives
+↘ What is an Architecture Overview?
+↘ Examples
+↘ Best Practices
+↘ Anti-patterns
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+2
+
+Learning objectives
+At the end of this module, you should be able to:
+• Explain an Architecture Overview
+• Describe the uses of an Architecture Overview
+• Explain how an Architecture Overview fits in with the
+Component and Operational Models
+• Develop a simple Architecture Overview
+• Identify potential issues when reviewing an Architecture
+Overview
+IBM Confidential © IBM Corporation 2025
+3
+
+Table of Contents
+↗ Introduction and objectives
+→ What is an Architecture Overview?
+↘ Examples
+↘ Best Practices
+↘ Anti-patterns
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+4
+
+What is an Architecture Overview (1 of 2)
+From the Work Product Description
+Purpose: Main Description:
+This artifact provides an overview of the ‘main conceptual
+• To communicate to the sponsor and external stakeholders
+elements and relationships’ of an architecture, which may
+a conceptual understanding of the intended IT system
+include candidate subsystems, components, nodes,
+• To provide a high-level shared vision of the architecture
+connections, data stores, users, and external systems. As
+and scope of the proposed IT system for the development
+such, it represents the governing ideas and ‘candidate
+building blocks’ of the architecture.
+teams
+• To explore and evaluate alternative architectural options
+• To enable early recognition and validation of the
+implications of the architectural approach
+• To facilitate effective communication between different
+communities of stakeholders and developers
+• To facilitate orientation for new people who join the
+project
+Footer 5
+
+What is an Architecture Overview (2 of 2)
+From the Work Product Description
+Notation:
+Consists of one or more ‘informal diagrams’ (in other words, • Diagrams are usually ‘static in nature’, showing the
+not necessarily created using formal modeling tools or
+relationships between components.
+‘notation’) together with supporting text describing the major
+• However, where it makes sense to do so, dynamic views
+architectural concepts of the architecture, such as:
+showing collaborations between the architectural
+• The range of different delivery mechanisms the
+components may also be included.
+architecture supports, such as home Internet terminals
+and kiosks • The diagrams may show ‘functional views, operational
+• The separation of functions views, or a combination’ of the two.
+• The architecture model, such as a three-tier or four-tier
+• Where ‘alternative architectural solutions’ are being
+model
+explored, diagrams may be produced for each option to
+• The use of hardware, such as distributed servers and
+enable various stakeholders to discuss the tradeoffs
+workstations
+between the options.
+• The access to legacy systems
+Footer 6
+
+Where does the Architecture Overview fit?
+Footer 7
+
+Table of Contents
+↗ Introduction and objectives
+↗ What is an Architecture Overview?
+→ Examples
+↘ Best Practices
+↘ Anti-patterns
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+8
+
+Example 1: Retail Industry – Customer Insights Architecture Overview
+Business Roles
+Line-of-Business Chief Data Customer
+Chief Marketing Agent
+Executive Officer Officer Officer
+Deliver UI Design & Pre-Built
+Insights via API
+Insights Dashboards
+Perform Pre-Built Industry Analytic Descriptive to Predictive to
+Pre-Integrated
+Analytics Models Cognitive
+Capabilities
+Prepare Industry Data Models
+Internal & External Data
+Data & Connectors
+Internal
+Relevant Data 3rd Party
+Systems
+Sources
+9
+
+Example 2: Security in the Cloud
+10
+
+Example 3: Site to Site VPC VPN and PowerVS
+11
+
+Example 4: Blockchain Application
+12
+
+Table of Contents
+↗ Introduction and objectives
+↗ What is an Architecture Overview?
+↗ Examples
+→ Best Practices
+↘ Anti-patterns
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+13
+
+Best practices
+#1 AO must clearly support the
+value proposition conversation of
+#6 Clearly depict the architecture
+the proposed solution.
+building blocks of the proposed
+solution.
+#2 Ensure the Architecture View
+supports the target stakeholder
+#7 Depict Architecture Thinking
+profile. For example, Enterprise
+towards Non-Functional
+View for Business Users.
+requirements.
+#3 Do not stop at Enterprise
+#8 Depict higher level
+View! Each AO View promotes a
+abstractions rather than fine
+different yet related “Architecture
+grained details.
+Thinking”.
+#4 Leverage Reference
+#9 Leverage existing System
+Architectures to expedite
+names (for example, External
+development of an AO.
+Betting System) rather than
+generic (such as Legacy system).
+#5 In some AO instances “Less #10 Use Annotations to convey
+may be more”. Avoid over more. For example, Scope of
+crowding an AO. release, systems management,
+high availability, and so on.
+14
+
+Table of Contents
+↗ Introduction and objectives
+↗ What is an Architecture Overview?
+↗ Examples
+↗ Best Practices
+→ Anti-patterns
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+15
+
+Anti-Patterns for an Architecture Overview (1 of 2)
+Brainstorming:
+What do you consider to be anti-patterns?
+• Information overload: Putting too much
+information into one diagram
+• Information underload: Putting too little
+information into the Architecture Overview
+• Using too many acronyms that are not properly
+introduced
+• Providing more technical details than required for
+a business audience
+IBM Confidential © IBM Corporation 2025
+1166
+
+Table of Contents
+↗ Introduction and objectives
+↗ What is an Architecture Overview?
+↗ Examples
+↗ Best Practices
+↗ Anti-patterns
+→ Summary and references
+IBM Confidential © IBM Corporation 2025
+17
+
+Summary
+• The main purpose of an Architecture Overview is
+communication.
+• It is more important for the Architecture Overview to
+be simple, brief, clear, and understandable than
+comprehensive or accurate in all details.
+• The Architecture Overview represents the governing
+ideas and candidate building blocks of an IT system or
+enterprise architecture.
+• The Architecture Overview provides an overview of
+the main conceptual elements and relationships in an
+architecture.
+Footer 18
+
+References
+Architecture Overview, Work Product ART 512, on MethodWorkspace
+Footer 19
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+20
+

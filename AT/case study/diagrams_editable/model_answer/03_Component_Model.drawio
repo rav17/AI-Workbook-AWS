@@ -1,0 +1,204 @@
+<mxfile host="Electron" agent="Kiro">
+  <diagram id="component-model-answer" name="Component Model - Model Answer">
+    <mxGraphModel dx="2000" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ============ SUBSYSTEM: Mobile App ============ -->
+        <mxCell id="ss_mobile" value="&lt;&lt;SubSystem&gt;&gt;&#xa;Mobile App" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFCC;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=left;fontSize=11;fontStyle=1;spacingLeft=5;spacingTop=2;">
+          <mxGeometry x="30" y="30" width="420" height="340" as="geometry" />
+        </mxCell>
+
+        <!-- Mobile App Components -->
+        <mxCell id="m_tabletviews" value="&lt;&lt;App Comp&gt;&gt;&#xa;TabletViews" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_phoneviews" value="&lt;&lt;App Comp&gt;&gt;&#xa;PhoneViews" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="180" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_viewcontroller" value="&lt;&lt;App Component&gt;&gt;&#xa;ViewController" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="120" width="250" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="m_getlocation" value="&lt;&lt;App Comp&gt;&gt;&#xa;GetLocation" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="200" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_validatepage" value="&lt;&lt;App Comp&gt;&gt;&#xa;ValidatePage" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="170" y="200" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_completesection" value="&lt;&lt;App Comp&gt;&gt;&#xa;CompleteSection" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="290" y="200" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_submitform" value="&lt;&lt;App Comp&gt;&gt;&#xa;SubmitForm" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="320" y="150" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_replicationctrl" value="&lt;&lt;App Comp&gt;&gt;&#xa;ReplicationControl" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="320" y="250" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_dataaccess" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;DataAccessFramework" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="140" y="280" width="170" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="m_deviceapi" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;DeviceAPI" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="310" width="100" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="m_localdb" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;DeviceLocalDB" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="160" y="325" width="130" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ============ Middle Components (between Mobile App and Form Handling) ============ -->
+        <mxCell id="m_processwelcome" value="&lt;&lt;App Comp&gt;&gt;&#xa;ProcessWelcome" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="470" y="100" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_authcontrol" value="&lt;&lt;App Comp&gt;&gt;&#xa;AuthenticationControl" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="470" y="155" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============ API Gateway ============ -->
+        <mxCell id="tc_apigateway" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;API Gateway" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=1;">
+          <mxGeometry x="640" y="60" width="140" height="35" as="geometry" />
+        </mxCell>
+        <!-- Interfaces -->
+        <mxCell id="if_processwelcome" value="&lt;&lt;Interface&gt;&gt;&#xa;Process Welcome" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=8;fontStyle=0;">
+          <mxGeometry x="640" y="105" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="if_getpagedef" value="&lt;&lt;Interface&gt;&gt;&#xa;Get Page Definition" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=8;fontStyle=0;">
+          <mxGeometry x="640" y="140" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="if_getsectiondef" value="&lt;&lt;Interface&gt;&gt;&#xa;Get Section Definition" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=8;fontStyle=0;">
+          <mxGeometry x="640" y="175" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="if_completesection" value="&lt;&lt;Interface&gt;&gt;&#xa;Complete Section" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=8;fontStyle=0;">
+          <mxGeometry x="640" y="210" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="if_validatepage" value="&lt;&lt;Interface&gt;&gt;&#xa;Validate Page" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=8;fontStyle=0;">
+          <mxGeometry x="640" y="245" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="if_submitform" value="&lt;&lt;Interface&gt;&gt;&#xa;Submit Form" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=8;fontStyle=0;">
+          <mxGeometry x="640" y="280" width="140" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============ SUBSYSTEM: Form Handling ============ -->
+        <mxCell id="ss_formhandling" value="&lt;&lt;SubSystem&gt;&gt;&#xa;Form Handling" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFCC;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=right;fontSize=11;fontStyle=1;spacingRight=5;spacingTop=2;">
+          <mxGeometry x="820" y="30" width="420" height="340" as="geometry" />
+        </mxCell>
+        <!-- Tech Comp: ECS Application Server -->
+        <mxCell id="fh_appserver" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;ECS Application Server" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=1;">
+          <mxGeometry x="960" y="60" width="170" height="35" as="geometry" />
+        </mxCell>
+        <!-- Tech Comp: Web Server -->
+        <mxCell id="fh_webserver" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;Web Server" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="960" y="105" width="140" height="35" as="geometry" />
+        </mxCell>
+        <!-- App Comp: Authentication -->
+        <mxCell id="fh_auth" value="&lt;&lt;App Comp&gt;&gt;&#xa;Authentication" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="960" y="150" width="140" height="35" as="geometry" />
+        </mxCell>
+        <!-- App Comp: ViewController -->
+        <mxCell id="fh_viewcontroller" value="&lt;&lt;App Comp&gt;&gt;&#xa;ViewController" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="960" y="195" width="140" height="35" as="geometry" />
+        </mxCell>
+        <!-- App Comp: Validation -->
+        <mxCell id="fh_validation" value="&lt;&lt;App Comp&gt;&gt;&#xa;Validation" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="960" y="240" width="140" height="35" as="geometry" />
+        </mxCell>
+        <!-- App Comp: Form Submission -->
+        <mxCell id="fh_formsubmission" value="&lt;&lt;App Comp&gt;&gt;&#xa;Form Submission" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="960" y="285" width="140" height="35" as="geometry" />
+        </mxCell>
+        <!-- App Comp: Form Definition Controller -->
+        <mxCell id="fh_formdefctrl" value="&lt;&lt;App Comp&gt;&gt;&#xa;Form Definition&#xa;Controller" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="1140" y="150" width="130" height="50" as="geometry" />
+        </mxCell>
+        <!-- App Comp: Census Forms Definition File -->
+        <mxCell id="fh_censusforms" value="&lt;&lt;App Comp&gt;&gt;&#xa;Census Forms&#xa;Definition File" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="1140" y="220" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ============ SUBSYSTEM: Help Desk and Admin ============ -->
+        <mxCell id="ss_helpdesk" value="&lt;&lt;SubSystem&gt;&gt;&#xa;Help Desk and Admin" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFCC;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=left;fontSize=11;fontStyle=1;spacingLeft=5;spacingTop=2;">
+          <mxGeometry x="30" y="420" width="220" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="hd_appserver" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;Application Server" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="460" width="140" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="hd_respondentviewer" value="&lt;&lt;App Comp&gt;&gt;&#xa;Respondent Data&#xa;Viewer" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="505" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="hd_mgmtviewer" value="&lt;&lt;App Comp&gt;&gt;&#xa;Management&#xa;Information Viewer" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="560" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="hd_configmgr" value="&lt;&lt;App Comp&gt;&gt;&#xa;Configuration&#xa;Manager" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="50" y="615" width="140" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ============ SUBSYSTEM: Information Management ============ -->
+        <mxCell id="ss_infomgmt" value="&lt;&lt;SubSystem&gt;&gt;&#xa;Information Management" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFCC;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=center;fontSize=11;fontStyle=1;spacingTop=2;">
+          <mxGeometry x="280" y="420" width="440" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="im_appserver" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;Application Server" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=1;">
+          <mxGeometry x="370" y="460" width="160" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="im_mobiledevicerep" value="&lt;&lt;App Comp&gt;&gt;&#xa;Mobile Device&#xa;Replication" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="300" y="510" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="im_translation" value="&lt;&lt;App Comp&gt;&gt;&#xa;Translation" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="430" y="510" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="im_mgmtinfoprocessing" value="&lt;&lt;App Comp&gt;&gt;&#xa;Management&#xa;Information Processing" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="550" y="510" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="im_rdbms" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;RDBMS" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="350" y="590" width="130" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="im_ecsdb" value="&lt;&lt;App Comp&gt;&gt;&#xa;ECS DB" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="350" y="635" width="130" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ============ SUBSYSTEM: DoS Interfacing ============ -->
+        <mxCell id="ss_dos" value="&lt;&lt;SubSystem&gt;&gt;&#xa;DoS Interfacing" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFCC;strokeColor=#000000;strokeWidth=2;verticalAlign=top;align=center;fontSize=11;fontStyle=1;spacingTop=2;">
+          <mxGeometry x="750" y="420" width="370" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dos_messaging" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;Messaging Middleware" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=1;">
+          <mxGeometry x="780" y="460" width="170" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="dos_sendrespondent" value="&lt;&lt;App Comp&gt;&gt;&#xa;Send Respondent&#xa;Data" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="780" y="510" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dos_sendmgmt" value="&lt;&lt;App Comp&gt;&gt;&#xa;Send Management&#xa;Information" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="780" y="565" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dos_pullecn" value="&lt;&lt;App Comp&gt;&gt;&#xa;Pull Confirmed or&#xa;Failed ECNs" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="780" y="620" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="dos_forwardproxy" value="&lt;&lt;Tech Comp&gt;&gt;&#xa;Forward Proxy" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=0;">
+          <mxGeometry x="960" y="510" width="110" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- ============ External System: Electronic Census Processing ============ -->
+        <mxCell id="ext_dos" value="&lt;&lt;External System&gt;&gt;&#xa;Electronic Census&#xa;Processing" parent="1" vertex="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontStyle=1;">
+          <mxGeometry x="1300" y="530" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ============ IBM / DoS boundary line ============ -->
+        <mxCell id="boundary_line" parent="1" edge="1" style="endArrow=none;strokeColor=#0000FF;strokeWidth=3;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1150" y="420" as="sourcePoint" />
+            <mxPoint x="1150" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_ibm" value="IBM" parent="1" vertex="1" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=10;fontStyle=1;">
+          <mxGeometry x="1110" y="400" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_dos" value="DoS" parent="1" vertex="1" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=10;fontStyle=1;">
+          <mxGeometry x="1165" y="400" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from Forward Proxy to External System -->
+        <mxCell id="arr_proxy_dos" parent="1" edge="1" source="dos_forwardproxy" target="ext_dos" style="endArrow=block;endFill=1;strokeColor=#000000;strokeWidth=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,185 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="security-ex7" name="Exercise 7: Initial Security Viewpoint">
+    <mxGraphModel dx="2200" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Exercise 7: Initial Security Viewpoint — Electronic Census System (ECS)" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="900" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Security Zones, Controls, and Data Flow" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="500" y="45" width="500" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== SECURITY ZONES ===================== -->
+
+        <!-- Zone: Untrusted (Internet) -->
+        <mxCell id="zone_internet" value="UNTRUSTED ZONE&#xa;(Public Internet)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="50" y="90" width="220" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- Zone: DMZ -->
+        <mxCell id="zone_dmz" value="DMZ&#xa;(Semi-Trusted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="300" y="90" width="240" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- Zone: Application -->
+        <mxCell id="zone_app" value="APPLICATION ZONE&#xa;(Trusted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="570" y="90" width="260" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- Zone: Data -->
+        <mxCell id="zone_data" value="DATA ZONE&#xa;(Restricted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="860" y="90" width="240" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- Zone: DoS (Government) -->
+        <mxCell id="zone_dos" value="DoS ZONE&#xa;(Government Network)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="90" width="240" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== ELEMENTS IN ZONES ===================== -->
+
+        <!-- Users (Untrusted) -->
+        <mxCell id="user_respondent" value="Respondent&#xa;(9.5M households)" style="shape=mxgraph.basic.person;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="user_collector" value="Census Collector&#xa;(~27,000)" style="shape=mxgraph.basic.person;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="310" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="user_admin" value="DoS Admin" style="shape=mxgraph.basic.person;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="420" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- DMZ Elements -->
+        <mxCell id="elem_cdn" value="CDN&#xa;(Static assets,&#xa;DDoS absorb)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="150" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_waf" value="WAF&#xa;(OWASP Top 10,&#xa;Rate limiting,&#xa;Bot detection)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_lb" value="Load Balancer&#xa;(Active-Active,&#xa;SSL Termination)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="340" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_bastion" value="Bastion Host&#xa;(Admin access only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="440" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Application Zone Elements -->
+        <mxCell id="elem_webserver" value="Web Servers&#xa;(Stateless, auto-scale)&#xa;• HTML5 rendering&#xa;• Input sanitization&#xa;• CSRF protection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="590" y="150" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_appserver" value="App Servers&#xa;(Stateless, auto-scale)&#xa;• Authentication (CFN+ECN)&#xa;• Authorization (RBAC)&#xa;• Session management&#xa;• Form validation&#xa;• Audit logging" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="590" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_integ" value="Integration Server&#xa;• MQ (async transfer)&#xa;• API Gateway&#xa;• SMS notification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="590" y="440" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Data Zone Elements -->
+        <mxCell id="elem_db" value="Database&#xa;(PostgreSQL HA)&#xa;• Encrypted at rest&#xa;  (AES-256)&#xa;• No direct internet&#xa;  access&#xa;• Access via app tier&#xa;  only" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="150" width="160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_cache" value="Session Cache&#xa;(Redis)&#xa;• Encrypted&#xa;• Internal only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="890" y="320" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_backup" value="Encrypted Backups&#xa;(AES-256, offsite)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="890" y="420" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DoS Zone Elements -->
+        <mxCell id="elem_dos_proc" value="DoS Electronic&#xa;Census Processing&#xa;(Government system)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="180" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="elem_dos_db" value="DoS Census&#xa;Database&#xa;(Statistics Act&#xa;protected)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="290" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== FIREWALLS ===================== -->
+        <mxCell id="fw1" value="FW1" style="shape=mxgraph.cisco.firewalls.firewall;whiteSpace=wrap;html=1;fillColor=#CC0000;fontColor=#ffffff;strokeColor=#990000;fontSize=8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="273" y="262" width="25" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="fw2" value="FW2" style="shape=mxgraph.cisco.firewalls.firewall;whiteSpace=wrap;html=1;fillColor=#CC0000;fontColor=#ffffff;strokeColor=#990000;fontSize=8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="543" y="262" width="25" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="fw3" value="FW3" style="shape=mxgraph.cisco.firewalls.firewall;whiteSpace=wrap;html=1;fillColor=#CC0000;fontColor=#ffffff;strokeColor=#990000;fontSize=8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="833" y="262" width="25" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="fw4" value="FW4" style="shape=mxgraph.cisco.firewalls.firewall;whiteSpace=wrap;html=1;fillColor=#CC0000;fontColor=#ffffff;strokeColor=#990000;fontSize=8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1103" y="262" width="25" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== DATA FLOW ARROWS ===================== -->
+        <mxCell id="flow1" value="TLS 1.2+" style="strokeWidth=2;strokeColor=#70AD47;fontColor=#333;fontSize=9;fontStyle=2;" edge="1" source="user_respondent" target="elem_cdn" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2" value="" style="strokeWidth=2;strokeColor=#70AD47;" edge="1" source="elem_cdn" target="elem_waf" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow3" value="" style="strokeWidth=2;strokeColor=#70AD47;" edge="1" source="elem_waf" target="elem_lb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow4" value="Internal HTTPS" style="strokeWidth=2;strokeColor=#6c8ebf;fontColor=#333;fontSize=9;fontStyle=2;" edge="1" source="elem_lb" target="elem_webserver" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow5" value="" style="strokeWidth=2;strokeColor=#6c8ebf;" edge="1" source="elem_webserver" target="elem_appserver" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow6" value="Encrypted JDBC" style="strokeWidth=2;strokeColor=#2F5496;fontColor=#333;fontSize=9;fontStyle=2;" edge="1" source="elem_appserver" target="elem_db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow7" value="" style="strokeWidth=1.5;strokeColor=#2F5496;" edge="1" source="elem_appserver" target="elem_cache" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow8" value="VPN / Secure&#xa;File Transfer" style="strokeWidth=2;strokeColor=#9673a6;fontColor=#333;fontSize=9;fontStyle=2;" edge="1" source="elem_integ" target="elem_dos_proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow9" value="MFA + VPN" style="strokeWidth=1.5;strokeColor=#9673a6;dashed=1;fontColor=#333;fontSize=9;fontStyle=2;" edge="1" source="user_admin" target="elem_bastion" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== SECURITY CONTROLS TABLES ===================== -->
+
+        <!-- Authentication & Authorization -->
+        <mxCell id="ctrl_authn" value="AUTHENTICATION &amp; AUTHORIZATION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbe5d6;strokeColor=#C55A11;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="640" width="420" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_authn_content" value="• Respondent login: CFN + ECN credential pair&#xa;  (physically delivered, no self-registration)&#xa;• Session timeout: 20 min inactivity auto-logout&#xa;• Rate limiting: 5 failed attempts → account lockout&#xa;• Admin access: Multi-Factor Authentication (MFA)&#xa;• Role-Based Access Control (RBAC):&#xa;  — Respondent: own form only&#xa;  — Collector: assigned CWL households only&#xa;  — Admin: system management (no raw data)&#xa;• Only Statistics Act staff access raw respondent data" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="60" y="665" width="400" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Data Protection -->
+        <mxCell id="ctrl_data" value="DATA PROTECTION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="490" y="640" width="420" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_data_content" value="• In-transit: TLS 1.2+ mandatory (all connections)&#xa;• At-rest: AES-256 encryption (all census data)&#xa;• DoS holds unique security key for data decryption&#xa;• PII masking in all application logs&#xa;• Data sovereignty: all data hosted in Bolumbia&#xa;• Backup encryption: same key + offsite storage&#xa;• Data retention: per Statistics Act requirements&#xa;• Secure deletion after retention period expires&#xa;• VPN/Direct Connect for DoS data transfer" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="500" y="665" width="400" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Network & Infrastructure Security -->
+        <mxCell id="ctrl_net" value="NETWORK &amp; INFRASTRUCTURE SECURITY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="930" y="640" width="440" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_net_content" value="• WAF: OWASP Top 10 protection (XSS, SQLi, CSRF)&#xa;• DDoS protection: CDN-based + cloud-native&#xa;• Network segmentation: 5 security zones (as shown)&#xa;• Firewall rules between every zone boundary&#xa;• No direct internet access to Data Zone&#xa;• Bastion host for admin access (VPN + MFA)&#xa;• Penetration testing before each Census cycle&#xa;• Vulnerability scanning: monthly automated scans&#xa;• Security monitoring: SIEM + real-time alerting&#xa;• Incident response plan documented &amp; tested" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="940" y="665" width="420" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Compliance Bar -->
+        <mxCell id="compliance_bar" value="COMPLIANCE &amp; GOVERNANCE: Electronic Transactions Act 2009 | Privacy Act | Statistics Act | Government Security Classification Policy | WCAG 2.0 AA Accessibility | Full Audit Trail | Regular Security Reviews | Data Sovereignty (Bolumbia only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#ffffff;strokeColor=#1B3A6B;fontSize=10;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="840" width="1320" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend_box" value="LEGEND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333;strokeWidth=1;verticalAlign=top;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="640" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_content" value="🔴 Firewall (zone boundary)&#xa;&#xa;🟢 Green arrow = TLS encrypted&#xa;&#xa;🔵 Blue arrow = Internal encrypted&#xa;&#xa;🟣 Purple arrow = VPN/Secure&#xa;&#xa;⬜ Dashed = Admin path (MFA)" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="665" width="180" height="145" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

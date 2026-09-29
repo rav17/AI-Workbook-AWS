@@ -1,0 +1,184 @@
+<mxfile host="Electron" agent="Kiro">
+  <diagram id="component" name="Component Relationship Diagram">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" parent="1" vertex="1" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" value="Exercise 3: Logical Component Relationship Diagram - ECS">
+          <mxGeometry x="350" y="10" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============ ACTORS ============ -->
+        <mxCell id="respondent" parent="1" vertex="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Respondent">
+          <mxGeometry x="50" y="280" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dosadmin" parent="1" vertex="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="DoS Administrator">
+          <mxGeometry x="50" y="520" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="collector" parent="1" vertex="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Census Collector">
+          <mxGeometry x="1350" y="520" width="40" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ============ COMPONENTS ============ -->
+        <!-- Presentation Layer -->
+        <mxCell id="presentation" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Presentation Manager">
+          <mxGeometry x="200" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Business Logic Layer -->
+        <mxCell id="auth" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Authentication Manager">
+          <mxGeometry x="500" y="100" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="session" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Session Manager">
+          <mxGeometry x="800" y="100" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="form" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Form Manager">
+          <mxGeometry x="500" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="validation" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Validation Engine">
+          <mxGeometry x="800" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Data / Integration Layer -->
+        <mxCell id="dataaccess" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Data Access Manager">
+          <mxGeometry x="500" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="integration" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Integration Manager">
+          <mxGeometry x="800" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="notification" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Notification Service">
+          <mxGeometry x="1100" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-cutting -->
+        <mxCell id="security" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Security Manager">
+          <mxGeometry x="1100" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="reporting" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=1;" value="&lt;&lt;component&gt;&gt;&#xa;Reporting Service">
+          <mxGeometry x="200" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ============ EXTERNAL SYSTEMS ============ -->
+        <mxCell id="censusdb" parent="1" vertex="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="Census Database">
+          <mxGeometry x="530" y="640" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dosproc" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6b656;fontSize=10;fontStyle=1;" value="DoS Electronic&#xa;Census Processing">
+          <mxGeometry x="830" y="650" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="smsext" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6b656;fontSize=10;fontStyle=1;" value="SMS Gateway">
+          <mxGeometry x="1130" y="650" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ============ RESPONSIBILITY ANNOTATIONS ============ -->
+        <mxCell id="resp_pres" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Render Census form pages (HTML)&#xa;• Handle user input &amp; navigation&#xa;• Responsive layout (desktop/mobile)">
+          <mxGeometry x="150" y="350" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_auth" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Validate CFN + ECN credentials&#xa;• Manage logon/logoff&#xa;• Rate limit failed attempts">
+          <mxGeometry x="450" y="175" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_session" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Create/destroy sessions&#xa;• Timeout management&#xa;• Concurrent access control">
+          <mxGeometry x="750" y="175" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_form" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Census form lifecycle (create/save/submit)&#xa;• Section navigation logic&#xa;• Receipt number generation">
+          <mxGeometry x="450" y="345" width="250" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_val" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Field-level validation rules&#xa;• Cross-field validation&#xa;• Mandatory field checks">
+          <mxGeometry x="750" y="345" width="230" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="resp_data" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• CRUD on census response data&#xa;• Save partial progress&#xa;• Retrieve saved forms">
+          <mxGeometry x="450" y="525" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_int" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Transfer submitted data to DoS&#xa;• Trigger SMS via gateway&#xa;• Handle async/retry logic">
+          <mxGeometry x="750" y="525" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_notif" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Send SMS to Census Collectors&#xa;• Generate receipts&#xa;• Manage notification templates">
+          <mxGeometry x="1050" y="525" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_sec" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Encryption (transit &amp; at rest)&#xa;• Access control &amp; audit logging&#xa;• Security policy enforcement">
+          <mxGeometry x="1050" y="345" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_rep" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" value="Responsibilities:&#xa;• Generate daily submission reports&#xa;• Submission statistics&#xa;• Census progress monitoring">
+          <mxGeometry x="150" y="525" width="230" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ============ CONNECTIONS ============ -->
+        <!-- Actor to Edge Components -->
+        <mxCell id="c1" parent="1" edge="1" source="respondent" target="presentation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_admin_rep" parent="1" edge="1" source="dosadmin" target="reporting">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_coll_notif" parent="1" edge="1" source="collector" target="notification" style="dashed=1;strokeColor=#9673a6;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Presentation to internal -->
+        <mxCell id="c2" parent="1" edge="1" source="presentation" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" parent="1" edge="1" source="presentation" target="form">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" parent="1" edge="1" source="auth" target="session">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Form Manager connections -->
+        <mxCell id="c5" parent="1" edge="1" source="form" target="validation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" parent="1" edge="1" source="form" target="dataaccess">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" parent="1" edge="1" source="form" target="integration">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Data Access to external -->
+        <mxCell id="c8" parent="1" edge="1" source="dataaccess" target="censusdb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Integration to external systems -->
+        <mxCell id="c9" parent="1" edge="1" source="integration" target="dosproc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" parent="1" edge="1" source="integration" target="notification">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" parent="1" edge="1" source="notification" target="smsext">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Reporting to Data Access -->
+        <mxCell id="c_rep_data" parent="1" edge="1" source="reporting" target="dataaccess">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Auth to Data Access (credential lookup) -->
+        <mxCell id="c_auth_data" parent="1" edge="1" source="auth" target="dataaccess" style="dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Security Manager cross-cutting (dashed) -->
+        <mxCell id="c12" parent="1" edge="1" source="security" target="auth" style="dashed=1;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" parent="1" edge="1" source="security" target="form" style="dashed=1;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" parent="1" edge="1" source="security" target="dataaccess" style="dashed=1;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" parent="1" edge="1" source="security" target="integration" style="dashed=1;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

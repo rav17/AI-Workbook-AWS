@@ -1,0 +1,83 @@
+<mxfile host="Electron" agent="Kiro">
+  <diagram id="location-model-answer" name="Location Model - Model Answer">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Exercise 4: Location Model - ECS (Model Answer)" parent="1" vertex="1" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;">
+          <mxGeometry x="300" y="10" width="600" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LOCATIONS ============ -->
+        <!-- LL_Respondent (9.5M dwellings) -->
+        <mxCell id="loc_respondent" value="LL_Respondent&#xa;(9.5M dwellings across Bolumbia)&#xa;&#xa;• Desktop browsers&#xa;• Mobile devices" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;verticalAlign=top;align=center;fontSize=10;fontStyle=1;spacingTop=5;arcSize=10;">
+          <mxGeometry x="50" y="80" width="250" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- LL_Collector (27k field workers) -->
+        <mxCell id="loc_collector" value="LL_Collector&#xa;(27,000 field workers)&#xa;&#xa;• Mobile phone (SMS)&#xa;• Hand held device" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;verticalAlign=top;align=center;fontSize=10;fontStyle=1;spacingTop=5;arcSize=10;">
+          <mxGeometry x="50" y="300" width="250" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- LL_Cloud (IBM Hosting - 1..n DCs) -->
+        <mxCell id="loc_cloud" value="LL_Cloud&#xa;(IBM Hosting Environment - 1..n)&#xa;&#xa;• ECS Application Server&#xa;• API Gateway&#xa;• Database Server&#xa;• Messaging Middleware&#xa;• Forward Proxy" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;verticalAlign=top;align=center;fontSize=10;fontStyle=1;spacingTop=5;arcSize=10;">
+          <mxGeometry x="500" y="80" width="300" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- LL_DoS_DC (Department of Statistics) -->
+        <mxCell id="loc_dos" value="LL_DoS_DC&#xa;(Department of Statistics - 1)&#xa;&#xa;• Electronic Census Processing&#xa;• Census Database (DoS)" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;verticalAlign=top;align=center;fontSize=10;fontStyle=1;spacingTop=5;arcSize=10;">
+          <mxGeometry x="1000" y="80" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- LL_DoS_Internal (Help Desk / Admin) -->
+        <mxCell id="loc_dosinternal" value="LL_DoS_Internal&#xa;(Help Desk &amp; Admin - 1)&#xa;&#xa;• Help Desk workstations&#xa;• Admin Dashboard" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;verticalAlign=top;align=center;fontSize=10;fontStyle=1;spacingTop=5;arcSize=10;">
+          <mxGeometry x="1000" y="300" width="280" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- ============ CONNECTIONS ============ -->
+        <!-- Respondent to Cloud: Internet -->
+        <mxCell id="conn_resp_cloud" parent="1" edge="1" source="loc_respondent" target="loc_cloud" style="endArrow=block;endFill=1;strokeColor=#2F5496;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_resp_cloud_lbl" value="Internet (HTTPS)" parent="conn_resp_cloud" vertex="1" connectable="0" style="edgeLabel;html=1;fontSize=9;fontStyle=2;">
+          <mxGeometry relative="1" x="0" y="-10" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <!-- Collector to Cloud: Mobile Network -->
+        <mxCell id="conn_coll_cloud" parent="1" edge="1" source="loc_collector" target="loc_cloud" style="endArrow=block;endFill=1;strokeColor=#70AD47;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_coll_cloud_lbl" value="Mobile Network (SMS)" parent="conn_coll_cloud" vertex="1" connectable="0" style="edgeLabel;html=1;fontSize=9;fontStyle=2;">
+          <mxGeometry relative="1" x="0" y="10" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <!-- Cloud to DoS DC: Secure Link -->
+        <mxCell id="conn_cloud_dos" parent="1" edge="1" source="loc_cloud" target="loc_dos" style="endArrow=block;endFill=1;strokeColor=#C00000;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_cloud_dos_lbl" value="Secure Link&#xa;(VPN / Direct Connect)" parent="conn_cloud_dos" vertex="1" connectable="0" style="edgeLabel;html=1;fontSize=9;fontStyle=2;">
+          <mxGeometry relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <!-- Cloud to DoS Internal: Internal Network -->
+        <mxCell id="conn_cloud_internal" parent="1" edge="1" source="loc_cloud" target="loc_dosinternal" style="endArrow=block;endFill=1;strokeColor=#9673a6;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_cloud_internal_lbl" value="Internal Network" parent="conn_cloud_internal" vertex="1" connectable="0" style="edgeLabel;html=1;fontSize=9;fontStyle=2;">
+          <mxGeometry relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <!-- DoS DC to DoS Internal: LAN -->
+        <mxCell id="conn_dos_internal" parent="1" edge="1" source="loc_dos" target="loc_dosinternal" style="endArrow=block;endFill=1;strokeColor=#666666;strokeWidth=1;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_dos_internal_lbl" value="LAN" parent="conn_dos_internal" vertex="1" connectable="0" style="edgeLabel;html=1;fontSize=9;fontStyle=2;">
+          <mxGeometry relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

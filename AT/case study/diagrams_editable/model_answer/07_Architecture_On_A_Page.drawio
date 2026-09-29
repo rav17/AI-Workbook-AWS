@@ -1,0 +1,120 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="aoap-ex7" name="Exercise 7: Architecture on a Page">
+    <mxGraphModel dx="2200" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title Banner -->
+        <mxCell id="title_banner" value="Electronic Census System (ECS) — Architecture on a Page" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#ffffff;strokeColor=#1B3A6B;fontSize=16;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="1700" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Republic of Bolumbia | 23M Population | 9.5M Households | Cloud-Hosted | 3-Year Delivery | Census Night Peak" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#3B6AB5;fontColor=#ffffff;strokeColor=#1B3A6B;fontSize=11;fontStyle=2;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="70" width="1700" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1: Users | Channels | Integrations -->
+        <!-- Users -->
+        <mxCell id="users_box" value="USERS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;verticalAlign=top;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="120" width="330" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="users_content" value="• Respondents (9.5M households)&#xa;  — Complete census form online&#xa;• Census Collectors (~27,000)&#xa;  — Mobile app, offline capability&#xa;• DoS Administrators&#xa;  — System management &amp; monitoring&#xa;• Help Desk Operators&#xa;  — Respondent support&#xa;• Support Staff (Hosting)&#xa;  — Infrastructure &amp; application support" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="60" y="145" width="310" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Channels -->
+        <mxCell id="channels_box" value="CHANNELS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bdd7ee;strokeColor=#6c8ebf;strokeWidth=2;verticalAlign=top;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="400" y="120" width="330" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="channels_content" value="• Desktop Browser (responsive web app)&#xa;  — Any modern browser, no install&#xa;• Mobile Browser (responsive design)&#xa;  — Smartphone/tablet access&#xa;• Mobile App (Collector handheld)&#xa;  — Offline capable, GPS, sync&#xa;• SMS Gateway&#xa;  — Collector notifications&#xa;• Secure Admin Portal&#xa;  — Internal DoS access (VPN)" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="410" y="145" width="310" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Integrations -->
+        <mxCell id="integrations_box" value="INTEGRATIONS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;verticalAlign=top;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="750" y="120" width="330" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="integrations_content" value="• DoS Electronic Census Processing&#xa;  — Transfer: responses + CFN data&#xa;  — Receive: confirmed ECN list&#xa;• SMS Gateway (Mobile network)&#xa;  — Collector notification messages&#xa;• Census Help Desk&#xa;  — Application usage information&#xa;• Daily Reports to DoS&#xa;  — Operational &amp; management info&#xa;• Bolumbia Post (physical forms)&#xa;  — Out of scope for ECS" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="760" y="145" width="310" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Solution Architecture Box -->
+        <mxCell id="solution_box" value="SOLUTION ARCHITECTURE (Cloud-Native, Elastic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f8ff;strokeColor=#2F5496;strokeWidth=3;verticalAlign=top;fontSize=13;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="340" width="1030" height="420" as="geometry" />
+        </mxCell>
+
+        <!-- Architecture Layers -->
+        <mxCell id="layer_cdn" value="CDN + WAF + DDoS Protection + Load Balancer (Active-Active, Multi-AZ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="970" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_web" value="Web Tier: Responsive UI (HTML5 / CSS3 / JavaScript) — Server-side rendering — Auto-scaling (x4+)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="440" width="970" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_app" value="Application Tier: Authentication (CFN+ECN) | Form Management | Validation | Session Mgmt — Auto-scaling (x8+)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="500" width="970" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_data" value="Data Tier: Database (HA Cluster + Read Replicas) | Session Cache (Redis) | Census Responses + Credentials" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="970" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_integ" value="Integration Tier: Message Queue + REST/File Transfer → DoS Census Processing | SMS Gateway | Replication (Mobile)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="620" width="970" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_ops" value="Operations &amp; Monitoring: APM | Centralized Logging | Alerting | Bastion Host | Automated Scaling | Backup/DR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="680" width="970" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows between layers -->
+        <mxCell id="fl1" style="strokeWidth=1;strokeColor=#666;" edge="1" source="layer_cdn" target="layer_web" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="fl2" style="strokeWidth=1;strokeColor=#666;" edge="1" source="layer_web" target="layer_app" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="fl3" style="strokeWidth=1;strokeColor=#666;" edge="1" source="layer_app" target="layer_data" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="fl4" style="strokeWidth=1;strokeColor=#666;" edge="1" source="layer_app" target="layer_integ" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- KEY ARCHITECTURAL DECISIONS -->
+        <mxCell id="decisions_box" value="KEY ARCHITECTURAL DECISIONS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbe5d6;strokeColor=#C55A11;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="120" width="370" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="decisions_content" value="AD-001: Cloud-native deployment&#xa;  — Elastic scaling for Census Night peak&#xa;AD-002: Responsive web (no native app for respondents)&#xa;  — No install required, widest reach&#xa;AD-003: Stateless app tier + distributed session cache&#xa;  — Enables horizontal scaling&#xa;AD-004: Credential-based auth (CFN + ECN)&#xa;  — No self-registration, physical delivery&#xa;AD-005: Asynchronous data transfer to DoS (MQ)&#xa;  — Decoupled, resilient integration&#xa;AD-006: Multi-AZ deployment + DR region (warm)&#xa;  — 99.99% availability target&#xa;AD-007: Container-based deployment (Docker/K8s)&#xa;  — Portability, auto-scaling, consistency" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="145" width="350" height="220" as="geometry" />
+        </mxCell>
+
+        <!-- KEY RISKS -->
+        <mxCell id="risks_box" value="KEY RISKS &amp; MITIGATIONS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="400" width="370" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="risks_content" value="R1: Census Night peak (millions simultaneous)&#xa;  → Auto-scaling + CDN + extensive load testing&#xa;R2: Data privacy/security breach&#xa;  → Encryption (TLS+AES-256), WAF, pen testing&#xa;R3: Browser/device compatibility (23M users)&#xa;  → Progressive enhancement, test matrix&#xa;R4: Single point of failure&#xa;  → HA at every tier, Multi-AZ, DR region&#xa;R5: Integration failure with DoS systems&#xa;  → Async MQ, retry logic, monitoring&#xa;R6: Census Collector offline access&#xa;  → Mobile app with local DB + sync&#xa;R7: Tight 3-year delivery timeline&#xa;  → Agile delivery, architecture runway" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="425" width="350" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- TECHNOLOGY STACK -->
+        <mxCell id="tech_box" value="TECHNOLOGY STACK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="660" width="370" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="tech_content" value="• Cloud Platform: AWS / Azure / GCP (IaaS+PaaS)&#xa;• Containers: Docker + Kubernetes (orchestration)&#xa;• Web: HTML5, CSS3, JavaScript (React/Angular)&#xa;• Application: Java / Node.js (stateless services)&#xa;• Database: PostgreSQL (HA) + Redis (session cache)&#xa;• Integration: REST APIs + RabbitMQ/Kafka (async)&#xa;• Monitoring: Prometheus + Grafana + ELK Stack&#xa;• Security: WAF + TLS 1.2+ + AES-256" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="685" width="350" height="115" as="geometry" />
+        </mxCell>
+
+        <!-- NFR Bar at bottom -->
+        <mxCell id="nfr_bar" value="KEY NON-FUNCTIONAL REQUIREMENTS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2F5496;fontColor=#ffffff;strokeColor=#1B3A6B;fontSize=11;fontStyle=1;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="780" width="1420" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="nfr_content" value="Performance: &lt;3s page load | Scalability: Auto-scale to millions concurrent (Census Night) | Availability: 99.99% during enumeration | Security: TLS 1.2+, AES-256, WAF, pen tested | Privacy: Statistics Act compliance, DoS holds unique key | Capacity: 9.5M forms (29 pages avg) | Accessibility: WCAG 2.0 AA | DR: Multi-region warm standby (RPO &lt;1hr, RTO &lt;4hr) | Usability: No software install, any modern browser | Compliance: Electronic Transactions Act 2009, Privacy Act" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="805" width="1400" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Scope Statement -->
+        <mxCell id="scope_bar" value="SCOPE: Capture Census responses electronically via internet (desktop + mobile) during enumeration period | Cloud-hosted (dev through production) | Full support services | EXCLUDES: Census data analysis, non-private dwellings (paper only for v1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;fontSize=9;fontStyle=2;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="900" width="1420" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Key Capacity Numbers -->
+        <mxCell id="capacity_box" value="KEY CAPACITY NUMBERS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;verticalAlign=top;fontSize=11;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1490" y="780" width="260" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="capacity_content" value="• 23M population&#xa;• 9.5M dwellings/households&#xa;• ~27,000 Census Collectors&#xa;• ~29 pages per form (avg)&#xa;• ~50 questions per person&#xa;• ~3 persons per dwelling&#xa;• Peak: Census Night (1st Tue Aug)&#xa;• Enumeration: 1 month (August)" style="text;html=1;align=left;verticalAlign=top;fontSize=9;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="805" width="240" height="125" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

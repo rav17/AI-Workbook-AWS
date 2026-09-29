@@ -1,0 +1,281 @@
+Architectural
+Thinking Overview
+
+---PAGE---
+
+Welcome to Architectural Thinking!
+IBM Confidential © IBM Corporation 2025
+2
+
+---PAGE---
+
+Course objectives
+This course should enable you to achieve the following:
+• Describe architecture and architecture models, such as functional or operational.
+• Understand how to elicit, analyze and select architecturally significant requirements.
+• Define and classify nonfunctional requirements and explain how to architect for them.
+• Explain an Architecture Overview and its relationship with the Component and Operational
+Models.
+• Define architecture decisions, for example, use SalesForce as a CRM package.
+• Apply architectural principles, for example, buy before build
+• Identify the functional aspects of an IT architecture and some key design principles used in
+building Component Models, such as loose coupling and strong cohesion
+• Explain the approach, steps and artifacts used to define an Operational Model (e.g.
+Location Model, Node Model, Deployment Model, etc.).
+• Describe technical reviews and how to incorporate full life cycle validation and verification
+into architectural thinking
+• Understand how architects operate within agile teams and how agile frameworks and
+approaches affect architectural styles.
+IBM Confidential © IBM Corporation 2025
+3
+
+---PAGE---
+
+What are the course prerequisites?
+Before beginning this course, you should have completed the following prerequisites:
+• Review case study background on which the in-class exercises are based.
+• Case Study Background
+IBM Confidential © IBM Corporation 2025
+4
+
+---PAGE---
+
+The instructors for this class
+Instructor Title/Division/Email
+Instructor #1 Info #1
+Instructor #2 Info #2
+IBM Confidential © IBM Corporation 2025
+5
+
+---PAGE---
+
+Let us take a few minutes to meet each other
+Please introduce yourself by giving us the following details about yourself:
+• Your name
+• Your current role
+• Your experience in IT
+• Your experience on the job
+• Your areas of specialization
+• What you expect to get from this class
+IBM Confidential © IBM Corporation 2025
+6
+
+---PAGE---
+
+Administrative items
+Please, take note of the following:
+• Prompt start, please
+• Estimated finish times
+• Lunch time
+• There will be morning and afternoon breaks
+IBM Confidential © IBM Corporation 2025
+7
+
+---PAGE---
+
+Agenda for Virtual AT Delivery
+Day 1 (8 hours) Day 2 (6:30 hours) Day 3 (7:45 hours) Day 4 (4:30)
+Architectural Thinking Overview Day 1 Checkpoint Day 2 Checkpoint Day 3 Checkpoint
+What Is Architecture? Architecture Overview Operational Aspect - Part 1 Agile for Architects – Part 1
+Requirements Aspect:
+Exercise 2 and Review Exercise 4 and Review Exercise 6 and Review
+Functional
+Lunch Functional Aspect Lunch Agile for Architects – Part 2
+Requirements Aspect:
+Lunch Operational Aspect - Part 2 Summary and Close
+Nonfunctional
+Case Study Introduction Exercise 3 and Review Exercise 5 and Review
+Exercise 1 and Review Validation and Viability
+Architectural Decisions and
+Principles
+IBM Confidential © IBM Corporation 2025
+8
+
+---PAGE---
+
+Agenda for Virtual AT Delivery
+Day 1 Day 2 Day 3 Day 4
+• Day 2 Checkpoint • Day 3 Checkpoint
+• Architectural Thinking Overview • Day 1 Checkpoint
+• Operational Aspect - Part 1 • Agile for Architects – Part 1
+• Architecture Overview
+• What Is Architecture?
+• Exercise 4 and Review • Exercise 6 and Review
+• Exercise 2 and Review
+• Requirements Aspect: Functional
+• Agile for Architects – Part 2
+• Functional Aspect
+• Lunch • Summary and Close
+• Lunch • Lunch
+• Operational Aspect - Part 2
+• Exercise 5 and Review
+• Exercise 3 and Review
+• Requirements Aspect: Nonfunctional
+• Validation and Viability
+• Case Study Introduction
+• Exercise 1 and Review
+• Architectural Decisions and Principles
+IBM Confidential © IBM Corporation 2025
+9
+
+---PAGE---
+
+Agenda for F2F AT Delivery
+Day 1 Day 2 Day 3
+Architectural Thinking Overview Review Day 1 Review Day 2
+What Is Architecture? Exercise 2 and Review Operational Aspect - Part 2
+Requirements Aspect:
+Functional Aspect Exercise 5 and Review
+Functional
+Exercise 3 and Review Validation and Viability
+Lunch
+Lunch Lunch
+Requirements Aspect:
+Nonfunctional
+Operational Aspect - Part 1 Agile for Architects – Part 1
+Case Study Introduction
+Exercise 4 and Review Exercise 6 and Review
+Exercise 1 and Review
+Agile for Architects – Part 2
+Architectural Decisions and
+Principles
+Summary and Close
+Architecture Overview
+IBM Confidential © IBM Corporation 2025
+10
+
+---PAGE---
+
+Agenda for F2F AT Delivery
+Day 1 Day 2 Day 3
+• Architectural Thinking Overview • Review Day 1 • Review Day 2
+• Exercise 2 and Review
+• What Is Architecture? • Operational Aspect - Part 2
+• Functional Aspect
+• Requirements Aspect: Functional • Exercise 5 and Review
+• Exercise 3 and Review
+• Validation and Viability
+• Lunch • Lunch
+• Lunch
+• Operational Aspect - Part 1
+• Requirements Aspect: Nonfunctional
+• Exercise 4 and Review
+• Case Study Introduction • Agile for Architects – Part 1
+• Exercise 1 and Review • Exercise 6 and Review
+• Architectural Decisions and Principles • Agile for Architects – Part 2
+• Architecture Overview • Summary and Close
+IBM Confidential © IBM Corporation 2025
+11
+
+---PAGE---
+
+Architectural thinking involves inputs, processes, and outputs (1 of 2)
+Requirements
+What is to be solved?
+Qualities
+Architecture
+How “good” is it?
+Assets
+What is available?
+Viability
+IBM Confidential © IBM Corporation 2025
+12
+
+---PAGE---
+
+Architectural thinking involves inputs, processes, and outputs (2 of 2)
+What’s the IT system got to do?
+How should the IT system behave?
+These are the system’s parts,
+and this is how it works
+Requirements
+together.
+What is to be solved?
+Qualities
+Architecture
+How “good” is it?
+Assets
+What is available?
+Viability
+After all that, will it work?
+Is there anything that’s done
+this before?
+IBM Confidential © IBM Corporation 2025
+13
+
+---PAGE---
+
+Architectural thinking is iterative and complex
+IBM Confidential © IBM Corporation 2025
+14
+
+---PAGE---
+
+What architectural thinking involves
+• Learning a variety of architecture styles and approaches
+• Avoiding the “golden hammer” anti-pattern
+• Not rushing to a solution
+• Understanding that fixing one problem often causes another
+• Looking for unconventional solutions
+IBM Confidential © IBM Corporation 2025
+15
+
+---PAGE---
+
+What statement best describes the anti- B
+pattern called "golden hammer?"
+When you have a preferred solution style (a
+“golden hammer”), every problem begins to look
+A. The ultimate goal in solving any problem is to create a
+the same, like a silver nail.
+perfect solution, like a golden hammer.
+B. When you have a preferred solution style (a “golden
+hammer”), every problem begins to look the same, like a
+silver nail.
+C. Sometimes a solution that looks good, like a “golden
+hammer”, proves too unrealistic to be of any practical
+value.
+16
+
+---PAGE---
+
+Now, let us get started
+IBM Confidential © IBM Corporation 2025
+17
+
+---PAGE---
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+18
+
+---PAGE---
+

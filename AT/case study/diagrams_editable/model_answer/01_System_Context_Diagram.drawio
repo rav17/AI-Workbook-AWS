@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0" type="device">
+  <diagram id="system-context" name="System Context Diagram">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title1" value="&lt;b&gt;System Context Diagram&lt;/b&gt;&lt;br&gt;ECS (Electronic Census System) - Exercise 1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="550" y="20" width="500" height="50" as="geometry" />
+        </mxCell>
+        <!-- Central System: ECS -->
+        <mxCell id="ecs" value="&lt;b&gt;ECS&lt;/b&gt;&lt;br&gt;(Electronic Census System)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4472C4;fontColor=#ffffff;strokeColor=#2F5597;fontSize=14;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="480" width="320" height="120" as="geometry" />
+        </mxCell>
+        <!-- Human Actors (Stick Figures) -->
+        <!-- A_Respondent -->
+        <mxCell id="actor_respondent" value="&lt;b&gt;A_Respondent&lt;/b&gt;&lt;br&gt;(Desktop/Mobile)&lt;br&gt;&lt;i&gt;9.5M dwellings, completes&lt;br&gt;Census online&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="300" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- A_Census_Collector -->
+        <mxCell id="actor_collector" value="&lt;b&gt;A_Census_Collector&lt;/b&gt;&lt;br&gt;&lt;i&gt;27,000 field workers,&lt;br&gt;receives SMS notifications&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="550" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- A_DoS_Administrator -->
+        <mxCell id="actor_dos_admin" value="&lt;b&gt;A_DoS_Administrator&lt;/b&gt;&lt;br&gt;&lt;i&gt;Department of Statistics staff&lt;br&gt;managing Census operations&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="150" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- A_Help_Desk_Operator -->
+        <mxCell id="actor_helpdesk" value="&lt;b&gt;A_Help_Desk_Operator&lt;/b&gt;&lt;br&gt;&lt;i&gt;DoS staff supporting&lt;br&gt;respondents&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="300" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- A_Developer_Tester -->
+        <mxCell id="actor_dev" value="&lt;b&gt;A_Developer_Tester&lt;/b&gt;&lt;br&gt;&lt;i&gt;Organization staff&lt;br&gt;building/testing ECS&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="550" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- A_Support_Staff -->
+        <mxCell id="actor_support" value="&lt;b&gt;A_Support_Staff&lt;/b&gt;&lt;br&gt;&lt;i&gt;Organization staff&lt;br&gt;monitoring/supporting&lt;br&gt;ECS hosting&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="750" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- System Actors (Rectangles) -->
+        <!-- DoS Electronic Census Processing -->
+        <mxCell id="sys_dos_processing" value="&lt;b&gt;DoS Electronic&lt;br&gt;Census Processing&lt;/b&gt;&lt;br&gt;&lt;i&gt;Receives submitted&lt;br&gt;Census data&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="680" y="800" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- SMS Gateway -->
+        <mxCell id="sys_sms_gateway" value="&lt;b&gt;SMS Gateway&lt;/b&gt;&lt;br&gt;(Mobile Phone Network)&lt;br&gt;&lt;i&gt;Sends SMS to collectors&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="200" y="750" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- DoS Forms Processing -->
+        <mxCell id="sys_forms_processing" value="&lt;b&gt;DoS Forms Processing&lt;/b&gt;&lt;br&gt;&lt;i&gt;Processes paper forms&lt;br&gt;(out of ECS scope)&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="150" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- Connections -->
+        <!-- A_Respondent -> ECS -->
+        <mxCell id="edge_respondent" value="HTTPS (Internet)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="actor_respondent" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- ECS -> A_Census_Collector (SMS Notifications) -->
+        <mxCell id="edge_collector" value="SMS Notifications&#xa;(Mobile Network)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;dashed=1;" edge="1" source="ecs" target="actor_collector" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- A_DoS_Administrator -> ECS -->
+        <mxCell id="edge_dos_admin" value="Internal Network (HTTPS)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="actor_dos_admin" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- A_Help_Desk_Operator -> ECS -->
+        <mxCell id="edge_helpdesk" value="Internal Network" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="actor_helpdesk" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- A_Developer_Tester -> ECS -->
+        <mxCell id="edge_dev" value="Internal Network (CI/CD)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.6;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="actor_dev" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- A_Support_Staff -> ECS -->
+        <mxCell id="edge_support" value="Internal Network (Monitoring)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.8;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="actor_support" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- ECS -> DoS Electronic Census Processing -->
+        <mxCell id="edge_dos_proc" value="Secure Data Transfer (VPN)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="ecs" target="sys_dos_processing" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- ECS -> SMS Gateway -->
+        <mxCell id="edge_sms" value="SMS API (HTTPS)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.8;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="ecs" target="sys_sms_gateway" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Legend -->
+        <mxCell id="legend_box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="900" width="400" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_title" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="50" y="905" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_human" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="60" y="940" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_human_label" value="Human Actor" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="945" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_sys" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="200" y="945" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_sys_label" value="System Actor" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="240" y="945" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_ecs_sample" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4472C4;strokeColor=#2F5597;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="985" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_ecs_label" value="System Under Design" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="985" width="130" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

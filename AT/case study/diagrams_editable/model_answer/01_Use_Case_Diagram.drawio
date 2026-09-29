@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0" type="device">
+  <diagram id="use-case-diagram" name="Use Case Diagram">
+    <mxGraphModel dx="1622" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title1" value="&lt;b&gt;Use Case Bubble Diagram&lt;/b&gt;&lt;br&gt;ECS (Electronic Census System) - Exercise 1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="600" y="20" width="500" height="50" as="geometry" />
+        </mxCell>
+        <!-- System Boundary (UML Frame) -->
+        <mxCell id="boundary" value="ECS System Boundary" style="shape=mxgraph.sysml.package;html=1;overflow=fill;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;labelX=150;align=left;verticalAlign=top;spacingTop=5;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="80" width="1100" height="1280" as="geometry" />
+        </mxCell>
+        <!-- Actors (Outside Boundary) -->
+        <!-- Respondent (Left Side) -->
+        <mxCell id="actor_respondent" value="&lt;b&gt;Respondent&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="100" y="500" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- DoS Administrator (Right Side) -->
+        <mxCell id="actor_dos_admin" value="&lt;b&gt;DoS Administrator&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="350" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- Support Staff (Right Side, Lower) -->
+        <mxCell id="actor_support" value="&lt;b&gt;Support Staff&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="700" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- Respondent Use Cases (Blue Stroke #4472C4) -->
+        <mxCell id="uc01" value="UC_01:&lt;br&gt;Logon to ECS" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="120" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc02" value="UC_02:&lt;br&gt;Navigate Census&lt;br&gt;Form Sections" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="220" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc03" value="UC_03:&lt;br&gt;Complete Address&lt;br&gt;Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="320" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc04" value="UC_04:&lt;br&gt;Complete Person&lt;br&gt;Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="420" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc05" value="UC_05:&lt;br&gt;Complete Dwelling&lt;br&gt;Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="520" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc06" value="UC_06:&lt;br&gt;Complete Feedback&lt;br&gt;Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="620" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc07" value="UC_07:&lt;br&gt;Save Progress" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="720" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc08" value="UC_08:&lt;br&gt;Resume Incomplete&lt;br&gt;Form" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="820" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc09" value="UC_09:&lt;br&gt;Submit Completed&lt;br&gt;Form" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="920" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc10" value="UC_10:&lt;br&gt;View Receipt/&lt;br&gt;Confirmation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1020" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc11" value="UC_11:&lt;br&gt;Logoff" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1120" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc12" value="UC_12:&lt;br&gt;Submit Form&lt;br&gt;(Mobile Device)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1220" width="160" height="70" as="geometry" />
+        </mxCell>
+        <!-- DoS Administrator Use Cases (Orange Stroke #ED7D31) -->
+        <mxCell id="uc20" value="UC_20:&lt;br&gt;Monitor Submission&lt;br&gt;Statistics" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="220" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc21" value="UC_21:&lt;br&gt;Generate Daily&lt;br&gt;Reports" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="330" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc22" value="UC_22:&lt;br&gt;Transfer Data to&lt;br&gt;DoS Processing" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="440" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc23" value="UC_23:&lt;br&gt;Send Collector&lt;br&gt;Notifications (SMS)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="550" width="180" height="70" as="geometry" />
+        </mxCell>
+        <!-- Support Staff Use Cases (Green Stroke #70AD47) -->
+        <mxCell id="uc30" value="UC_30:&lt;br&gt;Monitor System&lt;br&gt;Health" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#70AD47;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="700" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc31" value="UC_31:&lt;br&gt;Manage Application&lt;br&gt;Deployment" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#70AD47;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="810" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc32" value="UC_32:&lt;br&gt;Provide Help Desk&lt;br&gt;Support Info" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#70AD47;strokeWidth=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="920" width="180" height="70" as="geometry" />
+        </mxCell>
+        <!-- Connections: Respondent to Use Cases -->
+        <mxCell id="line_r_uc01" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc01" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc02" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc02" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc03" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc03" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc04" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc04" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc05" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc05" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc06" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc06" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc07" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc07" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc08" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc08" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc09" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc09" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc10" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc10" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc11" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc11" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_r_uc12" style="endArrow=none;html=1;strokeColor=#4472C4;" edge="1" source="actor_respondent" target="uc12" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Connections: DoS Administrator to Use Cases -->
+        <mxCell id="line_a_uc20" style="endArrow=none;html=1;strokeColor=#ED7D31;" edge="1" source="actor_dos_admin" target="uc20" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_a_uc21" style="endArrow=none;html=1;strokeColor=#ED7D31;" edge="1" source="actor_dos_admin" target="uc21" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_a_uc22" style="endArrow=none;html=1;strokeColor=#ED7D31;" edge="1" source="actor_dos_admin" target="uc22" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_a_uc23" style="endArrow=none;html=1;strokeColor=#ED7D31;" edge="1" source="actor_dos_admin" target="uc23" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Connections: Support Staff to Use Cases -->
+        <mxCell id="line_s_uc30" style="endArrow=none;html=1;strokeColor=#70AD47;" edge="1" source="actor_support" target="uc30" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_s_uc31" style="endArrow=none;html=1;strokeColor=#70AD47;" edge="1" source="actor_support" target="uc31" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="line_s_uc32" style="endArrow=none;html=1;strokeColor=#70AD47;" edge="1" source="actor_support" target="uc32" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Legend -->
+        <mxCell id="legend_box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="1100" width="500" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_title" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1105" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_blue" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="1145" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_blue_label" value="Respondent Use Cases" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="1140" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_orange" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="1175" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_orange_label" value="DoS Administrator Use Cases" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="1170" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_green" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#70AD47;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="1205" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_green_label" value="Support Staff Use Cases" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="1200" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_actor_sample" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1140" width="20" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_actor_label" value="Actor (Human)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="1140" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_boundary_sample" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1180" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_boundary_label" value="System Boundary" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="1175" width="110" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

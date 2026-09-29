@@ -1,0 +1,39 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="location" name="Location Model">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Exercise 4: Location Model - ECS" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="10" width="500" height="40" as="geometry" />
+        </mxCell>
+        <!-- Locations -->
+        <mxCell id="loc1" value="Respondent Location&#xa;(Homes/Offices across Bolumbia)&#xa;~9.5 Million Dwellings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;verticalAlign=middle;arcSize=15;" vertex="1" parent="1">
+          <mxGeometry x="50" y="100" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="loc2" value="Cloud Hosting Environment&#xa;(Cloud Provider Data Center)&#xa;Primary Region" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;verticalAlign=middle;arcSize=15;" vertex="1" parent="1">
+          <mxGeometry x="530" y="100" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="loc3" value="DoS Data Center&#xa;(Government Premises)&#xa;Secure / Restricted" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;verticalAlign=middle;arcSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="100" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="loc4" value="Census Collector (Field)&#xa;(Mobile Devices)&#xa;~27,000 Collectors across Bolumbia" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;verticalAlign=middle;arcSize=15;" vertex="1" parent="1">
+          <mxGeometry x="50" y="500" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="loc5" value="DoS Internal Network&#xa;(Admin Systems, Help Desk)&#xa;Government Internal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;verticalAlign=middle;arcSize=15;" vertex="1" parent="1">
+          <mxGeometry x="530" y="500" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="loc6" value="DR Region&#xa;(Cloud Provider Backup DC)&#xa;Warm Standby" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;verticalAlign=middle;arcSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="500" width="280" height="100" as="geometry" />
+        </mxCell>
+        <!-- Connections -->
+        <mxCell id="conn1" value="Internet (HTTPS)" style="strokeWidth=2;strokeColor=#2F5496;fontSize=9;" edge="1" source="loc1" target="loc2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="conn2" value="Secure Link (VPN/Direct Connect)" style="strokeWidth=2;strokeColor=#C00000;fontSize=9;" edge="1" source="loc2" target="loc3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="conn3" value="Mobile Network (SMS)" style="strokeWidth=2;strokeColor=#ED7D31;fontSize=9;" edge="1" source="loc2" target="loc4" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="conn4" value="Internal Network" style="strokeWidth=2;strokeColor=#666;fontSize=9;" edge="1" source="loc2" target="loc5" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="conn5" value="Async Replication" style="strokeWidth=2;strokeColor=#C00000;dashed=1;fontSize=9;" edge="1" source="loc2" target="loc6" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="conn6" value="Secure Network" style="strokeWidth=2;strokeColor=#666;fontSize=9;" edge="1" source="loc3" target="loc5" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

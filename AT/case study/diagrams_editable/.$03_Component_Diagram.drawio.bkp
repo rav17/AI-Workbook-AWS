@@ -1,0 +1,95 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="component" name="Component Relationship Diagram">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Exercise 3: Logical Component Relationship Diagram - ECS" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="700" height="40" as="geometry" />
+        </mxCell>
+        <!-- Actor -->
+        <mxCell id="respondent" value="Respondent" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="50" y="280" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- Components -->
+        <mxCell id="presentation" value="&lt;&lt;component&gt;&gt;&#xa;Presentation Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" value="&lt;&lt;component&gt;&gt;&#xa;Authentication Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="100" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="session" value="&lt;&lt;component&gt;&gt;&#xa;Session Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="100" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="form" value="&lt;&lt;component&gt;&gt;&#xa;Form Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="validation" value="&lt;&lt;component&gt;&gt;&#xa;Validation Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dataaccess" value="&lt;&lt;component&gt;&gt;&#xa;Data Access Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="integration" value="&lt;&lt;component&gt;&gt;&#xa;Integration Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="notification" value="&lt;&lt;component&gt;&gt;&#xa;Notification Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="security" value="&lt;&lt;component&gt;&gt;&#xa;Security Manager&#xa;(cross-cutting)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="reporting" value="&lt;&lt;component&gt;&gt;&#xa;Reporting Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="450" width="180" height="70" as="geometry" />
+        </mxCell>
+        <!-- External Systems -->
+        <mxCell id="censusdb" value="Census Database" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="530" y="620" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dosproc" value="DoS Electronic&#xa;Census Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="630" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="smsext" value="SMS Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffc000;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="630" width="150" height="50" as="geometry" />
+        </mxCell>
+        <!-- Component Responsibilities (annotations) -->
+        <mxCell id="resp_pres" value="Responsibilities:&#xa;• Render Census form pages (HTML)&#xa;• Handle user input &amp; navigation&#xa;• Responsive layout (desktop/mobile)" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="150" y="350" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_auth" value="Responsibilities:&#xa;• Validate CFN + ECN credentials&#xa;• Manage logon/logoff&#xa;• Rate limit failed attempts" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="450" y="175" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_session" value="Responsibilities:&#xa;• Create/destroy sessions&#xa;• Timeout management&#xa;• Concurrent access control" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="750" y="175" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_form" value="Responsibilities:&#xa;• Census form lifecycle (create/save/submit)&#xa;• Section navigation logic&#xa;• Receipt number generation" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="450" y="345" width="250" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_val" value="Responsibilities:&#xa;• Field-level validation rules&#xa;• Cross-field validation&#xa;• Mandatory field checks" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="750" y="345" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_data" value="Responsibilities:&#xa;• CRUD on census response data&#xa;• Save partial progress&#xa;• Retrieve saved forms" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="450" y="525" width="230" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="resp_int" value="Responsibilities:&#xa;• Transfer submitted data to DoS&#xa;• Trigger SMS via gateway&#xa;• Handle async/retry logic" style="text;html=1;align=left;verticalAlign=top;fontSize=8;fontStyle=2;fontColor=#333333;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="750" y="525" width="230" height="55" as="geometry" />
+        </mxCell>
+        <!-- Connections -->
+        <mxCell id="c1" edge="1" source="respondent" target="presentation" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c2" edge="1" source="presentation" target="auth" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c3" edge="1" source="presentation" target="form" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c4" edge="1" source="auth" target="session" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c5" edge="1" source="form" target="validation" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c6" edge="1" source="form" target="dataaccess" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c7" edge="1" source="form" target="integration" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c8" edge="1" source="dataaccess" target="censusdb" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c9" edge="1" source="integration" target="dosproc" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c10" edge="1" source="integration" target="notification" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c11" edge="1" source="notification" target="smsext" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c12" style="dashed=1;strokeColor=#b85450;" edge="1" source="security" target="auth" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c13" style="dashed=1;strokeColor=#b85450;" edge="1" source="security" target="form" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c14" style="dashed=1;strokeColor=#b85450;" edge="1" source="security" target="dataaccess" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,86 @@
+Architectural Thinking Workshop
+Exercise 1: Requirements Definition
+(Exercise Description)
+IBM Professional Series: Architectural Thinking Workshop
+IBM Client Education Version 7 IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This
+document may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Some tricks of the trade for the breakout exercises (1 of 2)
+For the breakout exercises, you’ll be in multidisciplinary teams.
+▪ Make sure you know who knows what.
+Identify on your team:
+▪ A scribe
+▪ A timekeeper
+▪ A presenter
+▪ A decision-maker
+• Important: “Debate which questions to ask, not the answers.”
+Instructors will visit every team. Use them:
+▪ Just as instructors and mentors
+▪ "In role" as Case Study expert users
+Remember this about the exercise presentations that you will prepare:
+▪ There will be a presentation and discussion.
+▪ You will probably use 3 - 4 working flip chart sheets or screenshots per team.
+▪ We’ll call on one or more teams each session.
+▪ We’ll discuss a “model answer” at the end.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+2 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Some tricks of the trade for the breakout exercises (1 of 2)
+For the breakout exercises, you’ll be in multidisciplinary teams.
+▪ Make sure you know who knows what.
+Hint: Whatever
+Hint: Change
+Hint: Make the the question,
+Identify on your team: for each
+scribe and the “heads” is
+▪ A scribe exercise.
+presenter the “YES.”
+▪ A timekeeper
+same person.
+▪ A presenter
+▪ A decision-maker
+• Important: “Debate which questions to ask, not the answers.”
+Instructors will visit every team. Use them:
+Hint: If they go
+▪ Just as instructors and mentors missing, find
+them.
+▪ "In role" as Case Study expert users
+Remember this about the exercise presentations that you will prepare:
+▪ There will be a presentation and discussion.
+▪ You will probably use 3 - 4 working flip chart sheets or screenshots per team.
+▪ We’ll call on one or more teams each session.
+Hint: You will
+▪ We’ll discuss a “model answer” at the end.
+not know if
+it’s you until
+the end of the
+exercise.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+3 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Case study Exercise 1: Requirements Definition
+At the end of this exercise, you will need to be ready with the following:
+▪ A System Context Diagram:
+▪ Remember to include both human and system actors
+▪ A high-level Use Case Model (a “bubble diagram”)
+▪ Do not include Use Cases themselves
+▪ List of key qualities (non-functional requirements) that the solution needs to satisfy
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+4 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+THANK YOU
+IBM, the IBM logo, and ibm.com are trademarks or registered trademarks of International Business Machines Corporation in the
+United States, other countries, or both. If these and other IBM trademarked terms are marked on their first occurrence in this
+information with a trademark symbol (® or ™), these symbols indicate U.S. registered or common law trademarks owned by IBM at
+the time this information was published. Such trademarks may also be registered or common law trademarks in other countries. A
+current list of IBM trademarks is available on the Web at "Copyright and trademark information.“ Java and all Java-based
+trademarks and logos are trademarks or registered trademarks of Oracle and its affiliates.
+Linux is a trademark of Linus Torvalds in the United States, or other countries, or both. Microsoft, Excel, PowerPoint, Project,
+Visio, Word, and Windows are trademarks of the Microsoft Corporation in the United States, other countries, or both. UML is a
+registered trademark of Object Management Group, Inc. in the United States and/or other countries. TOGAF and UNIX are
+registered trademarks of The Open Group in the United States and other countries. Other company, product, and service names
+may be trademarks of IBM or other companies. Citrix is a trademark of Citrix Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and Trademark Office and in other countries.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document
+5 Architectural Thinking Workshop may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+

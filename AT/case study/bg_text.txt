@@ -1,0 +1,387 @@
+Architectural Thinking Workshop – Case Study Background
+Architectural Thinking Workshop
+Case Study Background
+Version: 7
+__________________________________________________________________________________
+Page 1
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Architectural Thinking Workshop – Case Study Background
+Table of Contents
+1. Introduction .................................................................................................................................... 3
+1.1 Purpose of this document ..................................................................................................... 3
+1.1 Reading guide ........................................................................................................................ 3
+1.2 Definitions ............................................................................................................................. 3
+2. Case Study Background ................................................................................................................... 5
+2.1 Introduction ........................................................................................................................... 5
+2.2 The client ............................................................................................................................... 5
+2.3 Business purpose ................................................................................................................... 5
+2.4 Scope of the project .............................................................................................................. 6
+2.5 Existing client environment ................................................................................................... 6
+3. Business requirements .................................................................................................................... 7
+3.1 Business Process .................................................................................................................... 7
+3.2 Census Form .......................................................................................................................... 8
+Table of Figures
+Figure 1 - Census business process illustration ....................................................................................... 7
+Figure 2 - Census form structure ............................................................................................................ 9
+__________________________________________________________________________________
+Page 2
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Architectural Thinking Workshop – Case Study Background
+1. Introduction
+1.1 Purpose of this document
+This document is part of the case study materials for the Architectural Thinking Workshop course.
+The course uses a single case study where you, as a participant, play the role of lead architect during
+a proposal that has already started.
+1.1 Reading guide
+This document should be read in its entirety prior to starting the course. It should then be used as a
+reference during the course.
+This document will not provide you all the information you will need to complete the solution,
+therefore you will need to elicit additional requirements in client role plays during the course. Think
+about what other information you will need as you are reading this document and write down
+questions that you will ask the instructors to clarify and expand your understanding of the problem.
+1.2 Definitions
+Table 1. List of Terms and Acronyms.
+Term / Acronym Meaning
+Bolumbia Post The mail and parcel delivery service in Bolumbia.
+Census The Census of Population and Housing provides a snapshot of Bolumbia's
+people and their housing. The Census is the largest statistical collection
+undertaken by the DoS and one of the most important. Its objective is to
+accurately measure the number and key characteristics of people who are in
+Bolumbia on Census Night, and of the dwellings in which they live.
+Census Night While respondents may submit their responses during entire enumeration
+period, questions must be answered for the situation in the dwelling on
+Census night.
+CFN The CFN is a unique number assigned to each dwelling by the Census
+Collector upon delivery of the paper Census Form. The format of the CFN is:
+NNNNNNN A NNNN A
+CWL CD RNO CD
+Where:
+• CWL: Is the Collector Workload (CWL) (approximately 27,000 CWLs)
+followed by its alpha Check Digit (CD)
+• RNO: Is a sequential number issued by the collector when delivering
+forms called the RNO (Record Number) followed by its alpha Check
+Digit (CD).
+The CFN and ECN are used by the respondent as credentials to logon to ECS.
+CWL The seven digit Collector Workload (CWL) component of the CFN code. There
+will be approximately 27,000 CWLs. Refer to CFN.
+__________________________________________________________________________________
+Page 3
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Architectural Thinking Workshop – Case Study Background
+Term / Acronym Meaning
+DoS Bolumbia’s Department of Statistics
+Dwelling A dwelling is an important legal concept which defines a self-contained unit of
+accommodation used by one or more households as a home, such as a
+house, apartment, mobile home, houseboat or other 'substantial' structure.
+ECN The ECN uniquely identifies a Census form. The ECN format is as follows:
+Where:
+• There is a first 8-digit random sequence followed by 4 check digits.
+The ECN and CFN are used by the respondent as credentials to logon to ECS.
+ECS The Electronic Census System is the subject of this document.
+Enumeration Period Period during which Census response must be submitted.
+PD Private Dwelling (refer to Dwelling)
+RNO RNO (Record Number) is a four digit sequential number part of the CFN which
+is issued by the collector when delivering forms. Refer to CFN.
+__________________________________________________________________________________
+Page 4
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+N N
+RN
+N
+au
+N
+nm
+N
+d ob
+N
+me
+N
+r
+N N N
+C
+N
+D
+N
+
+Architectural Thinking Workshop – Case Study Background
+2. Case Study Background
+2.1 Introduction
+The proposal is for the Republic of Bolumbia’s Department of Statistics. The Department of Statistics
+(DoS) wants to implement a new Electronic Census System (ECS) for the next population Census to
+complement the existing manual process for collecting information about the current population.
+The client has asked for a proposal for the delivery of an Electronic Census System. A team has been
+assembled to respond to this client request. Some work has already been started. The lead architect
+who started as part of the proposal team is no longer available to work on the ECS proposal and you
+have been called to take the role of the lead architect.
+2.2 The client
+Our client is the government of the Republic of Bolumbia, a prosperous country with a population of
+over 23 million people.
+The government has a Department of Statistics (DoS) which collects and analyses information about
+various aspects of the country including its population, society, health and the economy to name the
+key areas. The department has been running a Population and Housing Census for over 100 years
+and in recent history the Census has run every 5 years, the next census being three years from now.
+The mission of the DoS is to assist and encourage informed decision making, research and discussion
+within government and the community, by leading a high quality, objective and responsive national
+statistical service.
+DoS is looking for an IT partner to deliver the complete ECS solution including implementation,
+hosting and support.
+2.3 Business purpose
+The Census of Population and Housing is the largest statistical collection undertaken by the DoS and
+one of the most important. Its objective is to accurately measure the number and key
+characteristics of people who are in Bolumbia on Census Night, and of the dwellings in which they
+live. This information provides a reliable basis for estimating the population of each of the provinces
+and local government areas, primarily for electoral purposes and for planning the distribution of
+government funds. Census data are also used by individuals and organizations in the public and
+private sectors to make informed decisions on policy and planning issues that impact on the lives of
+all Bolumbians. Everyone in Bolumbia is legally required to complete a Census form, to ensure that
+the Census data give an accurate and complete picture of the nation.
+To date the Census has been done by manually distributing and collecting paper forms from each
+household and business in the country before entering this information into a computer system. In
+line with DoS’ continual improvements program, effort has been expended in order to improve and
+expand communications channels to, and from the public. The ECS initiative represents a significant
+step in this process as it embraces the internet as a viable, and powerful, communications medium.
+__________________________________________________________________________________
+Page 5
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Architectural Thinking Workshop – Case Study Background
+ECS needs to provide the Bolumbian population with the ability to complete the next Census Form
+electronically over the Internet, with a solution that does not require any software other than
+desktop internet browser on the respondent’s computer and/or mobile app on the respondent’s
+mobile device. The next Census will occur in 3 years’ time.
+Thus the ECS initiative addresses the following DoS objectives:
+• Responds to public requests for increased flexibility in methods of completing Census
+materials.
+• Capitalizes on the internet as a viable communications channel.
+• Meets DoS obligations under the Electronic Transactions Act 2009.
+• Provides online support of the 2016 Census.
+• Maintains the privacy & perception of privacy, in that DoS holds a unique security access key
+to the managed data, and only staff employed under the Statistics Act can access the raw
+respondent data.
+2.4 Scope of the project
+You are asked to propose an ECS that includes the following elements:
+• Definition of a solution for capturing Census information electronically via the internet using
+a desktop or mobile device, through the Census period.
+• Implementation of the solution including testing and production deployment.
+• Use a cloud based environment to host services during the length of the project (i.e. through
+development and production) to optimize DoS infrastructure investment and provide
+maximum flexibility to increase or decrease infrastructure resources in line with demand.
+• Support services for the application and infrastructure (i.e. full support for the overall
+solution).
+The ECS proposal does not include:
+• Systems to analyze Census information collected (this is the subject of another proposal).
+• Non-private dwellings: These responses will be paper-based for this first release of ECS.
+2.5 Existing client environment
+The ECS is a new system therefore there are no existing environment constraints as far as the core
+ECS solution is concerned. However, there are constraints in terms of the client environments that
+need to be supported including Operating Systems, Browsers, network bandwidth, etc.
+The ECS will need to integrate with other DoS systems and there are various options that can be
+explored in terms of middleware and communication style.
+__________________________________________________________________________________
+Page 6
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Architectural Thinking Workshop – Case Study Background
+3. Business requirements
+3.1 Business Process
+The figure below [Figure 1] illustrates the overall Census business process and its major components.
+The numbered text following the figure describes the principle business flows as marked in the
+diagram. The blue shaded area [New ECS Hosting Environment] shows the scope for the new ECS
+Hosting Environment and the focus of this document.
+Figure 1 - Census business process illustration
+The overall Census process of which ECS is one part occurs as follows.
+1. The ECS application will be developed, and tested by your organization’s application
+development staff, then installed into the Production hosting environment for DoS User
+Acceptance Testing, and updated with any fixes ready for production use.
+2. At the beginning of the Census enumeration period ~27,000 Census Collectors deliver
+Census forms to each of the approximately 9.5 million households in Bolumbia. Along with
+their Census form each household receives an envelope containing their ‘Electronic Census
+Number’ and instructions on how to use this and their Census Form Number to do their
+census response on line using ECS.
+__________________________________________________________________________________
+Page 7
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+D w e
+3
+R e sp o n
+llin g (1
+d e
+o
+n t
+f 9 ,5 0
+8
+C e n su s fo rm s
+S M S m e ssa g
+C e n s u s
+6 C o lle c to r
+2
+C e n su s fo rm
+M o b ile d e live ry
+p h o n e n e tw o rk
+O p tio n a l
+C e n su s fo rm
+co lle ct
+BOLUM BIA
+O p tio n a l
+M a il C e n su s fo rm
+4
+In te rn e t
+O p tio n a l E C S
+re sp o n se
+0 ,0 0 0 )
+O rg a n is a tio n a l in fo rm a tio n (d o c u m e n ts e tc .)
+P a p e r fo rm s a n d re la te d d a ta
+C o lle c to r n o tific a tio n d a ta
+E C S re s p o n d e n t a n d m a n a g e m e n t d a ta
+B ro k e n lin e (a n y c o lo u r) re p re s e n ts o p tio n a l p a th
+e
+D
+1
+C e n s u s H e lp D e s k
+F o rm s
+P ro c e s s in g
+E le c tro n ic
+C e n s u s
+P ro c e s s in g
+5 7
+P ro d u c
+E C S
+1
+e ve lo p e r T e ste r
+A p p lic a tio n
+d e v e lo p m e n t
+N e w E C S
+E n v i r o n
+0
+tio
+Hm
+n
+o
+D
+D a ta
+1 1
+9
+S u p p o rt S ta ff
+S u p p o r t
+s t i n g
+e n t
+o S
+
+Architectural Thinking Workshop – Case Study Background
+3. During the enumeration period which runs during the month of August, a Census return
+must be completed for each dwelling/household. The Census response can be made at any
+time during the enumeration period; however the questions must be answered for the
+situation in the dwelling on Census night (the first Tuesday of August, 3 years from now).
+Due to this requirement many respondents complete their Census response on Census
+night.
+4. Respondents have the option of either completing a paper Census form collected by the
+Census Collectors, or completing their Census online using ECS. The ‘Electronic Census
+Number’ and ‘Census Form Number’ delivered with their Census form are used as access
+credentials for ECS. Respondents may also mail their forms back via Bolumbia Post.
+5. The ECS system transfers the Census Form Number (CFN) and address details of respondents
+who complete their Census return using ECS to the DoS Electronic Census Processing system.
+6. These details are sent to the appropriate Census Collector via an SMS message, enabling
+them to remove these addresses from their collection lists.
+7. The ECS system transfers all newly submitted ECS returns to the DoS Electronic Census
+Processing system. The Electronic Census Processing system transfers this data to the DoS
+Census database. This transfer of data is depicted by the red lines and arrows in Figure 1.
+8. The Census Collectors return to all dwellings remaining on their collection lists to collect the
+completed paper Census forms. These forms are processed by the DoS Forms Processing
+system and the resulting data loaded into the DoS Census database. The business flow of
+paper Census forms is indicated by the green arrows in Figure 1.
+9. The ECS system is monitored and supported by your organization’s staff in the hosting
+support groups.
+10. A Census help desk is provided by the DoS to handle respondent questions regarding
+completion of the Census form, or use of ECS. Your organization’s development group
+provides the help desk with ECS application usage information to support the application.
+11. Daily reports and other information pass between your organization and the DoS to support
+ECS operation as indicated by the solid black arrow in Figure 1.
+3.2 Census Form
+This section briefly describes how the Census Form is structured. The word form is used to describe
+the complete census response completed by a respondent. The form includes multiple sections
+containing questions and each of the sections can have one or more pages.
+Please note that page refers both to a physical page in the paper form as well as an electronic page
+displayed in the user’s desktop or mobile application by the ECS.
+The following diagram in Figure 2 shows the Census Form structure.
+__________________________________________________________________________________
+Page 8
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Architectural Thinking Workshop – Case Study Background
+Figure 2 - Census form structure
+The Census Form comprises 4 sections as can be seen in the Figure 2 diagram:
+• Address section: One page with the dwelling address details.
+• Person section: This section comprises 21 pages on average. There are 50 questions per
+person, which at around 7 questions per page equate to 7 pages. There are approximately 3
+persons per dwelling on average (23 Million people divided by 9.5 Million dwellings);
+therefore there is an average of 21 pages for the person section.
+• Dwelling section: This section comprises 6 pages on average based on 10 questions and the
+same logic applied to the person section (i.e. 2 [pages] * 3 [people] = 6 [pages]).
+• Feedback section: One page with respondent feedback captured before submitting the
+complete form.
+Trademarks
+IBM, the IBM logo, and ibm.com are trademarks or registered trademarks of International Business
+Machines Corporation in the United States, other countries, or both. If these and other IBM
+trademarked terms are marked on their first occurrence in this information with a trademark symbol
+(® or ™), these symbols indicate U.S. registered or common law trademarks owned by IBM at the
+time this information was published. Such trademarks may also be registered or common law
+trademarks in other countries. A current list of IBM trademarks is available on the web at Copyright
+*
+and trademark information.
+Other product and service names might be trademarks of IBM or other companies.
+__________________________________________________________________________________
+Page 9
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+A d
+AS
+d
+de
+r
+dc
+e
+r e s s
+t io n
+s s P a g e
+P e r s o n S e c t io n
+P e r s o n P a g e s
+P e r s o n P a g e ( 2 1 ) P e r s o n P a g e
+P e r s o n P a g
+P e r s o n P a
+C
+eg
+e
+e n s u s F o r m
+D
+D w e llin g
+S e c t io n
+D w e llin g
+w e llin g P P a g e s ( 6 a) g e
+F
+F
+eS
+e
+ee
+eP
+dc
+da
+b a
+t io
+b a
+g e
+cn
+c
+k
+k
+

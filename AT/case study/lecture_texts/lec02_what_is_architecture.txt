@@ -1,0 +1,821 @@
+What is Architecture?
+Version 7
+
+---PAGE---
+
+Module outline
+→ Introduction and objectives
+↘ What is architecture?
+↘ IBM’s Architects
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+2
+
+---PAGE---
+
+Learning Objective
+At the end of this module, you should be able to:
+• Explain what is meant by architecture and how we use it to help us design viable IT systems
+• Understand why architecture is important in the modern age of fast-paced change
+• Describe what an IT Architect is and what ones does in the design of IT system
+• Describe the relation between:
+• Enterprise architecture and solution architecture
+• Business architecture and IT architecture
+IBM Confidential © IBM Corporation 2025
+3
+
+---PAGE---
+
+Before we begin
+Spend five minutes thinking about the following questions:
+• What is your definition of architecture
+• What is the difference between architecture and design?
+• Why is architecture important to IT systems design, and why do projects need it?
+• What is the role of the IBM Architect?
+• What diagrams and models do you currently use to represent architectures?
+• What do you think is meant by architectural thinking?
+IBM Confidential © IBM Corporation 2025
+4
+
+---PAGE---
+
+Popular misconceptions
+Here are some popular misconceptions about architecture:
+• Architecture is just paper.
+• Architecture and design are the same thing.
+• Architecture and infrastructure are the same thing.
+• <My favorite technology> is the architecture.
+• A good architecture is the work of a single architect.
+• Architecture is simply structure.
+• Architecture can be represented in a single blueprint.
+• Architecture cannot be measured or validated.
+• Architecture is a science.
+• Architecture is an art.
+IBM Confidential © IBM Corporation 2025
+5
+
+---PAGE---
+
+Module outline
+↗ Introduction and objectives
+→ What is architecture?
+↘ IBM’s Architects
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+6
+
+---PAGE---
+
+Architecture defined
+Architecture (as an artefact): Architecture (as a discipline):
+The architecture of a system describes its overall Architecture is an engineering discipline that studies
+static structure and dynamic behavior. It models the methods of designing IT systems that provide a
+system’s elements (which for IT systems are solution of a business problem. The solution must
+software, hardware, and its human users), the satisfy functional and non-functional requirements in
+externally manifested properties of those elements, a way that best balances competing stakeholders’
+and the static and dynamic relationships among concerns and must take constraints into account.
+them.
+IBM Confidential © IBM Corporation 2025
+7
+
+---PAGE---
+
+Why Architecture is important (1 of 3)
+Think about the following statements and see if you agree with them:
+• I don’t have time for architecture – it’s just a document that no one needs anyway. My solution will work perfectly without
+the need to product these documents and/or diagrams
+• There are too many architectural artefacts that the method defines. I don’t have time to complete all this work even if I think
+it’s got value
+• We do not need architecture today. Modern ways of delivery use agile methods that make architecture superfluous
+• We use cloud based and “Platform as a Service” environment that “decide” on the architecture and spin out the necessary
+resources for me behind the scenes
+• We use a “Commercial off the Shelf” product (i.e., a package) of “Software as a Service” (SaaS) cloud-based solution. It has
+its own architecture that is hidden from me. Therefore, I don’t need to develop architecture
+• We use Design Thinking workshops to work on the solution. This removes the need to develop architecture
+IBM Confidential © IBM Corporation 2025
+8
+
+---PAGE---
+
+Why Architecture is important (2 of 3)
+What is the role of architecture? Some of the imperatives for producing architecture:
+• Solution blueprint that can be reviewed and validated
+• Communication tool for stakeholders and teams (business, IT delivery and BAU – IT Operations), future reference for maintenance
+and change, developing neighboring systems and integration
+• Delivery Environments: Input into the delivery environments’ design and specification, tools and platforms of choice for solution
+delivery
+• Delivery Planning: Starting point for developing the project plan (Traditional delivery), solution and feature backlog (Agile delivery),
+resource requirements and team structure
+• Estimates: Starting point for cost estimation (labor, licenses, platform costs, etc.)
+• Enable parallel development by understanding how inter-component dependencies can and should be managed
+• Foundation for commercial agreements (i.e., “This is what you get for the price we have agreed on”)
+• Foundation for DOU and segregation of responsibilities between various parties – e.g., Client and Solution Provider, Solution Provider
+and Partner(s)/Subcontractor(S) (e.g. RACI matrices)
+IBM Confidential © IBM Corporation 2025
+9
+
+---PAGE---
+
+Why Architecture is important (3 of 3)
+Why do we need it?
+• Both Functional capabilities and Non-functional requirements and Service Levels may be contractually binding:
+• Failure to achieve targets may result in financial penalties for the IT provider, and/or a loss of business for the client
+• It is an issue of significant severity if an architecture that meets the specified requirements cannot be established. This
+may be duck to lack of a viable solution in principle (e.g., we cannot solve a given problem with the amount of funding
+available) or due to poor design and the latter needs to be improved. Regardless, if the answer is negative, the sooner
+this is known the better for all the stakeholders
+• The effort expended should always be proportionate to the risk and return involved. Without a developed architecture, it is
+rare that all significant risks are known and well understood
+• Lack of architecture means that there is no basis for solution cost and delivery time estimates
+IBM Confidential © IBM Corporation 2025
+10
+
+---PAGE---
+
+Architecture can be at any scale, and the scale is defined by the characteristic
+dimension of the architecture’s elements (1 of 4)
+Paraphrasing the definition: Structure and behavior of the elements of a system
+• What is a system?
+• What is an element?
+IBM Confidential © IBM Corporation 2025
+11
+
+---PAGE---
+
+Architecture can be at any scale, and the scale is defined by the characteristic
+dimension of the architecture’s elements (2 of 4)
+Paraphrasing the definition: Structure and behavior of the elements of a system
+• What is a system?
+• What is an element?
+It’s all a question of scale:
+• The elements of a hi-fi are its tuner, amplifier, speakers, cables, and remote controls.
+• The elements of an amplifier are its case, the power supply, and the circuit board.
+• The elements of a circuit board are its resistors, fuses, and integrated circuits.
+• The elements of an integrated circuit are transistors and other components.
+IBM Confidential © IBM Corporation 2025
+12
+
+---PAGE---
+
+Architecture can be at any scale, and the scale is defined by the characteristic
+dimension of the architecture’s elements (3 of 4)
+Paraphrasing the definition: Structure and behavior of the elements of a system
+• What is a system?
+• What is an element?
+It’s all a question of scale:
+• The elements of a hi-fi are its tuner, amplifier, speakers, cables, and remote controls.
+• The elements of an amplifier are its case, the power supply, and the circuit board.
+• The elements of a circuit board are its resistors, fuses, and integrated circuits.
+• The elements of an integrated circuit are transistors and other components.
+Whatever the scale of the system we’re focused on, we say:
+• ‘Above’ that scale are the ‘requirements’ of the world in which the system sits.
+• ‘At’ that scale is the ‘architecture’ between the elements of the system.
+• ‘Below’ that scale is the ‘design’ of the insides of the elements of the system.
+IBM Confidential © IBM Corporation 2025
+13
+
+---PAGE---
+
+Architecture can be at any scale, and the scale is defined by the characteristic
+dimension of the architecture’s elements (4 of 4)
+Paraphrasing the definition: Structure and behavior of the elements of a system
+• What is a system?
+• What is an element?
+It’s all a question of scale:
+• The elements of a hi-fi are its tuner, amplifier, speakers, cables, and remote controls.
+• The elements of an amplifier are its case, the power supply, and the circuit board.
+• The elements of a circuit board are its resistors, fuses, and integrated circuits.
+• The elements of an integrated circuit are transistors and other components.
+Whatever the scale of the system we’re focused on, we say:
+• ‘Above’ that scale are the ‘requirements’ of the world in which the system sits.
+• ‘At’ that scale is the ‘architecture’ between the elements of the system.
+• ‘Below’ that scale is the ‘design’ of the insides of the elements of the system.
+So, in our world of IT:
+• Our IT system’s requirements are modelled as interactions (use cases, and so on.) with actors and other IT systems
+• Our IT system’s architecture’s elements are components and nodes, and so on.
+• Our IT system’s design or designs model the insides of components, nodes, messages, and connections
+IBM Confidential © IBM Corporation 2025
+14
+
+---PAGE---
+
+Architecture also helps us ensure that our systems are good systems
+Architecture is also used to describe best (or preferred) practice, documented as architecture guidance, that helps ensure our system is a good system.
+Architecture guidance includes:
+• Good things
+• Tried and tested parts
+• Tried and tested structures of parts (reference architectures)
+• Good ways of doing things
+• Principles and patterns that help ensure the architecture is created in a good way
+This architectural catalogue of guidance may be found in:
+• IBM’s own architecture asset databases
+• Our clients’ enterprise architecture artefacts
+See the course video on Architectural Assets available as post-work for an in-detail discussion.
+IBM Confidential © IBM Corporation 2025
+15
+
+---PAGE---
+
+The focus of architecture and design on the target system
+Overall, architecture and design both focus on the content and the context of the target system, ensuring that it does the right things and
+does things the right way.
+Architecture
+Creating the Structure
+Architecture Architecture
+Architecture: Nodes and
+(Architects) Model Guidance components = “black boxes”
+Design
+Detailing the Content Design Design Design: Nodes and
+components = “white boxes”
+Model Guidance
+(Designers)
+Ensuring the
+system Ensuring the
+does the system does
+right things things right
+IBM Confidential © IBM Corporation 2025
+16
+
+---PAGE---
+
+This simple framework can be extended, enabling us to see a repeating pattern
+across the scales
+Architecting the Amplifier
+Requirements
+Structure’s Requirements Requirements
+Model Guidance
+Requirements
+Architecting the Circuit Board
+Requirements
+Architecture
+Architecture Architecture Structure’s Requirements Requirements
+Creating the Structure
+Model Guidance Model Guidance
+Requirements
+(Architects)
+Design Architecture
+Architecture Architecture
+Design Design
+Detailing the Content Creating the Structure
+Model Guidance
+Model Guidance
+(Designers) (Architects)
+Design
+Design Design
+Detailing the Content
+Model Guidance
+(Designers)
+IBM Confidential © IBM Corporation 2025
+17
+
+---PAGE---
+
+What is architecting?
+Time for a question
+What is the correct definition of architecting?
+A. The process of analyzing and solving, at a high level, technical problems using various business theories
+B. The process of analyzing and solving, at a high level, business problems using various technologies
+C. The process of solution design
+IBM Confidential © IBM Corporation 2025
+18
+
+---PAGE---
+
+What is the value of architecting?
+Time for a question
+What is the value of architecting?
+A. To deliver the project on time and within budget
+B. To address a business problem with a technical solution involving technologies, people and processes
+C. To bring the vision of the most effective solution into reality
+IBM Confidential © IBM Corporation 2025
+19
+
+---PAGE---
+
+Architectural domains
+IT architecture is just one of the architectural domains we need to consider if our IT system is to do the right things and do them in the
+right way.
+IBM Confidential © IBM Corporation 2025
+20
+
+---PAGE---
+
+Thus this class focuses on the models needed to describe the IT architecture of
+solution-level systems
+The artifacts covered in this class present models of the target IT system.
+They can be driven by models of the broader business system, of which this target IT system is a
+part.
+• The target IT system must meet the specific business requirements placed on it. Business IT
+Architecture Architecture
+• Whether it meets those requirements or not is the subject of Solution Assurance.
+Enterprise
+They can be guided by artifacts documenting architectural principles, patterns, and building
+Architecture
+Solution
+blocks.
+Architecture
+• The target IT system must meet the wider architectural requirements placed on it.
+• Whether it meets those requirements or not is the subject of Architectural Conformance.
+The class focuses on the use of these IT system model artifacts at the solution scale, by IT
+Architects.
+• They are also used by Enterprise Architects at the enterprise scale as they plan (in outline)
+transition initiatives, and so on, in which case they may be elaborated by the IT Architect.
+IBM Confidential © IBM Corporation 2025
+21
+
+---PAGE---
+
+Aspects of IT Architecture (1 of 2)
+An architect asks questions for the different aspects each with technology, process and people to deliver a complete architecture
+What is your system Where is your system going to
+actually going to do? How Functional Operational operate? How are the
+are its applications and computers inter-connected and
+software organised? how many will you need?
+Build-time Run-time
+How does your system
+What happens to your system
+and application get
+when it runs? How will it be
+developed, integrated
+managed over its lifetime?
+and tested?
+Technology
+Process People
+IBM Confidential © IBM Corporation 2025
+22
+
+---PAGE---
+
+Aspects of IT Architecture (2 of 2)
+Architects look at a problem in a number of dimensions to organise their thoughts
+Application level
+Technical level
+Physical perspective
+Logical perspective
+Functional Operational
+aspect aspect
+IBM Confidential © IBM Corporation 2025
+23
+
+---PAGE---
+
+Module outline
+↗ Introduction and objectives
+↗ What is architecture?
+→ IBM’s Architects
+↘ Summary and references
+IBM Confidential © IBM Corporation 2025
+24
+
+---PAGE---
+
+IBM Architect defined
+Architect: An Architect defines the structures of solutions and architectures to address client business
+problems. The Architect understands client needs and business constraints, works in levels of abstraction,
+applies industry knowledge, and leverages appropriate business elements and information technology to
+address those needs. The solutions are manifested as business, enterprise, or IT architectures and can
+include systems, applications, and process components. They may also involve the application and
+integration of a broad variety of products, technologies and services, and various architectural styles and
+domains.
+IBM Confidential © IBM Corporation 2025
+25
+
+---PAGE---
+
+What an Architect does
+An Architect defines the structures of solutions… [based on] client needs and business constraints… [leveraging] appropriate business
+elements and information technology to address those needs. …Solutions [can address] business, enterprise, or IT architecture… domains.
+Architects work
+• At the front:
+• Listening to clients
+• Understanding business requirements
+• Negotiating feasible requirements and scope
+• Forming detailed definitions of solution structures
+• At the back:
+• During construction
+• Serving as a customer advocate
+• Guiding the team
+IBM Confidential © IBM Corporation 2025
+26
+
+---PAGE---
+
+Who is needed to create a new house?
+Many specialists are required to
+construct the house: Framers, Builder, Subcontractors
+Plumbers, Electricians, and
+Painters.
+Architect
+Occupants
+The Architect draws up the plan to meet the
+occupants’ needs and ensures that the
+builders meet the specifications, understands Occupants will live in the
+house and have wants and
+the influence of building codes, other
+needs.
+regulations, legacy, power and gas services,
+and the neighborhood architecture review
+committee guidelines.
+The Inspectors ensure that
+the house is built as per
+quality standards such as
+local building codes.
+The Project Manager
+manages the construction of
+Project Manager
+the house and coordinates
+Building Inspector
+subcontractors.
+IBM Confidential © IBM Corporation 2025
+27
+
+---PAGE---
+
+What’s this got to do with architecture at IBM?
+Designers, Coders, Package
+Specialists, Testers, and others Technical Specialists,
+are needed to construct the
+Designers, and Developers
+solution.
+Solution Architect
+Business Sponsor, Users
+The Architect creates the solution architecture
+to meet requirements and ensures that the
+Users and their delegates
+development meets the specifications,
+have their requirements.
+regulations, and passes governance
+checkpoints.
+The Enterprise Architect
+ensures that the solution
+architect complies with
+enterprise standards,
+governance, and roadmaps.
+The Project Manager
+manages the Solution
+Project Manager
+Enterprise Architect Delivery.
+IBM Confidential © IBM Corporation 2025
+28
+
+---PAGE---
+
+Comparing Architects and Technical Specialists
+Architects
+IT Specialists
+Technical Specialists:
+Analysts
+Architects:
+• Develop proof of concept, design,
+• Define solutions to client business problems. Resultant Designers
+develop, build, test, and implement
+architectures can include systems, applications, and process
+Testers
+systems.
+components.
+• Are hands-on professionals with in-
+Deployment Specialists
+• Focus on the front end of the solution life cycle. They may be
+depth understanding of products,
+Product Specialists
+involved in the construction of the solution as a client advocate.
+offerings, and services within their
+Data Base / Middleware
+specialty.
+Infrastructure Specialists
+Network
+IBM Confidential © IBM Corporation 2025
+29
+
+---PAGE---
+
+Architect supports two distinct dimensions (1 of 5)
+Embracing both models and guidance:
+s ) e
+A
+s r
+e B u
+n t
+(
+c
+i
+e
+s e
+r
+u t
+u
+i
+B
+h
+t
+c c
+e r
+t A
+i
+h
+T
+c
+I
+r
+A
+Enterprise Architecture (EA)
+Solution Architecture (SA)
+IBM Confidential © IBM Corporation 2025
+30
+
+---PAGE---
+
+Architect supports two distinct dimensions (2 of 5)
+Embracing both models and guidance:
+• Business Architects “do” BA
+• At both EA and SA levels.
+s ) e
+A
+s r
+e B u
+n t
+(
+c
+i
+e
+s e
+r
+u t
+u
+i
+B
+h
+t
+c c
+e r
+t A
+i
+h
+T
+c
+I
+r
+A
+Enterprise Architecture (EA)
+Solution Architecture (SA)
+IBM Confidential © IBM Corporation 2025
+31
+
+---PAGE---
+
+Architect supports two distinct dimensions (3 of 5)
+Embracing both models and guidance:
+• Business Architects “do” BA
+• At both EA and SA levels.
+s ) e
+A
+s r
+e B u
+n t
+• IT Architects “do” ITA (
+c
+i
+e
+s e
+r
+u t
+u
+i
+B
+h
+t
+• Mostly at the SA level. c c
+e r
+t A
+i
+h
+T
+c
+I
+r
+A
+Enterprise Architecture (EA)
+Solution Architecture (SA)
+IBM Confidential © IBM Corporation 2025
+32
+
+---PAGE---
+
+Architect supports two distinct dimensions (4 of 5)
+Embracing both models and guidance:
+• Business Architects “do” BA
+• At both EA and SA levels.
+s ) e
+A
+s r
+e B u
+n t
+• IT Architects “do” ITA (
+c
+i
+e
+s e
+r
+u t
+u
+i
+B
+h
+t
+• Mostly at the SA level. c c
+e r
+t A
+i
+h
+T
+• Enterprise Architects “do” EA c
+I
+r
+A
+• Across both BA and ITA.
+Enterprise Architecture (EA)
+• They often own guidance at the SA level.
+Solution Architecture (SA)
+IBM Confidential © IBM Corporation 2025
+33
+
+---PAGE---
+
+Architect supports two distinct dimensions (5 of 5)
+Embracing both models and guidance:
+• Business Architects “do” BA
+• At both EA and SA levels.
+s ) e
+A
+s r
+e B u
+n t
+• IT Architects “do” ITA (
+c
+i
+e
+s e
+r
+u t
+u
+i
+B
+h
+t
+• Mostly at the SA level. c c
+e r
+t A
+i
+h
+T
+• Enterprise Architects “do” EA c
+I
+r
+A
+• Across both BA and ITA.
+Enterprise Architecture (EA)
+• They often own guidance at the SA level.
+Solution Architecture (SA)
+• Solution Architect create solutions to business problems – SA
+• Typically within IT Architecture, but
+• Can create BAs too
+IBM Confidential © IBM Corporation 2025
+34
+
+---PAGE---
+
+Who is an Architect?
+Time for a question
+Which of the following choices is the better description of an Architect?
+A. A practitioner, a results-oriented person, a good communicator, a leader
+B. A “top-level” software designer, a project manager, a technology expert, a product expert, a lone scientist
+IBM Confidential © IBM Corporation 2025
+35
+
+---PAGE---
+
+Module outline
+↗ Introduction and objectives
+↗ What is architecture?
+↗ IBM’s Architects
+→ Summary and references
+IBM Confidential © IBM Corporation 2025
+36
+
+---PAGE---
+
+Summary
+• The architecture of a system describes the structure and behavior of its parts.
+• The parts of an IT system are its software and hardware elements, interacting with the IT system’s human and IT system users.
+• An IBM Architect defines the models and guidance needed to model IT or business systems to meet the business intent.
+• When working on an IT system solution architecture, the IBM Architect designs IT solutions to client business problems.
+IBM Confidential © IBM Corporation 2025
+37
+
+---PAGE---
+
+Back Up Slides: architecture vs Design
+IBM Confidential © IBM Corporation 2025
+38
+
+---PAGE---
+
+It is also possible to conceive of architecture and design in a rather different,
+possibly confusing, way (1 of 2)
+In this alternative framework:
+Requirements
+• Ensuring the system meets its specific requirements is called design.
+System’s
+Requirements Requirements
+• Ensuring it is designed in the right way is referred to as its architecture. Requirements Design Architecture
+Ask yourself:
+System
+• What is the design of a bridge?
+System’s System’s System’s
+Design Architecture
+• What is the architecture of a bridge? Structure
+And:
+• How many bridge architectures are there?
+Parts
+• How many bridges (that is, bridge designs) are there?
+System’s
+Part’s Part’s
+Detail Design Architecture
+IBM Confidential © IBM Corporation 2025
+39
+
+---PAGE---
+
+It is also possible to conceive of architecture and design in a rather different,
+possibly confusing, way (2 of 2)
+In this alternative framework:
+Requirements
+• Ensuring the system meets its specific requirements is called design.
+System’s
+Requirements Requirements
+• Ensuring it is designed in the right way is referred to as its architecture. Requirements Design Architecture
+Ask yourself:
+System
+• What is the design of a bridge?
+System’s System’s System’s
+Design Architecture
+• What is the architecture of a bridge? Structure
+And:
+• How many bridge architectures are there?
+Parts
+• How many bridges (that is, bridge designs) are there?
+System’s
+Part’s Part’s
+Detail Design Architecture
+This terminology is common, particularly among our clients and in enterprise
+architecture, but it has not been adopted by IBM’s Architect profession.
+Design Architecture
+Design describes something specific. Architecture describes good ways of doing something.
+IBM Confidential © IBM Corporation 2025
+40
+
+---PAGE---
+
+References
+[COOK07] Cook, Denise, Cripps, Peter, Spaas, Philippe.
+An Introduction to the IBM Views and Viewpoints Framework for IT Systems, IBM,
+December 2007
+IBM Confidential © IBM Corporation 2025
+41
+
+---PAGE---
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+42
+
+---PAGE---
+

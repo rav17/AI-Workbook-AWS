@@ -1,0 +1,125 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="seq-uc12" name="Sequence Diagram - UC_12 Submit Form">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Exercise 3: Sequence Diagram — UC_12 Submit Form (Mobile Device)" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="10" width="700" height="40" as="geometry" />
+        </mxCell>
+        <!-- Lifelines -->
+        <mxCell id="actor_head" value=":Respondent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="70" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#82b366;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="85" y="110" as="sourcePoint" /><mxPoint x="85" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="pres_head" value=":Presentation&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pres_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="110" as="sourcePoint" /><mxPoint x="260" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="form_head" value=":Form&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="form_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#82b366;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="110" as="sourcePoint" /><mxPoint x="440" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="val_head" value=":Validation&#xa;Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="val_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#82b366;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="620" y="110" as="sourcePoint" /><mxPoint x="620" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="data_head" value=":Data Access&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="data_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="800" y="110" as="sourcePoint" /><mxPoint x="800" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="int_head" value=":Integration&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="int_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="980" y="110" as="sourcePoint" /><mxPoint x="980" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="notif_head" value=":Notification&#xa;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="notif_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1160" y="110" as="sourcePoint" /><mxPoint x="1160" y="1050" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- Messages -->
+        <!-- 1. Press Submit Form -->
+        <mxCell id="m1" value="1. Press &quot;Submit Form&quot; button" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="85" y="160" as="sourcePoint" /><mxPoint x="260" y="160" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 2. submitForm(formId) -->
+        <mxCell id="m2" value="2. submitForm(formId)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="210" as="sourcePoint" /><mxPoint x="440" y="210" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 3. validateAllFields(formData) -->
+        <mxCell id="m3" value="3. validateAllFields(formData)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="270" as="sourcePoint" /><mxPoint x="620" y="270" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 4. validationResult: PASS -->
+        <mxCell id="m4" value="4. validationResult: PASS" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="620" y="320" as="sourcePoint" /><mxPoint x="440" y="320" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 5. saveFinalForm(formData, status=SUBMITTED) -->
+        <mxCell id="m5" value="5. saveFinalForm(formData, status=SUBMITTED)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="380" as="sourcePoint" /><mxPoint x="800" y="380" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 6. confirmation + receiptNumber -->
+        <mxCell id="m6" value="6. confirmed (receiptNumber generated)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="800" y="430" as="sourcePoint" /><mxPoint x="440" y="430" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 7. transferToDoS(CFN, address, formData) -->
+        <mxCell id="m7" value="7. transferToDoS(CFN, address, formData)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="490" as="sourcePoint" /><mxPoint x="980" y="490" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 8. sendCollectorSMS(collectorId, address) -->
+        <mxCell id="m8" value="8. sendCollectorSMS(collectorId, address)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="980" y="550" as="sourcePoint" /><mxPoint x="1160" y="550" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 9. SMS queued OK -->
+        <mxCell id="m9" value="9. SMS queued OK" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1160" y="600" as="sourcePoint" /><mxPoint x="980" y="600" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 10. submissionComplete(receiptNumber) -->
+        <mxCell id="m10" value="10. submissionComplete(receiptNumber)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="660" as="sourcePoint" /><mxPoint x="260" y="660" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 11. Display Thank You + Receipt -->
+        <mxCell id="m11" value="11. Display &quot;Thank You&quot; page + Receipt Number + Feedback form" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="720" as="sourcePoint" /><mxPoint x="85" y="720" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 12. Complete feedback, press Submit Feedback -->
+        <mxCell id="m12" value="12. Complete feedback, press &quot;Submit Feedback&quot;" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="85" y="790" as="sourcePoint" /><mxPoint x="260" y="790" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 13. saveFeedback -->
+        <mxCell id="m13" value="13. saveFeedback(formId, feedbackData)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="840" as="sourcePoint" /><mxPoint x="440" y="840" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 14. storeFeedback -->
+        <mxCell id="m14" value="14. storeFeedback(feedbackData)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="890" as="sourcePoint" /><mxPoint x="800" y="890" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 15. stored OK -->
+        <mxCell id="m15" value="15. stored OK" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="800" y="930" as="sourcePoint" /><mxPoint x="440" y="930" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 16. feedbackComplete -->
+        <mxCell id="m16" value="16. feedbackComplete" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="440" y="970" as="sourcePoint" /><mxPoint x="260" y="970" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 17. Display final screen -->
+        <mxCell id="m17" value="17. Display final screen (Census complete)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="260" y="1010" as="sourcePoint" /><mxPoint x="85" y="1010" as="targetPoint" /></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

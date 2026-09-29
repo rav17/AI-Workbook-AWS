@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="drawio" version="22.1.2" type="device">
+  <diagram id="lom-ecs-exercise5" name="LOM - ECS">
+    <mxGraphModel dx="2800" dy="1800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title and Subtitle -->
+        <mxCell id="title1" value="Exercise 5: Logical Operational Model (LOM) - ECS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="20" width="550" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="title2" value="Place Deployment Units onto Nodes Following Asset" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="950" y="55" width="420" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- LL_Respondent Location (top-left) -->
+        <mxCell id="LL_Respondent" value="LL_Respondent (9.5M)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;verticalAlign=top;fontStyle=1;fontSize=13;arcSize=5;align=left;spacingLeft=10;spacingTop=5;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="100" width="450" height="350" as="geometry" />
+        </mxCell>
+
+        <!-- LL_Collector Location (middle-left) -->
+        <mxCell id="LL_Collector" value="LL_Collector (27k)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;verticalAlign=top;fontStyle=1;fontSize=13;arcSize=5;align=left;spacingLeft=10;spacingTop=5;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="500" width="450" height="350" as="geometry" />
+        </mxCell>
+
+        <!-- LL_Cloud Location (large central/right) -->
+        <mxCell id="LL_Cloud" value="LL_Cloud (1..n) — IBM Hosting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;verticalAlign=top;fontStyle=1;fontSize=13;arcSize=5;align=left;spacingLeft=10;spacingTop=5;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="570" y="100" width="1200" height="750" as="geometry" />
+        </mxCell>
+
+        <!-- LL_DoS_DC Location (bottom-right) -->
+        <mxCell id="LL_DoS_DC" value="LL_DoS_DC (1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;verticalAlign=top;fontStyle=1;fontSize=13;arcSize=5;align=left;spacingLeft=10;spacingTop=5;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="1850" y="500" width="400" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- LL_DoS_Internal Location (bottom-right, adjacent) -->
+        <mxCell id="LL_DoS_Internal" value="LL_DoS_Internal (1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;verticalAlign=top;fontStyle=1;fontSize=13;arcSize=5;align=left;spacingLeft=10;spacingTop=5;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="1850" y="750" width="400" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Security Zone Separator (black thick line within Cloud) -->
+        <mxCell id="seczone1" value="" style="line;strokeWidth=3;strokeColor=#000000;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+          <mxGeometry x="570" y="460" width="1200" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="seczone_label" value="Security Zone Boundary" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#000000;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="443" width="140" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- === NODES IN LL_Respondent === -->
+        <!-- LN_Desktop_Browser -->
+        <mxCell id="LN_Desktop_Browser" value="&lt;b&gt;LN_Desktop_Browser&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;U_ECS_Web_UI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="180" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Mobile_Device -->
+        <mxCell id="LN_Mobile_Device" value="&lt;b&gt;LN_Mobile_Device&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;(Rendered from server)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="100" y="300" width="180" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- === NODES IN LL_Collector === -->
+        <!-- LN_Hand_Held_Device -->
+        <mxCell id="LN_Hand_Held_Device" value="&lt;b&gt;LN_Hand_Held_Device&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;U_Mobile_App&lt;br&gt;d_DeviceLocalDB&lt;br&gt;d_Census_Forms_Def&lt;br&gt;E_Validate_Page&lt;br&gt;E_Get_Location" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="100" y="560" width="200" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- === NODES IN LL_Cloud === -->
+        <!-- LN_Web_Server -->
+        <mxCell id="LN_Web_Server" value="&lt;b&gt;LN_Web_Server&lt;/b&gt;&lt;br&gt;&lt;i&gt;Type SS&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;U_ECS_Web_UI&lt;br&gt;(server-side rendering)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="620" y="160" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Application_Server -->
+        <mxCell id="LN_Application_Server" value="&lt;b&gt;LN_Application_Server&lt;/b&gt;&lt;br&gt;&lt;i&gt;Type SS&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;E_Authenticate&lt;br&gt;E_Validate_Page_Server&lt;br&gt;E_Submit_Form&lt;br&gt;E_Load_Form_Definition" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="870" y="160" width="220" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Database_Server -->
+        <mxCell id="LN_Database_Server" value="&lt;b&gt;LN_Database_Server&lt;/b&gt;&lt;br&gt;&lt;i&gt;Type SS&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;D_ECS_DB&lt;br&gt;D_Census_Responses&lt;br&gt;D_Census_Forms_Definition&lt;br&gt;D_ECN_Credentials" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="160" width="230" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Integration_Server -->
+        <mxCell id="LN_Integration_Server" value="&lt;b&gt;LN_Integration_Server&lt;/b&gt;&lt;br&gt;&lt;i&gt;Type SS&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;E_Send_Respondent_Data&lt;br&gt;E_Send_Mgmt_Info&lt;br&gt;E_Pull_Confirmed_ECNs&lt;br&gt;E_Forward_Proxy&lt;br&gt;D_Message_Queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="160" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Replication_Server -->
+        <mxCell id="LN_Replication_Server" value="&lt;b&gt;LN_Replication_Server&lt;/b&gt;&lt;br&gt;&lt;i&gt;Type SS&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;E_Replicate_To_Mobile&lt;br&gt;D_Replication_Queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="620" y="520" width="220" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Management_Server -->
+        <mxCell id="LN_Management_Server" value="&lt;b&gt;LN_Management_Server&lt;/b&gt;&lt;br&gt;&lt;i&gt;Type SS&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;E_Process_Mgmt_Info&lt;br&gt;E_Translate_Data&lt;br&gt;D_Management_Info" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="900" y="520" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- === NODES IN LL_DoS_DC === -->
+        <!-- LN_DoS_Processing_Server -->
+        <mxCell id="LN_DoS_Processing_Server" value="&lt;b&gt;LN_DoS_Processing_Server&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;(External)&lt;br&gt;DoS Electronic Census Processing" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1900" y="560" width="250" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- === NODES IN LL_DoS_Internal === -->
+        <!-- LN_Admin_Workstation -->
+        <mxCell id="LN_Admin_Workstation" value="&lt;b&gt;LN_Admin_Workstation&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;U_Help_Desk_UI&lt;br&gt;U_Admin_UI&lt;br&gt;E_View_Respondent_Data&lt;br&gt;E_Manage_Configuration" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;verticalAlign=top;fontSize=11;align=center;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1900" y="800" width="230" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- === ACTORS === -->
+        <!-- A_Respondent -->
+        <mxCell id="A_Respondent" value="A_Respondent" style="shape=mxgraph.basic.person;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="190" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- A_Census_Collector -->
+        <mxCell id="A_Census_Collector" value="A_Census_Collector" style="shape=mxgraph.basic.person;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="590" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- A_DoS_Admin -->
+        <mxCell id="A_DoS_Admin" value="A_DoS_Admin" style="shape=mxgraph.basic.person;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2170" y="810" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- === ACTOR CONNECTIONS === -->
+        <!-- A_Respondent to LN_Desktop_Browser -->
+        <mxCell id="conn_actor1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" source="A_Respondent" target="LN_Desktop_Browser" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- A_Respondent to LN_Mobile_Device -->
+        <mxCell id="conn_actor2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" source="A_Respondent" target="LN_Mobile_Device" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- A_Census_Collector to LN_Hand_Held_Device -->
+        <mxCell id="conn_actor3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" source="A_Census_Collector" target="LN_Hand_Held_Device" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- A_DoS_Admin to LN_Admin_Workstation -->
+        <mxCell id="conn_actor4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" source="A_DoS_Admin" target="LN_Admin_Workstation" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- === NODE-TO-NODE CONNECTIONS === -->
+        <!-- LN_Desktop_Browser → LN_Web_Server: HTTPS (Internet) -->
+        <mxCell id="conn1" value="HTTPS (Internet)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Desktop_Browser" target="LN_Web_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Hand_Held_Device → LN_Replication_Server: HTTPS (Mobile Network) -->
+        <mxCell id="conn2" value="HTTPS (Mobile Network)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Hand_Held_Device" target="LN_Replication_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Web_Server → LN_Application_Server: Internal HTTPS -->
+        <mxCell id="conn3" value="Internal HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Web_Server" target="LN_Application_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Application_Server → LN_Database_Server: JDBC/Encrypted -->
+        <mxCell id="conn4" value="JDBC/Encrypted" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Application_Server" target="LN_Database_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Application_Server → LN_Integration_Server: JMS/Internal -->
+        <mxCell id="conn5" value="JMS/Internal" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Application_Server" target="LN_Integration_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Integration_Server → LN_DoS_Processing_Server: Secure File Transfer (VPN) -->
+        <mxCell id="conn6" value="Secure File Transfer (VPN)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Integration_Server" target="LN_DoS_Processing_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Management_Server → LN_Database_Server: JDBC -->
+        <mxCell id="conn7" value="JDBC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Management_Server" target="LN_Database_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Admin_Workstation → LN_Management_Server: Internal HTTPS -->
+        <mxCell id="conn8" value="Internal HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jetSize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=10;fontColor=#000000;labelBackgroundColor=#FFFFFF;" edge="1" source="LN_Admin_Workstation" target="LN_Management_Server" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- === LEGEND === -->
+        <mxCell id="legend_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="900" width="400" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_title" value="&lt;b&gt;Legend — IBM AT Notation&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="910" width="190" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend1" value="LL_ = Logical Location (dashed region)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="940" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2" value="LN_ = Logical Node (white box inside location)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="960" width="250" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend3" value="U_ = UI DU | E_ = Executable DU | D_ = Data DU | d_ = local data" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="980" width="340" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend4" value="Type SS = Standard Service | Type CS = Custom Service" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1000" width="290" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend5" value="A_ = Actor (person icon at edge)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1020" width="190" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend6" value="Dashed line = Security Zone Boundary" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1040" width="230" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend7" value="Connection labels = Communication Protocol" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1060" width="240" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

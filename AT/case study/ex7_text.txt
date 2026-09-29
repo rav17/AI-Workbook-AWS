@@ -1,0 +1,54 @@
+Architectural Thinking Workshop
+Exercise 6: Agile: Initial Architecture
+IBM Professional Series: Architectural Thinking Workshop
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This
+IBM Client Education Version 7 document may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+So what do we mean by “…Initial Architecture…”?
+▪ Identify high-level
+scope
+▪ Identify initial
+requirements
+▪ Identify and
+architecture vision
+Design Thinking / Project Initiation /
+Scoping Workshops Feasibility / Sprint 0
+2-3 days 1 – 2 weeks
+Initial Requirements
+Initial Architecture
+Architecture-on-a-page
+with annotations
+2 IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+Architectural Thinking Workshop not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Exercise 6: Agile – architecture-on-a-page
+During this exercise we want you to create a complete two viewpoints in line with
+recommendations on “initial architecture’:
+• Architecture-on-a-page
+• Initial Security Viewpoint
+Use:
+• ATW Case Study Background
+• Examples from the lecture materials
+• Ensure all critical elements are covered
+Be ready with:
+Two viewpoints from initial architecture
+Use PowerPoint to document your viewpoints
+3 IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+Architectural Thinking Workshop not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+THANK YOU
+IBM, the IBM logo, and ibm.com are trademarks or registered trademarks of International Business Machines Corporation in the
+United States, other countries, or both. If these and other IBM trademarked terms are marked on their first occurrence in this
+information with a trademark symbol (® or ™), these symbols indicate U.S. registered or common law trademarks owned by IBM at
+the time this information was published. Such trademarks may also be registered or common law trademarks in other countries. A
+current list of IBM trademarks is available on the Web at "Copyright and trademark information.“ Java and all Java-based
+trademarks and logos are trademarks or registered trademarks of Oracle and its affiliates.
+Linux is a trademark of Linus Torvalds in the United States, or other countries, or both. Microsoft, Excel, PowerPoint, Project,
+Visio, Word, and Windows are trademarks of the Microsoft Corporation in the United States, other countries, or both. UML is a
+registered trademark of Object Management Group, Inc. in the United States and/or other countries. TOGAF and UNIX are
+registered trademarks of The Open Group in the United States and other countries. Other company, product, and service names
+may be trademarks of IBM or other companies. Citrix is a trademark of Citrix Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and Trademark Office and in other countries.
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This document may
+4 Architectural Thinking Workshop not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+

@@ -1,0 +1,635 @@
+<mxfile host="Electron" agent="Kiro">
+  <diagram id="du-model-ecs" name="ECS Deployment Unit Model">
+    <mxGraphModel dx="2200" dy="2800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ============ TITLE ============ -->
+        <mxCell id="title1" value="ECS - Deployment Unit Model (IBM Architectural Thinking)" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=22;fontStyle=1;fontColor=#000000;">
+          <mxGeometry x="30" y="15" width="800" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle1" value="Notation: U_ = Presentation DU | D_ = Data DU (Master) | d_ = Data DU (copy) | E_ = Execution DU | A_ = Actor" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;fontColor=#555555;">
+          <mxGeometry x="30" y="50" width="900" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============ TABLE 1: Component to DU Mapping ============ -->
+        <mxCell id="t1_title" value="Table 1: Component to Deployment Unit Mapping" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontColor=#000000;">
+          <mxGeometry x="30" y="75" width="500" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Table 1 Headers -->
+        <mxCell id="t1_h1" value="Component (from the CM)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#D9E2F3;strokeColor=#000000;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;">
+          <mxGeometry x="30" y="105" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_h2" value="Presentation Deployment Unit" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#BDD7EE;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#0070C0;align=center;verticalAlign=middle;">
+          <mxGeometry x="270" y="105" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_h3" value="Data Deployment Unit" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#C6EFCE;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#006100;align=center;verticalAlign=middle;">
+          <mxGeometry x="510" y="105" width="240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_h4" value="Execution Deployment Unit" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFC7CE;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#9C0006;align=center;verticalAlign=middle;">
+          <mxGeometry x="750" y="105" width="280" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1: Mobile App -->
+        <mxCell id="t1_r1c1" value="Mobile App&#xa;(TabletViews, PhoneViews,&#xa;ViewController, GetLocation,&#xa;ValidatePage, CompleteSection,&#xa;SubmitForm, ReplicationControl,&#xa;DataAccessFramework, DeviceAPI,&#xa;DeviceLocalDB)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="140" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r1c2" value="U_Mobile_App&#xa;(TabletViews, PhoneViews)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="270" y="140" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r1c3" value="d_DeviceLocalDB (copy)&#xa;d_Census_Forms_Def (copy)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="510" y="140" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r1c4" value="E_Validate_Page&#xa;E_Complete_Section&#xa;E_Submit_Form_Mobile&#xa;E_Replicate_Data&#xa;E_Get_Location" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="750" y="140" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2: Form Handling -->
+        <mxCell id="t1_r2c1" value="Form Handling&#xa;(ECS Application Server,&#xa;Web Server, Authentication,&#xa;ViewController, Validation,&#xa;Form Submission,&#xa;Form Definition Controller,&#xa;Census Forms Definition File)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="220" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r2c2" value="U_ECS_Web_UI" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="270" y="220" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r2c3" value="D_Census_Forms_Definition&#xa;D_Census_Responses" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="510" y="220" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r2c4" value="E_Authenticate&#xa;E_Validate_Page_Server&#xa;E_Submit_Form&#xa;E_Load_Form_Definition" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="750" y="220" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3: Information Management -->
+        <mxCell id="t1_r3c1" value="Information Management&#xa;(Application Server,&#xa;Mobile Device Replication,&#xa;Translation,&#xa;Management Information Processing,&#xa;RDBMS, ECS DB)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="300" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r3c2" value="N/A" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#999999;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="270" y="300" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r3c3" value="D_ECS_DB (Master)&#xa;D_Replication_Queue&#xa;D_Management_Info" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="510" y="300" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r3c4" value="E_Translate_Data&#xa;E_Process_Mgmt_Info&#xa;E_Replicate_To_Mobile&#xa;E_Run_RDBMS" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="750" y="300" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Row 4: Help Desk and Admin -->
+        <mxCell id="t1_r4c1" value="Help Desk and Admin&#xa;(Application Server,&#xa;Respondent Data Viewer,&#xa;Management Information Viewer,&#xa;Configuration Manager)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="380" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r4c2" value="U_Help_Desk_UI&#xa;U_Admin_UI" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="270" y="380" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r4c3" value="D_Configuration_Data&#xa;d_ECS_DB (read copy)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="510" y="380" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r4c4" value="E_View_Respondent_Data&#xa;E_View_Mgmt_Info&#xa;E_Manage_Configuration" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="750" y="380" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Row 5: DoS Interfacing -->
+        <mxCell id="t1_r5c1" value="DoS Interfacing&#xa;(Messaging Middleware,&#xa;Send Respondent Data,&#xa;Send Management Information,&#xa;Pull Confirmed or Failed ECNs,&#xa;Forward Proxy)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="460" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r5c2" value="N/A" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#999999;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="270" y="460" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r5c3" value="D_Message_Queue&#xa;D_ECN_Credentials" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="510" y="460" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_r5c4" value="E_Send_Respondent_Data&#xa;E_Send_Mgmt_Info&#xa;E_Pull_Confirmed_ECNs&#xa;E_Forward_Proxy" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="750" y="460" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ============ SEPARATOR ============ -->
+        <mxCell id="sep1" value="DU characteristics determine placement, grouping and non-functional requirements" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;fontColor=#333333;">
+          <mxGeometry x="30" y="560" width="700" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ============ TABLE 2: Presentation DU Characteristics ============ -->
+        <mxCell id="t2_title" value="Table 2: Presentation DU Characteristics" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontColor=#0070C0;">
+          <mxGeometry x="30" y="590" width="500" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2 Headers -->
+        <mxCell id="t2_h1" value="PresentationDU" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#0070C0;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="30" y="620" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_h2" value="Actor" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#0070C0;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="190" y="620" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_h3" value="IT Skill Level" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#0070C0;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="350" y="620" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_h4" value="Location" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#0070C0;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="480" y="620" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_h5" value="Frequency" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#0070C0;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="630" y="620" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_h6" value="Type" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#0070C0;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="770" y="620" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2 Row 1: U_ECS_Web_UI -->
+        <mxCell id="t2_r1c1" value="U_ECS_Web_UI" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="650" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r1c2" value="A_Respondent" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="190" y="650" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r1c3" value="Low (untrained public)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="350" y="650" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r1c4" value="LL_Respondent_Home&#xa;(Desktop/Laptop)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="650" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r1c5" value="Once per Census&#xa;(Aug peak)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="630" y="650" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r1c6" value="CS (Custom)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="770" y="650" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2 Row 2: U_Mobile_App -->
+        <mxCell id="t2_r2c1" value="U_Mobile_App" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="680" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r2c2" value="A_Census_Collector" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="190" y="680" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r2c3" value="Can be trained" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="350" y="680" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r2c4" value="LL_Field&#xa;(Mobile/Tablet)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="680" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r2c5" value="Daily (Aug)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="630" y="680" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r2c6" value="CS (Custom)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="770" y="680" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2 Row 3: U_Help_Desk_UI -->
+        <mxCell id="t2_r3c1" value="U_Help_Desk_UI" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="710" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r3c2" value="A_Help_Desk_Operator" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="190" y="710" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r3c3" value="Medium (trained)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="350" y="710" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r3c4" value="LL_DoS_Office&#xa;(Desktop)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="710" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r3c5" value="Daily (Aug)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="630" y="710" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r3c6" value="SS (Standard)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="770" y="710" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 2 Row 4: U_Admin_UI -->
+        <mxCell id="t2_r4c1" value="U_Admin_UI" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="740" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r4c2" value="A_System_Administrator" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="190" y="740" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r4c3" value="High (IT skilled)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="350" y="740" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r4c4" value="LL_DoS_Office&#xa;(Desktop)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="740" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r4c5" value="Ad hoc" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="630" y="740" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2_r4c6" value="SS (Standard)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="770" y="740" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============ TABLE 3: Data DU Characteristics ============ -->
+        <mxCell id="t3_title" value="Table 3: Data DU Characteristics" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontColor=#006100;">
+          <mxGeometry x="30" y="790" width="500" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Headers -->
+        <mxCell id="t3_h1" value="Data DU" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#00B050;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="30" y="820" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_h2" value="Scope" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#00B050;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="200" y="820" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_h3" value="Volatility" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#00B050;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="370" y="820" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_h4" value="Size" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#00B050;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="480" y="820" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_h5" value="Lifetime" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#00B050;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="580" y="820" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_h6" value="Master or Copy" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#00B050;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="710" y="820" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 1: D_ECS_DB -->
+        <mxCell id="t3_r1c1" value="D_ECS_DB" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="850" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r1c2" value="All Census responses&#xa;(9.5M dwellings)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="850" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r1c3" value="High" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="850" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r1c4" value="Very Large" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="850" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r1c5" value="Long lived&#xa;(permanent)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="850" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r1c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="850" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 2: D_Census_Forms_Definition -->
+        <mxCell id="t3_r2c1" value="D_Census_Forms_Definition" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="880" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r2c2" value="Form definitions&#xa;(all languages)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="880" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r2c3" value="Low" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="880" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r2c4" value="Small" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="880" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r2c5" value="Long lived" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="880" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r2c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="880" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 3: D_Census_Responses -->
+        <mxCell id="t3_r3c1" value="D_Census_Responses" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="910" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r3c2" value="Submitted forms&#xa;(in-progress + complete)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="910" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r3c3" value="High" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="910" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r3c4" value="Large" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="910" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r3c5" value="Long lived" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="910" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r3c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="910" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 4: d_DeviceLocalDB -->
+        <mxCell id="t3_r4c1" value="d_DeviceLocalDB" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="940" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r4c2" value="Store per device&#xa;(subset of dwellings)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="940" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r4c3" value="High" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="940" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r4c4" value="Small" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="940" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r4c5" value="Short (&lt;= 1 day)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="940" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r4c6" value="Copy (d_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="940" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 5: d_Census_Forms_Def (mobile copy) -->
+        <mxCell id="t3_r5c1" value="d_Census_Forms_Def" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="970" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r5c2" value="Form definitions&#xa;(per device replica)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="970" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r5c3" value="Low" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="970" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r5c4" value="Small" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="970" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r5c5" value="Short (synced)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="970" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r5c6" value="Copy (d_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="970" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 6: D_Replication_Queue -->
+        <mxCell id="t3_r6c1" value="D_Replication_Queue" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1000" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r6c2" value="Pending replication&#xa;data (27k collectors)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="1000" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r6c3" value="High" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="1000" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r6c4" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="1000" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r6c5" value="Transient" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="1000" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r6c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="1000" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 7: D_Management_Info -->
+        <mxCell id="t3_r7c1" value="D_Management_Info" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1030" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r7c2" value="Progress tracking&#xa;and status reports" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="1030" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r7c3" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="1030" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r7c4" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="1030" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r7c5" value="Long lived" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="1030" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r7c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="1030" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 8: D_Message_Queue -->
+        <mxCell id="t3_r8c1" value="D_Message_Queue" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1060" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r8c2" value="Messages to DoS&#xa;(respondent data, MI)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="1060" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r8c3" value="High" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="1060" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r8c4" value="Large" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="1060" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r8c5" value="Transient" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="1060" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r8c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="1060" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 9: D_ECN_Credentials -->
+        <mxCell id="t3_r9c1" value="D_ECN_Credentials" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1090" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r9c2" value="CFN + ECN credential&#xa;store (9.5M)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="1090" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r9c3" value="Low" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="1090" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r9c4" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="1090" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r9c5" value="Long lived" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="1090" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r9c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="1090" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 3 Row 10: D_Configuration_Data -->
+        <mxCell id="t3_r10c1" value="D_Configuration_Data" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#006100;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1120" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r10c2" value="System config&#xa;(form defs, rules)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="200" y="1120" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r10c3" value="Low" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#0070C0;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="370" y="1120" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r10c4" value="Small" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="480" y="1120" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r10c5" value="Long lived" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="580" y="1120" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t3_r10c6" value="Master (D_)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="710" y="1120" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============ TABLE 4: Execution DU Characteristics ============ -->
+        <mxCell id="t4_title" value="Table 4: Execution DU Characteristics" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontColor=#9C0006;">
+          <mxGeometry x="30" y="1170" width="500" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Headers -->
+        <mxCell id="t4_h1" value="Execution DU" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FF0000;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="30" y="1200" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_h2" value="Frequency" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FF0000;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="260" y="1200" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_h3" value="Processing Load" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FF0000;strokeColor=#000000;fontSize=10;fontStyle=1;fontColor=#FFFFFF;align=center;verticalAlign=middle;">
+          <mxGeometry x="540" y="1200" width="180" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 1: E_Authenticate -->
+        <mxCell id="t4_r1c1" value="E_Authenticate" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1230" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r1c2" value="Per login (9.5M respondents + 27k collectors)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1230" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r1c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1230" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 2: E_Validate_Page_Server -->
+        <mxCell id="t4_r2c1" value="E_Validate_Page_Server" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1258" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r2c2" value="Per page submit (multiple per respondent)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1258" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r2c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1258" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 3: E_Submit_Form -->
+        <mxCell id="t4_r3c1" value="E_Submit_Form" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1286" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r3c2" value="Once per respondent (9.5M over census period)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1286" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r3c3" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1286" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 4: E_Validate_Page (mobile) -->
+        <mxCell id="t4_r4c1" value="E_Validate_Page (mobile)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1314" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r4c2" value="Per page (runs locally on device)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1314" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r4c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1314" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 5: E_Replicate_Data -->
+        <mxCell id="t4_r5c1" value="E_Replicate_Data" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1342" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r5c2" value="On sync event (27k collectors, daily)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1342" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r5c3" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1342" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 6: E_Translate_Data -->
+        <mxCell id="t4_r6c1" value="E_Translate_Data" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1370" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r6c2" value="On form submit (translation to English)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1370" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r6c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1370" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 7: E_Process_Mgmt_Info -->
+        <mxCell id="t4_r7c1" value="E_Process_Mgmt_Info" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1398" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r7c2" value="Daily batch (progress, completion rates)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1398" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r7c3" value="Heavy" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1398" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 8: E_Replicate_To_Mobile -->
+        <mxCell id="t4_r8c1" value="E_Replicate_To_Mobile" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1426" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r8c2" value="On sync request (27k devices daily)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1426" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r8c3" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1426" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 9: E_Send_Respondent_Data -->
+        <mxCell id="t4_r9c1" value="E_Send_Respondent_Data" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1454" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r9c2" value="Daily batch transfer to DoS" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1454" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r9c3" value="Heavy" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1454" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 10: E_Send_Mgmt_Info -->
+        <mxCell id="t4_r10c1" value="E_Send_Mgmt_Info" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1482" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r10c2" value="Daily batch transfer to DoS" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1482" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r10c3" value="Medium" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1482" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 11: E_Pull_Confirmed_ECNs -->
+        <mxCell id="t4_r11c1" value="E_Pull_Confirmed_ECNs" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1510" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r11c2" value="Daily (pull confirmed/failed ECN list from DoS)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1510" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r11c3" value="Heavy" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#FF0000;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1510" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 12: E_Forward_Proxy -->
+        <mxCell id="t4_r12c1" value="E_Forward_Proxy" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1538" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r12c2" value="Continuous (on every DoS transfer)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1538" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r12c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1538" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 13: E_View_Respondent_Data -->
+        <mxCell id="t4_r13c1" value="E_View_Respondent_Data" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1566" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r13c2" value="On-demand (help desk queries)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1566" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r13c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1566" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 14: E_View_Mgmt_Info -->
+        <mxCell id="t4_r14c1" value="E_View_Mgmt_Info" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1594" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r14c2" value="On-demand (management reporting)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1594" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r14c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1594" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Table 4 Row 15: E_Manage_Configuration -->
+        <mxCell id="t4_r15c1" value="E_Manage_Configuration" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;fontColor=#9C0006;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="30" y="1622" width="230" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r15c2" value="Ad hoc (system configuration changes)" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="260" y="1622" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="t4_r15c3" value="Light" parent="1" vertex="1" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=9;align=left;verticalAlign=middle;spacingLeft=5;">
+          <mxGeometry x="540" y="1622" width="180" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ============ NOTES ============ -->
+        <mxCell id="notes_title" value="IBM AT Notation Key:" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;fontColor=#000000;">
+          <mxGeometry x="30" y="1680" width="300" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="notes1" value="U_ = Presentation DU (user interface)&#xa;D_ = Data DU (capital D = Master copy)&#xa;d_ = Data DU (lowercase d = copy/replica)&#xa;E_ = Execution DU&#xa;A_ = Actor&#xa;LL_ = Logical Location&#xa;SS = Standard Service | CS = Custom Service" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;strokeColor=#000000;fillColor=#F2F2F2;fontSize=10;spacingLeft=5;spacingTop=5;rounded=1;">
+          <mxGeometry x="30" y="1705" width="350" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="notes2" value="ECS Case Study Context:&#xa;- 9.5M dwellings in Bolumbia&#xa;- 27,000 Census Collectors with mobile devices&#xa;- Census period: August (peak load)&#xa;- CFN + ECN used for respondent authentication&#xa;- Daily data transfers to DoS Electronic Census Processing&#xa;- SMS notification to collectors on online submission" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=top;strokeColor=#000000;fillColor=#F2F2F2;fontSize=10;spacingLeft=5;spacingTop=5;rounded=1;">
+          <mxGeometry x="410" y="1705" width="400" height="120" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,1392 @@
+Requirements
+Aspect
+Version 7.0
+
+Module outline
+→ Introducing Requirements
+→ What are Requirements?
+→ Sourcing Requirements
+↘ System Context Diagram
+↘ Functional Requirements
+↘ Future Requirements
+↘ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+2
+
+Learning Objective
+At the end of this module, you should be able to:
+• Describe why requirements are important for Architects and the architecture that they develop
+• Understand how requirements are classified
+• Understand how to elicit requirements
+• Explain which requirements are important in defining the architecture
+• Show how an existing enterprise architecture, project context, and business case contribute to an
+understanding of the requirements
+• Demonstrate how requirements can be documented
+• Understand how requirements should be prioritized
+• Understand the importance of a Requirements Management Plan and the associated
+• Requirements Traceability Matrix to the successful implementation of the project
+IBM Confidential © IBM Corporation 2025
+3
+
+The importance of requirements management
+• According to the Standish Group, only 39% of all projects are successful.1
+• 37% of all organizations reported inaccurate requirements as the primary reason for project
+failure.2
+• Rework accounting for approximately 30-40% of all software development project budgets,
+and roughly half of the rework on a typical project, can be attributed to missing or
+misunderstood requirements.3
+• For every million dollars spent on software development, $150,000 to $200,000 is wasted
+because of bad requirements. 4
+• Requirements errors cost US companies $30 billion a year in total.4
+1.The Standish Group: “Chaos Manifesto 2013”
+2.PMI's Pulse of the Profession® (2014)
+3.Leffingwell, Dean, Managing Software Requirements, Addison-Wesley, 2003
+4.National Institute of Standards & Technology, US Department of Commerce, The Economic Impacts of Inadequate Infrastructure for
+Software Testing, 2002
+IBM Confidential © IBM Corporation 2025
+4
+
+Architecture Process: The three phases
+IBM Confidential © IBM Corporation 2025
+5
+
+The four basic types of requirements (1 of 2)
+• Functional Requirements (FRs)
+• Non-Functional Requirements (NFRs)
+• Constraints
+• Future Requirements
+IBM Confidential © IBM Corporation 2025
+6
+
+The four basic types of requirements (2 of 2)
+Functional requirements:
+• Answers the question of "what" the solution’s sponsor needs (but often not "how" it is achieved)
+• Tend to be "descriptive" or "qualitative“
+• Are capabilities needed by users of the IT solution to fulfill their job
+Non-Functional Requirements:
+• Define the expectations and characteristics that the IT system should support
+• Might be runtime (for example, performance or availability) or non-runtime (for example, scalability or
+maintainability)
+• Tend to be “prescriptive" or "quantitative"
+Constraints:
+• Given those things that cannot be changed within the scope and lifetime of the project (for example, existing
+infrastructure)
+• Other factors, such as available skills, budget, and operational limitations
+• Architectural guidelines and standard technologies (as may be declared
+in the enterprise architecture)
+Future Requirements:
+• Describe how the system might change in the future, whether these are functional or nonfunctional
+enhancements.
+IBM Confidential © IBM Corporation 2025
+7
+
+A solution architecture will have many stakeholders, who are potential
+sources of a requirement specification (1 of 2)
+Definition: A stakeholder in a solution architecture is someone with interest in or concerns about the realization of
+the architecture.*
+Principle: Our users determine the value we deliver**
+*After [ROZANSKI05]
+** In IBM Design Thinking
+IBM Confidential © IBM Corporation 2025
+8
+
+The wider project environment is a rich source of requirements and
+constraints (2 of 2)
+External Environment
+Laws and regulations ● Legal liabilities ● Social responsibilities ● Technology base ● Labor
+pool ● Competing products ● Standards and specifications ● Public culture
+Enterprise Environment
+Policies and procedures ● Parent corporation issues ● Legacy systems ● Enterprise
+architecture ● Standards and specifications ● Local culture ● Guidelines ● Domain
+technology ● Other initiatives
+Interdependent Parallel
+Programs
+Project Environment
+Enterprise Support
+Directives and procedures ● Plans ● Tools
+● Metrics
+• Resource management
+• Project management
+• Technical management • Project reporting
+• Integration, test, and deployment
+• Brand support
+• Colocated vs. virtual development team(s)
+• Infrastructure
+• Training
+• Operations and maintenance
+• Infrastructure
+Project A
+Project B
+Project C
+Project D
+IBM Confidential © IBM Corporation 2025
+9
+
+First, we need to focus on where our requirements are coming from
+Specifies the assets that
+may help ensure the IT
+Specifies what the
+architecture works in the
+solution is to do,
+context of the wider
+usually in business
+enterprise
+terms
+Project Enterprise
+Context Architecture
+Specifies the cost- IBM Design Sources of requirements
+benefit and other Thinking (requirements specification)
+contextual business
+concerns
+Business
+Requirements Gathering and Analysis
+Case
+Nonfunctional
+Requirements
+Future
+Functional
+Lets look first at sources of requirements
+Requirements
+Requirements
+Constraints
+IBM Confidential © IBM Corporation 2025
+10
+
+Where our requirements are coming from
+An Enterprise Architecture defines a set of governing
+Project context is the set of objectives and
+principles, patterns, standard building blocks (ABBs),
+assumptions used to frame the solution
+and reference architectures, together with architecture
+that IBM is developing.
+compliance processes.
+▪ For IT, the enterprise architecture provides: Project context is important to understand:
+– The long-term strategic IT objectives that an IT
+▪ What are the business objectives the
+solution should support
+project is supposed to meet?
+– The principles and standards with which the
+solution must comply ▪ What are the baseline technology
+– Appropriate reference architectures to be followed
+assumptions?
+– Governance structure for review and approval
+▪ What are the relationships (for example,
+dependencies) with other
+Business cases influence architectural decisions.
+ongoing or planned projects?
+▪ Investment drivers will affect choice of technology.
+Assumptions implied or stated in the
+▪ Key required features such as a “single customer
+proposal or Statement of Work (SOW):
+view” to provide better customer service will affect
+▪ In-scope application functionality
+data placement, legacy access, and so on.
+▪ Ongoing support costs, such as a single point of ▪ Service level agreements
+contact for support, have an impact on system
+▪ Customer infrastructure assumptions
+management capabilities and so on.
+▪ Product or vendor assumptions
+▪ Development environment assumptions
+IBM Confidential © IBM Corporation 2025
+11
+
+Second, how do we organize and analyze all this requirements information?
+Now, let’s look at requirements analysis!
+Project Enterprise
+Context Architecture
+IBM Design
+Thinking
+Business
+Organizing requirements
+Requirements Gathering and Analysis
+Case (requirements analysis)
+Nonfunctional
+Requirements
+Future
+Functional
+Documents the agreed business
+Requirements
+Requirements
+functions the IT system will
+Constraints
+support
+Identifies potential future requirements
+Documents the agreed service levels
+of all types, based on both business
+for the IT system Documents the agreed constraints under which
+and technology opportunities
+the IT system will be designed, deployed, and
+operated
+IBM Confidential © IBM Corporation 2025
+12
+
+Work product dependency diagram provides a useful requirements
+(and solution) framework
+IBM Confidential © IBM Corporation 2025
+13
+
+However, there’s a much larger requirements artefact landscape than
+we can address here
+Others document what the overall system is to do…
+Work products give us an overall sense of the
+IT system’s boundary… • User Story (ART 0650)
+System Context (ART 0651) • Prototype (DEL 0518)
+▪ The “requirements” work
+products in Team Solution
+• Functional and operational aspects • Business Event List (BUS 101)
+Design
+Use Case Model (ART 0508) • Customer Wants and Needs (BUS 320)
+▪
+• Including change cases • Process Definition (BUS 309)
+Nonfunctional Requirements (ART • Subject Area Model (APP 408)
+▪
+0507)
+• Stakeholder Requests (ART 0502)
+Including Constraints
+•
+…and help us understand the project’s overall context
+…and more specific requirements in focus
+• Business Direction (BUS 411)
+areas
+• Project Definition (ENG 343)
+Usability Requirements (APP 129)
+•
+• Business Case (BUS 082)
+Network Requirements (ARC 315)
+•
+• Decision Model (BUS 019)
+IT Management Requirements (OPS 303)
+•
+• Technical Environment (ART 0506)
+Security and Privacy Reqts (OPS 315)
+•
+• Standards (ARC 310)
+Future Org Scope and Reqts (ORG
+•
+002)ee • Current Organization Description (ORG 001)
+As the project moves forward, additional work products
+help us track why the solution looks the way it does:
+Requirements Matrix (BUS 011)
+•
+Requirements Traceability Matrix (APP 402)
+•
+IBM Confidential © IBM Corporation 2025
+14
+
+Requirements sources (1 of 3)
+What is the source of the following A.Enterprise architecture
+requirement? “This project depends on
+B.Business case
+project X going live.”
+C.Project context
+15
+
+Requirements sources (2 of 3)
+A.Enterprise architecture
+What is the source of the following
+requirement? “The proposed solution
+B.Business case
+must exploit packages at all times.”
+C.Project context
+16
+
+Requirements sources (3 of 3)
+A.Enterprise architecture
+What is the source of the following
+requirement? “The proposed solution
+B.Business case
+must pay for itself within 3 years.”
+C.Project context
+17
+
+Whatever artefacts we use to analyse and organize our requirements,
+they need to be SMART
+Individual requirements have to be*:
+• Specific
+Unambiguous, consistent, and at the appropriate level of detail
+• Measurable
+Possible to verify that a requirement has been met, so include success criteria
+• Attainable
+Technically feasible and within the art of the possible
+• Realizable
+Realistic given all the constraints (e.g., resources, skills, time, infrastructure)
+• Traceable
+Linked from conception through specification, design, implementation, and test
+• As a group, requirements have to be:
+Non-conflicting
+Prioritized
+*
+See [Bredemeyer, Dana and Malan, Ruth. Defining Non-Functional Requirements, Bredemeyer Consulting, March 2001]
+IBM Confidential © IBM Corporation 2025
+18
+
+Whatever artefacts we use to analyse and organize our requirements,
+they need to be SMART
+1. A requirement must form a complete sentence.
+2. Avoid using abbreviations unless they are defined.
+MOSCOW:
+3. Make consistent use of one of the following verbs:
+• Must (so will)
+• Should (and probably will)
+• Shall, will, or must to show mandatory requirements
+• Could (but might not)
+• Should or might to show optional requirements
+• Would (but won’t)
+• Could or would to show desirable requirements
+4. They must contain the success criteria and be measurable and testable.
+5. A unique reference ID must be provided; for example, NFR-PERF-001.
+6. Refer to supporting material; do not duplicate information.
+7. Avoid:
+• Ambiguity (instead, write as clearly and explicitly as possible)
+But, of course, this
+represents a perfect
+• Rambling, long sentences with arcane language
+world…
+• Wishful thinking (such as “100% reliable,” “totally safe,” and so on)
+IBM Confidential © IBM Corporation 2025
+19
+
+A collection of requirements pitfalls
+• The “this is too technical for me” attitude
+Which really means “I do not know how to describe what I want” or “I’m embarrassed that I do not know what I want.”
+• The “all requirements are equal” fallacy
+Which is a bit like saying “all or nothing!”
+• The “park it in the lot” problem
+Which probably means “it’s not my idea; I’d rather have something else, please.”
+• The “requirements that can't be measured” syndrome
+Such as “make it better than before” or “I’ll know what I want when I haven’t got it.”
+• The “not enough time” complaint
+A multimillion-dollar project probably has complicated requirements, and complicated requirements take time to work out!
+• The “lack of ownership” problem
+Who specifies, and who analyzes? The person paying or the person supplying?
+• The “all stakeholders are alike” misconception
+Is a functional requirement more or less important than a constraint?
+• The “too general” tendency
+Architectural requirements need to be more abstract than those for software development, but not so abstract that they are
+meaningless.
+IBM Confidential © IBM Corporation 2025
+20
+
+Requirements should be SMART (1 of 3)
+“The proposed solution must be better than
+Is the following an example of a SMART
+the current system.”
+requirement?
+21
+
+Requirements should be SMART (2 of 3)
+The proposed solution must decrease
+Is the following an example of a SMART
+customer callbacks by 10%, based on
+requirement?
+recorded call center statistics.
+22
+
+Requirements should be SMART (3 of 3)
+The proposed solution must completely
+Is the following an example of a SMART
+eliminate the need for customer support.
+requirement?
+23
+
+Module outline
+↗ Introducing Requirements
+↗ What are Requirements?
+↗ Sourcing Requirements
+→ System Context Diagram
+↘ Functional Requirements
+↘ Future Requirements
+↘ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+24
+
+System’s boundary – captured in the system context artifact
+The system context:
+• Clarifies the environment in which the system has to operate
+• Puts bounds on the system
+• Identifies external interfaces (with human users and other IT systems)
+Integration with…
+Product
+maintenance
+Order details
+Product updates
+system
+Payment details
+Project
+Delivery details
+Context
+Order status
+Online Credit
+Buyer authorization
+System
+Credit
+System requests
+under authorization
+Context
+Credit
+system
+construction
+Order status authorization
+Customer info responses
+IT
+Order details
+Solution
+Payment details
+Order taker Delivery details Orders
+Order amendments Warehouse
+management
+A template for the system context modelling TSD work product can be found in the following Order status
+system
+link Order exemptions
+Line of automation
+https://methodworkspace-
+prod.methodworkspace.dal.app.cirrus.ibm.com/search?wpName=Use_Case&wpType=Artifact
+IBM Confidential © IBM Corporation 2025
+25
+
+The System Context
+The system context can be produced as a “free form” sketch “interfaces”
+in which the meaning of the relationships between the
+Stand-alone Stand-alone
+System1 System 2
+system and its external agents is ambiguous. Output1
+Input 5
+Input 1 Output3
+“Entities”
+▪Who, or which, is interacting with the target system?
+Input 6
+Output2
+▪What are they doing? On-Line System On-Line
+User1 Name User2
+▪How are they doing it?
+Input 3 Output 4
+Input 6 Output6
+Input 4 Output 5
+Batch
+Batch Input
+Output
+Interface External
+A set of Interface
+Device
+“use cases”
+From: SCD Artifact template
+“function”
+“user”
+Logical IT
+System
+“actor”
+From: AT Class Case Study instructions
+Form of
+access
+From: TeamSD WPD
+From: AT Class Case Study sample answer
+Physical
+Transfer
+implementation
+mechanism
+IBM Confidential © IBM Corporation 2025
+26
+
+Module outline
+↗ Introducing Requirements
+↗ What are Requirements?
+↗ Sourcing Requirements
+↗ System Context Diagram
+→ Functional Requirements
+↘ Future Requirements
+↘ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+27
+
+Functional Requirements
+• Functional requirements describe what the system
+will do
+from a number of perspectives – each with its own
+architectural implications.
+• Source of business functionality (What the system
+has to do “inside”)
+▪ Customer Wants & Needs
+▪ Business Process Model
+▪ Use Case Model
+▪ Use Case Specification
+▪ Business Rules
+▪ Epics and User Stories
+• Users – What the system’s users can do, and where
+they are
+▪ IBM Design Thinking
+▪ Business Roles (Personas) and Locations
+IBM Confidential © IBM Corporation 2025
+28
+
+Business processes are a way of documenting functional requirements
+without concern for automation
+Business process modeling, system context, and use case modeling help to bridge between business
+architecture and IT architecture.
+IBM Confidential © IBM Corporation 2025
+29
+
+Use Case Model
+• The Use Case Model is a way of grouping all the use cases in scope for a particular solution (or solution
+domain for large solutions) and presenting them as a single model (or a reasonably small number of models)
+• A Use Case Model can be seen as a summary of the Use Cases in scope
+Human
+actor
+Target
+system
+IBM Confidential © IBM Corporation 2025
+30
+
+A use case consists of a main scenario together with one or more alternatives
+Sample use case
+Good use cases often adopt this
+“conversational style”:
+Main scenario
+I say, you say…
+• The system requests the person’s details.
+• The user supplies the address and phone number.
+• The system validates the address and phone number
+• The use case ends successfully.
+Alternatives
+• 3a. Non-unique name or town supplied at 2
+Do not confuse each step (what
+• 3a1. The system supplies a list of matching full names and/or post codes.
+each party does) with the
+• 3a2. The user selects an entry from the list.
+message that flows from party to
+party between the steps.
+• 3a3. The system supplies the address and phone number.
+• 3a4. The use case ends successfully.
+IBM Confidential © IBM Corporation 2025
+31
+
+Functional requirements in agile world
+Functional requirements in agile methodologies are typically defined in terms of Epics, User Stories, and
+Themes.
+• Epics represent large, complex requirements that usually need to be broken down into smaller stories before
+development.
+• User stories are short descriptions of system requirements from the perspective of a user or stakeholder.
+• Themes are groups of related user stories that are organized together for prioritization and planning purposes
+IBM Confidential © IBM Corporation 2025
+32
+
+User Stories – Formal User Story Card with Confirmations
+Use cases vs user stories
+There is no universal agreement on when to use use cases, user stories, or both.
+However, a practical perspective is that:
+• User stories capture high-level requirements from the user’s point of view.
+• Use cases expand those requirements by describing interactions and behavioral details.
+IBM Confidential © IBM Corporation 2025
+33
+
+Design Thinking – Framework to solve user problems
+“IBM Design Thinking is our approach to applying design
+thinking at the speed and scale the modern enterprise
+demands.”
+IBM Design Thinking Field Guide ( http://www.ibm.biz/fieldguide-public )
+The framework has us:
+Empathy map Scenario map Explore Ideas Stakeholders Playback
+• Work with sponsor users to understand and empathize with
+those who will be most impacted by whatever we are
+designing
+• Ideate to generate big ideas and then prioritize ideas that we
+have agreement will be impactful while within the bounds of
+feasibility
+• Establish a common statement (intent) that helps to align
+the entire team [our Hills]
+• And along the way continue to involve all sponsor users and
+stakeholders in the process through Playbacks to insure
+meaningful impact of the outcome of the design
+IBM Confidential © IBM Corporation 2025
+34
+
+The Architecture Process: From client need to client value
+Checkpoint: (1) How does a solution look like from the Client Checkpoint: (1) What is the solution to the business problem?
+Customer’s perspective? (2) Is it feasible? (3) What are the risks?
+(2) What are the main ideas underpinning the approach to solving the (4) How much will it cost? (5) How long will it take to deliver?
+business problem?
+Project Planning Analysis Design Implementation Operation
+Delivery Playbacks
+Empathy Needs Storyboard
+Key Questions:
+(Agile Methodology)
+Map Statement / Prototype
+IBM Design Given the scope and
+Thinking approach defined before,
+As Is Ideation / Hills /
+what is the solution and
+Scenario Prioritization Playback 0
+its architecture?
+Key Questions:
+What do the client and their customers truly need? Key activities:
+Key activities: Solution
+How can the business exceed expectations and Define requirements,
+delivery (architecture,
+deliver innovative value? solution architecture,
+design, development,
+schedule, resources,
+testing, hand-over to
+Key Activities: cost. Determine,
+production)
+Understand users, map current experiences, and feasibility and risks.
+identify pain points. Explore creative solutions,
+prototype ideas, and test them with users.
+IBM Confidential © IBM Corporation 2025
+Footer 35
+
+Functional Requirements definition – Level of details (elaboration)
+• Customer wants
+and needs
+• Business
+Requirements
+• System
+Requirements
+IBM Confidential © IBM Corporation 2025
+36
+
+Module outline
+↗ Introduction and objectives
+↗ Introducing Requirements
+↗ What Are Requirements?
+↗ Sourcing Requirements
+↗ System Context Diagram
+↗ Functional Requirements
+→ Non-Functional Requirements
+↘ Constraints
+↘ Future Requirements
+↘ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+37
+
+Introducing Non-Functional Requirements and Constraints
+Non-Functional Requirements define “how good” the solution should be.
+• The “adjectives” that can be applied to the “nouns and verbs” that describe the system’s functional
+requirements
+• Some are associated with the running system:
+• How secure, how fast, how many users…
+• Some are associated with other aspects of the system:
+• How portable, how scalable, how safe…
+Constraints are limitations imposed upon a solution.
+• They can be imposed by the business or from within IT.
+• “It must be done this way.”
+• “It must conform to this legislation.”
+• “We only have skills in these areas.”
+IBM Confidential © IBM Corporation 2025
+38
+
+Non-Functional requirements are often thought to apply only
+to the operational viewpoint (1 of 2)
+IBM Confidential © IBM Corporation 2025
+39
+
+Non-Functional requirements are often thought to apply only
+to the operational viewpoint (2 of 2)
+But they are not limited to it
+IBM Confidential © IBM Corporation 2025
+40
+
+Designing a solution to meet a number of NFRs involves resolving
+a number of opposing “forces”
+Functional Requirements
+Runtime NFRs Business Constraints
+Solution
+Non-runtime NFRs Technical Constraints
+Resolution of two or more opposing forces results in a solution to a problem.
+IBM Confidential © IBM Corporation 2025
+41
+
+NFRs define the “how good” expectations and characteristics of the target system
+NFRs can be:
+Of value to the user of the system – called “runtime NFRs”
+• Can be empirically tested (e.g., by monitoring the system)
+• Sometimes stated as the system’s service level
+characteristics, and may be the basis of SLAs
+• Also known as the observable qualities
+Of value to the operator of the system – called “non-runtime NFRs
+• Cannot be measured as easily, and may rely on other
+project metrics
+• Also known as the non-observable or
+development-time NFRs
+IBM Confidential © IBM Corporation 2025
+42
+
+What are example user (runtime) NFRs?
+Performance (of the system as it operates currently)
+• Does the system respond fast enough to user actions
+• Can the system support suitable numbers of concurrent users
+• Can the system support enough transactional throughput
+Volumetrics
+• Is the system capable of storing/ processing expected volumes of data
+• Is the system capable servicing expected number of users
+Security
+• Can the system identify and prevent unauthorized access?
+Usability
+• Can visually or hearing impaired people use our system
+• Do the system’s user interfaces measure up to best practice usability benchmarks
+Availability
+• What is the maximum length of unscheduled outage the business can tolerate
+Manageability
+• How straightforward the system is to maintain, whether this is to ensure appropriate levels of functional or nonfunctional requirements
+IBM Confidential © IBM Corporation 2025
+43
+
+What are example operator (non-runtime) NFRs?
+Can it scale?
+• How easily the system can be expanded to accommodate growth in the future.
+Is it compliant?
+• Whether it conforms to the regulatory environment, e.g. privacy, SOX, Anti Money laundering, anti Terrorism Financing laws, international
+Sanctions
+Can it be maintained?
+• The ease with which the system can be changed, whether for bug fixes or to add new functionality
+Can it be managed?
+• The ease with which the system can be reused, deployed, and tested, started up, and shut down
+Is it environmentally sound?
+• Whether the system will harm users, including physical harm, as in medical systems, or financial harm, as in accounting systems, or other
+forms of harm
+• How well the system utilizes resources, and its effect on the environment
+Is it portable?
+• Moving the application to other operating systems, application containers, or different hardware
+Is it reliable?
+• The probability that a component will fail, and the nature of that failure
+IBM Confidential © IBM Corporation 2025
+44
+
+NFR Categories* (1 of 2)
+NFR Theme Example or Description
+Volumetrics: Volumetrics for the data entities that exist within the target system that, although relatively static,
+are likely to have a significant effect on the overall sizing of the target system
+• Static E.g. Number of customers, accounts, policies, subscribers
+• Dynamic Throughput (txn per sec), response time
+Reliability: E.g.: 99.5%
+Hours of Operation: E.g.: 8:00 to 19:00
+Security E.g. Authentication, Authorisation, Confidentiality, Integrity, Non-repudiation of origin,
+delivery
+Quality of Service E.g. Guaranteed delivery (e.g. of transactions), idempotence (once only delivery)
+Scheduling and Temporal Time constraints imposed by business process (e.g. cut off times for transactions to be
+processed that need to be met). Schedule of events which drive processing (e.g.
+especially batch)
+Monitoring and Instrumentation Requirements for special facilities, functions, tools which are necessary to operate and
+manage the system
+IBM Confidential © IBM Corporation 2025
+45
+
+NFR Categories* (1 of 2)
+NFR Theme Example or Description
+Logging and timestamping What will be logged, and what will drive the timestamps to enable effective use of logs
+(e.g. a diagnostic log needs to have timestamps allowing re-creation of sequence of
+events)
+Compliance and auditability E.g. data that needs to be provided for audits that may be required in support of legal
+actions
+Regulatory and legal E.g. system functions and/or operational parameters needed to enable statutory
+compliance
+Archiving, backup and recovery What is the data history kept “active” and what can be archived? What is the data
+retention period for archives? How can the archived data be inspected?
+What data, how often backed up, retention period for the backup?
+Disaster Recovery Recovery Point Objective (RPO), Recovery Time Objective (RTO)
+Supportability, Maintainability Requirements for special facilities, functions, tools which are necessary to operate the
+system, and support its users
+Localization Languages supported
+Usability Parameters defining how easy it is to use the system (e.g. length of training required)
+Environmental E.g. safety
+IBM Confidential © IBM Corporation 2025
+46
+
+Performance (runtime)
+Definition:
+• “The degree to which a system or component accomplishes its designated functions within given constraints, such as
+speed, accuracy, or memory usage”
+• [IEE-610.12]
+In practical terms:
+• How fast, how often, how big…
+A simple performance statement, such as “a response time of less than 1 second,” is insufficient. It should always contain
+several components, such as:
+• What is the performance requirement (response time, transaction time)?
+• When is it to be delivered (in defined service hours)?
+• Where is it to be measured (on which systems, using which tools)?
+• For what workload is it to be valid (are test transactions available)?
+• For which users or systems (and how many)?
+• How can you define the percentile to achieve the given value (95th percentile, average)?
+IBM Confidential © IBM Corporation 2025
+47
+
+Striking a balance between cost, effort and accuracy
+How much cost and effort is needed to ensure the system’s performance is
+satisfactory? Just enough!
+Queuing Theory
+Statistical Techniques
+Prototyping
+t
+r
+o Modelling
+f
+f tools
+E
+Utility tools
+d
+n
+a
+Hand
+t
+s
+calculation Simulators and
+o
+C
+performance
+workbenches
+Rules of
+thumb
+Spreadsheets
+Accuracy
+48
+IBM Confidential © IBM Corporation 2025
+
+Availability (runtime)
+Definition:
+• “A measure of readiness for usage, whenever, and for whatever purpose”
+Systems may be unavailable.
+If HA is important, then CO may
+• At scheduled times, whether this is for maintenance, backup, or business
+not be possible, since
+reasons
+scheduled outages could be
+• At unscheduled times, when something breaks
+needed to “protect” HA.
+It is critical to distinguish:
+• High availability (HA)
+» System is always available whenever it’s expected to be
+HA CO CA
+o This may not be “24 x 7”
+Scheduled
+Y N N
+o No unscheduled outages between defined hours on defined days outages
+of the year. Scheduled outages permitted.
+Unscheduled
+N Y N
+outages
+• Continuous operations (CO)
+» System is intended to be available all the time: “24 by 7.”
+» Although unscheduled outages may occur, no scheduled outages
+• Continuous availability (= HA + CO)
+» System is always available all the time.
+IBM Confidential © IBM Corporation 2025
+49
+
+Availability: Factors affecting availability in an architecture
+Down! Up! Down!
+MTTR MTTF
+Mean Time To Recover Mean Time To Failure
+MTBF
+Mean Time Between Failure
+Manufacturers and suppliers might be persuaded to quote MTTF…
+• Hardware reliability, software bug rates
+But MTTR is almost totally in our hands!
+• The IT Architect’s solution design: Something might break “far away” or “near at home,” with widespread or local impact.
+• Operations running the solution: When something breaks, time is taken in detection and action, and more time for recovery and restart
+procedures.
+MTTR includes:
+• Detect, report, diagnose, quiesce, back up, replace, restore/recover, test, reintegrate/resync, restart…
+• Many different people, skills, roles…
+And if MTTF is long, then failure does not happen often: Can everyone remember what to do?
+• If human intervention is needed, the longer the MTTF, the longer MTTR might be!
+IBM Confidential © IBM Corporation 2025
+50
+
+Whether we aim for HA, CO, or CA, systems will always “fail.”
+How do we measure “unavailability”?
+• Typically, availability is measured as a percentage uptime, during scheduled hours.
+» 95%, 99%, 99.9999%...
+And don’t confuse
+• How useful is this? CO (“24x7”)
+with
+• All of these are “99%”…
+CA (“100% all the time”)!
+» 99 days “up,” 1 day “down”
+» 99 hours “up,” 1 hour “down”
+» 99 seconds “up,” 1 second “down”
+• The business impact of these is likely to be very different!
+• We therefore need to understand:
+» Mean time to failure – The average time something is “up” (“99”)
+» Mean time to repair – The average time something is “down” (“1”)
+» Mean time between failures – The average time between “going down” (“100”)
+IBM Confidential © IBM Corporation 2025
+51
+
+Security ( runtime )
+Definition: The ability to protect an IT system against malicious use while at the same time allowing
+legitimate use
+Security is sometimes referred to as:
+• Safety
+» “To reduce or eliminate danger, anxiety, and risk or liability”
+• Protection
+» “To defend against attacks (insider and outsider) and fraud (misuse of
+assets or misrepresentation of identity). To defend tangible assets (IT
+systems and applications or stored information or information in transit)
+and intangible assets (reputation).”
+• Assurance
+» To ensure correct and reliable operation; to enforce identity and
+ownership
+» To ensure the design complies with the security policy that the client
+already has in place.
+IBM Confidential © IBM Corporation 2025
+52
+
+Security: Typical requirements and QoS in architectures
+Authentication
+• Validation that the party is who they claim they are
+Authorization
+• Validation of rights a user (or process) has to access information or to perform actions on resources (e.g. access to a
+function, right to update specific data)
+Integrity
+• Quality that ensures the immutability of data (e.g. protection form unauthorized update)
+Confidentiality
+• Protecting data from disclosure to unauthorized parties
+Non-repudiation
+• Strong evidence of authenticity of the sender (non-repudiation of Origin)
+• Strong evidence of delivery of message to the receiving party (non-repudiation of Delivery)
+IBM Confidential © IBM Corporation 2025
+53
+
+Scalability (non runtime)
+Definition: A system’s ability to increase (or decrease) in size according to changing workloads, such as an
+increase in user numbers
+There are two approaches to scalability:
+Vertical scaling (“scaling up”)
+• Adding additional resources into
+the machine:
+• Adding more memory
+• Using more or faster processors
+Horizontal scaling (“scaling out”)
+• Spreading the load across more
+machines
+• May require a “load balancer”
+or “redirector” to distribute
+requests between the computers
+IBM Confidential © IBM Corporation 2025
+54
+
+Which important nonfunctional D – Scalability
+requirement is defined as “the ability to
+respond to increasing numbers of users
+by adding more resources?”
+A. Availability
+B. Maintainability
+C. Performance
+D. Scalability
+E. Security
+IBM Confidential © IBM Corporation 2025
+5555
+
+Module outline
+↗ Introduction and objectives
+↗ Introducing Requirements
+↗ What Are Requirements?
+↗ Sourcing Requirements
+↗ System Context Diagram
+↗ Functional Requirements
+↗ Non-Functional Requirements
+→ Constraints
+↘ Future Requirements
+↘ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+56
+
+Constraints are limitations imposed upon a solution
+Constraints can be:
+Imposed by the business
+• Adherence to externally imposed business legislation (for example., data protection)
+• Driven by available business capabilities (for example, end user skills)
+Imposed from within IT
+• Use of standard parts (components, platforms, and so on) and approaches (patterns, reference architectures)
+• Reuse of existing systems; limitations on other systems’ runtime NFRs
+Imposed by the project context
+Schedule
+• Be the project manager’s best friend
+Resources
+» Consider cost and budget implications
+Risk
+• How long will it take?
+» Optimise resource
+• How much will it cost?
+Scope Budget
+» Is it built to order?
+» Is it built to cost?
+Quality
+Tripe Constraint in Project Management
+IBM Confidential © IBM Corporation 2025
+57
+
+What are example business constraints?
+Regulatory
+• Governmental, legislative, and other rules relating to the operation of IT systems or with which IT systems must
+comply
+Organizational
+• What is the organization that the system must be deployed into, and what special requirements does this introduce?
+Geographic (including localization)
+• What geographic regions will the system operate in, and what special circumstances do they dictate?
+Risk willingness
+• How willing is the client to take risk? (This affects, for example, how much new or unproven technology might be used
+on a project.)
+Marketplace factors
+• Such as competitor offerings, cost of goods or services in the domain this system operates in, and so on
+Project
+• Time - How long can it take to design, build, and deploy the new system?
+• Resource (people and budget) - What is available for the project?
+• Scope – What functionality must be built?
+IBM Confidential © IBM Corporation 2025
+58
+
+What are example IT constraints?
+Development skills
+• What skills are available for the development and support of the new system, in both the client and delivery
+organizations?
+Existing infrastructure
+• Is there any existing infrastructure (both hardware and software) that must form part of the new solution?
+Technology leadership (“state of the art”)
+• What new technology should or should not be considered? (See also “Risk Willingness” in business constraints.)
+IT architectural standards
+• Principles, building blocks, patterns, and reference models that will apply to the new system
+Implementation constraints
+• Code development (or package configuration) constraints such as:
+• Implementation languages
+• Policies for database integrity
+• Resource limits
+• Operation environments
+IBM Confidential © IBM Corporation 2025
+59
+
+Module outline
+↗ Introduction and objectives
+↗ Introducing Requirements
+↗ What Are Requirements?
+↗ Sourcing Requirements
+↗ System Context Diagram
+↗ Functional Requirements
+↗ Non-Functional Requirements
+↗ Constraints
+→ Future Requirements
+↘ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+60
+
+What are future requirements and what do they look like?
+Change cases
+• Describe how the system might change in the future, whether these are functional or non-functional
+enhancements.
+• Conceptually like the Agile concept of “…product features which haven’t been assigned to any release of a
+sprint as of yet”.
+Future changes that might affect the architecture include:
+• New and modified business processes and goals
+• Adaptation of the system to new technologies
+• Changes in the profiles of the average user
+• Changes in the integration needs with other systems
+Understand the importance of:
+• Potential benefits
+• Probability of becoming a reality
+• Customer’s priorities
+Understand the impact of:
+• Change is accommodated now
+• Change is accommodated later
+IBM Confidential © IBM Corporation 2025
+61
+
+Module outline
+↗ Introduction and objectives
+↗ Introducing Requirements
+↗ What Are Requirements?
+↗ Sourcing Requirements
+↗ System Context Diagram
+↗ Functional Requirements
+↗ Non-Functional Requirements
+↗ Constraints
+↗ Future Requirements
+→ Managing Requirements
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+62
+
+Determine significant requirements that most likely affect the architecture
+Match requirements to purpose. The degree of detail,
+accuracy, and precision needed depends on the context:
+• Early pre-project sizing?
+• Proposal development?
+• Outline solution architecture?
+Samples
+• Focused functional or operational design?
+High business payback functions
+Critical business operations
+High volume, high usage functions
+Whatever the case, “architecturally significant” requirements
+Essential functionality of the system
+are ones that: Influential users
+Mobile users
+• “Touch” critical parts of the solution
+Have broad coverage and exercise many architectural elements
+Security requirements
+• “Touch” all part of the solution, maybe from end of end
+Complexity (such as complex business rules)
+or side to side
+Stringent demands on the architecture (such as performance and availability requirements)
+High potential for change (such as rules relating to taxation)
+• Are as likely to be non-functional as functional
+Communication and synchronization with external systems
+Those which highlight identified issues/risks
+Operational “Total cost of ownership” issues (such as conformance to an EA)
+Information requirements
+IBM Confidential © IBM Corporation 2025
+63
+
+How not to gather requirements
+Analyst: “Does the product need to allow changes to orders?”
+Stakeholder: “Oh, I’d not thought of that…. Yes, of course!”
+Analyst: “Do we need to cater for many languages?”
+Stakeholder: “That sounds good. We should plan to address foreign markets.”
+Analyst: “And what about security?”
+Stakeholder: “Oh yes, the product should be secure.”
+Analyst: “Tell me about your reliability expectations.”
+Stakeholder: “Reliability? What’s that? Oh, I see.... definitely 24x7 — no downtime. That's what we need to beat our
+competitors.”
+Analyst: “How many customers will be using it?”
+Stakeholder: “I’ve no idea, but I am sure you will cope.”
+IBM Confidential © IBM Corporation 2025
+64
+
+Non-functional requirements in the areas D – Users
+of usability and accessibility are most
+likely to come from which stakeholders? Users are most likely to provide usability and
+accessibility requirements
+A. Communicators
+B. Developers
+C. Testers
+D. Users
+IBM Confidential © IBM Corporation 2025
+6655
+
+Requirements are dynamic and require careful management throughout a
+project’s life cycle
+Reasons for change Change management
+• Users’ needs and technology change as time passes • Iterative documentation, review, and sign-off of
+• As the system evolves, requirements become clearer requirements
+• External changes to the environment make requirements • Well-defined and executed change management
+obsolete of create new requirements procedures
+• Change might be needed to manage require conflicts • Sufficient emphasis on developing change cases
+between different stakeholders • Ongoing evaluation of the application and the
+architecture
+IBM Confidential © IBM Corporation 2025
+66
+
+Summary
+• Requirements are the foundation for managing scope, quality, and client expectations and have a profound impact on the
+architecture of a system, hence their relevance for Architects.
+• There are many different sources of requirements and constraints, and these need careful balancing to arrive at a viable set
+acceptable to all stakeholders.
+• An Architect working on an IT system will typically rly on the architecturally significant requirements to drive the initial
+definition of the architecture.
+• A good requirement is clear, concise, traceable, design-independent, and verifiable. A good set of requirements is unique,
+complete, consistent, comparable, modifiable, and attainable.
+• Use cases and process models are typically used to document functional requirements, whereas system context is used to
+capture project scope.
+IBM Confidential © IBM Corporation 2025
+67
+
+References (1 of 2)
+• Agile: https://skillsbuild.org/students/course-catalog/agile
+• Bass, Clements and Kazman. Software Architecture in Practice, ISBN 0-201-19930-0
+• Boehm, Barry and In, Hoh. "Identifying Quality-Requirement Conflicts," IEEE Software, 2 March 1996, pp. 25-
+35
+• Bredemeyer, Dana and Malan, Ruth. Defining Non-Functional Requirements, Bredemeyer Consulting, March
+2001, https://www.bredemeyer.com/
+• Cockburn, Alistair. Writing Effect Use Cases. Addison-Wesley, 2001, ISBN: 0201702258
+• Eeles, Peter. Capturing Architectural Requirements, The Rational Edge, November 2001,
+https://www.researchgate.net/publication/329760910_Capturing_Architectural_Requirements
+• Eeles, Peter and Cripps, Peter. The Process of Software Architecting. Addison-Wesley, 2008, ISBN:
+0321357485
+• Glib, Tom. Software Engineering Management, ISBN 0-201-19246-2
+• Hope, Gregor and Woolf, Bobby. Enterprise Integration Patterns: Designing, Building and Deploying Messaging
+Solutions, Addison Wesley, 2004, ISBN: 0321200683
+• IBM Enterprise Design Thinking: https://www.ibm.com/training/enterprise-design-thinking
+• IBM System Description Standard V3
+• IBM Unified Method Framework. NFR development, Technique Paper
+IBM Confidential © IBM Corporation 2025
+68
+
+References (2 of 2)
+• IBM Team solution design Work product descriptions and templates at Method Hub (search work product
+name) https://methodhub.wdc1a.cirrus.ibm.com/browse/
+• IEEE Software Engineering Committee. IEEE Recommended Practice for Software Requirements
+Specifications, ISBN 1-55937-395-4
+• Rozanski, Nick & Woods, Eoin. Software Systems Architecture – Working With Stakeholders Using Viewpoints
+and Perspectives. Addison-Wesley, 2005, ISBN: 0321112296
+• Shaw and Garlan. Software Architecture, Perspectives on an Emerging Discipline, ISBN 0-13-182957-2
+• Sommerville, Ian, and Sawyer, Pete. Requirements Engineering: A Good Practice Guide. Wiley and Sons.
+• Whitmore, J.J. A Method for Designing Secure Solutions, IBM Systems Journal, Volume 40, Number 3,
+http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=5386938
+• “Defining Nonfunctional Requirements,” UMF Technique Paper
+• INCOSE Systems Engineering Handbook v5
+IBM Confidential © IBM Corporation 2025
+69
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+70
+
+Appendix – Requirements Management
+IBM Confidential © IBM Corporation 2025
+72
+
+Requirements
+1 2
+management includes
+these objectives
+Understand the source of Manage the scope of the
+requirements. project and establish a
+requirements baseline (official
+set of requirements).
+3 4 5 6
+Verify that all requirements of Balance competing Manage changes to Assess the impact of a failure
+the system are fulfilled by the requirements prioritization requirements and assess the of a test on requirements (that
+implementation and that the and conflicts. ​ project impact of a change in a is, if test fails, the requirement
+application does only what it requirement. may not be satisfied).
+was intended to do.​
+IBM Confidential © IBM Corporation 2025
+73
+
+Requirements must be managed end to end through the project life cycle
+Architectural
+Thinking
+But remember, while this looks like
+a waterfall, it need NOT be!
+For example, AT can set the
+context for a multiphase program,
+executing the rest of the V during
+each subsequent phase.
+IBM Confidential © IBM Corporation 2025
+74
+
+Joint Application Design (JAD) sessions are a useful way to gain agreement on
+requirements with all stakeholders​
+• Similar to brainstorming sessions, can be short or long (several days)
+• Structured, disciplined session
+• Often collaboration between IBM and client teams And don’t forget: This is not just
+about business requirements.
+• Facilitated, documented meeting
+Business qualities
+• Results in requirements agreement and/or deliverables
+• Service portfolio candidates Architectural and existing system
+constraints
+• User “stories”
+And all the “Ds” too…​
+• Use cases
+• Assumptions
+• Keep the parking lot manageable
+• Things carried over to the next session
+• Neutral to the project style:
+• Waterfall
+• Iterative/incremental​ (for example, series at start of each phase)​
+• Agile ​ (for example, daily hour-long meetings)​
+IBM Confidential © IBM Corporation 2025
+75
+
+IBM Design Thinking – Another great requirements elicitation approach​
+From the IBM Design Thinking Field Guide –
+IBM Design Thinking is our approach to applying design thinking at the speed and scale the modern
+enterprise demands. It’s a framework for teaming and action. It helps our teams not only form intent,
+but deliver outcomes – outcomes that advance the state of the art and improve the lives of the people
+they serve.
+The framework helps us
+• Work with sponsor users to understand and empathize with those who will be most impacted by
+whatever we are designing
+• Ideate to generate big ideas and then prioritize ideas that we have agreement will be impactful
+while within the bounds of feasibility
+• Establish a common statement (intent) that helps to align the entire team [our Hills]​
+• And along the way continue to involve all sponsor users and stakeholders in the process
+through Playbacks to insure meaningful impact of the outcome of the design​
+* For a great start on IBM Design Thinking visit the IBM Design Thinking University
+IBM Confidential © IBM Corporation 2025
+76
+
+Requirements must be prioritized in order to deliver the appropriate project scope
+It is useful to understand the customer’s prioritization of their requirements in establishing scope, trading off
+requirement and constraint conflicts, and baselining the set of requirements: Or we could use MoSCoW!
+MUST (so will)
+Should (and probably will)
+• High: Essential. Many requirements depend on this one, or it is considered of high value to many stakeholders. We should delay release if
+Could (but might not)
+Would (but won‘t)
+not ready. The main use of the system will be impacted significantly.
+• Medium High: Important to the effectiveness and efficiency of the system. Lack of inclusion may affect customer or user satisfaction, or
+even revenue, but release will not be delayed due to lack of this item.
+• Medium Low: Impact is to lesser used parts of the system, but those parts will be significantly hampered.
+• Low: Useful in less typical applications, will be used less frequently, or reasonably efficient workarounds can be achieved. No significant
+revenue or customer satisfaction impact can be expected if such an item is not​ included in a release.
+IBM Confidential © IBM Corporation 2025
+77
+
+Requirements should be able to be traced from initial identification through testing
+• In this strictly waterfall example, a client produced the following documents in
+sequence:​
+• Business Requirements Document (BRD)​
+Document Requirement Functional Requirement
+• High Level Design Document (HLD)​
+#
+• Low Level Design Document (LLD)​
+BRD D-33 The following attributes can only be customized by an Authenticated user;
+• Infrastructure Design Document (IDD)​
+- Localization (Language)
+- Customer Contact Settings (TBD)
+• The requirements were supposed to be traceable through this progression.​
+HLD NA Traceability comment: No information on this requirement was found in the HLD​
+TRD NA Traceability comment: No information on this requirement was found in the TRD
+• However, results indicated that many could not be traced, as shown in one
+LLD NA Traceability comment: No information on this requirement was found in the LLD
+entry of the Requirements Traceability Verification Matrix (APP 411) for a
+IDD 2.3.1 Traceability comment: Functional requirements may in some cases drive infrastructure,
+requirement related to localization.
+but in this case the requirement it is not expected to be addressed in the IDD. It was not
+traceable to the IDD​
+Service NA Traceability comment: No information on this requirement was found in the Service
+Model
+Test Caes NA Traceability comment: Unable to find this requirement (either in words or the numbering)
+in the test case
+Comments • In general, this pattern was found for the rest of the requirements for this project - not
+much detail on requirements and design was available once past the BRD.​
+• LLD is version 00.01, which may explain why not much detail is in it yet. Recommend
+Notes BRD Document Name: Project XYZ BRD 4-24-25 v1.doc, v5.0, dated March 5, 2025​
+HLD Document Name: Project XYZ HLD 6-20-25 v1.doc
+TRD Document Name: Project XYZ TRD V1.3.doc, dated July 9, 2025​
+LLD DocumentName: Project_XYZ_LLD.doc, v00.01, July 19, 20
+IBM Confidential © IBM Corporation 2025
+78
+

@@ -1,0 +1,96 @@
+<mxfile host="Electron" agent="Kiro">
+  <diagram id="aod-bw" name="Architecture Overview Diagram (B&amp;W)">
+    <mxGraphModel dx="1558" dy="865" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="desktop" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" value="Desktop&#xa;Browser" vertex="1">
+          <mxGeometry height="50" width="30" x="220" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mobile" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" value="Mobile&#xa;Device" vertex="1">
+          <mxGeometry height="50" width="30" x="450" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="collectoruser" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" value="Census&#xa;Collector" vertex="1">
+          <mxGeometry height="50" width="30" x="1320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="internet" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;fontColor=#000000;" value="Internet" vertex="1">
+          <mxGeometry height="80" width="200" x="250" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="cloudboundary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=2;verticalAlign=top;fontSize=13;fontStyle=1;arcSize=5;dashed=1;fontColor=#000000;" value="Cloud Hosting Environment" vertex="1">
+          <mxGeometry height="700" width="1000" x="150" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="tier1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;fontColor=#000000;strokeWidth=1.5;" value="Load Balancer" vertex="1">
+          <mxGeometry height="50" width="500" x="350" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="tier2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;fontColor=#000000;strokeWidth=1.5;" value="Web + Application Tier&#xa;(Responsive UI, Business Logic, Authentication, Form Management, Validation)" vertex="1">
+          <mxGeometry height="70" width="500" x="350" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="tier3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;fontColor=#000000;strokeWidth=1.5;" value="Data Tier&#xa;(Census Database + Session Cache)" vertex="1">
+          <mxGeometry height="60" width="500" x="350" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="tier4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;fontColor=#000000;strokeWidth=1.5;" value="Integration Tier&#xa;(Data Transfer to DoS + SMS Notifications + Reporting)" vertex="1">
+          <mxGeometry height="60" width="500" x="350" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="tier5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontColor=#000000;strokeWidth=1.5;" value="Monitoring &amp; Support Tools" vertex="1">
+          <mxGeometry height="50" width="500" x="350" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="dosext" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;fontColor=#000000;strokeWidth=2;" value="DoS Electronic&#xa;Census Processing" vertex="1">
+          <mxGeometry height="60" width="200" x="1250" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="sms" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;fontColor=#000000;strokeWidth=2;" value="SMS Gateway&#xa;(Mobile Network)" vertex="1">
+          <mxGeometry height="60" width="200" x="1250" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="ea1" edge="1" parent="1" source="desktop" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=1.5;strokeColor=#000000;" target="internet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea2" edge="1" parent="1" source="mobile" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=1.5;strokeColor=#000000;" target="internet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea3" edge="1" parent="1" source="internet" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=1.5;strokeColor=#000000;" target="tier1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea3l" connectable="0" parent="ea3" style="edgeLabel;html=1;fontSize=9;fontColor=#000000;" value="HTTPS" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea4" edge="1" parent="1" source="tier1" style="strokeWidth=1.5;strokeColor=#000000;" target="tier2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea5" edge="1" parent="1" source="tier2" style="strokeWidth=1.5;strokeColor=#000000;" target="tier3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea6" edge="1" parent="1" source="tier2" style="strokeWidth=1.5;strokeColor=#000000;" target="tier4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea7" edge="1" parent="1" source="tier4" style="strokeWidth=2;strokeColor=#000000;" target="dosext">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea7l" connectable="0" parent="ea7" style="edgeLabel;html=1;fontSize=9;fontColor=#000000;" value="Secure Data Transfer" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea8" edge="1" parent="1" source="dosext" style="strokeWidth=2;strokeColor=#000000;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" target="sms">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea8l" connectable="0" parent="ea8" style="edgeLabel;html=1;fontSize=9;fontColor=#000000;" value="SMS API" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea9" edge="1" parent="1" source="sms" style="strokeWidth=1.5;strokeColor=#000000;dashed=1;" target="collectoruser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea9l" connectable="0" parent="ea9" style="edgeLabel;html=1;fontSize=9;fontColor=#000000;" value="SMS Notification" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YpkmLWMEl-A9KFjDwdBE-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Propoasal Statge&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;(DoS IT Management, Project Management)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="680" y="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

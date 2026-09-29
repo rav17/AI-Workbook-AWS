@@ -1,0 +1,70 @@
+Architectural Thinking Workshop
+Exercise 3: Component Modeling
+(Exercise Description)
+IBM Professional Series: Architectural Thinking Workshop
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved.
+IBM Client Education Version 7 T co h n is s d en o t c o u f m IB en M t . m ay not be copied distributed or reproduced in whole or in part without the prior written
+
+Exercise 3: Component Modeling
+During this exercise we will review your logical component model’s structural and behavioral views.
+We are giving you:
+▪ Two use cases (see next slide)
+We want you to:
+▪ Create the structural view (relationship diagram)
+▪ Document the responsibilities of the components you’ve added to the model
+▪ Create two behavioral views (sequence diagrams) for the use cases given to you
+Refer to AT_CS01 Model Answer Requirements Specification for more details on the use cases.
+Be ready with:
+▪ A completed logical component relationship diagrams
+• Logical actors connected to “edge” components, which are connected to the other components
+in the system (so that information can flow between components)
+▪ Some thoughts on the responsibilities of the components you’ve added to the component model
+• And if you have time, maybe something about their interfaces, methods, and attributes
+▪ Two completed sequence diagrams
+• Logical actors interacting with “edge” components, which are also interacting with the other
+components in the system
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This
+2
+Architectural Thinking Workshop document may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+Exercise 3: Component Modeling – Use Cases in Scope
+▪ Use Case: UC_01 Logon
+• Initiating actor: Respondent
+• Supporting actors: None
+• Main scenario:
+– Actor Request logon page by providing URL (or using bookmark)
+– System Displays the Logon page
+– Actor Enters CFN, eCN and presses the “Logon” button
+– System Verifies the provided credentials
+If valid, renders the initial section page
+If invalid, displays the error message, offers to re-enter
+credentials
+▪ Use Case: UC_12 Submit Form (from mobile device)
+• Initiating actor: Respondent
+• Supporting actors: None
+• Main scenario:
+– Actor: Submits form by pressing the “Submit Form” button
+– System: Displays the “Thank you” page with the Receipt Number.
+Asks for feedback
+– Actor: Completes feedback. Presses the “Submit Feedback” button
+– System: Displays the final screen
+IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This
+3
+Architectural Thinking Workshop document may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+
+THANK YOU
+IBM, the IBM logo, and ibm.com are trademarks or registered trademarks of International Business Machines Corporation in the
+United States, other countries, or both. If these and other IBM trademarked terms are marked on their first occurrence in this
+information with a trademark symbol (® or ™), these symbols indicate U.S. registered or common law trademarks owned by IBM at
+the time this information was published. Such trademarks may also be registered or common law trademarks in other countries. A
+current list of IBM trademarks is available on the Web at "Copyright and trademark information.“ Java and all Java-based
+trademarks and logos are trademarks or registered trademarks of Oracle and its affiliates.
+Linux is a trademark of Linus Torvalds in the United States, or other countries, or both. Microsoft, Excel, PowerPoint, Project,
+Visio, Word, and Windows are trademarks of the Microsoft Corporation in the United States, other countries, or both. UML is a
+registered trademark of Object Management Group, Inc. in the United States and/or other countries. TOGAF and UNIX are
+registered trademarks of The Open Group in the United States and other countries. Other company, product, and service names
+may be trademarks of IBM or other companies. Citrix is a trademark of Citrix Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and Trademark Office and in other countries.
+4 IBM Confidential. © Copyright International Business Machines Corporation 2017. All Rights Reserved. This
+Architectural Thinking Workshop document may not be copied distributed or reproduced in whole or in part without the prior written consent of IBM.
+

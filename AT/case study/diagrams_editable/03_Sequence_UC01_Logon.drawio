@@ -1,0 +1,104 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="seq-uc01" name="Sequence Diagram - UC_01 Logon">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Exercise 3: Sequence Diagram — UC_01 Logon" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="10" width="600" height="40" as="geometry" />
+        </mxCell>
+        <!-- Lifelines (participants) -->
+        <mxCell id="actor_head" value=":Respondent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="70" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#82b366;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="110" y="110" as="sourcePoint" /><mxPoint x="110" y="900" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="pres_head" value=":Presentation&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="70" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pres_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="315" y="110" as="sourcePoint" /><mxPoint x="315" y="900" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="auth_head" value=":Authentication&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="70" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="535" y="110" as="sourcePoint" /><mxPoint x="535" y="900" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="data_head" value=":Data Access&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="70" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="data_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="755" y="110" as="sourcePoint" /><mxPoint x="755" y="900" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="sess_head" value=":Session&#xa;Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="70" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="sess_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="975" y="110" as="sourcePoint" /><mxPoint x="975" y="900" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- Messages -->
+        <!-- 1. Request logon page -->
+        <mxCell id="m1" value="1. Request logon page (URL)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="110" y="160" as="sourcePoint" /><mxPoint x="315" y="160" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 2. Display logon page -->
+        <mxCell id="m2" value="2. Display Logon Page" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="315" y="220" as="sourcePoint" /><mxPoint x="110" y="220" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 3. Enter CFN + ECN, press Logon -->
+        <mxCell id="m3" value="3. Enter CFN + ECN, press &quot;Logon&quot;" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="110" y="290" as="sourcePoint" /><mxPoint x="315" y="290" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 4. Validate credentials -->
+        <mxCell id="m4" value="4. validateCredentials(CFN, ECN)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="315" y="350" as="sourcePoint" /><mxPoint x="535" y="350" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 5. Lookup credentials in DB -->
+        <mxCell id="m5" value="5. lookupCredentials(CFN, ECN)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="535" y="410" as="sourcePoint" /><mxPoint x="755" y="410" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 6. Return result -->
+        <mxCell id="m6" value="6. credentials valid/invalid" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="755" y="470" as="sourcePoint" /><mxPoint x="535" y="470" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- ALT fragment -->
+        <mxCell id="alt" value="alt [credentials valid]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=150;height=25;fillColor=none;strokeColor=#000000;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="510" width="950" height="370" as="geometry" />
+        </mxCell>
+        <!-- 7. Create session -->
+        <mxCell id="m7" value="7. createSession(respondentId)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="535" y="560" as="sourcePoint" /><mxPoint x="975" y="560" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 8. Session created -->
+        <mxCell id="m8" value="8. sessionToken" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="975" y="610" as="sourcePoint" /><mxPoint x="535" y="610" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 9. Auth success -->
+        <mxCell id="m9" value="9. authSuccess(sessionToken)" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="535" y="660" as="sourcePoint" /><mxPoint x="315" y="660" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 10. Display initial section -->
+        <mxCell id="m10" value="10. Display initial Census section page" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="315" y="710" as="sourcePoint" /><mxPoint x="110" y="710" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- Else: invalid -->
+        <mxCell id="altelse" value="[else: credentials invalid]" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontStyle=2;fontColor=#C00000;" vertex="1" parent="1">
+          <mxGeometry x="90" y="750" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="altline" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="80" y="760" as="sourcePoint" /><mxPoint x="1030" y="760" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 11. Auth failure -->
+        <mxCell id="m11" value="11. authFailure(errorMessage)" style="endArrow=block;endFill=1;html=1;strokeColor=#C00000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="535" y="800" as="sourcePoint" /><mxPoint x="315" y="800" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <!-- 12. Display error -->
+        <mxCell id="m12" value="12. Display error, offer to re-enter" style="endArrow=block;endFill=1;html=1;strokeColor=#C00000;dashed=1;fontSize=9;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="315" y="850" as="sourcePoint" /><mxPoint x="110" y="850" as="targetPoint" /></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Kiro" version="22.0.0">
+  <diagram id="use-case" name="Use Case Diagram">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="Exercise 1: Use Case Model - Electronic Census System (ECS)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="650" height="40" as="geometry" />
+        </mxCell>
+        <!-- System Boundary -->
+        <mxCell id="boundary" value="ECS System Boundary" style="shape=umlFrame;whiteSpace=wrap;html=1;width=180;height=30;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="300" y="80" width="900" height="1050" as="geometry" />
+        </mxCell>
+        <!-- Actors -->
+        <mxCell id="respondent" value="Respondent" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="100" y="450" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" value="DoS Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="450" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="supportactor" value="Support Staff" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="750" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- Use Cases - Respondent -->
+        <mxCell id="uc01" value="UC_01: Logon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="120" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc02" value="UC_02: Navigate Census Form" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="210" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc03" value="UC_03: Complete Address Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="300" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc04" value="UC_04: Complete Person Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="390" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc05" value="UC_05: Complete Dwelling Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="480" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc06" value="UC_06: Complete Feedback Section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="570" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc07" value="UC_07: Save Progress" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="660" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc08" value="UC_08: Resume Incomplete Form" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="750" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc09" value="UC_09: Submit Completed Form" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="840" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc10" value="UC_10: View Receipt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="930" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc11" value="UC_11: Logoff" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1020" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc12" value="UC_12: Submit Form (Mobile)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4472C4;fontSize=10;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="700" y="120" width="220" height="60" as="geometry" />
+        </mxCell>
+        <!-- Use Cases - Admin -->
+        <mxCell id="uc20" value="UC_20: Monitor Submission Stats" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="250" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc21" value="UC_21: Generate Daily Reports" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="370" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc22" value="UC_22: Transfer Data to DoS" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="490" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc23" value="UC_23: Send Collector Notifs (SMS)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ED7D31;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="610" width="220" height="60" as="geometry" />
+        </mxCell>
+        <!-- Use Cases - Support -->
+        <mxCell id="uc30" value="UC_30: Monitor System Health" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#70AD47;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="750" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc31" value="UC_31: Deploy Application" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#70AD47;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="870" width="220" height="60" as="geometry" />
+        </mxCell>
+        <!-- Connections: Respondent to Use Cases -->
+        <mxCell id="r1" edge="1" source="respondent" target="uc01" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r2" edge="1" source="respondent" target="uc02" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r3" edge="1" source="respondent" target="uc03" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r4" edge="1" source="respondent" target="uc04" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r5" edge="1" source="respondent" target="uc05" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r6" edge="1" source="respondent" target="uc06" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r7" edge="1" source="respondent" target="uc07" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r8" edge="1" source="respondent" target="uc08" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r9" edge="1" source="respondent" target="uc09" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r10" edge="1" source="respondent" target="uc10" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r11" edge="1" source="respondent" target="uc11" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r12" edge="1" source="respondent" target="uc12" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- Connections: Admin to Use Cases -->
+        <mxCell id="a1" edge="1" source="admin" target="uc20" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a2" edge="1" source="admin" target="uc21" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a3" edge="1" source="admin" target="uc22" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a4" edge="1" source="admin" target="uc23" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <!-- Connections: Support to Use Cases -->
+        <mxCell id="s1" edge="1" source="supportactor" target="uc30" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="s2" edge="1" source="supportactor" target="uc31" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

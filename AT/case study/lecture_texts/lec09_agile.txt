@@ -1,0 +1,959 @@
+Agile for Architects
+Version 7
+
+---PAGE---
+
+Module outline
+Part 1
+↘ Introduction and objectives
+↘ Agile - foundational concepts
+↘ Flavours of Agile
+↘ Architecting Solutions in Agile Environment
+↘ Envisaging Initial Architecture
+Part 2
+↘ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+2
+
+---PAGE---
+
+Module outline
+Part 1
+→ Introduction and objectives
+↘ Agile - foundational concepts
+↘ Flavours of Agile
+↘ Architecting Solutions in Agile Environment
+↘ Envisaging Initial Architecture
+Part 2
+↘ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+3
+
+---PAGE---
+
+Learning Objective
+At the end of this module, you should be able to:
+• Form an opinion on value and applicability of agile within complex IT landscapes
+• Understand how to apply agile methodologies
+• Understand role of an architect within agile projects
+• Be able to effectively contribute to the agile projects
+• Understand what the “initial architecture” looks like
+• Recognise characteristics of modern architectural styles
+• Understand how DevOps fits into bigger picture
+IBM Confidential © IBM Corporation 2025
+4
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+→ Agile - foundational concepts
+↘ Flavours of Agile
+↘ Architecting Solutions in Agile Environment
+↘ Envisaging Initial Architecture
+Part 2
+↘ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+5
+
+---PAGE---
+
+Agile Manifesto
+• The Agile movement is not anti-methodology, in fact many of us want to restore
+credibility to the word methodology.
+Individuals and interactions over processes and tools
+• We want to restore a balance.
+Working software over comprehensive documentation
+• We embrace modelling, but not in order to file some diagram in a dusty
+Customer collaboration over contract negotiation
+corporate repository.
+Responding to change over following a plan
+• We embrace documentation, but not hundreds of pages of never-maintained
+and rarely-used tomes.
+• We plan, but recognize the limits of planning in a turbulent environment.
+• Those who would brand proponents of XP or SCRUM or any of the other Agile
+Methodologies as "hackers" are ignorant of both the methodologies and the
+original definition of the term hacker.
+That is, while there is value in the items on
+— Jim Highsmith, History: The Agile Manifesto
+the right, we value the items on the left more.
+IBM Confidential © IBM Corporation 2025
+6
+
+---PAGE---
+
+Traditional vs Agile Model
+Traditional
+• Project Management Triangle identified “scope”, “time” and “cost” as three constraints in the “iron triangle” of project management:
+• Agile often fixes time and cost while scope is “negotiable”
+• Traditional approach fixes scope and often time while the cost is estimated
+Agile
+IBM Confidential © IBM Corporation 2025
+7
+
+---PAGE---
+
+When do we use Agile? – Consider three client scenarios
+Scenario 1 Scenario 2
+Scenario 3
+An airline would like to introduce kiosk based check-in
+A large telecom wants to replace their legacy CRM and
+A software company developed a HR software for one
+channel at the major airports.
+Billing platform. Better customer care and flexibility in
+of their clients. The company retained IP for the
+Integration services with their core booking system,
+rolling out new products to the market are seen as
+software and is now planning to “productise” it as there
+supporting their existing online check-in system, is to
+critical to their future growth.
+is a significant market opportunity to sell their HR
+be re-used.
+Best of breed COTS packages are selected, but not package as a COTS product.
+much more beyond that has been done.
+Traditional methods
+Agile methods
+• High complexity
+• Low to medium complexity
+• Requirements are known
+• Requirements are exploratory
+• “Minimum viable product” must have 80% or more of the full scope
+• Concept of “minimum viable product” is highly flexible
+• Client culture that demands predictability and order
+• Client culture that tolerates “unknown”
+• Client has business case with firm scope assumptions
+• Client has budget to “explore possibilities” and develop POCs
+IBM Confidential © IBM Corporation 2025
+8
+
+---PAGE---
+
+Agile Principles - Class Discussion
+Agile Principle
+1. Customer satisfaction by early and continuous delivery of valuable software
+2. Welcome changing requirements, even in late development harnessing customer competitive
+advantage
+3. Working software is delivered frequently (from a couple of weeks to a couple of months with
+preference to shorter timescale)
+4. Close, daily cooperation between business people and developers
+5. Projects are built around motivated individuals, who should be trusted
+6. F2F conversation is the best form of communication (co-location)
+7. Working software is the principal measure of progress
+8. Sustainable development, able to maintain a constant pace
+9. Continuous attention to technical excellence and good design
+10. Simplicity—the art of maximizing the amount of work not done—is essential
+11.Best architectures, requirements, and designs emerge from self-organizing teams
+12.Regularly, the team reflects on how to become more effective, and adjusts accordingly
+IBM Confidential © IBM Corporation 2025
+9
+
+---PAGE---
+
+Mindset shift - keys to success
+People Scope
+• Identify the right people • Set a clear vision
+• Commit the right people to projects and prioritize their work • Prioritize the portfolio based on value
+• Empower the Product Owners to make decisions • Stop projects when the ROI starts to diminish
+• Shift the mindset to focus on agile values • Small is good (MVPs & frequent releases)
+• Embrace transparency: support people who are confronted by it • Scope is flexible
+• One in / One out;
+• Or increase cost and time
+IBM Confidential © IBM Corporation 2025
+10
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+↗ Agile - foundational concepts
+→ Flavours of Agile
+↘ Architecting Solutions in Agile Environment
+↘ Envisaging Initial Architecture
+Part 2
+↘ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+11
+
+---PAGE---
+
+Agile adoption
+Agile methods:
+From Gartner Research Circle report “Agile in the Enterprise 2018”
+About half of global organizations have
+adopted Agile to a large extent
+FromVersionOne 12th Annual State of Agile Report
+IBM Confidential © IBM Corporation 2025
+12
+
+---PAGE---
+
+Flavours of Agile / Agile Types
+Original flavours
+• Scrum
+• Extreme Programming (XP)
+• Feature Driven Development (FDD)
+• Dynamic Systems Development Method (DSDM)
+• Crystal
+Second Wave
+Scrum and SAFe
+• Lean Software Development (LSD)
+are widely used
+• Kanban
+so let inspect
+• Scrumban
+them further
+Scaled agile methods
+• Scaled Agile Framework (SAFe)
+• Large Scale Scrum (LeSS)
+• Scrum@Scale
+• Nexus
+• Disciplined Agile Delivery (DAD)
+IBM Confidential © IBM Corporation 2025
+13
+
+---PAGE---
+
+Scrum – Key Building Blocks
+Key Roles
+• Product owner – voice of customers
+• Delivery team – multidisciplinary, self-organising, three to 9 members
+• Scrum master – facilitator and roadblock remover
+Workflow
+• Sprint – Time-boxed unit of development – one week to one month
+• Sprint planning – scrum team discuss and agree on the scope of work
+• Daily scrum (or stand-up) – What was done yesterday / plan for today / any
+roadblocks
+• Sprint review – playback to stakeholders
+• Sprint retrospective – reflection / lessons learnt / improvement plan
+Artefacts
+• Product backlog – ordered list of requirements in form of user stories, use cases
+or any other form the team decides to be useful
+• Sprint Backlog - list of work the development team must address during the next
+sprint
+• Scrum Board – means of tracking sprint status
+• Product Increment – potentially releasable increment is the sum of all the product
+backlog items completed during a sprint, integrated with the work of all previous
+sprints.
+IBM Confidential © IBM Corporation 2025
+14
+
+---PAGE---
+
+Scrum – Challenges in adoption
+▪Scalability to large products/projects that require coordination of many scrum teams
+▪Drives introduction of scaled agile variations.
+▪Geographically dispersed or part-time team members
+▪Somewhat mitigated by modern collaboration tools.
+▪Team members with very specialized skills
+▪Scrum, developers should have T-shaped skills, allowing them to work on tasks outside of their specialization.
+▪Products with many external dependencies
+▪Given short sprints and detailed planning at the sprint level external dependencies, such as coordination with other teams, can lead to
+delays.
+▪Products that are mature or legacy or with regulated quality control
+▪In Scrum, product increments should be fully developed and tested in a single sprint; products that need large amounts of regression
+testing or safety testing (e.g., medical devices or vehicle control) for each release are less suited to short sprints than to longer waterfall
+releases.
+IBM Confidential © IBM Corporation 2025
+15
+
+---PAGE---
+
+How to scale up Agile from the first pilot project towards an Agile enterprise?
+Team size Compliance requirement
+Under 10 1000’s of
+Critical,
+Low risk
+developers developers
+Audited
+Domain Complexity
+Geographical distribution
+Straight Intricate/
+Co-located Global -forward Emerging
+Scaling Agile
+Factors Enterprise discipline Organisation distribution
+(outsourcing, partnerships)
+Project Enterprise
+focus focus
+Collaborative Contractual
+Organisational complexity Technical complexity
+Flexible Rigid Heterogeneous,
+Homogenous Legacy
+IBM Confidential © IBM Corporation 2025
+16
+
+---PAGE---
+
+SAFe® 4.6 for Lean Enterprises
+Portfolio level: Large Solution Level:
+• Identify and organize around • Implement Agile solution
+Value Streams trains around a common
+• Communicate enterprise mission for large solutions
+strategy with Strategic • Align and coordinate ARTs
+Themes and suppliers to collaborate
+like a single team
+• Budgeting and governance on
+cross-cutting initiatives
+Program level: Team level:
+• Implement Agile release trains • Delivery of user stories -
+around a common mission value creation and quality
+• Apply cadence (heartbeat) • End-to-end responsible for
+and synchronization software
+• Product management, system • Improvements and innovation
+architecture
+IBM Confidential © IBM Corporation 2025
+17
+
+---PAGE---
+
+SAFe can be configured to meet the needs of a specific enterprise
+Full Configuration
+Large Solution Configuration
+• Brings the Business Solutions and Lean Systems
+Engineering competency supporting multiple Agile Release
+Trains (ARTs) and suppliers.
+Portfolio Configuration
+• Applies Lean Portfolio Management competency to organise
+development through one or more value streams.
+Essential Configuration Introduces core competencies:
+• Lean-Agile Leadership,
+• Team and Technical Agility,
+• DevOps and
+• Release on Demand to the enterprise
+IBM Confidential © IBM Corporation 2025
+18
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+↗ Agile - foundational concepts
+↗ Flavours of Agile
+→ Architecting Solutions in Agile Environment
+↘ Envisaging Initial Architecture
+Part 2
+↘ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+19
+
+---PAGE---
+
+How much architecture is enough?
+Myths
+• Agile projects don’t need architecture to be successful
+• Agile projects need less architecture than
+“conventional” projects
+t
+r
+o
+f
+f
+E
+l
+a
+r
+u
+t
+c
+e
+t
+i
+Reality h
+c
+r
+A
+• Architecture effort on a project is function of
+complexity and not any particular method. Finding
+right balance is difficult.
+• Create “fit for purpose” architecture - avoid gold Complexity
+plating.
+IBM Confidential © IBM Corporation 2025
+20
+
+---PAGE---
+
+Architecting Solutions in Agile Environment (1 of 5)
+Architecture isn’t finished when the teams start working
+with it
+… that is OK ...
+It might never get finished
+... that is OK too.
+Architecture documentation typically labelled as a
+“living” document, to be updated/maintained through to
+production release and beyond
+Initiation Ongoing
+(days or weeks) (years)
+Intentional Architecture
+Emerging Design
+IBM Confidential © IBM Corporation 2025
+21
+
+---PAGE---
+
+Architecting Solutions in Agile Environment (2 of 5)
+Collaboration model between architects and
+agile teams (architect as a servant leader)
+• “Intentional architecture” constraints “emergent
+design” by agile teams
+• Emergent design informs and adjusts intentional
+architecture
+• Emergent design feeds new ideas to intentional
+architecture
+Architects in agile teams should
+• Value Initial Architecture Up Front over Big
+Architecture Up Front
+• Be collaborative communicator over standards
+enforcer
+IBM Confidential © IBM Corporation 2025
+22
+
+---PAGE---
+
+Architecting Solutions in Agile Environment (3 of 5)
+Where does an architect fit in an agile team:
+Option 1
+Architect is part of the Scrum team taking on tasks that are addressing
+architecturally significant concerns
+Option 2
+Architect as Scrum stakeholder looking to influence the Product Owner's
+decisions about what goes on the product backlog and what is
+prioritised, to help achieve their architectural objectives.
+Option 3
+Architect as Scrum Product Owner making the decisions around
+priorities and the 'definitions of done' for the product or component.
+IBM Confidential © IBM Corporation 2025
+23
+
+---PAGE---
+
+Architecting Solutions in Agile Environment (4 of 5)
+Where does an architect fit in an Influencing and guiding the Product
+Owner on decisions around product
+agile team?
+backlog, prioritisation and scope to
+achieve business goals with reasonable
+and cost effective effort.
+Early stages of delivery, continue Protect the scope by describing the
+elaborating the architecture through implications of change in terms of
+discussions with the business, client architectural impacts and
+architecture team and implementation consequential effort and cost terms.
+team – driving approvals from the
+Design Authority. This requires the
+architect to provide business and
+technical context and details of
+historical decision to the delivery
+team.
+Providing guidance to the technical Attend daily stand ups with
+delivery team on expected realisation developers and a separate daily stand
+of architecture to satisfy up with architects (for larger
+requirements. engagements).
+IBM Confidential © IBM Corporation 2025
+24
+
+---PAGE---
+
+Architecting Solutions in Agile Environment (5 of 5)
+Managing architecture runway
+Architecture enablers are technical initiatives needed to support
+development of business functionality
+Architecture enablers emerge either from enterprise architects at the
+program level or agile teams seeking to improve the existing solution
+Architecture is realised by gradually implementing architecture
+enablers through agile sprints
+IBM Confidential © IBM Corporation 2025
+25
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+↗ Agile - foundational concepts
+↗ Flavours of Agile
+↗ Architecting Solutions in Agile Environment
+→ Envisaging Initial Architecture
+Part 2
+↘ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+26
+
+---PAGE---
+
+So what do we mean by “…Initial Architecture…”?
+Identify high-level scope
+Identify initial requirements
+Identify and architecture vision
+IBM Confidential © IBM Corporation 2025
+27
+
+---PAGE---
+
+Capture key non-functional requirements
+Capture a minimal set of NFRs that will influence key parts of the • NFRs are likely to influence architectural
+solution. Capture as bullet points in one slide. If client doesn’t enablers and are part of “definition of done”
+know, make assumptions. • At this stage, unknown is OK and common
+What will impact your architectural decisions the most?
+These are the key areas to capture:
+Capacity
+Performance
+• Number of
+Response time for key use
+registered vs
+cases at the 95th percentile
+concurrent users
+(never 100!).
+• Peak transactions
+per second.
+Reliability & Security
+• Identity
+Recovery
+• Authentication
+• High Availability
+• Authorization
+• Disaster Recovery
+• Encryption at rest
+IBM Confidential © IBM Corporation 2025
+28
+
+---PAGE---
+
+Define architecture-on-a-page
+This diagram is used to communicate scope and key elements of • At this stage, unknown is OK and common
+the solution to business stakeholders and client architecture team.
+This is partly a scoping artefact. Simple is better. Used to talk
+through solution to audiences and triggers discussions around the
+solution and delivery.
+Essential items to capture are:
+Users
+Components
+• Internal/external
+Key software elements that
+• Main users
+will be procured, developed,
+impacted.
+Integration Detail
+Call out key integration Iinclude logical and/or
+points for golden path. physical to illustrate scope
+Not everything, just key boundary
+ones.
+IBM Confidential © IBM Corporation 2025
+29
+
+---PAGE---
+
+Initial Architecture (1/5) – Initial functional viewpoint
+More of the solution is teased out to get agreement from • At this stage, unknown is OK and common
+business and client architecture teams.
+Essential items to capture:
+Component Model
+Key components and their relationships to provide a
+more detailed walk through of solution workings.
+IBM Confidential © IBM Corporation 2025
+30
+
+---PAGE---
+
+Initial Architecture (2/5) – Initial functional viewpoint
+Component Model • At this stage, unknown is OK and common
+Description of components should be included as these
+slides will be distributed to client technical team for
+review
+IBM Confidential © IBM Corporation 2025
+31
+
+---PAGE---
+
+Initial Architecture (3/5) – Initial operational viewpoint
+Infrastructure
+Can include cloud and on premises parts of the solution. Start with
+environments at the high level and then cover lower level infra as required
+through discussion with the client technical teams.
+• At this stage, unknown is OK and common
+Essential items to capture:
+• Environments – capture the development, test and production
+environments
+• Redundancy – If disaster recovery is required include dual sites
+with links between them for data
+• Connectivity – include integration to DevSecOps, remote or local
+developers and testing distribution.
+IBM Confidential © IBM Corporation 2025
+32
+
+---PAGE---
+
+Initial Architecture (1/5) – Initial security viewpoint
+If security is a major factor (as it should be!) a walk through of the main
+• At this stage, unknown is OK and common
+authentication flow should be captured to satisfy client security team. It doesn’t
+have to cover 100% of cases, just the key concerns.
+Essential items to capture:
+• Security Architecture – include key steps for authentication and
+identity
+You will, guaranteed, change this sequence many times during
+delivery. The point here is to satisfy client security team that their
+primary security concerns can be addressed with the proposed
+solution. This is typically a top priority at financial institutions.
+IBM Confidential © IBM Corporation 2025
+33
+
+---PAGE---
+
+Initial Architecture (5/5) – Initial security viewpoint
+A sequence diagram may also be required for complex flows. This
+• At this stage, unknown is OK and common
+should be at a level that addresses primary security concerns. No
+need to cover everything.
+Essential items to capture:
+• Security Architecture – include key steps for authentication and
+identity.
+IBM Confidential © IBM Corporation 2025
+34
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+↗ Agile - foundational concepts
+↗ Flavors of Agile
+↗ Architecting Solutions in Agile Environment
+↗ Envisaging Initial Architecture
+Part 2
+→ Impact of Agile on Architectural Styles
+↘ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+35
+
+---PAGE---
+
+Impact of Agile on Architectural Styles
+Architecture Styles
+Based on
+Microservices and APIs
+Development, deployment and
+Lead to
+Operations Agility
+Decentralized Cloud native
+Fine grained
+Ownership infrastructure
+deployment
+People & Process Architecture & Design Infrastructure & Technology
+Improve build
+Dynamic scalability and
+Accelerate agility and
+independence and
+inherent resilience
+innovation
+production velocity
+(operational agility)
+(development agility)
+(deployment agility)
+IBM Confidential © IBM Corporation 2025
+36
+
+---PAGE---
+
+Traditional vs Contemporary Architectural Style
+“Micro” refers to granularity of the components, not the granularity
+of the exposed interfaces.
+Microservices are not just more fine-grained web services.
+APIs are not Microservices.
+IBM Confidential © IBM Corporation 2025
+37
+
+---PAGE---
+
+Be mindful of service granularity
+Problems with monoliths include:
+• At this stage, unknown is OK and common
+• Even small, minor changes require rebuilding of the entire code base
+and re-deployment of the new build.
+• Change cycles (for various functions and features) will have to be
+tied together, causing an undesirable dependency.
+• Achieving modular structure within a monolith is hard to enforce.
+• Scaling is achieved by replicating the entire application (though
+specific functions may have different scalability requirements).
+Problems with Microservices include:
+• Remote calls are expensive (from a performance perspective).
+• Communication between services becomes chatty, resulting in a sub-
+optimal system.
+• Unmanageable explosion of services can result in service proliferation,
+challenging governance.
+IBM Confidential © IBM Corporation 2025
+38
+
+---PAGE---
+
+Highly simplified Uber model
+Q: Is microservice granularity correct here: too coarse grained, too
+fine grained, or just right?
+IBM Confidential © IBM Corporation 2025
+39
+
+---PAGE---
+
+Decentralized Ownership
+Accelerate agility and
+Decentralized
+innovation
+Ownership
+(development agility)
+People & Process
+Inverse Conway Maneuver:
+Align teams to microservices components and create clear
+delineation of responsibilities.
+• The teams need to have cross-cutting skills since their goal is to deliver
+business results, not technology.
+• Result is less handoffs between teams to accomplish a business objective.
+• The practicing architect is part of a team and responsible for execution of the
+individual team mission as well as the related governance requirements that
+cut across multiple teams.
+IBM Confidential © IBM Corporation 2025
+40
+
+---PAGE---
+
+Fine grained deployment
+Improve build
+Fine grained
+independence and
+deployment
+production velocity
+(deployment agility)
+Architecture & Design
+Agility:
+Individual microservices can be changed, rebuilt, and deployed
+independently of others enabling safer application of changes and
+maximizing speed to production.
+Scalability:
+Individual microservices can be scaled on their own, allowing you to
+take advantage of efficient elastic scaling of cloud infrastructures.
+Resilience:
+Isolated microservices that are deployed in separate containers cannot
+affect one another by stealing shared resources, such as memory,
+connections, or CPU.
+IBM Confidential © IBM Corporation 2025
+41
+
+---PAGE---
+
+Decentralized Ownership
+Cloud native
+Dynamic scalability and
+infrastructure
+inherent resilience
+(operational agility)
+Infrastructure & Technology
+Elastic scalability:
+Microservices are scaled horizontally and allocated on-demand in a
+cloud-like infrastructure.
+Disposable and re-creatable:
+Using lightweight container technology encourages changes to be
+made by redeploying amended images rather than by nurturing a
+running server.
+Starts and stops in seconds:
+Microservices are run and deployed as more fine-grained entities and,
+therefore, take less time to start.
+Minimal Interdependencies:
+Unrelated microservices are not grouped. Functional and operational
+characteristics create colocation and grouping.
+Infrastructure as Code:
+Resources and code are declared and deployed together.
+IBM Confidential © IBM Corporation 2025
+42
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+↗ Agile - foundational concepts
+↗ Flavors of Agile
+↗ Architecting Solutions in Agile Environment
+↗ Envisaging Initial Architecture
+Part 2
+↗ Impact of Agile on Architectural Styles
+→ Agile and DevOps
+↘ Summary and References
+IBM Confidential © IBM Corporation 2025
+43
+
+---PAGE---
+
+What is DevOps?
+• DevOps is the practice, culture of Development and Operations
+engineers participating together in the entire service lifecycle, from
+design through the development process to production support.
+• DevOps is also characterized by operations staff making use of the
+same techniques as developers for their systems work.
+• The contraction of “Dev” and “Ops” refers to replacing siloed
+Development and Operations to create multidisciplinary teams that
+now work together with shared and efficient practices and tools.
+DevOps isn’t
+a job title, a toolset,
+or a marketplace.
+IBM Confidential © IBM Corporation 2025
+44
+
+---PAGE---
+
+maturity
+DevOps maturity is a journey ... of ever increasing automation
+Optimized Value Stream through:
+• Speed of Delivery
+• Responsiveness to business demand for new features and
+functionality through automation and streamlining delivery. DevOps DevOps DevOps DevOps
+Cycle 1 Cycle 2 Cycle 3 Cycle 4
+• Improved quality
+• Reduced opportunity for defects due to automated testing. • Continuous • Continuous • Continuous • Release on
+Integration & Delivery & Operations Demand
+• Increased efficiency and capacity
+Testing Deployment
+• Eliminated waste and rework, enabling the same size team to
+complete more work driven by integration automation.
+IBM Confidential © IBM Corporation 2025
+45
+
+---PAGE---
+
+maturity
+Deployment pipeline
+Continuous delivery is enabled through the
+deployment piepeline
+• Visibility – All aspects of the delivery system including building,
+deploying, testing, and releasing are visible to every member of
+the team to promote collaboration.
+• Feedback – Team members learn of problems as soon as
+possible when they occur so that they can fix them as quickly as
+possible.
+• Continually deploy – Through a fully automated process, you can
+deploy and release any version of the software to any
+environment.
+IBM Confidential © IBM Corporation 2025
+46
+
+---PAGE---
+
+maturity
+DevOps requires the right tools
+Main categories of DevOps tools
+• Version Control
+• Build and deploy
+• Functional and non-functional testing
+• Platform provisioning and Change management
+Selecting DevOps tools is hard
+• Access to tools by broad user base – developers, IT operations,
+project managers and testers - open rich collaboration opportunities.
+• Favor tools with APIs - aim for composition of new capabilities from
+multiple API-driven tools.
+• Start small - Prefer achievable gains now over possible future state
+• Encourage learning – hold regular show-and-tell sessions from peers
+and senior staff to demonstrate tools and techniques.
+• Avoid special 'singleton' tools – for example avoid “production only”
+tool due to high licensing costs.
+IBM Confidential © IBM Corporation 2025
+47
+
+---PAGE---
+
+Module outline
+Part 1
+↗ Introduction and objectives
+↗ Agile - foundational concepts
+↗ Flavors of Agile
+↗ Architecting Solutions in Agile Environment
+↗ Envisaging Initial Architecture
+Part 2
+↗ Impact of Agile on Architectural Styles
+↗ Agile and DevOps
+→ Summary and References
+IBM Confidential © IBM Corporation 2025
+48
+
+---PAGE---
+
+Summary
+• Agile often fixes time and cost while scope is “negotiable”
+• Architecture effort on a project is function of complexity and not any method. Finding right balance is difficult.
+• In agile environment:
+• Envision initial architecture quickly and evolve gradually
+• Collaboration between architects and agile teams is essential two-way street
+• Use Design Thinking in the early stages of the lifecycle to capture essence of user needs and potential solutions
+• Architecture enablers are technical initiatives needed to support development of business functionality
+• Architecture is realised by gradually implementing architecture enablers through agile sprints
+• Value Initial Architecture Up Front over Big Architecture Up Front
+• Architecture Styles based on Microservices and APIs lead to development, deployment and operations agility
+• DevOps is the practice, culture of Development and Operations engineers participating together in the entire service
+lifecycle
+IBM Confidential © IBM Corporation 2025
+49
+
+---PAGE---
+
+References
+• Agile: https://skillsbuild.org/students/course-catalog/agile
+• Advancing the Practice of Agile: https://www.agilealliance.org/
+• Agile Software Development - https://en.wikipedia.org/wiki/Agile_software_development
+• SAFe website - https://framework.scaledagile.com/
+• API Management versus Service Mesh - https://devops.com/how-are-api-management-and-service-mesh-
+different/
+• Agile Integration Architecture - https://www.ibm.com/cloud/agile-integration-architecture
+• DevOps Tutorial - https://www.guru99.com/devops-tutorial.html
+• Flavors of Agile - https://www.thekua.com/atwork/2018/07/flavours-of-agile/
+• DevOps vs Agile: What's the Difference and How Are They Related? - https://www.bmc.com/blogs/devops-vs-
+agile-whats-the-difference-and-how-are-they-related/
+• Microservices, Wikipedia, https://en.wikipedia.org/wiki/Microservices
+IBM Confidential © IBM Corporation 2025
+50
+
+---PAGE---
+
+Thank you
+IBM, the IBM logo, and ibm.com are trademarks or
+registered trademarks of International Business
+Machines Corporation in the United States, other
+countries, or both. If these and other IBM trademarked
+terms are marked on their first occurrence in this
+information with a trademark symbol (® or TM), these
+symbols indicate U.S. registered or common law
+trademarks owned by IBM at the time this information
+was published. Such trademarks may also be
+registered or common law trademarks in other
+countries. A current list of IBM trademarks is available
+on the Web at "Copyright and trademark information."
+Java and all Java-based trademarks and logos are
+trademarks or registered trademarks of Oracle and its
+affiliates.
+Linux is a trademark of Linus Torvalds in the United
+States, or other countries, or both. Microsoft, Excel,
+PowerPoint, Project, Visio, Word, and Windows are
+trademarks of the Microsoft Corporation in the United
+States, other countries, or both. UML is a registered
+trademark of Object Management Group, Inc. in the
+United States and/or other countries. TOGAF and
+UNIX are registered trademarks of The Open Group in
+the United States and other countries. Other company,
+product, and service names may be trademarks of IBM
+or other companies. Citrix is a trademark of Citrix
+Systems, Inc. and one or more of its subsidiaries, and
+may be registered in the United States Patent and
+Trademark Office and in other countries.
+51
+
+---PAGE---
+
