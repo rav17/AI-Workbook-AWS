@@ -1,0 +1,23 @@
+---
+- name: Clear disk space
+  hosts: all
+  become: true
+  tasks:
+    - name: Remove old log files
+      ansible.builtin.find:
+        paths: /var/log
+        age: 7d
+        recurse: true
+      register: old_logs
+
+    - name: Delete old log files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ old_logs.files }}"
+      when: old_logs.files | length > 0
+
+    - name: Clean package cache
+      ansible.builtin.apt:
+        autoclean: true
+        autoremove: true

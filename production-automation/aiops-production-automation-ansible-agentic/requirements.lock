@@ -1,0 +1,7 @@
+# Production dependencies - let pip resolve compatible sub-dependencies
+fastapi==0.115.0
+uvicorn==0.30.6
+pydantic==2.9.2
+pyyaml==6.0.2
+boto3==1.35.36
+slowapi==0.1.9

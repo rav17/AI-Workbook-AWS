@@ -1,0 +1,7 @@
+{
+  "alert_name": "HighMemoryUsage",
+  "severity": "warning",
+  "instance": "i-0ea05de70aa7d590d",
+  "service_name": "web-frontend",
+  "summary": "Memory usage exceeded 90% on i-0ea05de70aa7d590d - OOM risk"
+}

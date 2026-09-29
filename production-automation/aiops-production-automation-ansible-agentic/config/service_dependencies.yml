@@ -1,0 +1,48 @@
+# Service Dependency Graph
+# Used by the Health Checker for cross-service dependency awareness.
+# When remediating a service, downstream dependents are checked for health.
+# If dependents are already degraded, risk level is elevated.
+
+dependencies:
+  postgres-primary:
+    dependents:
+      - api-gateway
+      - user-service
+      - payment-service
+      - order-service
+    criticality: critical
+
+  redis-cache:
+    dependents:
+      - api-gateway
+      - session-service
+      - web-frontend
+    criticality: high
+
+  api-gateway:
+    dependents:
+      - web-frontend
+      - mobile-backend
+    criticality: high
+
+  message-queue:
+    dependents:
+      - notification-service
+      - analytics-service
+      - audit-service
+    criticality: medium
+
+# Availability thresholds per service group
+# Controls when the Health Checker blocks remediation based on
+# minimum healthy instance percentage (Improvement 4).
+availability_thresholds:
+  default: 50
+  overrides:
+    - service_group: api-gateway
+      minimum_healthy_percent: 75
+    - service_group: postgres-primary
+      minimum_healthy_percent: 100
+    - service_group: web-frontend
+      minimum_healthy_percent: 50
+    - service_group: background-workers
+      minimum_healthy_percent: 25

@@ -1,0 +1,124 @@
+version: "3.8"
+
+services:
+  # ===========================================================================
+  # AIOps Self-Healing Service
+  # ===========================================================================
+  self-healing:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SES_FROM_ADDRESS=aiops@example.com
+      - OPERATOR_EMAIL=ops-team@example.com
+      - ASSET_INVENTORY_PATH=/app/config/asset_inventory.yml
+      - MAPPING_CONFIG_PATH=/app/config/playbook_mapping.yml
+      - AUDIT_LOG_PATH=/app/logs/audit.log
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=dev
+      - SQS_QUEUE_URL=http://localstack:4566/000000000000/aiops-main-dev
+      - DYNAMODB_TABLE_NAME=AiopsIncidentMemory-dev
+      - SERVICE_BASE_URL=http://localhost:8080
+    volumes:
+      - ./config:/app/config:ro
+      - ./playbooks:/app/playbooks:ro
+      - ./logs:/app/logs
+    depends_on:
+      - prometheus
+      - alertmanager
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aiops-net
+
+  # ===========================================================================
+  # Prometheus — scrapes metrics from self-healing service
+  # ===========================================================================
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=7d"
+      - "--web.enable-lifecycle"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aiops-net
+
+  # ===========================================================================
+  # Alertmanager — routes alerts to self-healing webhook
+  # ===========================================================================
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aiops-net
+
+  # ===========================================================================
+  # Grafana — dashboards for visualizing metrics and alert states
+  # ===========================================================================
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aiops-net
+
+  # ===========================================================================
+  # Node Exporter — simulates a target host with real system metrics
+  # ===========================================================================
+  node-exporter:
+    image: prom/node-exporter:v1.8.1
+    ports:
+      - "9100:9100"
+    networks:
+      - aiops-net
+
+volumes:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  aiops-net:
+    driver: bridge

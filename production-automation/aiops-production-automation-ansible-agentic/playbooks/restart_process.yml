@@ -1,0 +1,42 @@
+---
+# Restart a process by name — works in containers without systemd.
+# Used by the demo environment where targets run bare processes.
+- name: Restart application process
+  hosts: all
+  become: true
+  vars:
+    process_name: "{{ service_name | default('fake_app') }}"
+    app_script: "/opt/app/fake_app.py"
+    app_port: "{{ service_port | default(8080) }}"
+
+  tasks:
+    - name: Find running process
+      ansible.builtin.shell: "pgrep -f {{ process_name }}"
+      register: pgrep_result
+      ignore_errors: true
+      changed_when: false
+
+    - name: Kill existing process (graceful)
+      ansible.builtin.shell: "pkill -TERM -f {{ process_name }}"
+      when: pgrep_result.rc == 0
+      ignore_errors: true
+
+    - name: Wait for process to stop
+      ansible.builtin.pause:
+        seconds: 2
+      when: pgrep_result.rc == 0
+
+    - name: Start application process
+      ansible.builtin.shell: "nohup python3 {{ app_script }} &"
+      async: 5
+      poll: 0
+
+    - name: Wait for application to be healthy
+      ansible.builtin.uri:
+        url: "http://localhost:{{ app_port }}/health"
+        method: GET
+        status_code: 200
+      register: health_check
+      retries: 5
+      delay: 2
+      until: health_check.status == 200

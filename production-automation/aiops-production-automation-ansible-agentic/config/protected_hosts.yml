@@ -1,0 +1,12 @@
+# Protected Hosts Configuration
+# Hosts in this list will NEVER be targeted by automated remediation.
+# Includes the automation host itself and critical infrastructure dependencies.
+
+protected_hosts:
+  - aiops-controller-01
+  - aiops-controller-02
+  - ansible-tower-primary
+  - vault-primary.internal
+  - consul-leader.internal
+  - monitoring-prometheus-01
+  - monitoring-grafana-01

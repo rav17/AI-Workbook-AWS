@@ -1,0 +1,31 @@
+# Bulkhead Isolation Configuration
+# Controls maximum concurrent executions per service group.
+# Prevents one service from monopolizing all execution slots.
+#
+# The global cap is always enforced across all bulkheads.
+# P1 alerts have reserved capacity that lower-priority work cannot consume.
+
+bulkheads:
+  web-frontend:
+    max_concurrent: 3
+    overflow_to_global: true
+  api-gateway:
+    max_concurrent: 2
+    overflow_to_global: true
+  postgres-primary:
+    max_concurrent: 1
+    overflow_to_global: false  # NEVER exceed 1 for database
+  redis-cache:
+    max_concurrent: 1
+    overflow_to_global: false
+  background-workers:
+    max_concurrent: 5
+    overflow_to_global: true
+
+defaults:
+  max_concurrent: 2
+  overflow_to_global: true
+
+global:
+  max_total_concurrent: 10
+  reserved_for_p1: 3  # Always keep 3 slots for P1 alerts

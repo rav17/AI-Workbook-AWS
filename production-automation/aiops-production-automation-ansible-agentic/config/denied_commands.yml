@@ -1,0 +1,50 @@
+# AI Remediation Plan Safety Validation
+# Patterns that are NEVER allowed in AI-generated remediation plans.
+# These act as a hard safety layer between AI output and execution.
+#
+# Inspired by Amazon Bedrock Guardrails 'denied topics' pattern.
+
+denied_patterns:
+  - pattern: "rm\\s+(-rf?\\s+)?/"
+    reason: "Recursive delete of root filesystem"
+  - pattern: "shutdown|halt|poweroff|init\\s+0"
+    reason: "Host shutdown not permitted via automation"
+  - pattern: "dd\\s+if="
+    reason: "Raw disk write operations not permitted"
+  - pattern: "mkfs|format\\s+[a-z]:"
+    reason: "Filesystem creation/format not permitted"
+  - pattern: "iptables\\s+-F|iptables.*-j\\s+DROP"
+    reason: "Firewall flush or drop-all rule not permitted"
+  - pattern: "systemctl\\s+(disable|mask)"
+    reason: "Permanently disabling services not permitted"
+  - pattern: "userdel|groupdel"
+    reason: "User/group deletion not permitted via automation"
+  - pattern: "chmod\\s+777"
+    reason: "World-writable permissions not permitted"
+  - pattern: "curl.*\\|.*sh|wget.*\\|.*bash"
+    reason: "Piping remote scripts to shell not permitted"
+  - pattern: ">(\\s+)?/dev/sd[a-z]|>(\\s+)?/dev/nvme"
+    reason: "Direct writes to block devices not permitted"
+
+parameter_bounds:
+  max_timeout_seconds: 600
+  max_target_hosts: 5
+  max_plan_steps: 10
+  max_ai_executions_per_host_per_hour: 3
+
+# Allowed filesystem paths for cleanup/log operations
+allowed_paths:
+  - /var/log/
+  - /tmp/
+  - /opt/app/
+  - /var/cache/
+
+# Action allowlist: when enabled, only these actions are permitted
+action_allowlist_enabled: false
+action_allowlist:
+  - fix_high_cpu
+  - restart_service
+  - clear_disk
+  - restart_process
+  - scale_service
+  - rotate_logs

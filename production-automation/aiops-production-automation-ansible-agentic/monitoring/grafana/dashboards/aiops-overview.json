@@ -1,0 +1,133 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "Alerts Received",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(alerts_received_total)",
+          "legendFormat": "Total"
+        }
+      ]
+    },
+    {
+      "title": "Remediation Success Rate",
+      "type": "gauge",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(remediation_success_total) / (sum(remediation_success_total) + sum(remediation_failure_total) + 0.001) * 100",
+          "legendFormat": "Success %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "steps": [
+              { "color": "red", "value": 0 },
+              { "color": "yellow", "value": 70 },
+              { "color": "green", "value": 90 }
+            ]
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "title": "Failures & Timeouts",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(remediation_failure_total)",
+          "legendFormat": "Failures"
+        },
+        {
+          "expr": "sum(remediation_timeout_total)",
+          "legendFormat": "Timeouts"
+        }
+      ]
+    },
+    {
+      "title": "No Playbook Match",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(no_playbook_match_total)",
+          "legendFormat": "Unmatched"
+        }
+      ]
+    },
+    {
+      "title": "Alerts Received Over Time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        {
+          "expr": "rate(alerts_received_total[5m])",
+          "legendFormat": "{{ alert_name }} ({{ severity }})"
+        }
+      ]
+    },
+    {
+      "title": "Remediation Outcomes Over Time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        {
+          "expr": "rate(remediation_success_total[5m])",
+          "legendFormat": "Success"
+        },
+        {
+          "expr": "rate(remediation_failure_total[5m])",
+          "legendFormat": "Failure"
+        },
+        {
+          "expr": "rate(remediation_timeout_total[5m])",
+          "legendFormat": "Timeout"
+        }
+      ]
+    },
+    {
+      "title": "Node Exporter — CPU Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
+          "legendFormat": "{{ instance }}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent" } }
+    },
+    {
+      "title": "Node Exporter — Memory Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "targets": [
+        {
+          "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
+          "legendFormat": "{{ instance }}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent" } }
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["aiops", "self-healing"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "AIOps Self-Healing Overview",
+  "uid": "aiops-overview",
+  "version": 1
+}

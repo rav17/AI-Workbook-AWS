@@ -1,0 +1,41 @@
+# Stop Conditions Configuration
+# These CloudWatch alarms are monitored DURING remediation execution.
+# If any alarm enters ALARM state, the remediation is immediately aborted.
+#
+# Inspired by AWS FIS Stop Conditions and SageMaker Deployment Guardrails.
+
+stop_conditions:
+  - service_group: web-frontend
+    alarms:
+      - name: HealthyHostCountCritical
+        metric: AWS/ApplicationELB/HealthyHostCount
+        threshold: "< 1"
+        description: "No healthy hosts remaining in target group"
+      - name: Error5xxSpike
+        metric: AWS/ApplicationELB/HTTPCode_Target_5XX_Count
+        threshold: "> 100 per minute"
+        description: "5xx error rate spiking during remediation"
+
+  - service_group: api-gateway
+    alarms:
+      - name: ApiLatencyP99Critical
+        metric: AIOps/dev/AIReasoningLatency
+        threshold: "> 30000 ms"
+        description: "API latency exceeded 30s — remediation making things worse"
+
+  - service_group: postgres-primary
+    alarms:
+      - name: DatabaseConnectionsDepleted
+        metric: AWS/RDS/DatabaseConnections
+        threshold: "> 95% of max_connections"
+        description: "Database connection pool nearly exhausted"
+
+global:
+  - name: MultiServiceDegradation
+    metric: custom/DegradedServiceCount
+    threshold: "> 3"
+    description: "Multiple services degraded simultaneously — halt all automation"
+
+defaults:
+  polling_interval_seconds: 10
+  grace_period_before_monitoring_seconds: 15

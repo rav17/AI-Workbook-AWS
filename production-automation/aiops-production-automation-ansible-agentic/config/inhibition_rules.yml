@@ -1,0 +1,42 @@
+# Alert Inhibition Rules
+# When a "source" alert is active, suppress "target" alerts that are
+# symptoms of the same root cause. This prevents redundant remediations.
+#
+# Example: When DatabaseDown fires, suppress APITimeout and ConnectionRefused
+# alerts because they are downstream symptoms of the database being down.
+
+inhibition_rules:
+  - source_alert: DatabaseDown
+    target_alerts:
+      - APITimeout
+      - ConnectionRefused
+      - HealthCheckFailed
+      - SlowQueryAlert
+    condition: same_service_dependency
+
+  - source_alert: NetworkPartition
+    target_alerts:
+      - ServiceUnreachable
+      - ConnectionTimeout
+      - DNSResolutionFailed
+    condition: same_availability_zone
+
+  - source_alert: DiskFull
+    target_alerts:
+      - LogRotationFailed
+      - DatabaseWriteError
+      - BackupFailed
+    condition: same_host
+
+  - source_alert: MemoryExhaustion
+    target_alerts:
+      - OOMKilled
+      - SwapUsageHigh
+      - ProcessCrashLoop
+    condition: same_host
+
+# Grouping window: alerts arriving within this window for the same host
+# are batched and the highest-severity one is selected as primary.
+grouping:
+  window_seconds: 30
+  select_by: highest_severity

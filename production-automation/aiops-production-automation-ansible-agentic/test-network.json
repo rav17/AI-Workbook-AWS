@@ -1,0 +1,7 @@
+{
+  "alert_name": "NetworkLatencyHigh",
+  "severity": "critical",
+  "instance": "i-0ea05de70aa7d590d",
+  "service_name": "web-frontend",
+  "summary": "Network latency p99 > 500ms on i-0ea05de70aa7d590d - possible packet loss"
+}

@@ -1,0 +1,559 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main, staging]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target deployment environment"
+        type: choice
+        options: [dev, staging, prod]
+      image_tag:
+        description: "Image tag to deploy (leave empty to use latest CI artifact)"
+        type: string
+        required: false
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+env:
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "20"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Determine deployment parameters
+  # ---------------------------------------------------------------------------
+  prepare:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    outputs:
+      environment: ${{ steps.params.outputs.environment }}
+      image_tag: ${{ steps.params.outputs.image_tag }}
+      commit_sha: ${{ steps.params.outputs.commit_sha }}
+      commit_message: ${{ steps.params.outputs.commit_message }}
+      is_prod: ${{ steps.params.outputs.is_prod }}
+      is_dev: ${{ steps.params.outputs.is_dev }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download image-tag artifact from CI
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download image-tag artifact (manual trigger)
+        if: github.event_name == 'workflow_dispatch' && inputs.image_tag == ''
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve deployment parameters
+        id: params
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            ENV="${{ inputs.environment }}"
+            if [[ -n "${{ inputs.image_tag }}" ]]; then
+              IMAGE_TAG="${{ inputs.image_tag }}"
+              COMMIT_SHA="${GITHUB_SHA}"
+              COMMIT_MSG="Manual deployment with image tag: ${IMAGE_TAG}"
+            else
+              IMAGE_TAG=$(jq -r '.image_tag' image-tag.json)
+              COMMIT_SHA=$(jq -r '.commit_sha' image-tag.json)
+              COMMIT_MSG=$(jq -r '.commit_message' image-tag.json)
+            fi
+          else
+            # workflow_run trigger — read from CI artifact
+            IMAGE_TAG=$(jq -r '.image_tag' image-tag.json)
+            COMMIT_SHA=$(jq -r '.commit_sha' image-tag.json)
+            COMMIT_MSG=$(jq -r '.commit_message' image-tag.json)
+            ENV=$(jq -r '.environment' image-tag.json)
+          fi
+
+          echo "environment=${ENV}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
+          echo "commit_message=${COMMIT_MSG}" >> $GITHUB_OUTPUT
+          echo "is_prod=$([[ ${ENV} == 'prod' ]] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          echo "is_dev=$([[ ${ENV} == 'dev' ]] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+          echo "=== Deployment Parameters ==="
+          echo "Environment: ${ENV}"
+          echo "Image Tag:   ${IMAGE_TAG}"
+          echo "Commit SHA:  ${COMMIT_SHA}"
+          echo "Commit Msg:  ${COMMIT_MSG}"
+
+  # ---------------------------------------------------------------------------
+  # Production manual approval gate (4h timeout)
+  # ---------------------------------------------------------------------------
+  prod-approval:
+    needs: prepare
+    if: needs.prepare.outputs.is_prod == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    steps:
+      - name: Display deployment info for approval
+        run: |
+          echo "============================================="
+          echo "  PRODUCTION DEPLOYMENT APPROVAL REQUIRED"
+          echo "============================================="
+          echo ""
+          echo "Image Tag:      ${{ needs.prepare.outputs.image_tag }}"
+          echo "Commit SHA:     ${{ needs.prepare.outputs.commit_sha }}"
+          echo "Commit Message: ${{ needs.prepare.outputs.commit_message }}"
+          echo "CI Run:         ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id || github.run_id }}"
+          echo ""
+          echo "============================================="
+    timeout-minutes: 240  # 4 hour timeout
+
+  # ---------------------------------------------------------------------------
+  # Deploy NetworkStack
+  # ---------------------------------------------------------------------------
+  deploy-network:
+    needs: [prepare, prod-approval]
+    if: |
+      always() &&
+      needs.prepare.result == 'success' &&
+      (needs.prod-approval.result == 'success' || needs.prod-approval.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-${{ runner.os }}-
+      - name: Install dependencies
+        run: pip install -e ".[dev,cdk]"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: CDK diff NetworkStack
+        id: diff
+        run: |
+          set +e
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff NetworkStack \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
+          DIFF_EXIT=$?
+          set -e
+          echo "$DIFF_OUTPUT" > cdk-diff-network.txt
+          echo "$DIFF_OUTPUT"
+          # CDK diff exits 0 if no changes, 1 if there are changes
+          if echo "$DIFF_OUTPUT" | grep -q "There were no differences"; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload CDK diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdk-diff-network-${{ needs.prepare.outputs.environment }}-${{ github.run_number }}
+          path: cdk-diff-network.txt
+          retention-days: 90
+
+      - name: Deploy NetworkStack
+        if: steps.diff.outputs.has_changes == 'true'
+        run: |
+          npx aws-cdk@2 deploy NetworkStack \
+            --require-approval never \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }}
+
+      - name: Skip deployment (no changes)
+        if: steps.diff.outputs.has_changes == 'false'
+        run: echo "No changes detected in NetworkStack — skipping deployment."
+
+  # ---------------------------------------------------------------------------
+  # Deploy DataStack
+  # ---------------------------------------------------------------------------
+  deploy-data:
+    needs: [prepare, deploy-network]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-${{ runner.os }}-
+      - name: Install dependencies
+        run: pip install -e ".[dev,cdk]"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: CDK diff DataStack
+        id: diff
+        run: |
+          set +e
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff DataStack \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
+          set -e
+          echo "$DIFF_OUTPUT" > cdk-diff-data.txt
+          echo "$DIFF_OUTPUT"
+          if echo "$DIFF_OUTPUT" | grep -q "There were no differences"; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload CDK diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdk-diff-data-${{ needs.prepare.outputs.environment }}-${{ github.run_number }}
+          path: cdk-diff-data.txt
+          retention-days: 90
+
+      - name: Deploy DataStack
+        if: steps.diff.outputs.has_changes == 'true'
+        run: |
+          npx aws-cdk@2 deploy DataStack \
+            --require-approval never \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }}
+
+      - name: Skip deployment (no changes)
+        if: steps.diff.outputs.has_changes == 'false'
+        run: echo "No changes detected in DataStack — skipping deployment."
+
+  # ---------------------------------------------------------------------------
+  # Deploy ComputeStack (--hotswap for dev)
+  # ---------------------------------------------------------------------------
+  deploy-compute:
+    needs: [prepare, deploy-data]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-${{ runner.os }}-
+      - name: Install dependencies
+        run: pip install -e ".[dev,cdk]"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: CDK diff ComputeStack
+        id: diff
+        run: |
+          set +e
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff ComputeStack \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
+          set -e
+          echo "$DIFF_OUTPUT" > cdk-diff-compute.txt
+          echo "$DIFF_OUTPUT"
+          if echo "$DIFF_OUTPUT" | grep -q "There were no differences"; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload CDK diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdk-diff-compute-${{ needs.prepare.outputs.environment }}-${{ github.run_number }}
+          path: cdk-diff-compute.txt
+          retention-days: 90
+
+      - name: Deploy ComputeStack
+        if: steps.diff.outputs.has_changes == 'true'
+        run: |
+          HOTSWAP_FLAG=""
+          if [[ "${{ needs.prepare.outputs.is_dev }}" == "true" ]]; then
+            HOTSWAP_FLAG="--hotswap"
+          fi
+          npx aws-cdk@2 deploy ComputeStack \
+            --require-approval never \
+            ${HOTSWAP_FLAG} \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }}
+
+      - name: Skip deployment (no changes)
+        if: steps.diff.outputs.has_changes == 'false'
+        run: echo "No changes detected in ComputeStack — skipping deployment."
+
+  # ---------------------------------------------------------------------------
+  # Health Gate — 3 consecutive healthy responses within 5 minutes
+  # ---------------------------------------------------------------------------
+  health-gate:
+    needs: [prepare, deploy-compute]
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.gate.outputs.result }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Run Health Gate
+        id: gate
+        run: |
+          python scripts/health_gate.py
+          echo "result=pass" >> $GITHUB_OUTPUT
+        env:
+          HEALTH_URL: ${{ vars.HEALTH_GATE_URL }}
+          MAX_WAIT_SECONDS: "300"
+          POLL_INTERVAL_SECONDS: "30"
+          REQUIRED_CONSECUTIVE_PASSES: "3"
+          ENVIRONMENT: ${{ needs.prepare.outputs.environment }}
+          IMAGE_TAG: ${{ needs.prepare.outputs.image_tag }}
+
+  # ---------------------------------------------------------------------------
+  # Rollback on Health Gate failure
+  # ---------------------------------------------------------------------------
+  rollback:
+    needs: [prepare, health-gate]
+    if: failure() && needs.health-gate.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Install dependencies
+        run: pip install -e ".[dev,cdk]" boto3
+
+      - name: Retrieve previous manifest (n=1) and rollback
+        id: rollback
+        run: |
+          echo "Retrieving previous deployment manifest..."
+          MANIFEST=$(python -c "
+          import scripts.rollback_trigger as rt
+          import json
+          manifest = rt.get_manifest('${{ needs.prepare.outputs.environment }}', 1)
+          print(json.dumps(manifest))
+          ")
+          echo "Previous manifest: ${MANIFEST}"
+
+          PREV_IMAGE_TAG=$(echo "$MANIFEST" | jq -r '.image_tag')
+          echo "Rolling back to image tag: ${PREV_IMAGE_TAG}"
+
+          npx aws-cdk@2 deploy ComputeStack \
+            --require-approval never \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${PREV_IMAGE_TAG}
+
+      - name: Re-run Health Gate after rollback
+        run: |
+          python scripts/health_gate.py
+        env:
+          HEALTH_URL: ${{ vars.HEALTH_GATE_URL }}
+          MAX_WAIT_SECONDS: "300"
+          POLL_INTERVAL_SECONDS: "30"
+          REQUIRED_CONSECUTIVE_PASSES: "3"
+          ENVIRONMENT: ${{ needs.prepare.outputs.environment }}
+          IMAGE_TAG: rollback
+
+      - name: Halt CD — rollback Health Gate failed
+        if: failure()
+        run: |
+          echo "::error::Rollback Health Gate also failed. Manual intervention required."
+          exit 1
+
+  # ---------------------------------------------------------------------------
+  # Deploy ObservabilityStack (only after Health Gate passes)
+  # ---------------------------------------------------------------------------
+  deploy-observability:
+    needs: [prepare, health-gate]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.prepare.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-${{ runner.os }}-
+      - name: Install dependencies
+        run: pip install -e ".[dev,cdk]"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: CDK diff ObservabilityStack
+        id: diff
+        run: |
+          set +e
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff ObservabilityStack \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
+          set -e
+          echo "$DIFF_OUTPUT" > cdk-diff-observability.txt
+          echo "$DIFF_OUTPUT"
+          if echo "$DIFF_OUTPUT" | grep -q "There were no differences"; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload CDK diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdk-diff-observability-${{ needs.prepare.outputs.environment }}-${{ github.run_number }}
+          path: cdk-diff-observability.txt
+          retention-days: 90
+
+      - name: Deploy ObservabilityStack
+        if: steps.diff.outputs.has_changes == 'true'
+        run: |
+          npx aws-cdk@2 deploy ObservabilityStack \
+            --require-approval never \
+            --context environment=${{ needs.prepare.outputs.environment }} \
+            --context imageTag=${{ needs.prepare.outputs.image_tag }}
+
+      - name: Skip deployment (no changes)
+        if: steps.diff.outputs.has_changes == 'false'
+        run: echo "No changes detected in ObservabilityStack — skipping deployment."
+
+  # ---------------------------------------------------------------------------
+  # Store deployment manifest on success
+  # ---------------------------------------------------------------------------
+  store-manifest:
+    needs: [prepare, deploy-observability]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Install dependencies
+        run: pip install boto3
+
+      - name: Store deployment manifest
+        run: python scripts/store_manifest.py
+        env:
+          ENVIRONMENT: ${{ needs.prepare.outputs.environment }}
+          IMAGE_TAG: ${{ needs.prepare.outputs.image_tag }}
+          COMMIT_SHA: ${{ needs.prepare.outputs.commit_sha }}
+          COMMIT_MESSAGE: ${{ needs.prepare.outputs.commit_message }}
+          HEALTH_GATE_RESULT: "pass"
+
+  # ---------------------------------------------------------------------------
+  # Slack notification on prod failure (non-fatal if webhook missing)
+  # ---------------------------------------------------------------------------
+  notify-failure:
+    needs: [prepare, deploy-network, deploy-data, deploy-compute, health-gate, deploy-observability]
+    if: >
+      failure() &&
+      needs.prepare.outputs.is_prod == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        continue-on-error: true
+        run: |
+          WEBHOOK_URL="${{ secrets.SLACK_WEBHOOK_URL }}"
+          if [[ -z "${WEBHOOK_URL}" ]]; then
+            echo "::warning::Slack webhook URL not configured — skipping notification."
+            exit 0
+          fi
+
+          FAILED_JOB="unknown"
+          if [[ "${{ needs.deploy-network.result }}" == "failure" ]]; then
+            FAILED_JOB="deploy-network (NetworkStack)"
+          elif [[ "${{ needs.deploy-data.result }}" == "failure" ]]; then
+            FAILED_JOB="deploy-data (DataStack)"
+          elif [[ "${{ needs.deploy-compute.result }}" == "failure" ]]; then
+            FAILED_JOB="deploy-compute (ComputeStack)"
+          elif [[ "${{ needs.health-gate.result }}" == "failure" ]]; then
+            FAILED_JOB="health-gate"
+          elif [[ "${{ needs.deploy-observability.result }}" == "failure" ]]; then
+            FAILED_JOB="deploy-observability (ObservabilityStack)"
+          fi
+
+          PAYLOAD=$(cat <<EOF
+          {
+            "text": ":rotating_light: *CD Pipeline Failure — Production*",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":rotating_light: *CD Pipeline Failure*\n\n*Environment:* \`${{ needs.prepare.outputs.environment }}\`\n*Failed Stage:* \`${FAILED_JOB}\`\n*Image Tag:* \`${{ needs.prepare.outputs.image_tag }}\`\n*Commit SHA:* \`${{ needs.prepare.outputs.commit_sha }}\`\n*Pipeline Run:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
+                }
+              }
+            ]
+          }
+          EOF
+          )
+
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "${PAYLOAD}" \
+            "${WEBHOOK_URL}" || echo "::warning::Slack notification send failed — non-fatal."

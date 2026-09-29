@@ -1,0 +1,86 @@
+# Alert rules for testing the AIOps self-healing pipeline end-to-end.
+# These alerts fire against the node-exporter target and get routed
+# to the self-healing webhook via Alertmanager.
+
+groups:
+  - name: node_alerts
+    rules:
+      # High CPU — fires when CPU idle is below 10% for 1 minute
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 90
+        for: 1m
+        labels:
+          severity: critical
+          service_name: web-frontend
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}"
+
+      # High Memory — fires when available memory < 10%
+      - alert: HighMemoryUsage
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 90
+        for: 1m
+        labels:
+          severity: warning
+          service_name: web-frontend
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value }}% on {{ $labels.instance }}"
+
+      # Disk Space Low — fires when root filesystem > 85% full
+      - alert: DiskSpaceLow
+        expr: (1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 > 85
+        for: 2m
+        labels:
+          severity: warning
+          service_name: web-frontend
+        annotations:
+          summary: "Disk space low on {{ $labels.instance }}"
+          description: "Disk usage is {{ $value }}% on {{ $labels.instance }}"
+
+      # Instance Down — fires when node-exporter is unreachable
+      - alert: InstanceDown
+        expr: up{job="node-exporter"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service_name: web-frontend
+        annotations:
+          summary: "Instance {{ $labels.instance }} is down"
+          description: "Node exporter has been unreachable for 30 seconds"
+
+  - name: aiops_alerts
+    rules:
+      # AIOps service down — fires if our own service is unreachable
+      - alert: AIOpsServiceDown
+        expr: up{job="aiops-self-healing"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service_name: aiops
+        annotations:
+          summary: "AIOps self-healing service is down"
+          description: "The webhook endpoint is unreachable"
+
+      # High remediation failure rate
+      - alert: HighRemediationFailureRate
+        expr: |
+          (remediation_failure_total / (remediation_success_total + remediation_failure_total + 0.001)) > 0.3
+        for: 5m
+        labels:
+          severity: warning
+          service_name: aiops
+        annotations:
+          summary: "High remediation failure rate"
+          description: "More than 30% of remediations are failing"
+
+      # DLQ depth growing (simulated via metric)
+      - alert: DLQDepthHigh
+        expr: remediation_failure_total > 5
+        for: 2m
+        labels:
+          severity: warning
+          service_name: aiops
+        annotations:
+          summary: "DLQ depth is high"
+          description: "Multiple remediation failures may indicate systemic issues"

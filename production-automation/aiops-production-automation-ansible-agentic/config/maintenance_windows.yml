@@ -1,0 +1,40 @@
+# Maintenance Windows Configuration
+# Defines scheduled maintenance windows during which remediation is deferred.
+
+maintenance_windows:
+  # Global maintenance window — all actions deferred
+  - name: "Weekly Infrastructure Maintenance"
+    type: "recurring"
+    scope: "global"
+    days_of_week: [6]  # Sunday (0=Monday, 6=Sunday)
+    start_hour: 2
+    start_minute: 0
+    duration_minutes: 120
+    timezone: "UTC"
+
+  # Database-specific window
+  - name: "Database Backup Window"
+    type: "recurring"
+    scope: "postgresql"
+    days_of_week: [0, 1, 2, 3, 4]  # Monday-Friday
+    start_hour: 3
+    start_minute: 0
+    duration_minutes: 60
+    timezone: "UTC"
+
+  # Monthly patching window
+  - name: "Monthly OS Patching"
+    type: "recurring"
+    scope: "global"
+    day_of_month: 15
+    start_hour: 1
+    start_minute: 0
+    duration_minutes: 240
+    timezone: "UTC"
+
+  # One-time window example (commented out — enable as needed)
+  # - name: "Datacenter Migration Phase 1"
+  #   type: "one_time"
+  #   scope: "global"
+  #   start_datetime: "2026-08-01T00:00:00+00:00"
+  #   end_datetime: "2026-08-01T06:00:00+00:00"

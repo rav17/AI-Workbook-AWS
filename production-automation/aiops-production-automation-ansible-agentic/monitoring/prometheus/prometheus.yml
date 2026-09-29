@@ -1,0 +1,41 @@
+# Prometheus configuration for AIOps local development
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# Alert rules
+rule_files:
+  - "alert_rules.yml"
+
+# Alertmanager integration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093"
+
+# Scrape targets
+scrape_configs:
+  # Self-healing service metrics (Prometheus exposition format)
+  - job_name: "aiops-self-healing"
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+    static_configs:
+      - targets: ["self-healing:8080"]
+        labels:
+          service: "aiops"
+          environment: "dev"
+
+  # Node exporter (simulates target hosts)
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100", "target-host:9100"]
+        labels:
+          instance: "web-server-01:9100"
+          service_name: "web-frontend"
+          location: "us-east-1a"
+
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

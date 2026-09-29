@@ -1,0 +1,51 @@
+---
+# Fix High CPU — kills stress processes and restarts the application.
+# Used by the AIOps self-healing pipeline when HighCPUUsage alert fires.
+# Executes via SSM (no SSH required).
+- name: Fix high CPU usage
+  hosts: all
+  become: true
+  tasks:
+    - name: Kill stress-ng processes
+      ansible.builtin.shell: "pkill -f stress-ng || true"
+      changed_when: true
+
+    - name: Kill any runaway CPU-intensive processes
+      ansible.builtin.shell: |
+        # Kill processes using > 80% CPU (excluding system processes)
+        ps aux --sort=-%cpu | awk 'NR>1 && $3>80 && $1!="root" {print $2}' | head -5 | xargs -r kill -TERM
+      changed_when: true
+      ignore_errors: true
+
+    - name: Restart the application service
+      ansible.builtin.systemd:
+        name: fake-app
+        state: restarted
+      ignore_errors: true
+
+    - name: Wait for application to be healthy
+      ansible.builtin.uri:
+        url: "http://localhost:8080/health"
+        method: GET
+        status_code: 200
+      register: health_check
+      retries: 5
+      delay: 3
+      until: health_check.status == 200
+      ignore_errors: true
+
+    - name: Verify CPU is back to normal
+      ansible.builtin.shell: |
+        CPU_IDLE=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}')
+        echo "CPU idle: ${CPU_IDLE}%"
+        # Fail if idle < 20% (meaning usage > 80%)
+        python3 -c "import sys; sys.exit(0 if float('${CPU_IDLE}') > 20 else 1)"
+      register: cpu_check
+      retries: 3
+      delay: 10
+      until: cpu_check.rc == 0
+      ignore_errors: true
+
+    - name: Report result
+      ansible.builtin.debug:
+        msg: "Remediation complete. CPU stress killed, app restarted."

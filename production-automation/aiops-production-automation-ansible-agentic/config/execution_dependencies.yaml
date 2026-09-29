@@ -1,0 +1,58 @@
+# Execution Dependency Graph Configuration
+#
+# Defines ordering constraints between remediation actions.
+# An edge from predecessor to successor means the predecessor must
+# complete successfully before the successor can begin.
+#
+# Schema:
+#   dependencies:
+#     - predecessor: <action_name>   # Must complete first
+#       successor: <action_name>     # Waits for predecessor
+#
+# Limits:
+#   max_nodes: 200  (maximum unique action names)
+#   max_edges: 500  (maximum dependency relationships)
+#
+# Rules:
+#   - Graph must be acyclic (DAG). Cycles will be rejected on load.
+#   - Actions not in the graph have no ordering constraints.
+#   - Independent actions (no path between them) can run in parallel.
+
+dependencies:
+  # Service restart sequence
+  - predecessor: drain_connections
+    successor: restart_nginx
+
+  - predecessor: restart_nginx
+    successor: health_check_nginx
+
+  # Database maintenance sequence
+  - predecessor: backup_database
+    successor: restart_database
+
+  - predecessor: restart_database
+    successor: verify_replication
+
+  # Cache operations
+  - predecessor: drain_connections
+    successor: flush_cache
+
+  - predecessor: flush_cache
+    successor: warm_cache
+
+  # Disk cleanup before log rotation
+  - predecessor: clear_disk
+    successor: rotate_logs
+
+  # Configuration deployment sequence
+  - predecessor: backup_config
+    successor: deploy_config
+
+  - predecessor: deploy_config
+    successor: restart_service
+
+  - predecessor: restart_service
+    successor: verify_service_health
+
+max_nodes: 200
+max_edges: 500

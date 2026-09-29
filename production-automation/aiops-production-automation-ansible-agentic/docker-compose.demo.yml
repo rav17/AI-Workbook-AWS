@@ -1,0 +1,126 @@
+version: "3.8"
+
+# =============================================================================
+# Full end-to-end demo environment for AIOps Self-Healing Pipeline.
+#
+# Start:   docker compose -f docker-compose.demo.yml up -d
+# Trigger: python demo/trigger_scenario.py --scenario high-cpu
+# Watch:   docker compose -f docker-compose.demo.yml logs -f self-healing
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # AIOps Self-Healing Service (the brain)
+  # ===========================================================================
+  self-healing:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SES_FROM_ADDRESS=aiops@example.com
+      - OPERATOR_EMAIL=ops-team@example.com
+      - ASSET_INVENTORY_PATH=/app/config/asset_inventory.yml
+      - MAPPING_CONFIG_PATH=/app/config/playbook_mapping.yml
+      - AUDIT_LOG_PATH=/app/logs/audit.log
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=dev
+      - SERVICE_BASE_URL=http://localhost:8080
+    volumes:
+      - ./config:/app/config:ro
+      - ./playbooks:/app/playbooks:ro
+      - ./logs:/app/logs
+      # SSH key for Ansible to connect to target-host
+      - demo-ssh-keys:/root/.ssh:ro
+    depends_on:
+      target-host:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aiops-demo
+
+  # ===========================================================================
+  # Target Host — simulates a managed server that can be broken and fixed
+  # Runs: SSH server, fake app, node-exporter, stress-ng
+  # ===========================================================================
+  target-host:
+    build:
+      context: ./demo
+      dockerfile: Dockerfile.target
+    hostname: web-server-01
+    ports:
+      - "9100:9100"
+      - "2222:22"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9100/metrics"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - demo-ssh-keys:/shared-keys
+    networks:
+      aiops-demo:
+        aliases:
+          - web-server-01
+          - web-server-01.prod.example.com
+
+  # ===========================================================================
+  # Prometheus — scrapes target-host and self-healing, evaluates alert rules
+  # ===========================================================================
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=1d"
+      - "--web.enable-lifecycle"
+    networks:
+      - aiops-demo
+
+  # ===========================================================================
+  # Alertmanager — routes fired alerts to self-healing webhook
+  # ===========================================================================
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+    depends_on:
+      - prometheus
+    networks:
+      - aiops-demo
+
+  # ===========================================================================
+  # Grafana — visual dashboards
+  # ===========================================================================
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    networks:
+      - aiops-demo
+
+volumes:
+  demo-ssh-keys:
+
+networks:
+  aiops-demo:
+    driver: bridge

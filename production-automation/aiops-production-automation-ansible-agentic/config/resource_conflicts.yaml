@@ -1,0 +1,86 @@
+# Resource Conflict Registry Configuration
+#
+# Defines which resources each remediation action modifies, and what
+# conflict resolution strategy to apply when overlapping resources are detected.
+#
+# Schema:
+#   actions:
+#     <action_name>:
+#       resources:              # List of resource categories (max 20 per action)
+#         - "<type>:<identifier>"  # Max 128 chars each
+#       strategies:             # Per-resource resolution strategy
+#         "<resource_category>": QUEUE | REJECT | PREEMPT
+#
+# Strategies:
+#   QUEUE   - Wait for conflicting execution to complete
+#   REJECT  - Fail immediately with conflict reason
+#   PREEMPT - Cancel lower-priority conflicting execution (requires severity gap >= 2)
+
+actions:
+  restart_nginx:
+    resources:
+      - "service:nginx"
+      - "network:port-80"
+      - "network:port-443"
+    strategies:
+      "service:nginx": QUEUE
+      "network:port-80": REJECT
+      "network:port-443": REJECT
+
+  restart_service:
+    resources:
+      - "service:generic"
+      - "process:systemd"
+    strategies:
+      "service:generic": QUEUE
+      "process:systemd": QUEUE
+
+  scale_up_instances:
+    resources:
+      - "compute:autoscaling"
+      - "memory:system"
+    strategies:
+      "compute:autoscaling": PREEMPT
+      "memory:system": QUEUE
+
+  drain_connections:
+    resources:
+      - "network:port-80"
+      - "network:port-443"
+      - "service:nginx"
+    strategies:
+      "network:port-80": REJECT
+      "network:port-443": REJECT
+      "service:nginx": QUEUE
+
+  clear_disk:
+    resources:
+      - "filesystem:/var/log"
+      - "filesystem:/tmp"
+    strategies:
+      "filesystem:/var/log": QUEUE
+      "filesystem:/tmp": QUEUE
+
+  rotate_logs:
+    resources:
+      - "filesystem:/var/log"
+    strategies:
+      "filesystem:/var/log": QUEUE
+
+  restart_database:
+    resources:
+      - "service:postgresql"
+      - "network:port-5432"
+      - "filesystem:/var/lib/postgresql"
+    strategies:
+      "service:postgresql": REJECT
+      "network:port-5432": REJECT
+      "filesystem:/var/lib/postgresql": QUEUE
+
+  flush_cache:
+    resources:
+      - "service:redis"
+      - "memory:cache"
+    strategies:
+      "service:redis": QUEUE
+      "memory:cache": QUEUE

@@ -1,0 +1,6 @@
+{
+  "commands": [
+    "stress-ng --vm 2 --vm-bytes 80% --timeout 120s --vm-keep &",
+    "echo Memory stress started for 120 seconds"
+  ]
+}

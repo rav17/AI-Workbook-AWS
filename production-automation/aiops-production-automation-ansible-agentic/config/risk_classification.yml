@@ -1,0 +1,67 @@
+# Risk Classification Configuration
+# Defines blast radius classification rules for remediation actions.
+
+# Services with only a single instance — always classified as CRITICAL
+single_instance_services:
+  - etcd
+  - consul-leader
+  - vault-primary
+  - dns-primary
+  - ntp-master
+
+# Database services — restart/stop actions are CRITICAL
+database_services:
+  - postgresql
+  - mysql
+  - mongodb
+  - redis-primary
+  - elasticsearch
+
+# Classification rules (evaluated in order, first match wins)
+# service: service name pattern (* for any)
+# action: action name pattern (* for any)
+# risk_level: low, medium, high, critical
+rules:
+  - service: "nginx"
+    action: "restart_service"
+    risk_level: "low"
+
+  - service: "nginx"
+    action: "reload_config"
+    risk_level: "low"
+
+  - service: "*"
+    action: "clear_disk"
+    risk_level: "low"
+
+  - service: "*"
+    action: "rotate_logs"
+    risk_level: "low"
+
+  - service: "app-server"
+    action: "restart_service"
+    risk_level: "medium"
+
+  - service: "worker"
+    action: "restart_service"
+    risk_level: "medium"
+
+  - service: "cache"
+    action: "flush_cache"
+    risk_level: "medium"
+
+  - service: "*"
+    action: "scale_out"
+    risk_level: "medium"
+
+  - service: "api-gateway"
+    action: "restart_service"
+    risk_level: "high"
+
+  - service: "load-balancer"
+    action: "restart_service"
+    risk_level: "critical"
+
+  - service: "*"
+    action: "stop_service"
+    risk_level: "high"

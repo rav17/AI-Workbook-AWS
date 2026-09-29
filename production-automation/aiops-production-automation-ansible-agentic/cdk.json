@@ -1,0 +1,14 @@
+{
+  "app": "python -m src.agentic_ai.infra.app",
+  "context": {
+    "environment": "dev",
+    "awsAccount": "533267042240",
+    "awsRegion": "us-east-1",
+    "bedrockModelId": "amazon.nova-pro-v1:0",
+    "costCenter": "platform-engineering",
+    "costCenterEmail": "ravindya@in.ibm.com",
+    "vpcCidr": "10.0.0.0/16",
+    "monthlyBudgetUsd": "200",
+    "imageTag": "latest-dev"
+  }
+}

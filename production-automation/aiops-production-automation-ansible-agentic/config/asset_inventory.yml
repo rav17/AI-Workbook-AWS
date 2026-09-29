@@ -1,0 +1,27 @@
+assets:
+  - hostname: web-server-01.prod.example.com
+    ip_address: 10.0.1.10
+    location: us-east-1a
+    service_name: web-frontend
+    service_owner: team-alpha
+    lookup_keys:
+      - web-server-01.prod.example.com
+      - 10.0.1.10
+      - web-server-01:9090
+  - hostname: db-primary-01.prod.example.com
+    ip_address: 10.0.2.20
+    location: us-east-1b
+    service_name: postgres-primary
+    service_owner: team-data
+    lookup_keys:
+      - db-primary-01.prod.example.com
+      - 10.0.2.20
+      - db-primary-01:5432
+  - hostname: cache-01.prod.example.com
+    ip_address: 10.0.3.30
+    location: us-east-1a
+    service_name: redis-cache
+    service_owner: team-platform
+    lookup_keys:
+      - cache-01.prod.example.com
+      - 10.0.3.30
