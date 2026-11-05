@@ -133,19 +133,30 @@ def find_conflicts(rules: list[Rule]) -> set[str]:
     return flagged
 
 
-LAYERS = ("org", "team", "project")
+LAYERS = ("org", "team", "project", "phase")
+
+
+def _layer_path(path: Path, layer: str, stage: str | None) -> Path | None:
+    if layer == "project":
+        return path
+    if layer == "phase":
+        # Phase rules are scoped to one stage, so they need a stage to apply.
+        return path.parent / "phase" / f"{stage}.json" if stage else None
+    return path.parent / f"{layer}.json"
 
 
 def effective_rules(path: Path = DEFAULT_RULES_FILE, stage: str | None = None) -> dict[str, Any]:
-    """Merge active rules from org, team and project layers; the narrower layer wins.
+    """Merge active rules from org, team, project and phase layers; the narrower layer wins.
 
-    org.json and team.json sit beside the project file and are human-authored.
-    A broader rule is overridden when a narrower one has the same wording with
-    opposite polarity.
+    org.json, team.json and phase/<stage>.json sit beside the project file and are
+    human-authored. A broader rule is overridden when a narrower one has the same
+    wording with opposite polarity.
     """
     layered: list[tuple[str, Rule]] = []
     for layer in LAYERS:
-        layer_path = path if layer == "project" else path.parent / f"{layer}.json"
+        layer_path = _layer_path(path, layer, stage)
+        if layer_path is None:
+            continue
         for rule in load_rules(layer_path):
             if rule.status == "active" and (stage is None or _applies(rule, stage)):
                 layered.append((layer, rule))

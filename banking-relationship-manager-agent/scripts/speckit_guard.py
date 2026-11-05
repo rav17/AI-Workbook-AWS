@@ -12,7 +12,7 @@ _DECISION_CMD = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 _PROTECTED = re.compile(
-    r"(audit\.jsonl|\.specify[\\/]+(rules[\\/]+(rules|org|team)|sensors[\\/]+sensors)\.json"
+    r"(audit\.jsonl|\.specify[\\/]+(rules[\\/]+(rules|org|team|phase[\\/]+[\w-]+)|sensors[\\/]+sensors)\.json"
     r"|\.specify[\\/]+custom[\\/]"
     r"|\.specify[\\/]+stages[\\/]"
     r"|\.specify[\\/]+plugins[\\/]"
