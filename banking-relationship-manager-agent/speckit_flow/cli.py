@@ -13,6 +13,8 @@ from speckit_flow import compose as compose_mod
 from speckit_flow import custom as custom_mod
 from speckit_flow import doctor as doctor_mod
 from speckit_flow import knowledge as knowledge_mod
+from speckit_flow import plugins as plugins_mod
+from speckit_flow import profiles as profiles_mod
 from speckit_flow import questions as questions_mod
 from speckit_flow import rules as rules_mod
 from speckit_flow import sensors as sensors_mod
@@ -32,6 +34,7 @@ from speckit_flow.profiles import (
 )
 from speckit_flow.rules import DEFAULT_RULES_FILE
 from speckit_flow.sensors import DEFAULT_SENSORS_FILE
+from speckit_flow.stagedefs import load_stage_defs
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -178,6 +181,8 @@ def _build_parser() -> argparse.ArgumentParser:
     trace_p.add_argument("--require-tests", action="store_true")
     sub.add_parser("doctor", parents=[common])
     sub.add_parser("stages", parents=[common])
+    plugins_p = sub.add_parser("plugins", parents=[common])
+    plugins_p.add_argument("action", choices=("list", "validate"))
     custom_p = sub.add_parser("custom", parents=[common])
     custom_p.add_argument("action", choices=("list", "validate"))
     questions_p = sub.add_parser("questions", parents=[common])
@@ -494,6 +499,42 @@ def _run_custom(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_plugins(args: argparse.Namespace) -> int:
+    specify_dir = Path(args.profiles_dir).parent
+    try:
+        found = plugins_mod.discover(specify_dir, enabled_only=False)
+    except plugins_mod.PluginError as exc:
+        raise FlowError(str(exc)) from exc
+    items: list[dict[str, Any]] = [
+        {
+            "name": p.name,
+            "version": p.version,
+            "enabled": p.enabled,
+            "provides": [
+                kind
+                for kind, present in (
+                    ("profiles", p.profiles_dir.is_dir()),
+                    ("sensors", p.sensors_file.is_file()),
+                    ("stages", p.stages_file.is_file()),
+                )
+                if present
+            ],
+        }
+        for p in found
+    ]
+    if args.action == "validate":
+        profiles_mod.load_profiles(Path(args.profiles_dir))
+        sensors_mod.load_sensors(Path(args.sensors_file))
+        load_stage_defs()
+    lines = [
+        f"{i['name']} {i['version']} {'on' if i['enabled'] else 'off'} "
+        f"[{', '.join(i['provides']) or 'nothing'}]"
+        for i in items
+    ]
+    _emit(args, {"plugins": items}, "\n".join(lines) or "no plugins")
+    return 0
+
+
 def _run_stages(args: argparse.Namespace) -> int:
     items = [
         {
@@ -567,6 +608,8 @@ def _run(args: argparse.Namespace) -> int:
         return _run_units(args, actor)
     if args.command == "verify":
         return _run_verify(args, actor)
+    if args.command == "plugins":
+        return _run_plugins(args)
     if args.command == "stages":
         return _run_stages(args)
     if args.command == "custom":

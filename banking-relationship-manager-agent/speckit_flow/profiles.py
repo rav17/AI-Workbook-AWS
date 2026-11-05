@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 
+from speckit_flow import plugins as plugins_mod
 from speckit_flow.models import DEFAULT_PROFILE, FlowError, Profile
 
 DEFAULT_PROFILES_DIR = Path(__file__).resolve().parent.parent / ".specify" / "profiles"
@@ -19,6 +20,13 @@ _KEYWORDS: dict[str, tuple[str, ...]] = {
 _PRIORITY = ("security-patch", "bugfix", "refactor", "infra", "poc", "enterprise")
 
 
+def _plugins(profiles_dir: Path) -> list[plugins_mod.Plugin]:
+    try:
+        return plugins_mod.discover(profiles_dir.parent)
+    except plugins_mod.PluginError as exc:
+        raise FlowError(str(exc)) from exc
+
+
 def load_profiles(profiles_dir: Path = DEFAULT_PROFILES_DIR) -> dict[str, Profile]:
     """Load and validate every profile; the first invalid file raises FlowError."""
     if not profiles_dir.is_dir():
@@ -28,6 +36,16 @@ def load_profiles(profiles_dir: Path = DEFAULT_PROFILES_DIR) -> dict[str, Profil
         profiles[path.stem] = load_profile_file(path)
     if not profiles:
         raise FlowError(f"no profiles found in {profiles_dir}")
+    # Plugins add profiles (never override); the project overlay applies last.
+    for plugin in _plugins(profiles_dir):
+        if plugin.profiles_dir.is_dir():
+            for path in sorted(plugin.profiles_dir.glob("*.json")):
+                if path.stem in profiles:
+                    raise FlowError(
+                        f"plugin {plugin.name}: profile {path.stem!r} already exists; "
+                        "plugins can only add profiles"
+                    )
+                profiles[path.stem] = load_profile_file(path)
     # Project overlay: .specify/custom/profiles/*.json adds or overrides profiles by id.
     overlay = profiles_dir.parent / "custom" / "profiles"
     if overlay.is_dir():

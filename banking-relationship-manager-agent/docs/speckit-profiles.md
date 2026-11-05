@@ -108,6 +108,10 @@ Stage order, optionality, `requires` and `lead` live in `.specify/stages/stages.
 
 Define units in `units.json` with `units add <id> "<title>" --depends-on a,b --tasks T001,T002`. Propose the project's real check with `verify propose --actor agent:developer -- python -m pytest -q`; a human approves it with `verify approve`. Editing the command invalidates approval. `units checkpoint <id>` needs its dependencies checkpointed, runs the approved command, and records a checkpoint only on success. The `implement` gate cannot be approved while any unit is unchecked. Agents are blocked from `verify approve` and from editing `.specify/verify.json`.
 
+## Plugin packs (feature 020)
+
+A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to the folder, `version`, optional `enabled: false`) and any of `profiles/*.json`, `sensors.json`, `stages.json`. Plugins only add items; reusing a core profile or sensor id is refused. Precedence is core, plugins by name, then `.specify/custom/`. `plugins list|validate` shows what each pack provides, and `doctor` checks them. Agents cannot be supplied by plugins yet. Agents are blocked from editing `.specify/plugins/`.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.

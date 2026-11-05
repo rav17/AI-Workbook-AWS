@@ -15,6 +15,7 @@ _PROTECTED = re.compile(
     r"(audit\.jsonl|\.specify[\\/]+(rules[\\/]+(rules|org|team)|sensors[\\/]+sensors)\.json"
     r"|\.specify[\\/]+custom[\\/]"
     r"|\.specify[\\/]+stages[\\/]"
+    r"|\.specify[\\/]+plugins[\\/]"
     r"|\.specify[\\/]+verify\.json"
     r"|specs[\\/]+[^\s\"']*?(state\.(json|md)|(reviews|sensors)[\\/]+[\w.-]+\.json))",
     re.IGNORECASE,

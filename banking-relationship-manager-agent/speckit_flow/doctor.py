@@ -5,7 +5,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from speckit_flow import agents, audit, custom, rules, sensors
+from speckit_flow import agents, audit, custom, plugins, rules, sensors
 from speckit_flow import state as flow_state
 from speckit_flow.models import FlowError
 from speckit_flow.profiles import load_profiles
@@ -74,6 +74,15 @@ def run_doctor(
         extra = sum(1 for d in defs if d.custom)
         return "ok", f"{len(defs)} stage(s), {extra} custom"
 
+    def plugins_check() -> tuple[str, str]:
+        try:
+            found = plugins.discover(profiles_dir.parent, enabled_only=False)
+        except plugins.PluginError as exc:
+            raise FlowError(str(exc)) from exc
+        if not found:
+            return "ok", "no plugins"
+        return "ok", f"{sum(p.enabled for p in found)}/{len(found)} plugin(s) enabled"
+
     def hooks_check() -> tuple[str, str]:
         hook = root / ".github" / "hooks" / "speckit-guard.json"
         if not hook.is_file():
@@ -98,6 +107,7 @@ def run_doctor(
         ("rules", rules_check),
         ("custom", custom_check),
         ("stages", stages_check),
+        ("plugins", plugins_check),
         ("hooks", hooks_check),
         ("workflow", workflow_check),
     ):

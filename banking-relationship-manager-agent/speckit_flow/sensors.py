@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from speckit_flow import audit, questions, trace
+from speckit_flow import plugins as plugins_mod
 from speckit_flow.models import STAGES, FlowError
 
 DEFAULT_SENSORS_FILE = (
@@ -105,6 +106,20 @@ def _read_sensors(path: Path) -> list[Sensor]:
 
 def load_sensors(path: Path = DEFAULT_SENSORS_FILE) -> list[Sensor]:
     sensors = _read_sensors(path)
+    try:
+        found = plugins_mod.discover(path.parent.parent)
+    except plugins_mod.PluginError as exc:
+        raise FlowError(str(exc)) from exc
+    for plugin in found:
+        if plugin.sensors_file.is_file():
+            known = {s.id for s in sensors}
+            for extra in _read_sensors(plugin.sensors_file):
+                if extra.id in known:
+                    raise FlowError(
+                        f"plugin {plugin.name}: sensor {extra.id!r} already exists; "
+                        "plugins can only add sensors"
+                    )
+                sensors.append(extra)
     # Project overlay: .specify/custom/sensors.json adds sensors or tightens existing ones.
     overlay = path.parent.parent / "custom" / "sensors.json"
     if not overlay.is_file():

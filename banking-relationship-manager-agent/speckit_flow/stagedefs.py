@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from speckit_flow import plugins
+
 ROOT = Path(__file__).resolve().parent.parent
 CORE_FILE = ROOT / ".specify" / "stages" / "stages.json"
 CUSTOM_FILE = ROOT / ".specify" / "custom" / "stages.json"
@@ -71,8 +73,16 @@ def load_stage_defs(core_file: Path = CORE_FILE, custom_file: Path | None = None
         raise StageDefError("core stages must be unique and non-empty")
     if stages[0].optional and not any(not s.optional for s in stages):
         raise StageDefError("core stages need a required stage")
-    if custom_file.is_file():
-        for item in _read(custom_file):
+    overlays: list[Path] = []
+    try:
+        overlays = [p.stages_file for p in plugins.discover(core_file.parent.parent)]
+    except plugins.PluginError as exc:
+        raise StageDefError(str(exc)) from exc
+    overlays.append(custom_file)
+    for overlay in overlays:
+        if not overlay.is_file():
+            continue
+        for item in _read(overlay):
             new = _make(item, True)
             after = item.get("after")
             if new.id in ids:
