@@ -7,7 +7,7 @@ from pathlib import Path
 
 from speckit_flow import agents, audit, custom, plugins, rules, sensors
 from speckit_flow import state as flow_state
-from speckit_flow.models import FlowError
+from speckit_flow.models import STAGES, FlowError
 from speckit_flow.profiles import load_profiles
 from speckit_flow.stagedefs import load_stage_defs
 
@@ -48,7 +48,8 @@ def run_doctor(
         problems = agents.validate_roster(roster, root)
         if problems:
             raise FlowError("; ".join(problems))
-        return "ok", f"{len(roster)} agents valid"
+        extra = sum(1 for a in roster.values() if a.source != "core")
+        return "ok", f"{len(roster)} agents valid ({extra} extra)"
 
     def sensors_check() -> tuple[str, str]:
         if not sensors_file.is_file():
@@ -60,7 +61,16 @@ def run_doctor(
             return "warn", "no rules file yet"
         layered = rules.effective_rules(rules_file)
         total = len(rules.load_rules(rules_file))
-        return "ok", f"{total} rule(s) loaded; {len(layered['rules'])} effective"
+        phase = sorted((rules_file.parent / "phase").glob("*.json"))
+        for path in phase:
+            if path.stem not in STAGES:
+                raise FlowError(f"phase rule file {path.name} names an unknown stage")
+            rules.load_rules(path)
+        return (
+            "ok",
+            f"{total} rule(s) loaded; {len(layered['rules'])} effective; "
+            f"{len(phase)} phase file(s)",
+        )
 
     def custom_check() -> tuple[str, str]:
         found = custom.describe(profiles_dir, sensors_file)["items"]

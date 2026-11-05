@@ -30,6 +30,16 @@ def test_healthy_repo() -> None:
     assert result["feature"].status == "skip"
 
 
+def test_unknown_phase_rule_file_fails(tmp_path: Path) -> None:
+    rules_file = tmp_path / "rules.json"
+    rules_file.write_text('{"rules": []}', encoding="utf-8")
+    (tmp_path / "phase").mkdir()
+    (tmp_path / "phase" / "nonsense.json").write_text('{"rules": []}', encoding="utf-8")
+    assert checks(rules_file=rules_file)["rules"].status == "fail"
+    (tmp_path / "phase" / "nonsense.json").rename(tmp_path / "phase" / "plan.json")
+    assert checks(rules_file=rules_file)["rules"].status == "ok"
+
+
 def test_broken_pieces_fail(tmp_path: Path) -> None:
     bad = tmp_path / "bad.json"
     bad.write_text("{not json", encoding="utf-8")
