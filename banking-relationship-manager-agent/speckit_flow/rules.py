@@ -133,6 +133,37 @@ def find_conflicts(rules: list[Rule]) -> set[str]:
     return flagged
 
 
+LAYERS = ("org", "team", "project")
+
+
+def effective_rules(path: Path = DEFAULT_RULES_FILE, stage: str | None = None) -> dict[str, Any]:
+    """Merge active rules from org, team and project layers; the narrower layer wins.
+
+    org.json and team.json sit beside the project file and are human-authored.
+    A broader rule is overridden when a narrower one has the same wording with
+    opposite polarity.
+    """
+    layered: list[tuple[str, Rule]] = []
+    for layer in LAYERS:
+        layer_path = path if layer == "project" else path.parent / f"{layer}.json"
+        for rule in load_rules(layer_path):
+            if rule.status == "active" and (stage is None or _applies(rule, stage)):
+                layered.append((layer, rule))
+    cores = [(layer, rule, *_core(rule.text)) for layer, rule in layered]
+    overridden: set[tuple[str, str]] = set()
+    for i, (layer_a, rule_a, core_a, neg_a) in enumerate(cores):
+        for layer_b, rule_b, core_b, neg_b in cores[i + 1 :]:
+            if core_a == core_b and neg_a != neg_b and layer_a != layer_b:
+                overridden.add((layer_a, rule_a.id))
+    kept = [(layer, rule) for layer, rule in layered if (layer, rule.id) not in overridden]
+    shown = kept[-MAX_STAGE_RULES:] if stage else kept
+    return {
+        "rules": [{**rule.to_dict(), "layer": layer, "conflict": False} for layer, rule in shown],
+        "omitted": len(kept) - len(shown),
+        "overridden": [{"layer": layer, "id": rid} for layer, rid in sorted(overridden)],
+    }
+
+
 def list_rules(
     path: Path = DEFAULT_RULES_FILE,
     status: str | None = None,

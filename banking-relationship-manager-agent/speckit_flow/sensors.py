@@ -9,14 +9,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from speckit_flow import audit, trace
+from speckit_flow import audit, questions, trace
 from speckit_flow.models import STAGES, FlowError
 
 DEFAULT_SENSORS_FILE = (
     Path(__file__).resolve().parent.parent / ".specify" / "sensors" / "sensors.json"
 )
 SENSORS_DIR = "sensors"
-BUILTINS = ("consistency", "traceability")
+BUILTINS = ("consistency", "traceability", "questions")
 ARTIFACTS = ("spec.md", "plan.md", "tasks.md")
 _ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 _PLACEHOLDER_RE = re.compile(r"NEEDS CLARIFICATION|\[FEATURE NAME\]|\[DATE\]|ACTION REQUIRED")
@@ -86,7 +86,7 @@ def _parse(raw: Any, index: int) -> Sensor:
     return sensor
 
 
-def load_sensors(path: Path = DEFAULT_SENSORS_FILE) -> list[Sensor]:
+def _read_sensors(path: Path) -> list[Sensor]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except OSError as exc:
@@ -101,6 +101,21 @@ def load_sensors(path: Path = DEFAULT_SENSORS_FILE) -> list[Sensor]:
     if len(ids) != len(set(ids)):
         raise FlowError("sensor ids must be unique")
     return sensors
+
+
+def load_sensors(path: Path = DEFAULT_SENSORS_FILE) -> list[Sensor]:
+    sensors = _read_sensors(path)
+    # Project overlay: .specify/custom/sensors.json adds sensors or tightens existing ones.
+    overlay = path.parent.parent / "custom" / "sensors.json"
+    if not overlay.is_file():
+        return sensors
+    by_id = {s.id: s for s in sensors}
+    for extra in _read_sensors(overlay):
+        base = by_id.get(extra.id)
+        if base and base.required:
+            raise FlowError(f"custom sensor {extra.id} cannot replace required core sensor")
+        by_id[extra.id] = extra
+    return list(by_id.values())
 
 
 def for_stage(sensors: list[Sensor], stage: str) -> list[Sensor]:
@@ -163,6 +178,10 @@ def run_sensor(sensor: Sensor, feature_dir: Path, stage: str) -> tuple[bool, str
             return _command(sensor, feature_dir.parent.parent)
         if sensor.builtin == "consistency":
             return _consistency(feature_dir, stage)
+        if sensor.builtin == "questions":
+            pending = questions.open_questions(feature_dir)
+            ids = ", ".join(q.id for q in pending)
+            return (not pending, f"open questions: {ids}" if pending else "no open questions")
         return _traceability(feature_dir, sensor.options)
     except FlowError as exc:
         return False, str(exc)

@@ -86,6 +86,20 @@ For `comprehensive` depth, first save current source-bound review evidence with 
 - `.github/hooks/speckit-session.json` runs `scripts/speckit_session.py` at session start to print the active feature, stage and lead agent. It is best-effort and always exits 0.
 - Specs: `specs/014-intents-session-control/`.
 
+## Layered rules and customization (feature 015)
+
+- **Layered rules:** `.specify/rules/org.json` and `team.json` (human-authored) plus the project `rules.json`. `python -m speckit_flow rules list --effective [--stage S]` merges active rules, labelled by layer; a narrower layer overrides a broader rule with the same wording and opposite polarity.
+- **Overlay:** `.specify/custom/profiles/<id>.json` and `.specify/custom/sensors.json` add to or override shipped items. Invalid overlays are errors, and an overlay cannot replace a required core sensor. `python -m speckit_flow custom list|validate`; `doctor` checks it.
+- The guard hook protects `.specify/custom/`, `org.json` and `team.json` from agent edits.
+- Specs: `specs/015-layered-rules-customization/`.
+
+## Questions file and policies (features 016-017)
+
+- **Questions:** `python -m speckit_flow questions add "<text>" --role <agent-id>|answer Q1 "<text>"|list [--open] [--role R]|check`. Questions live in `<feature>/questions.md` as `## Q1 [role: product]`; answer via the CLI (human-only), or type after `**Answer:**` in the file. `check` exits 1 while any are open, and the required `no-open-questions` sensor blocks the plan gate. Agents ask through the conductor and never answer.
+- **Guard policy:** profile field `guard_policy: strict|standard`. Strict needs a current review and no open questions before any gate approval. Unset, `depth: comprehensive` implies strict.
+- **Test strategy:** profile field `test_strategy: standard|required`. Required refuses tasks/analyze/implement gate approval while a requirement has no test task.
+- Specs: `specs/016-questions-interaction-modes/`, `specs/017-test-strategy-guard-policy/`.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.

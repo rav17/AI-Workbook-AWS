@@ -8,11 +8,12 @@ import sys
 from typing import Any
 
 _DECISION_CMD = re.compile(
-    r"speckit_flow\b.*?\b(gate\s+(approve|reject)|rules\s+(approve|discard))\b",
+    r"speckit_flow\b.*?\b(gate\s+(approve|reject)|rules\s+(approve|discard)|questions\s+answer)\b",
     re.IGNORECASE | re.DOTALL,
 )
 _PROTECTED = re.compile(
-    r"(audit\.jsonl|\.specify[\\/]+(rules[\\/]+rules|sensors[\\/]+sensors)\.json"
+    r"(audit\.jsonl|\.specify[\\/]+(rules[\\/]+(rules|org|team)|sensors[\\/]+sensors)\.json"
+    r"|\.specify[\\/]+custom[\\/]"
     r"|specs[\\/]+[^\s\"']*?(state\.(json|md)|(reviews|sensors)[\\/]+[\w.-]+\.json))",
     re.IGNORECASE,
 )

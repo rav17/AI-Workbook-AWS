@@ -36,6 +36,8 @@ EVENT_TYPES: tuple[str, ...] = (
     "intent_parked",
     "intent_resumed",
     "stage_redone",
+    "question_asked",
+    "question_answered",
 )
 STATUSES: tuple[str, ...] = ("pending", "in_progress", "done", "skipped")
 EXEMPTIONS: tuple[str, ...] = ("implement-without-tasks",)
@@ -43,7 +45,19 @@ DEFAULT_PROFILE = "feature"
 
 _ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 _ACTOR_RE = re.compile(r"^(human|agent):.+")
-_PROFILE_FIELDS = {"id", "description", "stages", "depth", "gates", "exemptions", "assignments"}
+_PROFILE_FIELDS = {
+    "id",
+    "description",
+    "stages",
+    "depth",
+    "gates",
+    "exemptions",
+    "assignments",
+    "test_strategy",
+    "guard_policy",
+}
+TEST_STRATEGIES: tuple[str, ...] = ("standard", "required")
+GUARD_POLICIES: tuple[str, ...] = ("", "standard", "strict")
 
 
 class FlowError(Exception):
@@ -59,6 +73,15 @@ class Profile:
     gates: tuple[str, ...]
     exemptions: tuple[str, ...] = ()
     assignments: dict[str, Any] = field(default_factory=dict)
+    test_strategy: str = "standard"
+    guard_policy: str = ""
+
+    @property
+    def strict(self) -> bool:
+        """Strict guard policy; comprehensive depth implies it unless set explicitly."""
+        return self.guard_policy == "strict" or (
+            not self.guard_policy and self.depth == "comprehensive"
+        )
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], expected_id: str | None = None) -> Profile:
@@ -79,11 +102,19 @@ class Profile:
             gates=tuple(data["gates"]),
             exemptions=tuple(data.get("exemptions", ())),
             assignments=dict(raw_assignments),
+            test_strategy=str(data.get("test_strategy", "standard")),
+            guard_policy=str(data.get("guard_policy", "")),
         )
         profile.validate(expected_id)
         return profile
 
     def validate(self, expected_id: str | None = None) -> None:
+        if self.test_strategy not in TEST_STRATEGIES:
+            raise FlowError(
+                f"profile {self.id}: test_strategy must be one of {list(TEST_STRATEGIES)}"
+            )
+        if self.guard_policy not in GUARD_POLICIES:
+            raise FlowError(f"profile {self.id}: guard_policy must be 'standard' or 'strict'")
         if not _ID_RE.match(self.id):
             raise FlowError(f"invalid profile id: {self.id!r}")
         if expected_id is not None and expected_id != self.id:
@@ -149,6 +180,10 @@ class Profile:
             out["exemptions"] = list(self.exemptions)
         if self.assignments:
             out["assignments"] = {k: dict(v) for k, v in self.assignments.items()}
+        if self.test_strategy != "standard":
+            out["test_strategy"] = self.test_strategy
+        if self.guard_policy:
+            out["guard_policy"] = self.guard_policy
         return out
 
 

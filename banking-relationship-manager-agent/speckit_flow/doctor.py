@@ -5,7 +5,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from speckit_flow import agents, audit, rules, sensors
+from speckit_flow import agents, audit, custom, rules, sensors
 from speckit_flow import state as flow_state
 from speckit_flow.models import FlowError
 from speckit_flow.profiles import load_profiles
@@ -57,7 +57,16 @@ def run_doctor(
     def rules_check() -> tuple[str, str]:
         if not rules_file.is_file():
             return "warn", "no rules file yet"
-        return "ok", f"{len(rules.load_rules(rules_file))} rule(s) loaded"
+        layered = rules.effective_rules(rules_file)
+        total = len(rules.load_rules(rules_file))
+        return "ok", f"{total} rule(s) loaded; {len(layered['rules'])} effective"
+
+    def custom_check() -> tuple[str, str]:
+        found = custom.describe(profiles_dir, sensors_file)["items"]
+        if not found:
+            return "ok", "no custom overlay"
+        custom.validate(profiles_dir, sensors_file)
+        return "ok", f"{len(found)} custom item(s) valid"
 
     def hooks_check() -> tuple[str, str]:
         hook = root / ".github" / "hooks" / "speckit-guard.json"
@@ -81,6 +90,7 @@ def run_doctor(
         ("roster", roster_check),
         ("sensors", sensors_check),
         ("rules", rules_check),
+        ("custom", custom_check),
         ("hooks", hooks_check),
         ("workflow", workflow_check),
     ):

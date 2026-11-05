@@ -10,8 +10,10 @@ from typing import Any
 from speckit_flow import agents as agents_mod
 from speckit_flow import audit, reviews
 from speckit_flow import compose as compose_mod
+from speckit_flow import custom as custom_mod
 from speckit_flow import doctor as doctor_mod
 from speckit_flow import knowledge as knowledge_mod
+from speckit_flow import questions as questions_mod
 from speckit_flow import rules as rules_mod
 from speckit_flow import sensors as sensors_mod
 from speckit_flow import session as session_mod
@@ -136,6 +138,7 @@ def _build_parser() -> argparse.ArgumentParser:
     rules_list.add_argument("--rules-file", default=str(DEFAULT_RULES_FILE))
     rules_list.add_argument("--status")
     rules_list.add_argument("--stage", choices=STAGES)
+    rules_list.add_argument("--effective", action="store_true")
 
     knowledge = sub.add_parser("knowledge", parents=[common])
     knowledge_sub = knowledge.add_subparsers(dest="action", required=True)
@@ -172,6 +175,20 @@ def _build_parser() -> argparse.ArgumentParser:
     trace_p = sub.add_parser("trace", parents=[common])
     trace_p.add_argument("--require-tests", action="store_true")
     sub.add_parser("doctor", parents=[common])
+    custom_p = sub.add_parser("custom", parents=[common])
+    custom_p.add_argument("action", choices=("list", "validate"))
+    questions_p = sub.add_parser("questions", parents=[common])
+    q_sub = questions_p.add_subparsers(dest="action", required=True)
+    q_add = q_sub.add_parser("add", parents=[common])
+    q_add.add_argument("text")
+    q_add.add_argument("--role", required=True)
+    q_answer = q_sub.add_parser("answer", parents=[common])
+    q_answer.add_argument("id")
+    q_answer.add_argument("text")
+    q_list = q_sub.add_parser("list", parents=[common])
+    q_list.add_argument("--open", action="store_true")
+    q_list.add_argument("--role")
+    q_sub.add_parser("check", parents=[common])
     intents = sub.add_parser("intents", parents=[common])
     intents_sub = intents.add_subparsers(dest="action", required=True)
     intents_sub.add_parser("list", parents=[common])
@@ -232,9 +249,13 @@ def _run_review(args: argparse.Namespace, feature_dir: Path, actor: str) -> int:
 def _run_rules(args: argparse.Namespace, actor: str) -> int:
     path = Path(args.rules_file)
     if args.action == "list":
-        result = rules_mod.list_rules(path, args.status, args.stage)
+        if args.effective:
+            result = rules_mod.effective_rules(path, args.stage)
+        else:
+            result = rules_mod.list_rules(path, args.status, args.stage)
         lines = [
-            f"{r['id']} [{r['status']}]{' CONFLICT' if r['conflict'] else ''} {r['text']}"
+            f"{r['id']} [{r.get('layer', r['status'])}]"
+            f"{' CONFLICT' if r['conflict'] else ''} {r['text']}"
             for r in result["rules"]
         ]
         if result["omitted"]:
@@ -370,6 +391,45 @@ def _run_intents(args: argparse.Namespace, actor: str) -> int:
     return 0
 
 
+def _run_questions(args: argparse.Namespace, actor: str) -> int:
+    feature_dir = _feature_dir(args.feature_dir)
+    if args.action == "add":
+        roles: set[str] | None = None
+        roster_path = Path(args.roster_file)
+        if roster_path.is_file():
+            roles = set(agents_mod.load_roster(roster_path))
+        question = questions_mod.add_question(feature_dir, args.text, args.role, actor, roles)
+        _emit(args, question.to_dict(), f"{question.id} asked of {question.role}")
+    elif args.action == "answer":
+        question = questions_mod.answer_question(feature_dir, args.id, args.text, actor)
+        _emit(args, question.to_dict(), f"{question.id} answered")
+    elif args.action == "list":
+        result = questions_mod.list_questions(feature_dir, args.open, args.role)
+        lines = [f"{q['id']} [{q['role']}] {q['status']}: {q['text']}" for q in result["questions"]]
+        _emit(args, result, "\n".join(lines) or "no questions")
+    else:
+        pending = questions_mod.open_questions(feature_dir)
+        _emit(
+            args,
+            {"open": [q.id for q in pending]},
+            f"{len(pending)} open question(s)" + "".join(f"\n{q.id} [{q.role}]" for q in pending),
+        )
+        return 1 if pending else 0
+    return 0
+
+
+def _run_custom(args: argparse.Namespace) -> int:
+    profiles_dir, sensors_file = Path(args.profiles_dir), Path(args.sensors_file)
+    if args.action == "list":
+        result = custom_mod.describe(profiles_dir, sensors_file)
+        lines = [f"{i['type']} {i['id']} ({i['effect']})" for i in result["items"]]
+        _emit(args, result, "\n".join(lines) or "no custom overlay")
+    else:
+        result = custom_mod.validate(profiles_dir, sensors_file)
+        _emit(args, result, f"custom overlay valid: {result['profiles']} profile(s) merged")
+    return 0
+
+
 def _run_doctor(args: argparse.Namespace) -> int:
     try:
         feature_dir: Path | None = _feature_dir(args.feature_dir)
@@ -416,6 +476,10 @@ def _run(args: argparse.Namespace) -> int:
         return _run_sensors(args, actor)
     if args.command == "trace":
         return _run_trace(args)
+    if args.command == "questions":
+        return _run_questions(args, actor)
+    if args.command == "custom":
+        return _run_custom(args)
     if args.command == "doctor":
         return _run_doctor(args)
     if args.command == "intents":
@@ -502,6 +566,7 @@ def _run(args: argparse.Namespace) -> int:
             args.reason,
             args.override_reason,
             sensors_path if sensors_path.is_file() else None,
+            profiles_dir,
         )
     elif args.command == "rebuild":
         st = flow_state.rebuild_state(feature_dir, actor, args.profile, profiles_dir)

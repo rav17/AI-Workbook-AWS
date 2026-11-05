@@ -13,6 +13,7 @@ For the requested stage:
 4. Dispatch the lead agent with the same brief plus the contributions; the lead owns the final artifacts.
 5. If the stage has a reviewer, dispatch the reviewer separately and give it only the stage definition and artifacts, not the author's notes.
 6. Run `python -m speckit_flow stage done <stage> --actor agent:conductor`.
-7. Stop. Report the result and any pending gate. Never approve or reject a gate or a learned rule; only a human does.
+7. For each clarification question an agent returned, run `python -m speckit_flow questions add "<text>" --role <agent-id> --actor agent:conductor`; the human answers with `questions answer` or by editing `questions.md`. Run `questions check` before proposing the plan gate.
+8. Stop. Report the result and any pending gate. Never approve or reject a gate or a learned rule; only a human does.
 
 Use `agent:composer` for route proposals and never run `compose save`.

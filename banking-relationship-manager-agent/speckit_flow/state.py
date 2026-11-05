@@ -6,7 +6,7 @@ import re
 import tempfile
 from pathlib import Path
 
-from speckit_flow import audit, reviews
+from speckit_flow import audit, questions, reviews, trace
 from speckit_flow import sensors as sensors_mod
 from speckit_flow.models import (
     STAGES,
@@ -24,6 +24,7 @@ ROUTE_FILE = "route.json"
 OPTIONAL_STAGES = ("ideation", "deploy", "operate")
 _ARTIFACTS = {"specify": "spec.md", "plan": "plan.md", "tasks": "tasks.md"}
 _PROFILE_RE = re.compile(r"profile=([a-z][a-z0-9-]*)")
+TEST_GATED = ("tasks", "analyze", "implement")
 
 
 def atomic_write(path: Path, content: str) -> None:
@@ -280,6 +281,7 @@ def decide_gate(
     reason: str = "",
     override_reason: str = "",
     sensors_file: Path | None = None,
+    profiles_dir: Path | None = None,
 ) -> FeatureState:
     state = load_state(feature_dir)
     if not actor.startswith("human:"):
@@ -288,6 +290,20 @@ def decide_gate(
         raise _reject(feature_dir, stage, actor, f"no pending gate for stage {stage!r}")
     detail = reason or ("approved" if approve else "rejected")
     review_note = ""
+    try:
+        profile = profile_for(feature_dir, state.profile, profiles_dir)
+    except FlowError as exc:
+        raise _reject(feature_dir, stage, actor, f"profile cannot be loaded: {exc}") from exc
+    strict = profile.strict
+    if approve and profile.test_strategy == "required" and stage in TEST_GATED:
+        matrix = trace.build_matrix(feature_dir)
+        if not matrix.ok(True):
+            gaps = ", ".join(matrix.uncovered + matrix.untested)
+            raise _reject(
+                feature_dir, stage, actor, f"test strategy 'required': no test task for {gaps}"
+            )
+    if approve and strict and questions.open_questions(feature_dir):
+        raise _reject(feature_dir, stage, actor, "strict guard policy: open questions remain")
     if approve and sensors_file is not None:
         try:
             problems, relied = sensors_mod.gate_problems(feature_dir, stage, sensors_file)
@@ -302,13 +318,13 @@ def decide_gate(
     if approve:
         review = reviews.latest_review(feature_dir, stage)
         fresh = review if review and not reviews.is_stale(feature_dir, review) else None
-        if state.depth == "comprehensive" and fresh is None:
+        if strict and fresh is None:
             why = "is stale" if review else "is missing"
             raise _reject(
                 feature_dir,
                 stage,
                 actor,
-                f"comprehensive depth needs a current review for {stage!r}; it {why}",
+                f"strict guard policy needs a current review for {stage!r}; it {why}",
             )
         if fresh is not None:
             review_note += f" review={fresh.id}"

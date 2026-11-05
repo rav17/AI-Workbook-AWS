@@ -9,6 +9,14 @@
       "required": true
     },
     {
+      "id": "no-open-questions",
+      "description": "No clarifying questions are left unanswered",
+      "kind": "builtin",
+      "builtin": "questions",
+      "stages": ["plan"],
+      "required": true
+    },
+    {
       "id": "traceability",
       "description": "Every requirement is cited by at least one task",
       "kind": "builtin",

@@ -28,6 +28,11 @@ def load_profiles(profiles_dir: Path = DEFAULT_PROFILES_DIR) -> dict[str, Profil
         profiles[path.stem] = load_profile_file(path)
     if not profiles:
         raise FlowError(f"no profiles found in {profiles_dir}")
+    # Project overlay: .specify/custom/profiles/*.json adds or overrides profiles by id.
+    overlay = profiles_dir.parent / "custom" / "profiles"
+    if overlay.is_dir():
+        for path in sorted(overlay.glob("*.json")):
+            profiles[path.stem] = load_profile_file(path)
     return profiles
 
 

@@ -1,0 +1,3 @@
+# Plan: Questions File and Interaction Modes
+
+Python stdlib only. `speckit_flow/questions.py` parses and writes `<feature>/questions.md` (`## Q<n> [role: <role>]`, question text, `**Answer:**`). Answered means non-empty answer, so hand edits work. CLI `questions add|answer|list|check`. Events `question_asked` and `question_answered`. Builtin sensor `questions` plus a required `no-open-questions` sensor at `plan`. The conductor records agent-returned questions; the product agent returns them as `role: question`. Roles are validated against the roster ids when a roster exists. `state.py` imports questions, so questions defers its `atomic_write` import to avoid a cycle.
