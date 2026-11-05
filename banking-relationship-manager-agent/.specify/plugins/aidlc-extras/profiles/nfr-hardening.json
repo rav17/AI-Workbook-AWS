@@ -1,0 +1,7 @@
+{
+  "id": "nfr-hardening",
+  "description": "Work with firm performance, scale or resilience targets: NFR design and performance validation with gates.",
+  "stages": ["specify", "clarify", "plan", "nfr-design", "tasks", "analyze", "implement", "perf-validation"],
+  "depth": "comprehensive",
+  "gates": ["specify", "plan", "nfr-design", "perf-validation"]
+}

@@ -170,6 +170,21 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
     return problems
 
 
+def undispatchable(roster: dict[str, Agent], root: Path = REPO_ROOT) -> list[str]:
+    """Extra agents the conductor cannot dispatch because its 'agents' list omits them."""
+    conductor = next((a for a in roster.values() if a.role == "conductor"), None)
+    if conductor is None:
+        return []
+    try:
+        meta = parse_frontmatter((root / conductor.file).read_text(encoding="utf-8"))
+    except (OSError, FlowError):
+        return []
+    listed = set(meta.get("agents") or [])
+    return sorted(
+        a.agent_name for a in roster.values() if a.source != "core" and a.agent_name not in listed
+    )
+
+
 def validate_roster(roster: dict[str, Agent], root: Path = REPO_ROOT) -> list[str]:
     problems: list[str] = []
     for role, expected in EXPECTED_COUNTS.items():

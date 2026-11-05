@@ -112,8 +112,38 @@ def test_doctor_has_no_failures(project: Path, enabled: bool) -> None:
         sensors_file=project / "sensors" / "sensors.json",
         rules_file=project / "rules" / "rules.json",
     )
-    assert not [
-        c
-        for c in result
-        if c.status == "fail" and c.name in ("profiles", "roster", "sensors", "plugins")
+    watched = ("profiles", "roster", "sensors", "plugins")
+    assert not [c for c in result if c.status == "fail" and c.name in watched]
+    roster_check = next(c for c in result if c.name == "roster")
+    assert (roster_check.status == "warn") is enabled
+    if enabled:
+        assert "speckit-compliance-reviewer" in roster_check.detail
+
+
+def test_pack_is_self_contained_and_core_untouched() -> None:
+    pack = SPECIFY / "plugins" / "compliance"
+    files = {p.relative_to(pack).as_posix() for p in pack.rglob("*") if p.is_file()}
+    assert files == {
+        "plugin.json",
+        "README.md",
+        "agents.json",
+        "sensors.json",
+        "profiles/compliance.json",
+    }
+    core = [
+        SPECIFY / "profiles",
+        SPECIFY / "sensors",
+        SPECIFY / "agents",
+        SPECIFY / "stages",
     ]
+    for folder in core:
+        for path in folder.rglob("*.json"):
+            assert "compliance-section" not in path.read_text(encoding="utf-8")
+            assert "compliance-reviewer" not in path.read_text(encoding="utf-8")
+    assert not (SPECIFY / "profiles" / "compliance.json").exists()
+
+
+def test_readme_explains_enable_and_adapt() -> None:
+    text = (SPECIFY / "plugins" / "compliance" / "README.md").read_text(encoding="utf-8")
+    for needed in ("## Enable", "## Adapt", '"enabled": true', "agents"):
+        assert needed in text

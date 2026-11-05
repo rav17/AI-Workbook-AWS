@@ -49,6 +49,13 @@ def run_doctor(
         if problems:
             raise FlowError("; ".join(problems))
         extra = sum(1 for a in roster.values() if a.source != "core")
+        missing = agents.undispatchable(roster, root)
+        if missing:
+            return (
+                "warn",
+                f"{len(roster)} agents valid; conductor cannot dispatch {', '.join(missing)} "
+                "(add to its 'agents' list)",
+            )
         return "ok", f"{len(roster)} agents valid ({extra} extra)"
 
     def sensors_check() -> tuple[str, str]:

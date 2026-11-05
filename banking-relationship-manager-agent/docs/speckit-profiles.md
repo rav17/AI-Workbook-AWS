@@ -152,6 +152,17 @@ Two generic sensor features support it:
 - `profiles` on any sensor: a non-empty list of profile ids. The sensor then
   runs and is required only for features on those profiles.
 
+`doctor` warns (not fails) when an enabled extra agent is missing from the
+conductor's `agents` list, because the conductor could not dispatch it.
+
+## AI-DLC extras pack (example plugin)
+
+`.specify/plugins/aidlc-extras/` ships disabled. Enabled, it adds the optional
+stages `market-research`, `nfr-design` and `perf-validation`, the profiles
+`discovery` and `nfr-hardening`, and a required `nfr-section` sensor for
+`nfr-hardening`. Its `templates/` give each stage a starting layout (not read by
+the tool). Stages load at start-up, so enabling takes effect on the next command.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.

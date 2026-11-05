@@ -49,6 +49,8 @@
 - [x] T012 [P] Write `.specify/plugins/compliance/README.md`: how to enable, what it adds, how to adapt, and that enabling means adding the agent to the conductor's `agents` list (FR-008)
 - [x] T013 [P] Add a "Compliance pack" section and document `profiles` and `section` sensors in `docs/speckit-profiles.md` (FR-008)
 - [x] T014 Run ruff, mypy and the full unit suite; run `graphify update .`; confirm the quickstart steps in `specs/025-compliance-plugin-pack/quickstart.md` (FR-007)
+- [x] T015 Test that the pack is self-contained and core config does not mention it, in `tests/unit/speckit_flow/test_flow_compliance_pack.py` (FR-001)
+- [x] T016 Test that the pack README documents enabling and adapting, in `tests/unit/speckit_flow/test_flow_compliance_pack.py` (FR-008)
 
 ## Dependencies
 
