@@ -14,6 +14,7 @@ _DECISION_CMD = re.compile(
 _PROTECTED = re.compile(
     r"(audit\.jsonl|\.specify[\\/]+(rules[\\/]+(rules|org|team)|sensors[\\/]+sensors)\.json"
     r"|\.specify[\\/]+custom[\\/]"
+    r"|\.specify[\\/]+stages[\\/]"
     r"|specs[\\/]+[^\s\"']*?(state\.(json|md)|(reviews|sensors)[\\/]+[\w.-]+\.json))",
     re.IGNORECASE,
 )

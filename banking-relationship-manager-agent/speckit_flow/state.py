@@ -9,6 +9,7 @@ from pathlib import Path
 from speckit_flow import audit, questions, reviews, trace
 from speckit_flow import sensors as sensors_mod
 from speckit_flow.models import (
+    OPTIONAL_STAGES,
     STAGES,
     FeatureState,
     FlowError,
@@ -21,7 +22,6 @@ from speckit_flow.profiles import get_profile
 STATE_FILE = "state.json"
 STATE_MD = "state.md"
 ROUTE_FILE = "route.json"
-OPTIONAL_STAGES = ("ideation", "deploy", "operate")
 _ARTIFACTS = {"specify": "spec.md", "plan": "plan.md", "tasks": "tasks.md"}
 _PROFILE_RE = re.compile(r"profile=([a-z][a-z0-9-]*)")
 TEST_GATED = ("tasks", "analyze", "implement")

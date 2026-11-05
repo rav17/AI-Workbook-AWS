@@ -4,17 +4,26 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
-STAGES: tuple[str, ...] = (
-    "ideation",
-    "specify",
-    "clarify",
-    "plan",
-    "tasks",
-    "analyze",
-    "implement",
-    "deploy",
-    "operate",
-)
+from speckit_flow.stagedefs import StageDef, StageDefError, load_stage_defs
+
+
+class FlowError(Exception):
+    """Raised for any user-facing validation or state error."""
+
+
+def _load_stage_table() -> list[StageDef]:
+    try:
+        return load_stage_defs()
+    except StageDefError as exc:
+        raise FlowError(f"invalid stage definitions: {exc}") from exc
+
+
+STAGE_DEFS: tuple[StageDef, ...] = tuple(_load_stage_table())
+STAGES: tuple[str, ...] = tuple(s.id for s in STAGE_DEFS)
+OPTIONAL_STAGES: tuple[str, ...] = tuple(s.id for s in STAGE_DEFS if s.optional)
+STAGE_REQUIRES: dict[str, tuple[str, ...]] = {s.id: s.requires for s in STAGE_DEFS if s.requires}
+STAGE_LEADS: dict[str, str] = {s.id: s.lead for s in STAGE_DEFS if s.lead}
+FIRST_STAGE: str = next(s.id for s in STAGE_DEFS if not s.optional)
 DEPTHS: tuple[str, ...] = ("minimal", "standard", "comprehensive")
 EVENT_TYPES: tuple[str, ...] = (
     "profile_selected",
@@ -58,10 +67,6 @@ _PROFILE_FIELDS = {
 }
 TEST_STRATEGIES: tuple[str, ...] = ("standard", "required")
 GUARD_POLICIES: tuple[str, ...] = ("", "standard", "strict")
-
-
-class FlowError(Exception):
-    """Raised for any user-facing validation or state error."""
 
 
 @dataclass(frozen=True)
@@ -136,13 +141,14 @@ class Profile:
         for exemption in self.exemptions:
             if exemption not in EXEMPTIONS:
                 raise FlowError(f"profile {self.id}: unknown exemption {exemption!r}")
-        rest = self.stages[1:] if self.stages[0] == "ideation" else self.stages
-        if not rest or rest[0] != "specify":
-            raise FlowError(f"profile {self.id}: specify must be the first stage")
-        if "deploy" in self.stages and "implement" not in self.stages:
-            raise FlowError(f"profile {self.id}: deploy requires implement")
-        if "operate" in self.stages and "deploy" not in self.stages:
-            raise FlowError(f"profile {self.id}: operate requires deploy")
+        before = STAGES[: STAGES.index(FIRST_STAGE)]
+        rest = [s for s in self.stages if s not in before]
+        if not rest or rest[0] != FIRST_STAGE:
+            raise FlowError(f"profile {self.id}: {FIRST_STAGE} must be the first stage")
+        for stage in self.stages:
+            for req in STAGE_REQUIRES.get(stage, ()):
+                if req not in self.stages:
+                    raise FlowError(f"profile {self.id}: {stage} requires {req}")
         if (
             "implement" in self.stages
             and "tasks" not in self.stages

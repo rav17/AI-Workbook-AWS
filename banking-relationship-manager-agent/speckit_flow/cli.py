@@ -21,7 +21,7 @@ from speckit_flow import state as flow_state
 from speckit_flow import trace as trace_mod
 from speckit_flow.agents import DEFAULT_ROSTER_FILE
 from speckit_flow.knowledge import DEFAULT_KNOWLEDGE_DIR
-from speckit_flow.models import DEFAULT_PROFILE, STAGES, FeatureState, FlowError
+from speckit_flow.models import DEFAULT_PROFILE, STAGE_DEFS, STAGES, FeatureState, FlowError
 from speckit_flow.profiles import (
     DEFAULT_PROFILES_DIR,
     get_profile,
@@ -175,6 +175,7 @@ def _build_parser() -> argparse.ArgumentParser:
     trace_p = sub.add_parser("trace", parents=[common])
     trace_p.add_argument("--require-tests", action="store_true")
     sub.add_parser("doctor", parents=[common])
+    sub.add_parser("stages", parents=[common])
     custom_p = sub.add_parser("custom", parents=[common])
     custom_p.add_argument("action", choices=("list", "validate"))
     questions_p = sub.add_parser("questions", parents=[common])
@@ -430,6 +431,27 @@ def _run_custom(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_stages(args: argparse.Namespace) -> int:
+    items = [
+        {
+            "id": d.id,
+            "phase": d.phase,
+            "optional": d.optional,
+            "requires": list(d.requires),
+            "lead": d.lead,
+            "custom": d.custom,
+        }
+        for d in STAGE_DEFS
+    ]
+    lines = [
+        f"{i['id']} [{i['phase']}]{' optional' if i['optional'] else ''}"
+        f"{' custom' if i['custom'] else ''}"
+        for i in items
+    ]
+    _emit(args, {"stages": items}, "\n".join(lines))
+    return 0
+
+
 def _run_doctor(args: argparse.Namespace) -> int:
     try:
         feature_dir: Path | None = _feature_dir(args.feature_dir)
@@ -478,6 +500,8 @@ def _run(args: argparse.Namespace) -> int:
         return _run_trace(args)
     if args.command == "questions":
         return _run_questions(args, actor)
+    if args.command == "stages":
+        return _run_stages(args)
     if args.command == "custom":
         return _run_custom(args)
     if args.command == "doctor":

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from speckit_flow.models import STAGES, FlowError, Profile
+from speckit_flow.models import STAGE_LEADS, STAGES, FlowError, Profile
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ROSTER_FILE = REPO_ROOT / ".specify" / "agents" / "roster.json"
@@ -151,7 +151,9 @@ def validate_roster(roster: dict[str, Agent], root: Path = REPO_ROOT) -> list[st
         problems.extend(_check_agent_file(agent, roster, root))
     for stage in STAGES:
         leads = [a.id for a in roster.values() if stage in a.leads]
-        if len(leads) != 1:
+        if stage in STAGE_LEADS:
+            leads.append(STAGE_LEADS[stage])
+        if len(leads) != 1 or leads[0] not in roster:
             problems.append(f"stage {stage!r} needs exactly one lead, found {leads}")
     return problems
 
@@ -172,6 +174,8 @@ def resolve_assignments(profile: Profile, roster: dict[str, Agent]) -> dict[str,
                 raise FlowError(f"profile {profile.id}: {lead!r} cannot lead and support {stage!r}")
         else:
             leads = [a.id for a in roster.values() if stage in a.leads]
+            if stage in STAGE_LEADS and STAGE_LEADS[stage] in roster:
+                leads.append(STAGE_LEADS[stage])
             if len(leads) != 1:
                 raise FlowError(f"stage {stage!r} has no single lead in the roster")
             lead = leads[0]

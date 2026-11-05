@@ -9,6 +9,7 @@ from speckit_flow import agents, audit, custom, rules, sensors
 from speckit_flow import state as flow_state
 from speckit_flow.models import FlowError
 from speckit_flow.profiles import load_profiles
+from speckit_flow.stagedefs import load_stage_defs
 
 
 @dataclass
@@ -68,6 +69,11 @@ def run_doctor(
         custom.validate(profiles_dir, sensors_file)
         return "ok", f"{len(found)} custom item(s) valid"
 
+    def stages_check() -> tuple[str, str]:
+        defs = load_stage_defs()
+        extra = sum(1 for d in defs if d.custom)
+        return "ok", f"{len(defs)} stage(s), {extra} custom"
+
     def hooks_check() -> tuple[str, str]:
         hook = root / ".github" / "hooks" / "speckit-guard.json"
         if not hook.is_file():
@@ -91,6 +97,7 @@ def run_doctor(
         ("sensors", sensors_check),
         ("rules", rules_check),
         ("custom", custom_check),
+        ("stages", stages_check),
         ("hooks", hooks_check),
         ("workflow", workflow_check),
     ):

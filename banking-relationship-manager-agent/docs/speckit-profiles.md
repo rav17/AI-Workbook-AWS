@@ -100,6 +100,10 @@ For `comprehensive` depth, first save current source-bound review evidence with 
 - **Test strategy:** profile field `test_strategy: standard|required`. Required refuses tasks/analyze/implement gate approval while a requirement has no test task.
 - Specs: `specs/016-questions-interaction-modes/`, `specs/017-test-strategy-guard-policy/`.
 
+## Stages as data (feature 018)
+
+Stage order, optionality, `requires` and `lead` live in `.specify/stages/stages.json`. A project can add optional stages in `.specify/custom/stages.json`, each with `after` naming an existing stage, for example `{"id": "nfr-design", "phase": "design", "optional": true, "after": "plan", "lead": "architect"}`. Custom stages must be optional, use a new id, and have one lead (roster `leads` or the stage `lead`). Profiles opt in by listing the stage in canonical order. `speckit-flow stages` lists the effective stages and `doctor` validates them. Stages load at process start.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.
