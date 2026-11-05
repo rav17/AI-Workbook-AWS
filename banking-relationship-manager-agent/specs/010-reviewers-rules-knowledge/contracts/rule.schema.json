@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rules Store",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "text", "origin", "status", "proposed_at", "decided_by"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^R-[0-9]{3,}$" },
+      "text": { "type": "string", "minLength": 1, "maxLength": 300 },
+      "origin": { "type": "string", "minLength": 1 },
+      "status": { "enum": ["pending", "active", "discarded"] },
+      "proposed_at": { "type": "string", "format": "date-time" },
+      "decided_by": { "type": ["string", "null"], "pattern": "^human:.+" }
+    }
+  }
+}

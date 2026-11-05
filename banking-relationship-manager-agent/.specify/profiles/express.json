@@ -1,0 +1,7 @@
+{
+  "id": "express",
+  "description": "Requirements already understood: shortest path from spec to code, one gate after the spec.",
+  "stages": ["specify", "tasks", "implement"],
+  "depth": "minimal",
+  "gates": ["specify"]
+}

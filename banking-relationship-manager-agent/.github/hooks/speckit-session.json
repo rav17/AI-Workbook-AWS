@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "python3 scripts/speckit_session.py",
+        "powershell": "python scripts/speckit_session.py",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

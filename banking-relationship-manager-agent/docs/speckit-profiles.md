@@ -1,0 +1,91 @@
+# Spec Kit Workflow Profiles, State and Audit
+
+Inspired by [AI-DLC](https://github.com/awslabs/aidlc-workflows), the Spec Kit workflow supports profiles that tune the stage route, depth and approval gates per kind of work. Each feature also keeps a persistent state file and a tamper-evident audit trail.
+
+## Profiles
+
+Profiles are JSON files in `.specify/profiles/`. Add a team profile by dropping in a new file; the `id` must match the filename.
+
+| Profile | Stages | Depth | Gates |
+|---|---|---|---|
+| `feature` (default) | specify, plan, tasks, implement | standard | specify, plan |
+| `enterprise` | all six stages | comprehensive | every stage |
+| `express` | specify, tasks, implement | minimal | specify |
+| `bugfix` | specify, tasks, implement | minimal | specify |
+| `refactor` | specify, plan, tasks, implement | minimal | plan |
+| `infra` | specify, plan, tasks, implement | standard | plan |
+| `security-patch` | specify, tasks, implement | minimal | specify |
+| `poc` | specify, implement | minimal | none |
+| `full-lifecycle` | ideation through operate | standard | ideation, specify, plan, implement, deploy |
+
+Rules enforced by validation: `specify` is first (optionally after `ideation`), stages are in canonical order (`ideation, specify, clarify, plan, tasks, analyze, implement, deploy, operate`), `implement` needs `tasks` unless the profile declares `implement-without-tasks`, `deploy` needs `implement`, `operate` needs `deploy`, and every gate must be a stage in the route. Schema: `specs/009-workflow-profiles-audit/contracts/profile.schema.json`.
+
+## Commands
+
+Run from the repository root with `python -m speckit_flow <command>`; `--feature-dir` defaults to the directory in `.specify/feature.json`.
+
+| Command | Purpose |
+|---|---|
+| `profiles list / validate [id] / suggest "<text>"` | Inspect profiles; suggestion is advisory |
+| `init --profile <id>` | Create state, mark omitted stages skipped |
+| `workflow begin --stages <csv> --gates <csv>` | Initialize the default profile if needed; verify state, audit chain and the standard workflow route |
+| `stage start|done <stage>` | Record stage progress (order enforced) |
+| `gate approve|reject <stage> [--reason R]` | Record a gate decision |
+| `switch --profile <id> --confirm` | Change profile at a stage boundary |
+| `status` / `resume` | Show progress and verify the audit chain |
+| `rebuild` | Reconstruct state from `spec.md`, `plan.md`, `tasks.md` |
+
+In an agent session, use the `speckit-profile` skill, which drives these commands and asks for confirmation.
+
+## Standard workflow lifecycle automation (feature 011)
+
+The shipped `.specify/workflows/speckit/workflow.yml` automatically tracks the standard `feature` route. After `/speckit-specify` creates the feature directory, workflow preflight initializes lifecycle state and records `specify`; shell steps wrap `plan`, `tasks` and `implement`. The existing human gates after specify and plan record `gate_approved` or `gate_rejected`. Rejection is audited before the workflow stops.
+
+Preflight verifies the audit chain and requires the selected profile to match the workflow's exact stages and gates. It does not reset existing state. Use the `speckit-profile` skill for non-standard profiles; the static standard workflow reports a mismatch rather than silently switching profiles. To resume an interrupted engine run, use `specify workflow resume`; `python -m speckit_flow resume` verifies persisted lifecycle state but does not resume the engine's step cursor.
+
+For `comprehensive` depth, first save current source-bound review evidence with `/speckit-review <stage>`. A blocked review requires an explicit human `gate approve <stage> --override-reason "<reason>"`; the standard workflow does not inject arbitrary free text into shell commands, so resolve that approval explicitly and continue with the `speckit-profile` skill rather than resuming an already-decided gate step.
+
+## Reviews, rules, knowledge, composer and extended stages (feature 010)
+
+| Command | Purpose |
+|---|---|
+| `review save <stage> --file f.json` / `review list [stage]` | Record or list source-bound reviews (`reviews/<stage>-<n>.json`); a changed reviewed file makes a review STALE |
+| `gate approve <stage> --override-reason R` | Human override of a `block` review; audited as `gate_overridden` |
+| `rules propose --text T (--from-gate S / --from-finding ID:N / --manual)` | Store a pending rule |
+| `rules approve|discard <R-nnn>` | Human-only decision |
+| `rules list [--status S] [--stage X]` | `--stage` shows active rules for that stage (max 10, conflicts flagged) |
+| `knowledge list [--stage X]` | Titles and paths of `.specify/knowledge/*.md` (optional `title:` and `stages:` header lines) |
+| `compose validate|save --file route.json [--confirm]` / `init --route-file` | Validate and save a custom route with a reason per stage |
+
+- **Review gating:** a current (non-stale) review is used when approving a gate. `comprehensive` depth (for example the `enterprise` profile) **refuses approval without a current review**. A `block` verdict refuses approval unless a human passes `--override-reason`. Reviewer and author must differ.
+- **Rules:** agents only propose; a `human:` actor must approve. Stored in `.specify/rules/rules.json`.
+- **Extended stages:** `ideation, specify, clarify, plan, tasks, analyze, implement, deploy, operate`. `deploy` needs `implement`; `operate` needs `deploy`. The `full-lifecycle` profile uses all of them. Features on older profiles keep working and do not record the optional stages.
+- **Skills:** `speckit-review`, `speckit-learn`, `speckit-compose`. Schemas: `specs/010-reviewers-rules-knowledge/contracts/`.
+
+## Agent roster (feature 012)
+
+- **Roster:** `.specify/agents/roster.json` lists 14 agents (11 domain, 2 reviewers, 1 composer) plus the `speckit-conductor`. Each has `.github/agents/speckit-<id>.agent.md`. Reviewers have no `edit` tool.
+- **Orchestration:** only the conductor delegates (`agent` tool). Roster agents are non-user-invocable sub-agents. Each stage has a default lead; a profile may override via `assignments`.
+- **Commands:** `python -m speckit_flow agents list|validate|assign [--profile <id>]`. `status`/`resume` show `lead_agent`.
+- **Actors:** `agent:<id>` must be a roster id. Gates can only be approved or rejected by `human:` actors.
+- **Enforcement:** `.github/hooks/speckit-guard.json` runs `scripts/speckit_guard.py` as a `preToolUse` hook, denying agent gate/rule decisions and writes to audit, state, review and rules files. Hooks are a Copilot preview feature; the CLI checks remain the backstop.
+- Specs: `specs/012-ai-dlc-agent-roster/`.
+
+## Sensors, traceability and doctor (feature 013)
+
+- **Sensors:** `.specify/sensors/sensors.json` defines builtin (`consistency`, `traceability`) and command sensors (argv list, no shell, timeout; output is never stored). `python -m speckit_flow sensors list|run <stage>` records results with artifact fingerprints under `<feature>/sensors/<stage>.json` and audits `sensor_run`.
+- **Gate enforcement:** when the config exists, `gate approve` is refused unless every required sensor for the stage has a passing, non-stale result. Use `--sensors-file` to point elsewhere. The shipped workflow runs `sensors run` for specify and plan before each gate.
+- **Traceability:** `python -m speckit_flow trace [--require-tests]` maps `FR-###` requirements in `spec.md` to tasks (and test tasks, those mentioning "test") in `tasks.md`; exits 1 on uncovered requirements.
+- **Doctor:** `python -m speckit_flow doctor` checks profiles, roster, sensors, rules, hook, workflow and (when available) feature state and audit chain.
+- Specs: `specs/013-sensors-traceability-doctor/`.
+
+## Intents and session control (feature 014)
+
+- `python -m speckit_flow intents list|switch <name>|park [--reason]|unpark`: list initialized features (active marked `*`), change the active feature (`.specify/feature.json`), park or resume work. Parked status comes from the latest `intent_parked`/`intent_resumed` audit event; `stage start` is refused while parked.
+- `redo <stage> --reason R` (alias `jump`): human-only; resets that stage and all later stages to pending, clears a pending gate and audits `stage_redone`. Forward targets are refused so gates stay meaningful.
+- `.github/hooks/speckit-session.json` runs `scripts/speckit_session.py` at session start to print the active feature, stage and lead agent. It is best-effort and always exits 0.
+- Specs: `specs/014-intents-session-control/`.
+
+## Audit trail
+
+`audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.

@@ -1,0 +1,8 @@
+{
+  "id": "poc",
+  "description": "Feasibility test with the smallest useful implementation path.",
+  "stages": ["specify", "implement"],
+  "depth": "minimal",
+  "gates": [],
+  "exemptions": ["implement-without-tasks"]
+}

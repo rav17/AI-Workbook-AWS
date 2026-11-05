@@ -1,0 +1,7 @@
+{
+  "id": "enterprise",
+  "description": "Regulated or high-assurance work: every stage at comprehensive depth with a gate after each.",
+  "stages": ["specify", "clarify", "plan", "tasks", "analyze", "implement"],
+  "depth": "comprehensive",
+  "gates": ["specify", "clarify", "plan", "tasks", "analyze", "implement"]
+}

@@ -1,0 +1,7 @@
+{
+  "id": "full-lifecycle",
+  "description": "Idea to operations: every stage, with gates on the decision points.",
+  "stages": ["ideation", "specify", "clarify", "plan", "tasks", "analyze", "implement", "deploy", "operate"],
+  "depth": "standard",
+  "gates": ["ideation", "specify", "plan", "implement", "deploy"]
+}

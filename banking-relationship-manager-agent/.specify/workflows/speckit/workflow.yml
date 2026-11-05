@@ -43,11 +43,46 @@ steps:
     input:
       args: "{{ inputs.spec }}"
 
+  - id: begin-lifecycle
+    type: shell
+    run: "python -m speckit_flow workflow begin --stages specify,plan,tasks,implement --gates specify,plan --actor agent:workflow"
+
+  - id: start-specify-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage start specify --actor agent:workflow"
+
+  - id: complete-specify-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage done specify --actor agent:workflow"
+
+  - id: sensors-specify
+    type: shell
+    run: "python -m speckit_flow sensors run specify --actor agent:workflow"
+
   - id: review-spec
     type: gate
-    message: "Review the generated spec before planning."
+    message: "Review the generated spec before planning. For comprehensive depth, save a current review with /speckit-review specify before approving."
     options: [approve, reject]
-    on_reject: abort
+    on_reject: skip
+
+  - id: record-spec-decision
+    type: if
+    condition: "{{ steps.review-spec.output.choice == 'approve' }}"
+    then:
+      - id: approve-spec-lifecycle
+        type: shell
+        run: "python -m speckit_flow gate approve specify"
+    else:
+      - id: reject-spec-lifecycle
+        type: shell
+        run: "python -m speckit_flow gate reject specify --reason \"rejected in workflow\""
+      - id: stop-after-spec-rejection
+        type: shell
+        run: "python -c \"raise SystemExit('Workflow stopped: specification gate rejected')\""
+
+  - id: start-plan-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage start plan --actor agent:workflow"
 
   - id: plan
     command: speckit.plan
@@ -55,11 +90,38 @@ steps:
     input:
       args: "{{ inputs.spec }}"
 
+  - id: complete-plan-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage done plan --actor agent:workflow"
+
+  - id: sensors-plan
+    type: shell
+    run: "python -m speckit_flow sensors run plan --actor agent:workflow"
+
   - id: review-plan
     type: gate
-    message: "Review the plan before generating tasks."
+    message: "Review the plan before generating tasks. For comprehensive depth, save a current review with /speckit-review plan before approving."
     options: [approve, reject]
-    on_reject: abort
+    on_reject: skip
+
+  - id: record-plan-decision
+    type: if
+    condition: "{{ steps.review-plan.output.choice == 'approve' }}"
+    then:
+      - id: approve-plan-lifecycle
+        type: shell
+        run: "python -m speckit_flow gate approve plan"
+    else:
+      - id: reject-plan-lifecycle
+        type: shell
+        run: "python -m speckit_flow gate reject plan --reason \"rejected in workflow\""
+      - id: stop-after-plan-rejection
+        type: shell
+        run: "python -c \"raise SystemExit('Workflow stopped: plan gate rejected')\""
+
+  - id: start-tasks-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage start tasks --actor agent:workflow"
 
   - id: tasks
     command: speckit.tasks
@@ -67,8 +129,20 @@ steps:
     input:
       args: "{{ inputs.spec }}"
 
+  - id: complete-tasks-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage done tasks --actor agent:workflow"
+
+  - id: start-implement-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage start implement --actor agent:workflow"
+
   - id: implement
     command: speckit.implement
     integration: "{{ inputs.integration }}"
     input:
       args: "{{ inputs.spec }}"
+
+  - id: complete-implement-lifecycle
+    type: shell
+    run: "python -m speckit_flow stage done implement --actor agent:workflow"
