@@ -112,6 +112,10 @@ Define units in `units.json` with `units add <id> "<title>" --depends-on a,b --t
 
 A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to the folder, `version`, optional `enabled: false`) and any of `profiles/*.json`, `sensors.json`, `stages.json`. Plugins only add items; reusing a core profile or sensor id is refused. Precedence is core, plugins by name, then `.specify/custom/`. `plugins list|validate` shows what each pack provides, and `doctor` checks them. Agents cannot be supplied by plugins yet. Agents are blocked from editing `.specify/plugins/`.
 
+## Clarify interaction modes (feature 021)
+
+`speckit-clarify` offers three modes: guided (default), file (answer by editing `questions.md`) and discussion (free conversation). Every question is recorded with a role tag, agents cannot answer, and `questions check` confirms none remain.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.
