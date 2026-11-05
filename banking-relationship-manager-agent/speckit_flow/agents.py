@@ -26,6 +26,7 @@ class Agent:
     leads: tuple[str, ...]
     supports: tuple[str, ...]
     can_edit: bool
+    source: str = "core"
 
     @property
     def agent_name(self) -> str:
@@ -40,34 +41,68 @@ class Agent:
             "leads": list(self.leads),
             "supports": list(self.supports),
             "can_edit": self.can_edit,
+            "source": self.source,
         }
 
 
-def load_roster(path: Path = DEFAULT_ROSTER_FILE) -> dict[str, Agent]:
+def _read_items(path: Path, what: str) -> list[Any]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise FlowError(f"cannot read roster {path}: {exc}") from exc
+        raise FlowError(f"cannot read {what} {path}: {exc}") from exc
     items = data.get("agents") if isinstance(data, dict) else None
     if not isinstance(items, list):
-        raise FlowError("roster must be an object with an 'agents' list")
+        raise FlowError(f"{what} must be an object with an 'agents' list")
+    return items
+
+
+def _build(item: Any, source: str) -> Agent:
+    try:
+        return Agent(
+            id=str(item["id"]),
+            role=str(item["role"]),
+            tier=str(item["tier"]),
+            file=str(item["file"]),
+            leads=tuple(item.get("leads", ())),
+            supports=tuple(item.get("supports", ())),
+            can_edit=bool(item["can_edit"]),
+            source=source,
+        )
+    except (KeyError, TypeError, AttributeError) as exc:
+        raise FlowError(f"malformed roster entry: {item!r}") from exc
+
+
+def _extra_sources(specify_dir: Path) -> list[tuple[str, Path]]:
+    """Add-only agent files: enabled plugins by name, then the project overlay."""
+    from speckit_flow import plugins
+
+    try:
+        found = [
+            (f"plugin:{p.name}", p.path / "agents.json") for p in plugins.discover(specify_dir)
+        ]
+    except plugins.PluginError as exc:
+        raise FlowError(str(exc)) from exc
+    found.append(("custom", specify_dir / "custom" / "agents.json"))
+    return [(source, p) for source, p in found if p.is_file()]
+
+
+def load_roster(path: Path = DEFAULT_ROSTER_FILE) -> dict[str, Agent]:
     roster: dict[str, Agent] = {}
-    for item in items:
-        try:
-            agent = Agent(
-                id=str(item["id"]),
-                role=str(item["role"]),
-                tier=str(item["tier"]),
-                file=str(item["file"]),
-                leads=tuple(item.get("leads", ())),
-                supports=tuple(item.get("supports", ())),
-                can_edit=bool(item["can_edit"]),
-            )
-        except (KeyError, TypeError) as exc:
-            raise FlowError(f"malformed roster entry: {item!r}") from exc
+    for item in _read_items(path, "roster"):
+        agent = _build(item, "core")
         if agent.id in roster:
             raise FlowError(f"duplicate agent id {agent.id!r}")
         roster[agent.id] = agent
+    for source, extra_path in _extra_sources(path.parent.parent):
+        for item in _read_items(extra_path, f"{source} agents"):
+            agent = _build(item, source)
+            if agent.id in roster:
+                raise FlowError(f"{source}: agent id {agent.id!r} already exists; extras only add")
+            if agent.role != "domain" or agent.leads:
+                raise FlowError(
+                    f"{source}: agent {agent.id!r} must be a domain agent that only supports stages"
+                )
+            roster[agent.id] = agent
     return roster
 
 
@@ -116,10 +151,15 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
     if agent.role == "conductor":
         if "agent" not in tools:
             problems.append(f"{agent.id}: conductor needs the 'agent' tool")
-        expected = {a.agent_name for a in roster.values() if a.role != "conductor"}
+        core = {
+            a.agent_name for a in roster.values() if a.role != "conductor" and a.source == "core"
+        }
+        everyone = {a.agent_name for a in roster.values() if a.role != "conductor"}
         listed = set(meta.get("agents") or [])
-        if listed != expected:
-            problems.append(f"{agent.id}: 'agents' must list exactly the roster agents")
+        if not core <= listed <= everyone:
+            problems.append(
+                f"{agent.id}: 'agents' must list every core agent and only roster agents"
+            )
         if meta.get("user-invocable") is False:
             problems.append(f"{agent.id}: conductor must be user-invocable")
     else:
@@ -133,7 +173,7 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
 def validate_roster(roster: dict[str, Agent], root: Path = REPO_ROOT) -> list[str]:
     problems: list[str] = []
     for role, expected in EXPECTED_COUNTS.items():
-        found = sum(1 for a in roster.values() if a.role == role)
+        found = sum(1 for a in roster.values() if a.role == role and a.source == "core")
         if found != expected:
             problems.append(f"expected {expected} {role} agent(s), found {found}")
     for agent in roster.values():

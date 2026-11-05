@@ -128,6 +128,16 @@ when that stage is requested and override opposite rules from org, team and
 project. Like the other rule files, they are human-managed and protected by the
 guard hook.
 
+## Custom and plugin agents
+
+Add agents without editing the core roster: list them in
+`.specify/custom/agents.json` or in a plugin's `agents.json` (same format as
+`.specify/agents/roster.json`). Extra agents are add-only and must be `domain`
+agents that only `supports` stages. They cannot lead a stage, reuse a core id,
+or change the fixed core counts. Each needs its own `.agent.md` file; list it in
+the conductor's `agents` to let the conductor dispatch it. `agents list` shows
+each agent's `source` (`core`, `custom` or `plugin:<name>`).
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.
