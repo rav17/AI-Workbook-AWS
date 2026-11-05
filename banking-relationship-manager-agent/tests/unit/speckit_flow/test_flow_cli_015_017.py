@@ -24,6 +24,8 @@ def _shell(cmd: str) -> dict[str, Any]:
     "cmd",
     [
         'python -m speckit_flow questions answer Q1 "ok"',
+        "python -m speckit_flow verify approve",
+        "echo {} > .specify/verify.json",
         "echo {} > .specify/rules/org.json",
         "echo {} > .specify/rules/team.json",
         "echo {} > .specify/custom/sensors.json",

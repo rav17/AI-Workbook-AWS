@@ -8,6 +8,7 @@ from pathlib import Path
 
 from speckit_flow import audit, questions, reviews, trace
 from speckit_flow import sensors as sensors_mod
+from speckit_flow import units as units_mod
 from speckit_flow.models import (
     OPTIONAL_STAGES,
     STAGES,
@@ -301,6 +302,12 @@ def decide_gate(
             gaps = ", ".join(matrix.uncovered + matrix.untested)
             raise _reject(
                 feature_dir, stage, actor, f"test strategy 'required': no test task for {gaps}"
+            )
+    if approve and stage == "implement":
+        unchecked = units_mod.unchecked_units(feature_dir)
+        if unchecked:
+            raise _reject(
+                feature_dir, stage, actor, f"units not checkpointed: {', '.join(unchecked)}"
             )
     if approve and strict and questions.open_questions(feature_dir):
         raise _reject(feature_dir, stage, actor, "strict guard policy: open questions remain")

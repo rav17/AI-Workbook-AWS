@@ -47,6 +47,8 @@ EVENT_TYPES: tuple[str, ...] = (
     "stage_redone",
     "question_asked",
     "question_answered",
+    "unit_defined",
+    "unit_checkpoint",
 )
 STATUSES: tuple[str, ...] = ("pending", "in_progress", "done", "skipped")
 EXEMPTIONS: tuple[str, ...] = ("implement-without-tasks",)

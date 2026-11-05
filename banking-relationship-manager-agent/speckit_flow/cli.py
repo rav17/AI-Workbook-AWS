@@ -19,6 +19,7 @@ from speckit_flow import sensors as sensors_mod
 from speckit_flow import session as session_mod
 from speckit_flow import state as flow_state
 from speckit_flow import trace as trace_mod
+from speckit_flow import units as units_mod
 from speckit_flow.agents import DEFAULT_ROSTER_FILE
 from speckit_flow.knowledge import DEFAULT_KNOWLEDGE_DIR
 from speckit_flow.models import DEFAULT_PROFILE, STAGE_DEFS, STAGES, FeatureState, FlowError
@@ -85,6 +86,7 @@ def _build_parser() -> argparse.ArgumentParser:
     common.add_argument("--profiles-dir", default=str(DEFAULT_PROFILES_DIR))
     common.add_argument("--roster-file", default=str(DEFAULT_ROSTER_FILE))
     common.add_argument("--sensors-file", default=str(DEFAULT_SENSORS_FILE))
+    common.add_argument("--verify-file", default=str(units_mod.DEFAULT_VERIFY_FILE))
     common.add_argument("--actor")
     common.add_argument("--json", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -190,6 +192,23 @@ def _build_parser() -> argparse.ArgumentParser:
     q_list.add_argument("--open", action="store_true")
     q_list.add_argument("--role")
     q_sub.add_parser("check", parents=[common])
+    units_p = sub.add_parser("units", parents=[common])
+    u_sub = units_p.add_subparsers(dest="action", required=True)
+    u_add = u_sub.add_parser("add", parents=[common])
+    u_add.add_argument("id")
+    u_add.add_argument("title")
+    u_add.add_argument("--depends-on", default="")
+    u_add.add_argument("--tasks", default="")
+    u_sub.add_parser("list", parents=[common])
+    u_cp = u_sub.add_parser("checkpoint", parents=[common])
+    u_cp.add_argument("id")
+    verify_p = sub.add_parser("verify", parents=[common])
+    v_sub = verify_p.add_subparsers(dest="action", required=True)
+    v_prop = v_sub.add_parser("propose", parents=[common])
+    v_prop.add_argument("argv", nargs="+")
+    v_sub.add_parser("approve", parents=[common])
+    v_sub.add_parser("show", parents=[common])
+    v_sub.add_parser("run", parents=[common])
     intents = sub.add_parser("intents", parents=[common])
     intents_sub = intents.add_subparsers(dest="action", required=True)
     intents_sub.add_parser("list", parents=[common])
@@ -419,6 +438,50 @@ def _run_questions(args: argparse.Namespace, actor: str) -> int:
     return 0
 
 
+def _csv(value: str) -> list[str]:
+    return [v.strip() for v in value.split(",") if v.strip()]
+
+
+def _run_units(args: argparse.Namespace, actor: str) -> int:
+    feature_dir = _feature_dir(args.feature_dir)
+    if args.action == "add":
+        unit = units_mod.add_unit(
+            feature_dir, args.id, args.title, _csv(args.depends_on), _csv(args.tasks), actor
+        )
+        _emit(args, unit, f"unit {unit['id']} defined")
+    elif args.action == "list":
+        result = units_mod.list_units(feature_dir)
+        lines = [
+            f"{u['id']} {'[x]' if u['checkpointed'] else '[ ]'} {u['title']}"
+            f" (after: {', '.join(u['depends_on']) or '-'})"
+            for u in result["units"]
+        ]
+        _emit(args, result, "\n".join(lines) or "no units")
+    else:
+        ok, note = units_mod.checkpoint_unit(feature_dir, args.id, actor, Path(args.verify_file))
+        _emit(args, {"unit": args.id, "passed": ok, "note": note}, f"{args.id}: {note}")
+        return 0 if ok else 1
+    return 0
+
+
+def _run_verify(args: argparse.Namespace, actor: str) -> int:
+    path = Path(args.verify_file)
+    if args.action == "propose":
+        data = units_mod.propose_verify(list(args.argv), actor, path)
+        _emit(args, data, "proposed; a human must run 'verify approve'")
+    elif args.action == "approve":
+        data = units_mod.approve_verify(actor, path)
+        _emit(args, data, f"approved by {actor}")
+    elif args.action == "show":
+        data = units_mod.load_verify(path) or {}
+        _emit(args, data, " ".join(data.get("command", [])) or "no verification command")
+    else:
+        ok, note, _ = units_mod.run_verify(_REPO_ROOT, path)
+        _emit(args, {"passed": ok, "note": note}, note)
+        return 0 if ok else 1
+    return 0
+
+
 def _run_custom(args: argparse.Namespace) -> int:
     profiles_dir, sensors_file = Path(args.profiles_dir), Path(args.sensors_file)
     if args.action == "list":
@@ -500,6 +563,10 @@ def _run(args: argparse.Namespace) -> int:
         return _run_trace(args)
     if args.command == "questions":
         return _run_questions(args, actor)
+    if args.command == "units":
+        return _run_units(args, actor)
+    if args.command == "verify":
+        return _run_verify(args, actor)
     if args.command == "stages":
         return _run_stages(args)
     if args.command == "custom":
