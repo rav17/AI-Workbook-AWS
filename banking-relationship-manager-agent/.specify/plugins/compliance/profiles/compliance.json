@@ -1,0 +1,8 @@
+{
+  "id": "compliance",
+  "description": "Regulated work: gates on specify and plan, each requiring a Compliance section.",
+  "stages": ["specify", "clarify", "plan", "tasks", "analyze", "implement"],
+  "depth": "comprehensive",
+  "gates": ["specify", "plan"],
+  "guard_policy": "strict"
+}

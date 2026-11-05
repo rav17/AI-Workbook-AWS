@@ -1,0 +1,5 @@
+{
+  "agents": [
+    {"id": "compliance-reviewer", "role": "domain", "tier": "judgment", "file": ".github/agents/speckit-compliance-reviewer.agent.md", "leads": [], "supports": ["specify", "plan"], "can_edit": false}
+  ]
+}

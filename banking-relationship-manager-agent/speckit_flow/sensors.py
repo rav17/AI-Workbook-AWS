@@ -17,7 +17,7 @@ DEFAULT_SENSORS_FILE = (
     Path(__file__).resolve().parent.parent / ".specify" / "sensors" / "sensors.json"
 )
 SENSORS_DIR = "sensors"
-BUILTINS = ("consistency", "traceability", "questions")
+BUILTINS = ("consistency", "traceability", "questions", "section")
 ARTIFACTS = ("spec.md", "plan.md", "tasks.md")
 _ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 _PLACEHOLDER_RE = re.compile(r"NEEDS CLARIFICATION|\[FEATURE NAME\]|\[DATE\]|ACTION REQUIRED")
@@ -42,6 +42,7 @@ class Sensor:
     options: dict[str, Any] = field(default_factory=dict)
     argv: tuple[str, ...] = ()
     timeout: int = 120
+    profiles: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -50,6 +51,7 @@ class Sensor:
             "stages": list(self.stages),
             "required": self.required,
             "description": self.description,
+            "profiles": list(self.profiles),
         }
 
 
@@ -67,12 +69,24 @@ def _parse(raw: Any, index: int) -> Sensor:
     if not isinstance(required, bool):
         raise FlowError(f"sensor {sid}: required must be true or false")
     sensor = Sensor(sid, str(kind), tuple(stages), required, str(raw.get("description", "")))
+    scope = raw.get("profiles")
+    if scope is not None:
+        if not isinstance(scope, list) or not scope or not all(isinstance(p, str) for p in scope):
+            raise FlowError(f"sensor {sid}: profiles must be a non-empty list of profile ids")
+        sensor.profiles = tuple(scope)
     if kind == "builtin":
         if raw.get("builtin") not in BUILTINS:
             raise FlowError(f"sensor {sid}: builtin must be one of {list(BUILTINS)}")
         options = raw.get("options", {})
         if not isinstance(options, dict):
             raise FlowError(f"sensor {sid}: options must be an object")
+        if raw["builtin"] == "section":
+            heading = options.get("heading")
+            if not isinstance(heading, str) or not heading.strip():
+                raise FlowError(f"sensor {sid}: section needs a non-empty 'heading' option")
+            artifact = options.get("artifact")
+            if artifact is not None and artifact not in ARTIFACTS:
+                raise FlowError(f"sensor {sid}: artifact must be one of {list(ARTIFACTS)}")
         sensor.builtin, sensor.options = str(raw["builtin"]), options
     elif kind == "command":
         argv = raw.get("argv")
@@ -133,8 +147,43 @@ def load_sensors(path: Path = DEFAULT_SENSORS_FILE) -> list[Sensor]:
     return list(by_id.values())
 
 
-def for_stage(sensors: list[Sensor], stage: str) -> list[Sensor]:
-    return [s for s in sensors if stage in s.stages]
+def for_stage(sensors: list[Sensor], stage: str, profile: str | None = None) -> list[Sensor]:
+    return [
+        s
+        for s in sensors
+        if stage in s.stages and (not s.profiles or profile is None or profile in s.profiles)
+    ]
+
+
+def _feature_profile(feature_dir: Path) -> str | None:
+    from speckit_flow import state as flow_state
+
+    try:
+        return flow_state.load_state(feature_dir).profile
+    except (FlowError, OSError):
+        return None
+
+
+def _section(feature_dir: Path, stage: str, options: dict[str, Any]) -> tuple[bool, str]:
+    heading = str(options["heading"]).strip().lower()
+    name = options.get("artifact") or ("plan.md" if stage == "plan" else "spec.md")
+    path = feature_dir / name
+    if not path.is_file():
+        return False, f"{name} missing"
+    in_section, has_body = False, False
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"^#{1,6}\s+(.*?)\s*$", line)
+        if match:
+            if in_section:
+                break
+            in_section = match.group(1).strip().lower().startswith(heading)
+        elif in_section and line.strip():
+            has_body = True
+    if not in_section and not has_body:
+        return False, f"{name} has no '{options['heading']}' section"
+    if not has_body:
+        return False, f"{name} '{options['heading']}' section is empty"
+    return True, f"{name} has a '{options['heading']}' section"
 
 
 def _fingerprints(feature_dir: Path) -> dict[str, str]:
@@ -197,6 +246,8 @@ def run_sensor(sensor: Sensor, feature_dir: Path, stage: str) -> tuple[bool, str
             pending = questions.open_questions(feature_dir)
             ids = ", ".join(q.id for q in pending)
             return (not pending, f"open questions: {ids}" if pending else "no open questions")
+        if sensor.builtin == "section":
+            return _section(feature_dir, stage, sensor.options)
         return _traceability(feature_dir, sensor.options)
     except FlowError as exc:
         return False, str(exc)
@@ -218,7 +269,7 @@ def _load_results(feature_dir: Path, stage: str) -> dict[str, Any]:
 def run_stage(
     feature_dir: Path, stage: str, actor: str, path: Path = DEFAULT_SENSORS_FILE
 ) -> list[dict[str, Any]]:
-    selected = for_stage(load_sensors(path), stage)
+    selected = for_stage(load_sensors(path), stage, _feature_profile(feature_dir))
     results = _load_results(feature_dir, stage)
     outcomes: list[dict[str, Any]] = []
     for sensor in selected:
@@ -244,7 +295,8 @@ def gate_problems(
     feature_dir: Path, stage: str, path: Path = DEFAULT_SENSORS_FILE
 ) -> tuple[list[str], list[str]]:
     """Return (problems, relied-on sensor ids) for approving the stage's gate."""
-    required = [s for s in for_stage(load_sensors(path), stage) if s.required]
+    profile = _feature_profile(feature_dir)
+    required = [s for s in for_stage(load_sensors(path), stage, profile) if s.required]
     results = _load_results(feature_dir, stage)
     current = _fingerprints(feature_dir)
     problems: list[str] = []

@@ -1,0 +1,6 @@
+{
+  "name": "compliance",
+  "version": "1.0.0",
+  "description": "Example pack: compliance profile, a required Compliance-section sensor and a read-only reviewer agent.",
+  "enabled": false
+}

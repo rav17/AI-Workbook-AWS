@@ -138,6 +138,20 @@ or change the fixed core counts. Each needs its own `.agent.md` file; list it in
 the conductor's `agents` to let the conductor dispatch it. `agents list` shows
 each agent's `source` (`core`, `custom` or `plugin:<name>`).
 
+## Compliance pack (example plugin)
+
+`.specify/plugins/compliance/` is a worked example, shipped disabled. Enabled, it
+adds a `compliance` profile, a required `compliance-section` sensor and a
+read-only `compliance-reviewer` agent. See its `README.md` to enable and adapt it.
+
+Two generic sensor features support it:
+
+- `section` built-in sensor: `options.heading` (required) and optional
+  `options.artifact` (`spec.md`, `plan.md` or `tasks.md`). It fails when the
+  heading is missing or its body is empty.
+- `profiles` on any sensor: a non-empty list of profile ids. The sensor then
+  runs and is required only for features on those profiles.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.
