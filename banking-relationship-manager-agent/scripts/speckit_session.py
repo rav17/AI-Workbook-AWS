@@ -25,6 +25,21 @@ def summary() -> str:
         pass
     if active.pending_gate:
         text += f" gate={active.pending_gate}"
+    try:
+        from speckit_flow import state as flow_state
+
+        st = flow_state.load_state(ROOT / "specs" / active.name)
+        off = [
+            k
+            for k, v in flow_state.profile_for(
+                ROOT / "specs" / active.name, st.profile, None
+            ).ceremony.items()
+            if not v
+        ]
+        if off:
+            text += f" skips={','.join(off)}"
+    except Exception:
+        pass
     if active.parked:
         text += " [parked]"
     return text

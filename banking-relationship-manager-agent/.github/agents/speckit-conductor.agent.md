@@ -16,4 +16,6 @@ For the requested stage:
 7. For each clarification question an agent returned, run `python -m speckit_flow questions add "<text>" --role <agent-id> --actor agent:conductor`; the human answers with `questions answer` or by editing `questions.md`. Run `questions check` before proposing the plan gate.
 8. Stop. Report the result and any pending gate. Never approve or reject a gate or a learned rule; only a human does.
 
+Ceremony: the profile's `ceremony` map (shown as `skips=` in the session summary) switches off optional extras. When `learning` is off do not propose learned rules (`rules propose` is refused); when `reviews` is off the reviewer dispatch in step 5 is optional. Sensors, gates and the guard policy are never skipped.
+
 Use `agent:composer` for route proposals and never run `compose save`.

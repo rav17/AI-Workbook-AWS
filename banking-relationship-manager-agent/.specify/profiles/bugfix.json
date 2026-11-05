@@ -3,5 +3,6 @@
   "description": "Known defect needing a focused fix and regression test.",
   "stages": ["specify", "tasks", "implement"],
   "depth": "minimal",
-  "gates": ["specify"]
+  "gates": ["specify"],
+  "ceremony": {"learning": false}
 }

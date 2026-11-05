@@ -116,6 +116,10 @@ A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to t
 
 `speckit-clarify` offers three modes: guided (default), file (answer by editing `questions.md`) and discussion (free conversation). Every question is recorded with a role tag, agents cannot answer, and `questions check` confirms none remain.
 
+## Ceremony toggles (feature 022)
+
+A profile can set `"ceremony": {"learning": false, "reviews": false}`; both default to on. With `learning` off, `rules propose` is refused for that feature (`bugfix` uses this). `reviews` off makes the conductor's reviewer dispatch optional and is rejected together with a strict guard policy. Sensors, gates and the guard are never switchable. The session summary shows `skips=`.
+
 ## Audit trail
 
 `audit.jsonl` holds one event per line with `seq`, `ts`, `type`, `stage`, `actor`, `detail` and `prev_hash` (SHA-256 of the previous line). The file is only appended to. Editing or deleting an earlier line breaks the chain and `status` reports it. Modifying only the very last line cannot be detected until another event is appended, so rely on version control for that case. Event text containing secret-like or account-number-like values is rejected.

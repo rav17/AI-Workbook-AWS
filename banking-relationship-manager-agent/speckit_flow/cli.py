@@ -271,6 +271,16 @@ def _run_review(args: argparse.Namespace, feature_dir: Path, actor: str) -> int:
     return 0
 
 
+def _require_ceremony(feature_dir: Path, name: str, profiles_dir: Path) -> None:
+    """Refuse an optional ceremony the feature's profile switches off; no state means allowed."""
+    if not (feature_dir / flow_state.STATE_FILE).is_file():
+        return
+    st = flow_state.load_state(feature_dir)
+    profile = flow_state.profile_for(feature_dir, st.profile, profiles_dir)
+    if not profile.ceremony_on(name):
+        raise FlowError(f"profile {profile.id} switches off ceremony {name!r}")
+
+
 def _run_rules(args: argparse.Namespace, actor: str) -> int:
     path = Path(args.rules_file)
     if args.action == "list":
@@ -289,6 +299,7 @@ def _run_rules(args: argparse.Namespace, actor: str) -> int:
         return 0
     feature_dir = _feature_dir(args.feature_dir)
     if args.action == "propose":
+        _require_ceremony(feature_dir, "learning", Path(args.profiles_dir))
         rule = rules_mod.propose_rule(
             feature_dir,
             args.text,

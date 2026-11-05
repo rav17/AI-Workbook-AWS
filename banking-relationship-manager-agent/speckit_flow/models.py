@@ -66,9 +66,24 @@ _PROFILE_FIELDS = {
     "assignments",
     "test_strategy",
     "guard_policy",
+    "ceremony",
 }
+CEREMONY_KEYS: tuple[str, ...] = ("learning", "reviews")
 TEST_STRATEGIES: tuple[str, ...] = ("standard", "required")
 GUARD_POLICIES: tuple[str, ...] = ("", "standard", "strict")
+
+
+def _parse_ceremony(raw: Any) -> dict[str, bool]:
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise FlowError("profile ceremony must be an object")
+    unknown = set(raw) - set(CEREMONY_KEYS)
+    if unknown:
+        raise FlowError(f"profile ceremony has unknown keys: {sorted(unknown)}")
+    if not all(isinstance(v, bool) for v in raw.values()):
+        raise FlowError("profile ceremony values must be true or false")
+    return dict(raw)
 
 
 @dataclass(frozen=True)
@@ -82,6 +97,11 @@ class Profile:
     assignments: dict[str, Any] = field(default_factory=dict)
     test_strategy: str = "standard"
     guard_policy: str = ""
+    ceremony: dict[str, bool] = field(default_factory=dict)
+
+    def ceremony_on(self, name: str) -> bool:
+        """Optional ceremony defaults to on; a profile can switch a named item off."""
+        return self.ceremony.get(name, True)
 
     @property
     def strict(self) -> bool:
@@ -111,11 +131,14 @@ class Profile:
             assignments=dict(raw_assignments),
             test_strategy=str(data.get("test_strategy", "standard")),
             guard_policy=str(data.get("guard_policy", "")),
+            ceremony=_parse_ceremony(data.get("ceremony")),
         )
         profile.validate(expected_id)
         return profile
 
     def validate(self, expected_id: str | None = None) -> None:
+        if self.strict and not self.ceremony_on("reviews"):
+            raise FlowError(f"profile {self.id}: strict guard policy needs ceremony reviews on")
         if self.test_strategy not in TEST_STRATEGIES:
             raise FlowError(
                 f"profile {self.id}: test_strategy must be one of {list(TEST_STRATEGIES)}"
@@ -192,6 +215,8 @@ class Profile:
             out["test_strategy"] = self.test_strategy
         if self.guard_policy:
             out["guard_policy"] = self.guard_policy
+        if self.ceremony:
+            out["ceremony"] = dict(self.ceremony)
         return out
 
 
