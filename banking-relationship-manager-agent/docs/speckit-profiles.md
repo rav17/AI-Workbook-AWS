@@ -2,6 +2,10 @@
 
 Inspired by [AI-DLC](https://github.com/awslabs/aidlc-workflows), the Spec Kit workflow supports profiles that tune the stage route, depth and approval gates per kind of work. Each feature also keeps a persistent state file and a tamper-evident audit trail.
 
+To reuse the toolkit outside this application, follow the
+[portable setup guide](./speckit-portability.md). It installs neutral defaults
+without copying this project's constitution, banking knowledge or test commands.
+
 ## Profiles
 
 Profiles are JSON files in `.specify/profiles/`. Add a team profile by dropping in a new file; the `id` must match the filename.
@@ -110,7 +114,7 @@ Define units in `units.json` with `units add <id> "<title>" --depends-on a,b --t
 
 ## Plugin packs (feature 020)
 
-A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to the folder, `version`, optional `enabled: false`) and any of `profiles/*.json`, `sensors.json`, `stages.json`. Plugins only add items; reusing a core profile or sensor id is refused. Precedence is core, plugins by name, then `.specify/custom/`. `plugins list|validate` shows what each pack provides, and `doctor` checks them. Agents cannot be supplied by plugins yet. Agents are blocked from editing `.specify/plugins/`.
+A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to the folder, `version`, optional `enabled: false`) and any of `profiles/*.json`, `sensors.json`, `stages.json`, `agents.json`. Plugins only add items; reusing a core profile or sensor id is refused. Precedence is core, plugins by name, then `.specify/custom/`. `plugins list|validate` shows what each pack provides, and `doctor` checks them. Agents are blocked from editing `.specify/plugins/`.
 
 ## Clarify interaction modes (feature 021)
 
