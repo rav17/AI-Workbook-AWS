@@ -233,7 +233,30 @@ Define units in `units.json` with `units add <id> "<title>" --depends-on a,b --t
 
 ## Plugin packs (feature 020)
 
-A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to the folder, `version`, optional `enabled: false`) and any of `profiles/*.json`, `sensors.json`, `stages.json`, `agents.json`. Plugins only add items; reusing a core profile or sensor id is refused. Precedence is core, plugins by name, then `.specify/custom/`. `plugins list|validate` shows what each pack provides, and `doctor` checks them. Agents are blocked from editing `.specify/plugins/`.
+A pack lives in `.specify/plugins/<name>/` with `plugin.json` (`name` equal to the folder, `version`, optional `enabled: false`) and any of `profiles/*.json`, `sensors.json`, `stages.json`, `agents.json` or `contracts/stages.json`. Plugins only add items; reusing a core profile or sensor id is refused. Precedence is core, plugins by name, then `.specify/custom/`. `plugins list|validate` shows what each pack provides, and `doctor` checks them. Agents are blocked from editing `.specify/plugins/`.
+
+## Structured stage contracts (feature 031)
+
+The disabled `stage-contracts` pack adds the `contract-driven` profile. A
+contract records stage purpose, inputs, required/optional outputs, acceptance
+criteria and reviewer focus. Enable the pack only after review, then initialize
+with that profile or opt a project-owned profile in with
+`"stage_contracts": true`. Every routed stage must have a contract; custom
+contracts may be added or override pack contracts in
+`.specify/custom/stage-contracts.json`.
+
+Use `python -m speckit_flow contracts list` or
+`python -m speckit_flow contracts show <stage>` to inspect contracts. Required
+outputs on gated stages need feature-relative paths and must exist, be regular
+non-empty files, with no more than 100 distinct paths and 1 MiB per file. Run
+the stage-contract sensor before gate approval. Missing/failed/stale evidence
+blocks the human gate; on non-gated stages it is advisory. The check proves
+only presence and freshness, never content quality. No source code or commands
+are executed, and file contents are not written to the audit trail.
+
+The pack's sensor uses the `["*"]` stage selector so it also covers custom
+stages in an opted-in profile. The profile's `stage_contracts` flag keeps that
+sensor inactive for existing profiles.
 
 ## Clarify interaction modes (feature 021)
 

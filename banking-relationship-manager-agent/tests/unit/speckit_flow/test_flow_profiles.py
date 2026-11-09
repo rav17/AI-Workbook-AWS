@@ -86,6 +86,19 @@ def test_exemption_allows_implement_without_tasks() -> None:
     assert p.stages == ("specify", "implement")
 
 
+def test_stage_contracts_defaults_off_and_can_be_enabled() -> None:
+    assert Profile.from_dict(_base()).stage_contracts is False
+    enabled = Profile.from_dict(_base(stage_contracts=True))
+    assert enabled.stage_contracts is True
+    assert enabled.to_dict()["stage_contracts"] is True
+
+
+@pytest.mark.parametrize("value", ["true", 1, None])
+def test_stage_contracts_rejects_non_boolean_values(value: object) -> None:
+    with pytest.raises(FlowError, match="stage_contracts must be true or false"):
+        Profile.from_dict(_base(stage_contracts=value))
+
+
 def test_id_must_match_filename(tmp_path: Path) -> None:
     (tmp_path / "other.json").write_text(json.dumps(_base()), encoding="utf-8")
     with pytest.raises(FlowError, match="does not match filename"):

@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "contracts": [
+    {
+      "stage": "specify",
+      "purpose": "Define user needs and outcomes as a testable agreement.",
+      "inputs": [
+        {
+          "id": "feature-request",
+          "description": "User intent, target users, constraints and desired outcomes."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "feature-specification",
+          "description": "Validated feature specification and acceptance scenarios.",
+          "required": true,
+          "path": "spec.md"
+        }
+      ],
+      "acceptance_criteria": [
+        "User scenarios are independently testable and prioritized.",
+        "Requirements and success criteria are testable, bounded and unambiguous.",
+        "Assumptions and edge cases are recorded."
+      ],
+      "review_focus": [
+        "User value and scope",
+        "Requirement clarity and measurable outcomes"
+      ]
+    },
+    {
+      "stage": "plan",
+      "purpose": "Connect the approved specification to an evidence-based implementation design.",
+      "inputs": [
+        {
+          "id": "approved-specification",
+          "description": "The accepted feature specification.",
+          "path": "spec.md"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "implementation-plan",
+          "description": "Technical plan with architecture and validation strategy.",
+          "required": true,
+          "path": "plan.md"
+        },
+        {
+          "id": "research-decisions",
+          "description": "Resolved technical decisions and alternatives.",
+          "required": true,
+          "path": "research.md"
+        },
+        {
+          "id": "data-model",
+          "description": "Entities, relationships and validation rules.",
+          "required": true,
+          "path": "data-model.md"
+        },
+        {
+          "id": "quickstart",
+          "description": "Human-approved validation scenarios and expected outcomes.",
+          "required": true,
+          "path": "quickstart.md"
+        }
+      ],
+      "acceptance_criteria": [
+        "The plan addresses the specification and project governance.",
+        "Open technical decisions are resolved or explicitly bounded.",
+        "Validation commands are proposed for human approval before construction checkpoints."
+      ],
+      "review_focus": [
+        "Architecture fit and dependency impact",
+        "Security, data handling and operational limits",
+        "Verification coverage and approval boundaries"
+      ]
+    },
+    {
+      "stage": "tasks",
+      "purpose": "Translate the approved design into dependency-ordered, independently testable work.",
+      "inputs": [
+        {
+          "id": "approved-plan",
+          "description": "The approved implementation plan and design artifacts.",
+          "path": "plan.md"
+        },
+        {
+          "id": "feature-specification",
+          "description": "Prioritized user stories and acceptance scenarios.",
+          "path": "spec.md"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "task-list",
+          "description": "Story-organized tasks with dependencies, paths and verification.",
+          "required": true,
+          "path": "tasks.md"
+        }
+      ],
+      "acceptance_criteria": [
+        "Every user story maps to implementation and verification tasks.",
+        "Dependencies and parallel opportunities are explicit.",
+        "Each task is concrete, path-specific and follows the project task format."
+      ],
+      "review_focus": [
+        "Traceability to requirements",
+        "Task clarity, ordering and independent testability"
+      ]
+    },
+    {
+      "stage": "implement",
+      "purpose": "Deliver the approved tasks while preserving behavior and recording verification.",
+      "inputs": [
+        {
+          "id": "approved-task-list",
+          "description": "The approved dependency-ordered tasks.",
+          "path": "tasks.md"
+        },
+        {
+          "id": "approved-verification",
+          "description": "Verification commands approved by a human."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "implementation",
+          "description": "Code changes mapped to the approved tasks.",
+          "required": true
+        },
+        {
+          "id": "verification-results",
+          "description": "Test and quality-check outcomes recorded in the feature artifacts.",
+          "required": true
+        }
+      ],
+      "acceptance_criteria": [
+        "Implementation follows approved task dependencies and requirements.",
+        "Verification outcomes are recorded, and failures are surfaced explicitly.",
+        "Human approvals and user-owned changes are preserved."
+      ],
+      "review_focus": [
+        "Correctness and regression risk",
+        "Test coverage and evidence freshness",
+        "Scope and preservation of unrelated work"
+      ]
+    }
+  ]
+}

@@ -529,7 +529,7 @@ def test_optional_packs_stay_disabled_after_install(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stdout + result.stderr
     for plugin in (
         "compliance", "aidlc-extras", "codebase-analysis", "operational-readiness",
-        "walking-skeleton",
+        "walking-skeleton", "stage-contracts",
     ):
         manifest = json.loads(
             (target / ".specify" / "plugins" / plugin / "plugin.json").read_text(encoding="utf-8")
@@ -841,3 +841,103 @@ def test_enabled_generic_plugin_is_usable_in_target(tmp_path: Path) -> None:
         timeout=120,
     )
     assert doctor.returncode == 0, doctor.stdout + doctor.stderr
+
+
+def test_portable_stage_contracts_support_project_owned_stages(tmp_path: Path) -> None:
+    target = tmp_path / "reading-list-contracts"
+    target.mkdir()
+    installed = _run(BOOTSTRAP, target, "install")
+    assert installed.returncode == 0, installed.stdout + installed.stderr
+    assert (target / "speckit_flow" / "contracts.py").is_file()
+    assert (target / ".github" / "skills" / "speckit-contracts" / "SKILL.md").is_file()
+    plugin_file = target / ".specify" / "plugins" / "stage-contracts" / "plugin.json"
+    plugin = json.loads(plugin_file.read_text(encoding="utf-8"))
+    assert plugin["enabled"] is False
+    hidden = _flow(target, "profiles", "list", "--json")
+    assert "contract-driven" not in json.loads(hidden.stdout)
+
+    plugin["enabled"] = True
+    plugin_file.write_text(json.dumps(plugin), encoding="utf-8")
+    custom = target / ".specify" / "custom"
+    custom.mkdir(parents=True, exist_ok=True)
+    (custom / "stages.json").write_text(
+        json.dumps(
+            {
+                "stages": [
+                    {
+                        "id": "project-check",
+                        "phase": "construction",
+                        "optional": True,
+                        "after": "tasks",
+                        "lead": "developer",
+                        "description": "Project-specific review stage",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    profiles_dir = custom / "profiles"
+    profiles_dir.mkdir()
+    (profiles_dir / "project-workflow.json").write_text(
+        json.dumps(
+            {
+                "id": "project-workflow",
+                "description": "Reading-list workflow with a project review stage",
+                "stages": ["specify", "plan", "tasks", "project-check", "implement"],
+                "depth": "standard",
+                "gates": ["specify", "plan"],
+                "stage_contracts": True,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (custom / "stage-contracts.json").write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "contracts": [
+                    {
+                        "stage": "project-check",
+                        "purpose": "Review the reading-list integration boundary.",
+                        "inputs": [
+                            {"id": "tasks", "description": "Approved implementation tasks."}
+                        ],
+                        "outputs": [
+                            {
+                                "id": "review",
+                                "description": "Project-specific review notes.",
+                                "required": True,
+                            }
+                        ],
+                        "acceptance_criteria": [
+                            "Project-specific boundary decisions are recorded."
+                        ],
+                        "review_focus": ["Reading-list data handling"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    _flow(target, "plugins", "validate")
+    _flow(target, "profiles", "validate")
+    shown = json.loads(_flow(target, "contracts", "show", "project-check", "--json").stdout)
+    assert shown["contracts"][0]["purpose"] == (
+        "Review the reading-list integration boundary."
+    )
+
+    pointer = json.loads((target / ".specify" / "feature.json").read_text(encoding="utf-8"))
+    feature = target / pointer["feature_directory"]
+    feature.mkdir(parents=True)
+    _flow(target, "init", "--profile", "project-workflow", "--actor", "human:fixture")
+    for stage, filenames in (
+        ("specify", ("spec.md",)),
+        ("plan", ("plan.md", "research.md", "data-model.md", "quickstart.md")),
+    ):
+        _flow(target, "stage", "start", stage, "--actor", "agent:developer")
+        for filename in filenames:
+            (feature / filename).write_text(f"# {filename}\nContent\n", encoding="utf-8")
+        _flow(target, "stage", "done", stage, "--actor", "agent:developer")
+        _flow(target, "sensors", "run", stage, "--actor", "agent:quality")
+        _flow(target, "gate", "approve", stage, "--actor", "human:fixture")

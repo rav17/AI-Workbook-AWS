@@ -72,6 +72,14 @@ and human gates. Tracked-file checkpoints are portable; no source-project test
 command or preapproved verify policy is installed. See
 [walking skeleton](./speckit-profiles.md#optional-walking-skeleton-checkpoint).
 
+The disabled `stage-contracts` pack and `speckit-contracts` skill provide
+structured stage inputs, outputs and acceptance criteria. Its
+`contract-driven` profile checks declared required outputs before human gate
+approval; non-gated stages remain advisory. Receiving projects can override
+contracts for their own stages without importing domain policy. No output
+contents, source-project commands or verification approvals are bundled. See
+[structured stage contracts](./speckit-profiles.md#structured-stage-contracts).
+
 ## What's deliberately excluded
 
 The installer does not copy application code, `.specify/memory/constitution.md`,

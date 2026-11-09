@@ -51,6 +51,11 @@ def load_profiles(profiles_dir: Path = DEFAULT_PROFILES_DIR) -> dict[str, Profil
     if overlay.is_dir():
         for path in sorted(overlay.glob("*.json")):
             profiles[path.stem] = load_profile_file(path)
+    from speckit_flow import contracts
+
+    for profile in profiles.values():
+        if profile.stage_contracts:
+            contracts.validate_profile(profile, profiles_dir.parent)
     return profiles
 
 

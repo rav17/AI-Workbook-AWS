@@ -68,6 +68,7 @@ _PROFILE_FIELDS = {
     "test_strategy",
     "guard_policy",
     "ceremony",
+    "stage_contracts",
 }
 CEREMONY_KEYS: tuple[str, ...] = ("learning", "reviews")
 TEST_STRATEGIES: tuple[str, ...] = ("standard", "required")
@@ -99,6 +100,7 @@ class Profile:
     test_strategy: str = "standard"
     guard_policy: str = ""
     ceremony: dict[str, bool] = field(default_factory=dict)
+    stage_contracts: bool = False
 
     def ceremony_on(self, name: str) -> bool:
         """Optional ceremony defaults to on; a profile can switch a named item off."""
@@ -122,6 +124,9 @@ class Profile:
         raw_assignments = data.get("assignments") or {}
         if not isinstance(raw_assignments, dict):
             raise FlowError("profile assignments must be an object")
+        stage_contracts = data.get("stage_contracts", False)
+        if not isinstance(stage_contracts, bool):
+            raise FlowError("profile stage_contracts must be true or false")
         profile = cls(
             id=str(data["id"]),
             description=str(data["description"]),
@@ -133,6 +138,7 @@ class Profile:
             test_strategy=str(data.get("test_strategy", "standard")),
             guard_policy=str(data.get("guard_policy", "")),
             ceremony=_parse_ceremony(data.get("ceremony")),
+            stage_contracts=stage_contracts,
         )
         profile.validate(expected_id)
         return profile
@@ -220,6 +226,8 @@ class Profile:
             out["guard_policy"] = self.guard_policy
         if self.ceremony:
             out["ceremony"] = dict(self.ceremony)
+        if self.stage_contracts:
+            out["stage_contracts"] = True
         return out
 
 

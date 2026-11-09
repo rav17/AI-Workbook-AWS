@@ -11,6 +11,7 @@ from speckit_flow import agents as agents_mod
 from speckit_flow import audit, reviews
 from speckit_flow import codebase as codebase_mod
 from speckit_flow import compose as compose_mod
+from speckit_flow import contracts as contracts_mod
 from speckit_flow import custom as custom_mod
 from speckit_flow import doctor as doctor_mod
 from speckit_flow import knowledge as knowledge_mod
@@ -181,6 +182,11 @@ def _build_parser() -> argparse.ArgumentParser:
     sensors_sub.add_parser("list", parents=[common])
     srun = sensors_sub.add_parser("run", parents=[common])
     srun.add_argument("stage", choices=STAGES)
+    contracts = sub.add_parser("contracts", parents=[common])
+    contracts_sub = contracts.add_subparsers(dest="action", required=True)
+    contracts_sub.add_parser("list", parents=[common])
+    contract_show = contracts_sub.add_parser("show", parents=[common])
+    contract_show.add_argument("stage", choices=STAGES)
     trace_p = sub.add_parser("trace", parents=[common])
     trace_p.add_argument("--require-tests", action="store_true")
     sub.add_parser("doctor", parents=[common])
@@ -533,6 +539,7 @@ def _run_plugins(args: argparse.Namespace) -> int:
                     ("profiles", p.profiles_dir.is_dir()),
                     ("sensors", p.sensors_file.is_file()),
                     ("stages", p.stages_file.is_file()),
+                    ("contracts", p.contracts_dir.is_dir()),
                 )
                 if present
             ],
@@ -571,6 +578,53 @@ def _run_stages(args: argparse.Namespace) -> int:
         for i in items
     ]
     _emit(args, {"stages": items}, "\n".join(lines))
+    return 0
+
+
+def _run_contracts(args: argparse.Namespace) -> int:
+    specify_dir = Path(args.profiles_dir).parent
+    available = contracts_mod.load_contracts(specify_dir)
+    selected = available
+    active_profile: str | None = None
+    if args.feature_dir:
+        feature_dir = _feature_dir(args.feature_dir)
+        state = flow_state.load_state(feature_dir)
+        profile = flow_state.profile_for(feature_dir, state.profile, Path(args.profiles_dir))
+        if not profile.stage_contracts:
+            raise FlowError(f"profile {profile.id!r} does not enable stage contracts")
+        active_profile = profile.id
+        missing = [stage for stage in profile.stages if stage not in available]
+        if missing:
+            raise FlowError(
+                f"profile {profile.id}: missing contracts for routed stages: "
+                f"{', '.join(missing)}"
+            )
+        selected = {stage: available[stage] for stage in profile.stages}
+    if args.action == "show":
+        contract = selected.get(args.stage)
+        if contract is None:
+            raise FlowError(f"no stage contract found for {args.stage!r}")
+        items = [contract.to_dict()]
+    else:
+        items = [selected[stage].to_dict() for stage in sorted(selected)]
+    if args.json:
+        _emit(
+            args,
+            {"profile": active_profile, "contracts": items},
+            "",
+        )
+    else:
+        lines: list[str] = []
+        for item in items:
+            lines.extend(
+                [
+                    f"{item['stage']}: {item['purpose']}",
+                    f"  Inputs: {', '.join(value['id'] for value in item['inputs']) or 'none'}",
+                    f"  Outputs: {', '.join(value['id'] for value in item['outputs']) or 'none'}",
+                    f"  Acceptance: {'; '.join(item['acceptance_criteria'])}",
+                ]
+            )
+        _emit(args, {"profile": active_profile, "contracts": items}, "\n".join(lines))
     return 0
 
 
@@ -618,6 +672,8 @@ def _run(args: argparse.Namespace) -> int:
         return _run_agents(args, profiles_dir)
     if args.command == "sensors":
         return _run_sensors(args, actor)
+    if args.command == "contracts":
+        return _run_contracts(args)
     if args.command == "trace":
         return _run_trace(args)
     if args.command == "questions":

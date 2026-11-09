@@ -1,0 +1,12 @@
+{
+  "sensors": [
+    {
+      "id": "stage-contract",
+      "description": "Required stage outputs exist and remain unchanged since the check.",
+      "kind": "builtin",
+      "builtin": "stage-contract",
+      "stages": ["*"],
+      "required": true
+    }
+  ]
+}

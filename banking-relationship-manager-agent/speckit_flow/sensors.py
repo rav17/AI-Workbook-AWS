@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from speckit_flow import audit, questions, readiness, trace
+from speckit_flow import contracts as contracts_mod
 from speckit_flow import plugins as plugins_mod
 from speckit_flow import units as units_mod
 from speckit_flow.models import STAGES, FlowError
@@ -17,8 +18,19 @@ from speckit_flow.models import STAGES, FlowError
 DEFAULT_SENSORS_FILE = (
     Path(__file__).resolve().parent.parent / ".specify" / "sensors" / "sensors.json"
 )
+DEFAULT_PROFILES_DIR = (
+    Path(__file__).resolve().parent.parent / ".specify" / "profiles"
+)
 SENSORS_DIR = "sensors"
-BUILTINS = ("consistency", "traceability", "questions", "section", "readiness", "skeleton")
+BUILTINS = (
+    "consistency",
+    "traceability",
+    "questions",
+    "section",
+    "readiness",
+    "skeleton",
+    "stage-contract",
+)
 ARTIFACTS = ("spec.md", "plan.md", "tasks.md")
 _ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 _PLACEHOLDER_RE = re.compile(r"NEEDS CLARIFICATION|\[FEATURE NAME\]|\[DATE\]|ACTION REQUIRED")
@@ -64,8 +76,15 @@ def _parse(raw: Any, index: int) -> Sensor:
         raise FlowError(f"sensor #{index} needs an id like 'my-sensor'")
     kind = raw.get("kind")
     stages = raw.get("stages")
-    if not isinstance(stages, list) or not stages or any(s not in STAGES for s in stages):
-        raise FlowError(f"sensor {sid}: stages must be a non-empty list of {list(STAGES)}")
+    if (
+        not isinstance(stages, list)
+        or not stages
+        or ("*" in stages and stages != ["*"])
+        or any(s not in STAGES and s != "*" for s in stages)
+    ):
+        raise FlowError(
+            f"sensor {sid}: stages must be a non-empty list of stage ids or ['*']"
+        )
     required = raw.get("required", False)
     if not isinstance(required, bool):
         raise FlowError(f"sensor {sid}: required must be true or false")
@@ -81,7 +100,7 @@ def _parse(raw: Any, index: int) -> Sensor:
         options = raw.get("options", {})
         if not isinstance(options, dict):
             raise FlowError(f"sensor {sid}: options must be an object")
-        if raw["builtin"] in ("readiness", "skeleton") and options:
+        if raw["builtin"] in ("readiness", "skeleton", "stage-contract") and options:
             raise FlowError(f"sensor {sid}: {raw['builtin']} does not accept options")
         if raw["builtin"] == "section":
             heading = options.get("heading")
@@ -150,21 +169,39 @@ def load_sensors(path: Path = DEFAULT_SENSORS_FILE) -> list[Sensor]:
     return list(by_id.values())
 
 
-def for_stage(sensors: list[Sensor], stage: str, profile: str | None = None) -> list[Sensor]:
+def for_stage(
+    sensors: list[Sensor],
+    stage: str,
+    profile: str | None = None,
+    stage_contracts: bool = False,
+) -> list[Sensor]:
     return [
         s
         for s in sensors
-        if stage in s.stages and (not s.profiles or profile is None or profile in s.profiles)
+        if ("*" in s.stages or stage in s.stages)
+        and (not s.profiles or profile is None or profile in s.profiles)
+        and (s.builtin != "stage-contract" or stage_contracts)
     ]
 
 
-def _feature_profile(feature_dir: Path) -> str | None:
+def _feature_profile(feature_dir: Path) -> tuple[str | None, bool]:
     from speckit_flow import state as flow_state
 
     try:
-        return flow_state.load_state(feature_dir).profile
+        state = flow_state.load_state(feature_dir)
     except (FlowError, OSError):
-        return None
+        return None, False
+    candidates = (
+        feature_dir.parent.parent / ".specify" / "profiles",
+        DEFAULT_PROFILES_DIR,
+    )
+    for profiles_dir in candidates:
+        try:
+            profile = flow_state.profile_for(feature_dir, state.profile, profiles_dir)
+            return profile.id, profile.stage_contracts
+        except FlowError:
+            continue
+    return state.profile, False
 
 
 def _section(feature_dir: Path, stage: str, options: dict[str, Any]) -> tuple[bool, str]:
@@ -189,7 +226,9 @@ def _section(feature_dir: Path, stage: str, options: dict[str, Any]) -> tuple[bo
     return True, f"{name} has a '{options['heading']}' section"
 
 
-def _fingerprints(feature_dir: Path, sensor: Sensor | None = None) -> dict[str, str]:
+def _fingerprints(
+    feature_dir: Path, sensor: Sensor | None = None, stage: str | None = None
+) -> dict[str, str]:
     result: dict[str, str] = {}
     for name in ARTIFACTS:
         path = feature_dir / name
@@ -199,6 +238,12 @@ def _fingerprints(feature_dir: Path, sensor: Sensor | None = None) -> dict[str, 
         result.update(readiness.fingerprints(feature_dir))
     if sensor is not None and sensor.builtin == "skeleton":
         result.update(units_mod.skeleton_fingerprints(feature_dir))
+    if sensor is not None and sensor.builtin == "stage-contract" and stage is not None:
+        result.update(
+            contracts_mod.fingerprints(
+                feature_dir, stage, feature_dir.parent.parent / ".specify"
+            )
+        )
     return result
 
 
@@ -262,6 +307,10 @@ def run_sensor(sensor: Sensor, feature_dir: Path, stage: str) -> tuple[bool, str
             return not problems, "; ".join(problems) or (
                 "current skeleton checkpoint; human journey review still required"
             )
+        if sensor.builtin == "stage-contract":
+            return contracts_mod.check_outputs(
+                feature_dir, stage, feature_dir.parent.parent / ".specify"
+            )
         return _traceability(feature_dir, sensor.options)
     except FlowError as exc:
         return False, str(exc)
@@ -283,16 +332,17 @@ def _load_results(feature_dir: Path, stage: str) -> dict[str, Any]:
 def run_stage(
     feature_dir: Path, stage: str, actor: str, path: Path = DEFAULT_SENSORS_FILE
 ) -> list[dict[str, Any]]:
-    selected = for_stage(load_sensors(path), stage, _feature_profile(feature_dir))
+    profile, has_contracts = _feature_profile(feature_dir)
+    selected = for_stage(load_sensors(path), stage, profile, has_contracts)
     results = _load_results(feature_dir, stage)
     outcomes: list[dict[str, Any]] = []
     for sensor in selected:
         before = (
-            _fingerprints(feature_dir, sensor)
-            if sensor.builtin in ("readiness", "skeleton") else None
+            _fingerprints(feature_dir, sensor, stage)
+            if sensor.builtin in ("readiness", "skeleton", "stage-contract") else None
         )
         passed, reason = run_sensor(sensor, feature_dir, stage)
-        fingerprints = _fingerprints(feature_dir, sensor)
+        fingerprints = _fingerprints(feature_dir, sensor, stage)
         if before is not None and before != fingerprints:
             passed, reason = False, f"{sensor.builtin} artifacts changed during validation; re-run"
         status = "pass" if passed else "fail"
@@ -316,13 +366,17 @@ def gate_problems(
     feature_dir: Path, stage: str, path: Path = DEFAULT_SENSORS_FILE
 ) -> tuple[list[str], list[str]]:
     """Return (problems, relied-on sensor ids) for approving the stage's gate."""
-    profile = _feature_profile(feature_dir)
-    required = [s for s in for_stage(load_sensors(path), stage, profile) if s.required]
+    profile, has_contracts = _feature_profile(feature_dir)
+    required = [
+        s
+        for s in for_stage(load_sensors(path), stage, profile, has_contracts)
+        if s.required
+    ]
     results = _load_results(feature_dir, stage)
     problems: list[str] = []
     for sensor in required:
         try:
-            current = _fingerprints(feature_dir, sensor)
+            current = _fingerprints(feature_dir, sensor, stage)
         except FlowError as exc:
             problems.append(f"required sensor {sensor.id!r}: {exc}")
             continue

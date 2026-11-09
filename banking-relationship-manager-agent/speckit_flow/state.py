@@ -156,6 +156,10 @@ def init_from_route(feature_dir: Path, route: Route, actor: str) -> FeatureState
     if (feature_dir / STATE_FILE).exists():
         raise FlowError("already initialized; use 'switch' to change the profile")
     profile = route.profile
+    if profile.stage_contracts:
+        from speckit_flow import contracts
+
+        contracts.validate_profile(profile, feature_dir.parent.parent / ".specify")
     state = _build_state(feature_dir, profile)
     audit.append_event(
         feature_dir, "profile_selected", None, actor, f"profile={profile.id} depth={profile.depth}"

@@ -3,14 +3,14 @@
   "files": [
     {"source": "speckit_flow", "destination": "speckit_flow", "category": "engine", "include": [
       "__init__.py", "__main__.py", "agents.py", "audit.py", "cli.py", "codebase.py", "compose.py",
-      "custom.py", "doctor.py", "knowledge.py", "models.py", "plugins.py", "profiles.py",
+      "contracts.py", "custom.py", "doctor.py", "knowledge.py", "models.py", "plugins.py", "profiles.py",
       "questions.py", "readiness.py", "reviews.py", "rules.py", "sensors.py", "session.py", "stagedefs.py",
       "state.py", "trace.py", "units.py"
     ]},
     {"source": ".github/skills", "destination": ".github/skills", "category": "skills", "include": [
       "speckit-analyze/SKILL.md", "speckit-checklist/SKILL.md", "speckit-clarify/SKILL.md",
       "speckit-compose/SKILL.md", "speckit-codebase/SKILL.md", "speckit-constitution/SKILL.md", "speckit-converge/SKILL.md",
-      "speckit-implement/SKILL.md", "speckit-learn/SKILL.md", "speckit-plan/SKILL.md",
+      "speckit-contracts/SKILL.md", "speckit-implement/SKILL.md", "speckit-learn/SKILL.md", "speckit-plan/SKILL.md",
       "speckit-profile/SKILL.md", "speckit-readiness/SKILL.md", "speckit-review/SKILL.md", "speckit-specify/SKILL.md",
       "speckit-tasks/SKILL.md", "speckit-taskstoissues/SKILL.md", "speckit-skeleton/SKILL.md"
     ]},
@@ -44,7 +44,10 @@
       "operational-readiness/templates/release.md", "operational-readiness/templates/runbook.md",
       "walking-skeleton/plugin.json", "walking-skeleton/README.md",
       "walking-skeleton/stages.json", "walking-skeleton/sensors.json",
-      "walking-skeleton/profiles/skeleton-first.json", "walking-skeleton/templates/skeleton.md"
+      "walking-skeleton/profiles/skeleton-first.json", "walking-skeleton/templates/skeleton.md",
+      "stage-contracts/plugin.json", "stage-contracts/sensors.json",
+      "stage-contracts/profiles/contract-driven.json",
+      "stage-contracts/contracts/stages.json"
     ]},
     {"source": ".specify/scripts/powershell", "destination": ".specify/scripts/powershell", "category": "scripts", "include": [
       "check-prerequisites.ps1", "common.ps1", "create-new-feature.ps1", "resolve-template.ps1", "setup-plan.ps1", "setup-tasks.ps1"
