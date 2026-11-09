@@ -23,6 +23,7 @@ STAGES: tuple[str, ...] = tuple(s.id for s in STAGE_DEFS)
 OPTIONAL_STAGES: tuple[str, ...] = tuple(s.id for s in STAGE_DEFS if s.optional)
 STAGE_REQUIRES: dict[str, tuple[str, ...]] = {s.id: s.requires for s in STAGE_DEFS if s.requires}
 STAGE_LEADS: dict[str, str] = {s.id: s.lead for s in STAGE_DEFS if s.lead}
+STAGE_CONDITIONS: dict[str, str] = {s.id: s.condition for s in STAGE_DEFS if s.condition}
 FIRST_STAGE: str = next(s.id for s in STAGE_DEFS if not s.optional)
 DEPTHS: tuple[str, ...] = ("minimal", "standard", "comprehensive")
 EVENT_TYPES: tuple[str, ...] = (
@@ -183,6 +184,8 @@ class Profile:
         for gate in self.gates:
             if gate not in self.stages:
                 raise FlowError(f"profile {self.id}: gate {gate!r} is not in stages")
+            if gate in STAGE_CONDITIONS:
+                raise FlowError(f"profile {self.id}: conditional stage {gate!r} cannot be a gate")
         for stage, entry in self.assignments.items():
             if stage not in self.stages:
                 raise FlowError(f"profile {self.id}: assignment for stage {stage!r} not in route")

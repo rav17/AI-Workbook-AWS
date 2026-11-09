@@ -1,0 +1,6 @@
+{
+  "name": "operational-readiness",
+  "version": "1.0.0",
+  "description": "Evidence-backed release and operational handoff records with human gates.",
+  "enabled": false
+}

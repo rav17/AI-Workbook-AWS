@@ -1,0 +1,13 @@
+{
+  "stages": [
+    {
+      "id": "walking-skeleton",
+      "phase": "construction",
+      "optional": true,
+      "after": "analyze",
+      "requires": ["tasks"],
+      "lead": "developer",
+      "description": "Follow speckit-skeleton: prove a minimal end-to-end journey with a current approved checkpoint."
+    }
+  ]
+}

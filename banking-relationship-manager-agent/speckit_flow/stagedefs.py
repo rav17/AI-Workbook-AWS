@@ -29,6 +29,7 @@ class StageDef:
     lead: str | None = None
     description: str = ""
     custom: bool = False
+    condition: str = ""
 
 
 def _read(path: Path) -> list[dict[str, Any]]:
@@ -52,6 +53,11 @@ def _make(item: dict[str, Any], custom: bool) -> StageDef:
     phase = item.get("phase")
     if not isinstance(phase, str) or not phase:
         raise StageDefError(f"stage {sid}: phase is required")
+    condition = item.get("condition", "")
+    if not isinstance(condition, str) or condition not in ("", "existing-codebase"):
+        raise StageDefError(f"stage {sid}: unknown condition {condition!r}")
+    if condition and item.get("optional") is not True:
+        raise StageDefError(f"stage {sid}: condition requires an optional stage")
     return StageDef(
         id=sid,
         phase=phase,
@@ -60,6 +66,7 @@ def _make(item: dict[str, Any], custom: bool) -> StageDef:
         lead=item.get("lead") if isinstance(item.get("lead"), str) else None,
         description=str(item.get("description", "")),
         custom=custom,
+        condition=condition,
     )
 
 

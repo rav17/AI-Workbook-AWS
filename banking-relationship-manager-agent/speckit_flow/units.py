@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import stat
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from speckit_flow import audit
@@ -18,6 +20,9 @@ DEFAULT_VERIFY_FILE = Path(__file__).resolve().parent.parent / ".specify" / "ver
 _ID_RE = re.compile(r"^[a-z][a-z0-9-]{0,40}$")
 _TASK_RE = re.compile(r"^T\d{3,}$")
 VERIFY_TIMEOUT = 600
+MAX_TRACKED_FILES = 100
+MAX_TRACKED_BYTES = 1024 * 1024
+SKELETON_UNIT = "walking-skeleton"
 
 
 def _digest(argv: list[str]) -> str:
@@ -137,7 +142,14 @@ def _validate(units: list[dict[str, Any]]) -> None:
 
 
 def add_unit(
-    feature_dir: Path, uid: str, title: str, depends_on: list[str], tasks: list[str], actor: str
+    feature_dir: Path,
+    uid: str,
+    title: str,
+    depends_on: list[str],
+    tasks: list[str],
+    actor: str,
+    *,
+    files: list[str] | None = None,
 ) -> dict[str, Any]:
     if not _ID_RE.match(uid):
         raise FlowError(f"invalid unit id {uid!r}")
@@ -148,9 +160,13 @@ def add_unit(
             raise FlowError(f"invalid task id {task!r}; expected T001 style")
     units = load_units(feature_dir)
     unit = {"id": uid, "title": title.strip(), "depends_on": depends_on, "tasks": tasks}
+    if files:
+        normalized = _file_paths(files)
+        tracked_fingerprints(feature_dir.parent.parent, normalized)
+        unit["files"] = normalized
     units.append(unit)
     _validate(units)
-    _write(feature_dir / UNITS_FILE, {"units": units})
+    _write(feature_dir / UNITS_FILE, {"units": units, "checkpoints": checkpointed(feature_dir)})
     audit.append_event(feature_dir, "unit_defined", None, actor, f"{uid} deps={len(depends_on)}")
     return unit
 
@@ -171,17 +187,176 @@ def checkpoint_unit(
     if unit is None:
         raise FlowError(f"unknown unit {uid!r}")
     done = checkpointed(feature_dir)
+    tracked = bool(unit.get("files"))
+    if tracked:
+        done.pop(uid, None)
+        _write(feature_dir / UNITS_FILE, {"units": units, "checkpoints": done})
+    try:
+        return _checkpoint(feature_dir, unit, units, done, actor, verify_file)
+    except FlowError:
+        if tracked:
+            audit.append_event(
+                feature_dir,
+                "unit_checkpoint",
+                None,
+                actor,
+                f"{uid} failed: invalid evidence or policy",
+            )
+        raise
+
+
+def _checkpoint(
+    feature_dir: Path,
+    unit: dict[str, Any],
+    units: list[dict[str, Any]],
+    done: dict[str, dict[str, Any]],
+    actor: str,
+    verify_file: Path,
+) -> tuple[bool, str]:
+    uid = unit["id"]
     missing = [d for d in unit["depends_on"] if d not in done]
     if missing:
         raise FlowError(f"unit {uid}: dependencies not checkpointed: {', '.join(missing)}")
+    files = _file_paths(unit.get("files", []))
+    before = tracked_fingerprints(feature_dir.parent.parent, files) if files else {}
     ok, note, digest = run_verify(feature_dir.parent.parent, verify_file)
+    if ok and files:
+        current = next((u for u in load_units(feature_dir) if u["id"] == uid), None)
+        if (
+            tracked_fingerprints(feature_dir.parent.parent, files) != before
+            or current != unit
+            or _digest(approved_command(verify_file)) != digest
+        ):
+            ok, note = False, "tracked files, definition or command changed during verification"
     audit.append_event(
         feature_dir, "unit_checkpoint", None, actor, f"{uid} {'passed' if ok else 'failed'}: {note}"
     )
     if ok:
         done[uid] = {"at": audit.now_iso(), "command": digest, "actor": actor}
+        if files:
+            done[uid].update(files=before, definition=_definition(unit))
         _write(feature_dir / UNITS_FILE, {"units": units, "checkpoints": done})
     return ok, note
+
+
+def _file_paths(files: Any) -> list[str]:
+    if not isinstance(files, list) or len(files) > MAX_TRACKED_FILES:
+        raise FlowError(f"tracked files must be a path list of at most {MAX_TRACKED_FILES}")
+    result: list[str] = []
+    for label in files:
+        if not isinstance(label, str):
+            raise FlowError("tracked file path must be a string")
+        value = label.replace("\\", "/")
+        path = PurePosixPath(value)
+        if (
+            not value
+            or not path.parts
+            or value.strip() != value
+            or path.is_absolute()
+            or str(path) != value
+            or ".." in path.parts
+            or any(c in value for c in ':*?"<>|\0')
+            or any(
+                part.endswith((".", " "))
+                or part.split(".")[0].upper()
+                in {
+                    "CON",
+                    "PRN",
+                    "AUX",
+                    "NUL",
+                    *(f"COM{i}" for i in range(1, 10)),
+                    *(f"LPT{i}" for i in range(1, 10)),
+                }
+                for part in path.parts
+            )
+        ):
+            raise FlowError(
+                "tracked file path must be canonical and root-relative without traversal"
+            )
+        result.append(value)
+    if len({p.casefold() for p in result}) != len(result):
+        raise FlowError("duplicate or aliased tracked file path")
+    return result
+
+
+def tracked_fingerprints(root: Path, files: list[str]) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for label in _file_paths(files):
+        try:
+            path = root
+            for part in PurePosixPath(label).parts:
+                path = path / part
+                info = path.lstat()
+                if stat.S_ISLNK(info.st_mode) or (
+                    getattr(info, "st_file_attributes", 0) & stat.FILE_ATTRIBUTE_REPARSE_POINT
+                ):
+                    raise FlowError("tracked file path cannot traverse a symlink or reparse point")
+            if not stat.S_ISREG(info.st_mode):
+                raise FlowError("tracked file path must name a regular file")
+            with path.open("rb") as handle:
+                if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+                    raise FlowError("tracked file path must name a regular file")
+                data = handle.read(MAX_TRACKED_BYTES + 1)
+            if len(data) > MAX_TRACKED_BYTES:
+                raise FlowError(f"tracked file exceeds size limit ({MAX_TRACKED_BYTES} bytes)")
+            result[label] = hashlib.sha256(data).hexdigest()
+        except OSError as exc:
+            raise FlowError(f"cannot read tracked file path: {type(exc).__name__}") from exc
+    return result
+
+
+def _definition(unit: dict[str, Any]) -> str:
+    return hashlib.sha256(json.dumps(unit, sort_keys=True).encode("utf-8")).hexdigest()
+
+
+def skeleton_fingerprints(feature_dir: Path) -> dict[str, str]:
+    root = feature_dir.parent.parent
+    unit = next((u for u in load_units(feature_dir) if u["id"] == SKELETON_UNIT), None)
+    policy = load_verify(root / ".specify" / "verify.json")
+    payload = {"units": load_units(feature_dir), "checkpoints": checkpointed(feature_dir)}
+    result = {
+        "skeleton:units": hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest(),
+        "skeleton:verify": hashlib.sha256(json.dumps(policy, sort_keys=True).encode()).hexdigest(),
+    }
+    if unit:
+        result.update(
+            {
+                f"skeleton:file:{name}": digest
+                for name, digest in tracked_fingerprints(root, unit.get("files", [])).items()
+            }
+        )
+    return result
+
+
+def skeleton_problems(feature_dir: Path) -> list[str]:
+    try:
+        unit = next((u for u in load_units(feature_dir) if u["id"] == SKELETON_UNIT), None)
+        if unit is None:
+            return ["walking-skeleton unit missing"]
+        files = _file_paths(unit.get("files", []))
+        report = (feature_dir / "skeleton.md").relative_to(feature_dir.parent.parent).as_posix()
+        if len(files) < 3 or report not in files:
+            return ["skeleton needs tracked implementation, test and feature-local skeleton.md"]
+        try:
+            tasks = (feature_dir / "tasks.md").read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            raise FlowError("cannot read skeleton task references") from exc
+        known = set(re.findall(r"^\s*-\s+\[[ xX]\]\s+(T\d{3,})\b", tasks, re.MULTILINE))
+        if not unit["tasks"] or any(task not in known for task in unit["tasks"]):
+            return ["skeleton unit must reference actual feature tasks"]
+        cp = checkpointed(feature_dir).get(SKELETON_UNIT)
+        if not cp:
+            return ["walking-skeleton has no passing checkpoint"]
+        command = approved_command(feature_dir.parent.parent / ".specify" / "verify.json")
+        if (
+            cp.get("definition") != _definition(unit)
+            or cp.get("files") != tracked_fingerprints(feature_dir.parent.parent, files)
+            or cp.get("command") != _digest(command)
+        ):
+            return ["skeleton checkpoint is stale; run checkpoint again"]
+        return []
+    except FlowError as exc:
+        return [str(exc)]
 
 
 def unchecked_units(feature_dir: Path) -> list[str]:

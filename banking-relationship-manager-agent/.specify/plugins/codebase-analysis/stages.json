@@ -1,0 +1,14 @@
+{
+  "stages": [
+    {
+      "id": "codebase-analysis",
+      "phase": "inception",
+      "optional": true,
+      "after": "specify",
+      "requires": ["specify"],
+      "lead": "architect",
+      "condition": "existing-codebase",
+      "description": "Ground planning in source evidence. Follow speckit-codebase and write feature-local codebase.md."
+    }
+  ]
+}

@@ -26,6 +26,125 @@ Rules enforced by validation: `specify` is first (optionally after `ideation`), 
 
 ## Commands
 
+### Optional walking-skeleton checkpoint
+
+The disabled `walking-skeleton` plugin adds an optional developer-led stage
+before implement, after tasks/analyze. Profile `skeleton-first` runs specify ->
+plan -> tasks -> walking-skeleton -> implement, with human gates after specify,
+plan and walking-skeleton. Quality supports the skeleton stage. A human enables
+the pack, restarts the session/CLI, validates plugins and selects that profile.
+Default profiles and the nine core stages remain unchanged; use the profile/
+conductor flow rather than the static default feature workflow.
+
+Follow `speckit-skeleton`: define a thin journey with exact input/output, real
+entry/application/output boundaries, task references and explicit mocks/limits.
+Create feature-local `skeleton.md` and actual source/acceptance tests. Define
+reserved unit `walking-skeleton` with `units add ... --tasks T001,T002 --files
+<source>,<test>,<feature>/skeleton.md,...`. The human must approve the receiving
+project's actual verification command; the pack/installer grants no approval.
+
+`units add --files` is optional for any construction unit. Paths are root-relative
+and normalized from Windows separators to `/` in metadata. At most 100 unique
+files, <=1 MiB each; traversal, drive paths, aliases, symlink/reparse ancestors,
+non-regular/missing files and access errors fail explicitly. Checkpoints for
+tracked units snapshot hashes before/after approved verification. File, unit
+definition or command changes during verification fail. Failed rechecks invalidate
+prior tracked-unit success before attempting validation, including policy/access
+errors. Adding later units preserves existing checkpoints; untracked units keep
+their established checkpoint behavior.
+
+The profile-scoped `skeleton` builtin requires actual task references, at least
+three tracked files including the feature's report, and current passing evidence
+for the reserved unit against default `.specify/verify.json`. Custom unit CLI
+verify paths do not satisfy this sensor. File/definition/command changes need
+a fresh checkpoint. Run stage sensors after checkpointing; gate freshness covers
+units metadata, verify policy, tracked files and existing lifecycle artifacts.
+The sensor and gate do not execute verification commands.
+
+**Humans judge whether the slice is genuinely end-to-end.** File count, a passing
+command and a report do not prove architecture, full-feature coverage or live
+integrations. Only declared files are source-bound: include fixtures/dependencies/
+configuration as needed. Later full implementation may intentionally change the
+slice; recheckpoint when relying on that evidence again. No deployment, live
+services, domain policy or application generator is included.
+
+### Optional operational readiness
+
+The disabled `operational-readiness` plugin adds profile `release-ready`:
+specify -> plan -> tasks -> implement -> deploy -> operate. It reuses existing
+stages and agents; human gates apply after specify, plan, implement, deploy and
+operate. A human enables its manifest, restarts the session/CLI, validates the
+plugin and chooses the profile. The default/static workflow is unchanged.
+
+At deploy, pipeline-deploy follows `speckit-readiness` to prepare feature-local
+`release.md` and `runbook.md` from the pack's templates. Operations updates both
+for the operate handoff. Preserve existing records; never overwrite completed
+evidence with templates. The conductor passes the skill/records to the leads,
+collects sensor results and stops for human review.
+
+Release sections: **Ownership and target**, **Configuration**, **Verification**,
+**Rollout**, **Rollback**. Runbook sections: **Ownership**, **Health signals**,
+**Alerts**, **Incidents**, **Rollback**, **Feedback**. Each needs an exact
+level-two heading, substantive content and a standalone `- Evidence: ...` line.
+Keep planned/executed/failed/untested work distinct; non-applicability needs a
+reason and human reviewer/reference. No test or operational outcome is invented.
+
+`python -m speckit_flow sensors run deploy` (or `operate`) runs the required
+profile-scoped readiness builtin. Missing content/evidence, common placeholders,
+unchecked tasks, duplicate sections and comment/code-only evidence fail.
+Records must be regular non-symlink/reparse-point UTF-8 files of at most 256 KiB.
+Access errors are surfaced. No referenced command, URL or file is executed/read.
+
+Passing readiness results fingerprint both records plus the existing
+spec/plan/tasks artifacts; edits/deletion require rerunning checks before a human
+gate can be approved. Other sensors keep their existing fingerprint scope.
+External evidence is not fingerprinted: prefer immutable/versioned references
+and revalidate it manually when it changes.
+
+**A pass validates record structure, not truth, live health or deployment
+authorization.** Human reviewers decide evidence quality and acceptable risks.
+The pack deploys nothing, runs no live probes and grants no verification approval.
+It is provider/domain neutral and ships disabled in the portable toolkit.
+
+### Optional existing-codebase analysis
+
+The disabled `codebase-analysis` plugin adds an architect-led analysis stage
+between specify and clarify/plan and a `brownfield` profile. A human enables its
+`plugin.json`; restart the CLI/session and validate plugins/profiles before
+selecting the route. Default profiles and the nine core stages are unchanged.
+Use the profile/conductor flow, not the static standard `feature` workflow.
+
+`python -m speckit_flow codebase scan [--json]` provides a read-only path inventory,
+even when the pack is disabled. The conductor passes it to the architect, who
+follows `speckit-codebase` and writes feature-local `codebase.md` covering
+architecture, dependencies, interfaces, tests, impact and unknowns. Planning
+consumes that evidence and rechecks it against changed code. No test/build
+command is executed by scanning; discovered tests are not passing-test evidence.
+
+Applicability is deliberately heuristic: recognized source extensions include
+Python, JavaScript/TypeScript, Java/Kotlin, Go, Rust, .NET, C/C++, Ruby/PHP,
+Swift, Scala, functional languages, Dart, Vue/Svelte, SQL, Terraform and shell.
+Other extensions (including YAML-only infrastructure) may yield a false
+greenfield result; perform manual scoped analysis when needed. Manifests alone
+do not establish existing application source; recognized test files do.
+The exact extension and manifest lists live in `speckit_flow/codebase.py`.
+
+The scanner excludes dependency/build/cache directories, virtual environments,
+toolkit metadata (`.specify`, `.github`, `.claude`, `.kiro`, `.agents`), root
+`speckit_flow`, `specs`, `graphify-out`, and the three installed Spec Kit Python
+scripts; other application scripts remain visible. Exclusion names apply at
+any depth except the three explicitly root-only directories. Symlinks and
+Windows reparse points/junctions are not traversed. File contents are never
+opened. Listing/stat failures and more than 10,000 examined filesystem entries
+produce errors, not a greenfield result. This checks inventory access, not
+whether every source file's contents are readable.
+
+With no recognized sources, `stage start codebase-analysis` records
+`stage_skipped`, saves its reason and advances. Ordering, parked state and
+pending human gates are checked first. Conditional stages must be optional and
+cannot be approval gates. The conductor must not dispatch agents or call done
+for a skipped stage. No general-purpose skip command is introduced.
+
 Run from the repository root with `python -m speckit_flow <command>`; `--feature-dir` defaults to the directory in `.specify/feature.json`.
 
 | Command | Purpose |

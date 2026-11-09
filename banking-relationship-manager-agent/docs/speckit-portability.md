@@ -50,6 +50,28 @@ are not exported; the target starts with an empty project-rules file. Directory
 entries in the bundle enumerate exact files, so unrelated agents, skills, hooks,
 profiles or plugins added to the source repository are not automatically copied.
 
+The optional `codebase-analysis` pack is included with its scanner and
+`speckit-codebase` skill. In a receiving project, explicitly enable the pack to
+use the architect-led `brownfield` route. Tooling-only projects automatically
+skip its analysis stage with an audited reason; recognized application code
+runs it. See [analysis scope and limits](./speckit-profiles.md#optional-existing-codebase-analysis).
+No banking assumptions, project tests or approval decisions are carried over.
+
+The `operational-readiness` pack is also included disabled, with its templates,
+structural sensor and `speckit-readiness` skill. A receiving project can opt
+into `release-ready` to require evidence-backed release/runbook records at the
+existing deploy/operate human gates. It performs no deployment or live checks
+and does not certify evidence truth. See
+[operational readiness](./speckit-profiles.md#optional-operational-readiness).
+Installed plugin files remain project-owned seeds on update.
+
+The disabled `walking-skeleton` pack and `speckit-skeleton` skill add an optional
+thin-journey checkpoint before full implementation. It reuses receiving-project
+verification approval, existing construction units, developer/quality agents
+and human gates. Tracked-file checkpoints are portable; no source-project test
+command or preapproved verify policy is installed. See
+[walking skeleton](./speckit-profiles.md#optional-walking-skeleton-checkpoint).
+
 ## What's deliberately excluded
 
 The installer does not copy application code, `.specify/memory/constitution.md`,

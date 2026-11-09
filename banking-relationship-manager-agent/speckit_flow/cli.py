@@ -9,6 +9,7 @@ from typing import Any
 
 from speckit_flow import agents as agents_mod
 from speckit_flow import audit, reviews
+from speckit_flow import codebase as codebase_mod
 from speckit_flow import compose as compose_mod
 from speckit_flow import custom as custom_mod
 from speckit_flow import doctor as doctor_mod
@@ -93,6 +94,9 @@ def _build_parser() -> argparse.ArgumentParser:
     common.add_argument("--actor")
     common.add_argument("--json", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
+
+    codebase = sub.add_parser("codebase", parents=[common])
+    codebase.add_argument("action", choices=["scan"])
 
     prof = sub.add_parser("profiles", parents=[common])
     prof_sub = prof.add_subparsers(dest="action", required=True)
@@ -204,6 +208,7 @@ def _build_parser() -> argparse.ArgumentParser:
     u_add.add_argument("title")
     u_add.add_argument("--depends-on", default="")
     u_add.add_argument("--tasks", default="")
+    u_add.add_argument("--files", default="")
     u_sub.add_parser("list", parents=[common])
     u_cp = u_sub.add_parser("checkpoint", parents=[common])
     u_cp.add_argument("id")
@@ -462,7 +467,8 @@ def _run_units(args: argparse.Namespace, actor: str) -> int:
     feature_dir = _feature_dir(args.feature_dir)
     if args.action == "add":
         unit = units_mod.add_unit(
-            feature_dir, args.id, args.title, _csv(args.depends_on), _csv(args.tasks), actor
+            feature_dir, args.id, args.title, _csv(args.depends_on), _csv(args.tasks), actor,
+            files=_csv(args.files),
         )
         _emit(args, unit, f"unit {unit['id']} defined")
     elif args.action == "list":
@@ -555,6 +561,7 @@ def _run_stages(args: argparse.Namespace) -> int:
             "requires": list(d.requires),
             "lead": d.lead,
             "custom": d.custom,
+            "condition": d.condition,
         }
         for d in STAGE_DEFS
     ]
@@ -656,6 +663,10 @@ def _run(args: argparse.Namespace) -> int:
         )
         _emit(args, _state_summary(st), _state_text(st))
         return 0
+    if args.command == "codebase":
+        inventory = codebase_mod.scan(_REPO_ROOT)
+        _emit(args, inventory.to_dict(), inventory.markdown())
+        return 0
     if args.command == "profiles":
         if args.action == "list":
             profiles = load_profiles(profiles_dir)
@@ -698,7 +709,7 @@ def _run(args: argparse.Namespace) -> int:
         st = flow_state.switch_profile(feature_dir, args.profile, actor, args.confirm, profiles_dir)
     elif args.command == "stage":
         if args.action == "start":
-            st = flow_state.start_stage(feature_dir, args.stage, actor)
+            st = flow_state.start_stage(feature_dir, args.stage, actor, profiles_dir)
         else:
             st = flow_state.done_stage(feature_dir, args.stage, actor, profiles_dir)
     elif args.command == "gate":

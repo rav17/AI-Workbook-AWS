@@ -11,6 +11,7 @@ from speckit_flow import sensors as sensors_mod
 from speckit_flow import units as units_mod
 from speckit_flow.models import (
     OPTIONAL_STAGES,
+    STAGE_CONDITIONS,
     STAGES,
     FeatureState,
     FlowError,
@@ -227,7 +228,9 @@ def begin_workflow(
     return init_state(feature_dir, "feature", actor, profiles_dir)
 
 
-def start_stage(feature_dir: Path, stage: str, actor: str) -> FeatureState:
+def start_stage(
+    feature_dir: Path, stage: str, actor: str, profiles_dir: Path | None = None,
+) -> FeatureState:
     state = load_state(feature_dir)
     if stage not in route_stages(state):
         raise _reject(
@@ -245,6 +248,24 @@ def start_stage(feature_dir: Path, stage: str, actor: str) -> FeatureState:
         raise _reject(
             feature_dir, stage, actor, f"out of order: next stage is {next_stage(state)!r}"
         )
+    if STAGE_CONDITIONS.get(stage) == "existing-codebase":
+        from speckit_flow import codebase
+
+        try:
+            profile = profile_for(feature_dir, state.profile, profiles_dir)
+            profile.validate()
+            if stage in profile.gates:
+                raise FlowError(f"conditional stage {stage!r} cannot be a gate")
+            inventory = codebase.scan()
+        except FlowError as exc:
+            raise _reject(feature_dir, stage, actor, str(exc)) from exc
+        if not inventory.existing:
+            reason = "existing-codebase: no recognized application source (heuristic)"
+            audit.append_event(feature_dir, "stage_skipped", stage, actor, reason)
+            _set(state, stage, "skipped", reason)
+            _refresh_current(state)
+            save_state(feature_dir, state)
+            return state
     audit.append_event(feature_dir, "stage_started", stage, actor, "started")
     _set(state, stage, "in_progress")
     state.current_stage = stage

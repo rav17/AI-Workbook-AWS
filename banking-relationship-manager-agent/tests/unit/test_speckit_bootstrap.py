@@ -527,7 +527,10 @@ def test_optional_packs_stay_disabled_after_install(tmp_path: Path) -> None:
     result = _run(BOOTSTRAP, target, "install")
 
     assert result.returncode == 0, result.stdout + result.stderr
-    for plugin in ("compliance", "aidlc-extras"):
+    for plugin in (
+        "compliance", "aidlc-extras", "codebase-analysis", "operational-readiness",
+        "walking-skeleton",
+    ):
         manifest = json.loads(
             (target / ".specify" / "plugins" / plugin / "plugin.json").read_text(encoding="utf-8")
         )
@@ -543,6 +546,268 @@ def test_optional_packs_stay_disabled_after_install(tmp_path: Path) -> None:
     )
     assert profiles.returncode == 0, profiles.stdout + profiles.stderr
     assert "nfr-hardening" not in profiles.stdout
+    assert "brownfield" not in profiles.stdout
+    assert "release-ready" not in profiles.stdout
+    assert "skeleton-first" not in profiles.stdout
+
+
+def test_portable_walking_skeleton_proves_entry_to_output(tmp_path: Path) -> None:
+    target = tmp_path / "reading-list-skeleton"
+    target.mkdir()
+    installed = _run(BOOTSTRAP, target, "install")
+    assert installed.returncode == 0, installed.stdout + installed.stderr
+    assert (target / ".github" / "skills" / "speckit-skeleton" / "SKILL.md").is_file()
+    plugin_file = target / ".specify" / "plugins" / "walking-skeleton" / "plugin.json"
+    plugin = json.loads(plugin_file.read_text(encoding="utf-8"))
+    assert plugin["enabled"] is False
+    plugin["enabled"] = True
+    plugin_file.write_text(json.dumps(plugin), encoding="utf-8")
+    _flow(target, "plugins", "validate")
+    _flow(target, "doctor")
+    assignment = _flow(target, "agents", "assign", "--profile", "skeleton-first").stdout
+    assert "walking-skeleton lead=developer support=quality" in assignment
+
+    pointer = json.loads((target / ".specify" / "feature.json").read_text())
+    feature = target / pointer["feature_directory"]
+    feature.mkdir(parents=True)
+    _flow(target, "init", "--profile", "skeleton-first", "--actor", "agent:product")
+    for stage, name, content in (
+        ("specify", "spec.md",
+         "# Reading list\n\n- FR-001: Return unread titles in input order.\n"),
+        ("plan", "plan.md", "# Plan\n\nJSON stdin -> reading-list filter -> JSON stdout.\n"),
+        ("tasks", "tasks.md", "# Tasks\n\n- [ ] T001 Implement entry journey (FR-001)\n"
+         "- [ ] T002 Test exact output (FR-001)\n"),
+    ):
+        _flow(target, "stage", "start", stage, "--actor", "agent:conductor")
+        (feature / name).write_text(content, encoding="utf-8")
+        _flow(target, "stage", "done", stage, "--actor", "agent:conductor")
+        _flow(target, "sensors", "run", stage, "--actor", "agent:quality")
+        if stage != "tasks":
+            _flow(target, "gate", "approve", stage, "--actor", "human:fixture")
+
+    _flow(target, "stage", "start", "walking-skeleton", "--actor", "agent:developer")
+    (target / "reading_list.py").write_text(
+        "def unread_titles(books):\n"
+        "    return [book['title'] for book in books if not book['read']]\n", encoding="utf-8",
+    )
+    (target / "entry.py").write_text(
+        "import json\nimport sys\nfrom reading_list import unread_titles\n"
+        "json.dump(unread_titles(json.load(sys.stdin)), sys.stdout)\n", encoding="utf-8",
+    )
+    (target / "check.py").write_text(
+        "import json\nimport subprocess\nimport sys\nimport unittest\n\n"
+        "class Journey(unittest.TestCase):\n"
+        "    def test_exact_entry_output(self):\n"
+        "        books = [{'title': 'B', 'read': False}, {'title': 'A', 'read': True},\n"
+        "                 {'title': 'C', 'read': False}]\n"
+        "        result = subprocess.run([sys.executable, 'entry.py'],\n"
+        "            input=json.dumps(books), text=True, capture_output=True, timeout=10)\n"
+        "        self.assertEqual(result.returncode, 0, result.stderr)\n"
+        "        self.assertEqual(result.stdout, '[\"B\", \"C\"]')\n\n"
+        "unittest.main()\n", encoding="utf-8",
+    )
+    report = feature / "skeleton.md"
+    report.write_text(
+        "# Thin journey\n\nT001/T002, FR-001. JSON stdin via entry.py -> unread filter "
+        "-> exact JSON stdout. check.py asserts B,C order and excludes read title A.\n"
+        "No mocks. Local CLI only; persistence/live services out of scope.\n"
+        "Review actual checkpoint/test assertions before expanding.\n", encoding="utf-8",
+    )
+    files = f"entry.py,reading_list.py,check.py,{pointer['feature_directory']}/skeleton.md"
+    _flow(
+        target, "units", "add", "walking-skeleton", "Thin journey", "--tasks", "T001,T002",
+        "--files", files, "--actor", "agent:developer",
+    )
+    _flow(
+        target, "units", "checkpoint", "walking-skeleton", "--actor", "agent:developer", expected=1,
+    )
+    _flow(target, "verify", "propose", "--actor", "agent:developer", "--", "python", "check.py")
+    _flow(target, "verify", "approve", "--actor", "agent:developer", expected=1)
+    _flow(target, "verify", "approve", "--actor", "human:fixture")
+    _flow(target, "stage", "done", "walking-skeleton", "--actor", "agent:conductor")
+    blocked = _flow(target, "stage", "start", "implement", "--actor", "agent:developer", expected=1)
+    assert "must be decided" in blocked.stderr
+    _flow(target, "sensors", "run", "walking-skeleton", "--actor", "agent:quality", expected=1)
+    _flow(target, "gate", "approve", "walking-skeleton", "--actor", "human:fixture", expected=1)
+    _flow(target, "units", "checkpoint", "walking-skeleton", "--actor", "agent:developer")
+    _flow(target, "sensors", "run", "walking-skeleton", "--actor", "agent:quality")
+    report.write_text(
+        report.read_text(encoding="utf-8") + "\nReviewed limitations.\n", encoding="utf-8",
+    )
+    stale = _flow(
+        target, "gate", "approve", "walking-skeleton", "--actor", "human:fixture", expected=1,
+    )
+    assert "stale" in stale.stderr
+    _flow(target, "sensors", "run", "walking-skeleton", "--actor", "agent:quality", expected=1)
+    _flow(target, "units", "checkpoint", "walking-skeleton", "--actor", "agent:developer")
+    _flow(target, "sensors", "run", "walking-skeleton", "--actor", "agent:quality")
+    agent = _flow(
+        target, "gate", "approve", "walking-skeleton", "--actor", "agent:conductor", expected=1,
+    )
+    assert "only a human" in agent.stderr
+    _flow(target, "gate", "approve", "walking-skeleton", "--actor", "human:fixture")
+    _flow(target, "stage", "start", "implement", "--actor", "agent:developer")
+    before = json.loads((feature / "units.json").read_text())["checkpoints"]["walking-skeleton"]
+    _flow(
+        target, "units", "add", "expand", "Remaining work", "--depends-on", "walking-skeleton",
+        "--actor", "agent:developer",
+    )
+    after = json.loads((feature / "units.json").read_text())["checkpoints"]["walking-skeleton"]
+    assert after == before
+    _flow(target, "resume")
+    state = json.loads((feature / "state.json").read_text())
+    assert state["stages"]["walking-skeleton"]["status"] == "done"
+    assert state["stages"]["implement"]["status"] == "in_progress"
+
+
+def test_portable_operational_readiness_lifecycle(tmp_path: Path) -> None:
+    target = tmp_path / "reading-list-release"
+    target.mkdir()
+    installed = _run(BOOTSTRAP, target, "install")
+    assert installed.returncode == 0, installed.stdout + installed.stderr
+    assert (target / ".github" / "skills" / "speckit-readiness" / "SKILL.md").is_file()
+    plugin_file = target / ".specify" / "plugins" / "operational-readiness" / "plugin.json"
+    plugin = json.loads(plugin_file.read_text(encoding="utf-8"))
+    assert plugin["enabled"] is False
+    plugin["enabled"] = True
+    plugin_file.write_text(json.dumps(plugin), encoding="utf-8")
+    _flow(target, "plugins", "validate")
+    _flow(target, "doctor")
+    assignments = _flow(target, "agents", "assign", "--profile", "release-ready").stdout
+    assert "lead=pipeline-deploy" in assignments and "lead=operations" in assignments
+    assert "aws-platform" not in assignments and "support=compliance" not in assignments
+    assert len(json.loads(_flow(target, "stages", "--json").stdout)["stages"]) == 9
+
+    pointer = json.loads((target / ".specify" / "feature.json").read_text())
+    feature = target / pointer["feature_directory"]
+    feature.mkdir(parents=True)
+    _flow(target, "init", "--profile", "release-ready", "--actor", "agent:product")
+    artifacts = {
+        "specify": ("spec.md", "# Reading list\n\n- FR-001: List books.\n"),
+        "plan": ("plan.md", "# Design\n\nA local reading list.\n"),
+        "tasks": ("tasks.md", "# Tasks\n\n- [X] T001 Test listing (FR-001)\n"),
+    }
+    for stage in ("specify", "plan", "tasks", "implement", "deploy", "operate"):
+        _flow(target, "stage", "start", stage, "--actor", "agent:conductor")
+        if stage in artifacts:
+            name, content = artifacts[stage]
+            (feature / name).write_text(content, encoding="utf-8")
+        _flow(target, "stage", "done", stage, "--actor", "agent:conductor")
+        if stage == "tasks":
+            continue
+        if stage in ("deploy", "operate"):
+            # Fixture-only synthetic evidence and human decisions are user-authorized.
+            if stage == "deploy":
+                _flow(target, "sensors", "run", stage, "--actor", "agent:quality", expected=1)
+                blocked = _flow(
+                    target, "gate", "approve", stage, "--actor", "human:fixture", expected=1,
+                )
+                assert "operational-readiness" in blocked.stderr
+                sections = {
+                    "release.md": (
+                        "Ownership and target", "Configuration", "Verification",
+                        "Rollout", "Rollback",
+                    ),
+                    "runbook.md": (
+                        "Ownership", "Health signals", "Alerts", "Incidents",
+                        "Rollback", "Feedback",
+                    ),
+                }
+                for name, headings in sections.items():
+                    (feature / name).write_text(
+                        "# Fixture evidence only\n\n" + "\n\n".join(
+                            f"## {heading}\n\nProcedure reviewed by fixture release owner.\n"
+                            "- Evidence: synthetic review record rev abc123; no live checks run."
+                            for heading in headings
+                        ), encoding="utf-8",
+                    )
+            _flow(target, "sensors", "run", stage, "--actor", "agent:quality")
+            changed = feature / ("release.md" if stage == "deploy" else "runbook.md")
+            changed.write_text(
+                changed.read_text(encoding="utf-8") + "\nEvidence revision changed.\n",
+                encoding="utf-8",
+            )
+            blocked = _flow(
+                target, "gate", "approve", stage, "--actor", "human:fixture", expected=1,
+            )
+            assert "stale" in blocked.stderr
+        _flow(target, "sensors", "run", stage, "--actor", "agent:quality")
+        agent = _flow(
+            target, "gate", "approve", stage, "--actor", "agent:conductor", expected=1,
+        )
+        assert "only a human" in agent.stderr
+        _flow(target, "gate", "approve", stage, "--actor", "human:fixture")
+
+    _flow(target, "resume")
+    _flow(target, "doctor")
+    final = json.loads((feature / "state.json").read_text(encoding="utf-8"))
+    assert final["current_stage"] is None and final["pending_gate"] is None
+    events = [
+        json.loads(line) for line in (feature / "audit.jsonl").read_text().splitlines()
+    ]
+    for stage in ("deploy", "operate"):
+        approved = [
+            event for event in events
+            if event["type"] == "gate_approved" and event["stage"] == stage
+        ]
+        assert len(approved) == 1
+        assert "operational-readiness" in approved[0]["detail"]
+    assert not (target / ".specify" / "verify.json").exists()
+
+
+@pytest.mark.parametrize("existing", [False, True])
+def test_portable_codebase_analysis_route(tmp_path: Path, existing: bool) -> None:
+    target = tmp_path / "reading-list"
+    target.mkdir()
+    installed = _run(BOOTSTRAP, target, "install")
+    assert installed.returncode == 0, installed.stdout + installed.stderr
+    assert (target / ".github" / "skills" / "speckit-codebase" / "SKILL.md").is_file()
+    empty = json.loads(_flow(target, "codebase", "scan", "--json").stdout)
+    assert empty["existing"] is False
+
+    plugin_file = target / ".specify" / "plugins" / "codebase-analysis" / "plugin.json"
+    plugin = json.loads(plugin_file.read_text(encoding="utf-8"))
+    assert plugin["enabled"] is False
+    plugin["enabled"] = True
+    plugin_file.write_text(json.dumps(plugin), encoding="utf-8")
+    _flow(target, "plugins", "validate")
+    _flow(target, "doctor")
+    profiles = json.loads(_flow(target, "profiles", "list", "--json").stdout)
+    route = profiles["brownfield"]
+    assert route["stages"].index("specify") < route["stages"].index("codebase-analysis")
+    assert route["stages"].index("codebase-analysis") < route["stages"].index("plan")
+    assignments = _flow(target, "agents", "assign", "--profile", "brownfield")
+    assert "codebase-analysis lead=architect" in assignments.stdout
+
+    if existing:
+        (target / "app.py").write_text("raise RuntimeError('must not execute')\n", encoding="utf-8")
+    pointer = json.loads((target / ".specify" / "feature.json").read_text())
+    feature = target / pointer["feature_directory"]
+    feature.mkdir(parents=True)
+    _flow(target, "init", "--profile", "brownfield", "--actor", "agent:product")
+    _flow(target, "stage", "start", "specify", "--actor", "agent:product")
+    (feature / "spec.md").write_text("# Reading list\n\n- FR-001: List books.\n", encoding="utf-8")
+    _flow(target, "stage", "done", "specify", "--actor", "agent:product")
+    blocked = _flow(
+        target, "stage", "start", "codebase-analysis", "--actor", "agent:conductor", expected=1,
+    )
+    assert "must be decided" in blocked.stderr
+    _flow(target, "sensors", "run", "specify", "--actor", "agent:quality")
+    _flow(target, "gate", "approve", "specify", "--actor", "human:fixture")
+    result = json.loads(_flow(
+        target, "stage", "start", "codebase-analysis", "--actor", "agent:conductor", "--json",
+    ).stdout)
+    assert result["stages"]["codebase-analysis"] == ("in_progress" if existing else "skipped")
+    events = [json.loads(line) for line in (feature / "audit.jsonl").read_text().splitlines()]
+    assert events[-1]["type"] == ("stage_started" if existing else "stage_skipped")
+    if existing:
+        _flow(target, "stage", "done", "codebase-analysis", "--actor", "agent:conductor")
+    else:
+        _flow(
+            target, "stage", "done", "codebase-analysis", "--actor", "agent:conductor", expected=1,
+        )
+    _flow(target, "stage", "start", "clarify", "--actor", "agent:product")
+    _flow(target, "resume")
 
 
 def test_enabled_generic_plugin_is_usable_in_target(tmp_path: Path) -> None:
