@@ -10,6 +10,7 @@ class FrameworkConfig:
     runtime_session_ttl_seconds: int = 1800
     max_context_tokens: int = 4000
     max_tool_calls: int = 8
+    max_turns: int = 20
     environment: str = "dev"
 
     def __post_init__(self) -> None:
@@ -19,6 +20,8 @@ class FrameworkConfig:
             raise ValueError("max_context_tokens must be positive")
         if self.max_tool_calls <= 0:
             raise ValueError("max_tool_calls must be positive")
+        if self.max_turns <= 0:
+            raise ValueError("max_turns must be positive")
         if not self.environment:
             raise ValueError("environment must not be empty")
 
@@ -32,6 +35,7 @@ def load_framework_config(
         runtime_session_ttl_seconds=int(source.get("ARIA_RUNTIME_SESSION_TTL_SECONDS", "1800")),
         max_context_tokens=int(source.get("ARIA_MAX_CONTEXT_TOKENS", "4000")),
         max_tool_calls=int(source.get("ARIA_MAX_TOOL_CALLS", "8")),
+        max_turns=int(source.get("ARIA_MAX_TURNS", "20")),
         environment=source.get("ARIA_ENVIRONMENT", "dev"),
     )
     if overrides:
@@ -40,5 +44,6 @@ def load_framework_config(
         runtime_session_ttl_seconds=cast(int, config["runtime_session_ttl_seconds"]),
         max_context_tokens=cast(int, config["max_context_tokens"]),
         max_tool_calls=cast(int, config["max_tool_calls"]),
+        max_turns=cast(int, config["max_turns"]),
         environment=cast(str, config["environment"]),
     )

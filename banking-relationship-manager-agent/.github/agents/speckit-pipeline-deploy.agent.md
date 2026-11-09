@@ -16,4 +16,7 @@ Lead stage: deploy.
   run deploy sensors and present actual evidence/unknowns to the human.
   Structural readiness does not mean tests or a deployment ran.
 
-Boundaries: only a human approves gates and learned rules. Never run commands that change production. Record lifecycle actions with `--actor agent:pipeline-deploy`.
+Boundaries: only a human approves gates and learned rules. Never run commands
+that change production. Use the conductor's delegated-stage context; do not
+re-enter workflow or start/done stages. Use `agent:pipeline-deploy` for allowed
+helper commands and return artifacts, evidence and errors to the conductor.

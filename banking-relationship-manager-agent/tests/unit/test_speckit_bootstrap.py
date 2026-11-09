@@ -99,6 +99,45 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
     assert "aws-platform" not in assignments.stdout
     assert "support=compliance" not in assignments.stdout
 
+    entry = target / ".github" / "skills" / "speckit-workflow" / "SKILL.md"
+    assert "speckit-conductor" in entry.read_text(encoding="utf-8")
+    routing = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "workflow", "recommend",
+            "Create a new reading-list feature", "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert routing.returncode == 0, routing.stdout + routing.stderr
+    advice = json.loads(routing.stdout)
+    assert advice["profile"] == "full-lifecycle"
+    assert advice["confirmation_required"] is True
+    assert not list((target / "specs").glob("*/state.json"))
+
+    feature = target / "specs" / "001-reading-list"
+    feature.mkdir(parents=True, exist_ok=True)
+    initialized = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "init", "--profile", "full-lifecycle",
+            "--feature-dir", str(feature), "--actor", "human:fixture",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert initialized.returncode == 0, initialized.stdout + initialized.stderr
+    preflight = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "workflow", "dispatch",
+            "--feature-dir", str(feature), "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert preflight.returncode == 0, preflight.stdout + preflight.stderr
+    brief = json.loads(preflight.stdout)
+    assert brief["stage"] == "ideation"
+    assert brief["lead"]["id"] == "product"
+    assert brief["delegated_stage"] == "SPECKIT_DELEGATED_STAGE=ideation"
+    assert existing_instructions.read_text(encoding="utf-8") == "project-owned instructions\n"
+
 
 def test_install_conflict_writes_nothing(tmp_path: Path) -> None:
     target = tmp_path / "existing-project"

@@ -143,6 +143,8 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
         problems.append(f"{agent.id}: frontmatter name must be {agent.agent_name!r}")
     if not meta.get("description"):
         problems.append(f"{agent.id}: description is required")
+    if meta.get("disable-model-invocation") is True:
+        problems.append(f"{agent.id}: disable-model-invocation prevents automated dispatch")
     tools = meta.get("tools")
     if not isinstance(tools, list):
         return [*problems, f"{agent.id}: tools must be a list"]
@@ -151,6 +153,8 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
     if agent.role == "conductor":
         if "agent" not in tools:
             problems.append(f"{agent.id}: conductor needs the 'agent' tool")
+        if "execute" not in tools:
+            problems.append(f"{agent.id}: conductor needs the 'execute' tool for preflight")
         core = {
             a.agent_name for a in roster.values() if a.role != "conductor" and a.source == "core"
         }
@@ -167,6 +171,8 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
             problems.append(f"{agent.id}: only the conductor may hold the 'agent' tool")
         if meta.get("user-invocable") is not False:
             problems.append(f"{agent.id}: must set user-invocable: false")
+    if agent.leads and "execute" not in tools:
+        problems.append(f"{agent.id}: stage lead needs 'execute' for stage skill helpers")
     return problems
 
 

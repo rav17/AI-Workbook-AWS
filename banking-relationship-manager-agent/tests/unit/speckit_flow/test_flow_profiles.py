@@ -125,18 +125,10 @@ def test_suggest(text: str, expected: str) -> None:
     assert suggest_profile(text)[0] == expected
 
 
-def test_feature_profile_matches_workflow_yml() -> None:
+def test_workflow_uses_profile_aware_entry_without_changing_legacy_default() -> None:
     yaml = pytest.importorskip("yaml")
     wf = yaml.safe_load((REPO / ".specify/workflows/speckit/workflow.yml").read_text("utf-8"))
-    command_steps = [
-        (i, s["command"].split(".")[1]) for i, s in enumerate(wf["steps"]) if "command" in s
-    ]
-    commands = [name for _, name in command_steps]
-    gates = [
-        max((i, name) for i, name in command_steps if i < idx)[1]
-        for idx, step in enumerate(wf["steps"])
-        if step.get("type") == "gate"
-    ]
-    feature = get_profile("feature")
-    assert list(feature.stages) == commands
-    assert list(feature.gates) == gates
+    assert len(wf["steps"]) == 1
+    assert wf["steps"][0]["type"] == "prompt"
+    assert "speckit-workflow" in wf["steps"][0]["prompt"]
+    assert get_profile("feature").stages == ("specify", "plan", "tasks", "implement")

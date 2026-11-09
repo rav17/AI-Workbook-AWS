@@ -100,6 +100,21 @@ python -m speckit_flow profiles validate
 python -m speckit_flow plugins validate
 ```
 
+For work requests, use `/speckit-workflow <request>` in Copilot. It recommends
+a profile (full-lifecycle for a new feature, bugfix for a bug/hotfix), asks when
+intent is unclear, and confirms the route before initialization. Explicitly
+resumed work keeps its existing profile. Direct core stage skills use the same
+conductor handoff; the engine's standard workflow is now a profile-aware host
+session rather than a fixed four-stage route. Both the shared entry skill and
+neutral always-on routing instructions are included. Existing target
+`copilot-instructions.md` is not overwritten.
+
+`workflow recommend` and `workflow dispatch` are deterministic CLI advice and
+preflight, not model calls. The receiving host must support the conductor and
+nested subagents; otherwise the skill stops explicitly. Host sessions ending
+at a human gate are not completed features. Old static engine cursors are not
+silently migrated. See [routing and resume](./speckit-profiles.md#profile-aware-workflow-entry-feature-032).
+
 Create a project-specific constitution and customize profiles, stages, agents,
 rules, sensors and knowledge using the documented `.specify/custom/` and plugin
 mechanisms. Propose the project's actual check command with

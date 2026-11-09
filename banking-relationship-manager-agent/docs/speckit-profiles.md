@@ -12,7 +12,7 @@ Profiles are JSON files in `.specify/profiles/`. Add a team profile by dropping 
 
 | Profile | Stages | Depth | Gates |
 |---|---|---|---|
-| `feature` (default) | specify, plan, tasks, implement | standard | specify, plan |
+| `feature` (legacy CLI default) | specify, plan, tasks, implement | standard | specify, plan |
 | `enterprise` | all six stages | comprehensive | every stage |
 | `express` | specify, tasks, implement | minimal | specify |
 | `bugfix` | specify, tasks, implement | minimal | specify |
@@ -33,8 +33,8 @@ before implement, after tasks/analyze. Profile `skeleton-first` runs specify ->
 plan -> tasks -> walking-skeleton -> implement, with human gates after specify,
 plan and walking-skeleton. Quality supports the skeleton stage. A human enables
 the pack, restarts the session/CLI, validates plugins and selects that profile.
-Default profiles and the nine core stages remain unchanged; use the profile/
-conductor flow rather than the static default feature workflow.
+Default profiles and the nine core stages remain unchanged; use the profile-aware
+workflow entry to confirm this route and invoke the conductor.
 
 Follow `speckit-skeleton`: define a thin journey with exact input/output, real
 entry/application/output boundaries, task references and explicit mocks/limits.
@@ -74,7 +74,7 @@ The disabled `operational-readiness` plugin adds profile `release-ready`:
 specify -> plan -> tasks -> implement -> deploy -> operate. It reuses existing
 stages and agents; human gates apply after specify, plan, implement, deploy and
 operate. A human enables its manifest, restarts the session/CLI, validates the
-plugin and chooses the profile. The default/static workflow is unchanged.
+plugin and chooses the profile through the profile-aware entry.
 
 At deploy, pipeline-deploy follows `speckit-readiness` to prepare feature-local
 `release.md` and `runbook.md` from the pack's templates. Operations updates both
@@ -112,7 +112,7 @@ The disabled `codebase-analysis` plugin adds an architect-led analysis stage
 between specify and clarify/plan and a `brownfield` profile. A human enables its
 `plugin.json`; restart the CLI/session and validate plugins/profiles before
 selecting the route. Default profiles and the nine core stages are unchanged.
-Use the profile/conductor flow, not the static standard `feature` workflow.
+Use the profile-aware entry and conductor flow for this route.
 
 `python -m speckit_flow codebase scan [--json]` provides a read-only path inventory,
 even when the pack is disabled. The conductor passes it to the architect, who
@@ -160,13 +160,53 @@ Run from the repository root with `python -m speckit_flow <command>`; `--feature
 
 In an agent session, use the `speckit-profile` skill, which drives these commands and asks for confirmation.
 
-## Standard workflow lifecycle automation (feature 011)
+## Profile-aware workflow entry (feature 032)
 
-The shipped `.specify/workflows/speckit/workflow.yml` automatically tracks the standard `feature` route. After `/speckit-specify` creates the feature directory, workflow preflight initializes lifecycle state and records `specify`; shell steps wrap `plan`, `tasks` and `implement`. The existing human gates after specify and plan record `gate_approved` or `gate_rejected`. Rejection is audited before the workflow stops.
+Use `/speckit-workflow <request>` for any code-change request. The entry skill
+distinguishes new work from explicitly resumed work and invokes
+`python -m speckit_flow workflow recommend "<request>" --json`.
+New features recommend `full-lifecycle`; bugs/hotfixes `bugfix`; security fixes
+`security-patch`; refactor, infrastructure and experiments use their existing
+profiles. The heuristic is advisory: vague/mixed requests ask the user.
+An explicit `--profile <id>` overrides inference but still needs confirmation.
+The host always presents stages/gates and asks before initializing.
 
-Preflight verifies the audit chain and requires the selected profile to match the workflow's exact stages and gates. It does not reset existing state. Use the `speckit-profile` skill for non-standard profiles; the static standard workflow reports a mismatch rather than silently switching profiles. To resume an interrupted engine run, use `specify workflow resume`; `python -m speckit_flow resume` verifies persisted lifecycle state but does not resume the engine's step cursor.
+The legacy `feature` profile and `init` default remain unchanged for explicit
+CLI clients. Initialized features retain their routes, even if a fresh request
+would receive a different recommendation. Switch only with explicit confirmation.
 
-For `comprehensive` depth, first save current source-bound review evidence with `/speckit-review <stage>`. A blocked review requires an explicit human `gate approve <stage> --override-reason "<reason>"`; the standard workflow does not inject arbitrary free text into shell commands, so resolve that approval explicitly and continue with the `speckit-profile` skill rather than resuming an already-decided gate step.
+The standard `.specify/workflows/speckit/workflow.yml` now starts a profile-aware
+host session instead of hard-coding four stages. It invokes the shared skill
+through the Copilot integration; it does not add other harness adapters.
+A session stops at human gates or failures. A successful engine prompt/session
+does **not** mean the feature is complete; inspect `python -m speckit_flow status`.
+If CLI interaction or nested subagents are unavailable, execution stops explicitly.
+
+Direct specify/clarify/plan/tasks/analyze/implement skill calls hand off through
+the same entry skill. Only the assigned lead with a conductor-supplied matching
+`SPECKIT_DELEGATED_STAGE=<stage>` brief executes the body. The marker prevents
+recursive handoffs; it is not gate/verification authority. Feature allocation
+happens once so ideation can precede specification.
+
+`python -m speckit_flow workflow dispatch [--stage <stage>] --json` is read-only
+preflight: it checks state, audit integrity, parked/pending gates, stage order,
+roster/frontmatter and conductor allowlist. It returns a lead, domain supports
+and independent reviewers, not model invocation evidence. Strict gated stages
+without an assigned reviewer receive a core independent product or architecture
+reviewer so clarify/tasks gates cannot be stranded without review. The conductor uses
+the host agent tool, collects read-only contributions as text, runs the lead,
+then separate reviewers and sensors. Failed workers are not marked done.
+
+Use `/speckit-workflow resume` after an actual human decision or interruption;
+in-progress workers require inspection and explicit resume confirmation.
+`python -m speckit_flow resume` verifies lifecycle state, not an engine cursor.
+Do not silently migrate an old static workflow cursor; finish it with its old
+definition or re-enter from verified lifecycle state after review.
+Legacy `workflow begin --stages ... --gates ...` remains for explicit clients.
+
+For `comprehensive`/strict profiles, source-bound review evidence and existing
+sensors remain required at human gates. Human overrides must be explicit and
+audited. A deployment stage never authorizes changing live resources.
 
 ## Reviews, rules, knowledge, composer and extended stages (feature 010)
 

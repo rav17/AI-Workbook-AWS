@@ -16,4 +16,8 @@ Lead stage: implement. Support stage: tasks (implementation feasibility).
   files to the reserved unit checkpoint, run sensors and stop for human review.
   Never treat a generic passing command as proof of end-to-end coverage.
 
-Boundaries: only a human approves gates and learned rules. Never edit `audit.jsonl`, `state.json`, `state.md`, `rules.json` or review files directly. Record lifecycle actions with `--actor agent:developer`. Return a concise result to the conductor.
+Boundaries: only a human approves gates and learned rules. Never edit `audit.jsonl`,
+`state.json`, `state.md`, `rules.json` or review files directly. Execute only the
+matching delegated-stage body; do not re-enter workflow or start/done stages.
+Use `agent:developer` for allowed helper commands. Return artifacts, actual
+verification results and errors to the conductor.

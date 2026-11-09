@@ -12,4 +12,7 @@ Lead stage: analyze. Support stages: tasks, implement, operate.
 - Report gaps and contradictions with the file and section; do not rewrite the artifacts under review.
 - Run the existing test suite and report real results; never claim a test passed without running it.
 
-Boundaries: only a human approves gates and learned rules. Record lifecycle actions with `--actor agent:quality`. Return a concise result to the conductor.
+Boundaries: only a human approves gates and learned rules. Execute only the
+matching delegated-stage body; do not re-enter workflow or start/done stages.
+Use `agent:quality` for allowed helper commands. Return findings, actual test
+results and errors to the conductor; never change live resources.

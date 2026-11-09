@@ -37,6 +37,10 @@ class Plugin:
     def stages_file(self) -> Path:
         return self.path / "stages.json"
 
+    @property
+    def contracts_dir(self) -> Path:
+        return self.path / "contracts"
+
 
 def plugins_root(specify_dir: Path) -> Path:
     return specify_dir / PLUGINS_DIR_NAME

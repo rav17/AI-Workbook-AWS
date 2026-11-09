@@ -157,13 +157,16 @@ Each tool is a Strands-compatible tool function that the agent can invoke during
 def read_client_profile(client_id: str) -> ClientProfile:
     """Retrieve client profile including segment flags, accounts, and preferences."""
 
+
 @tool
 def update_client_profile(client_id: str, updates: ProfileUpdate) -> bool:
     """Update client profile with new information or preferences."""
 
+
 @tool
 def log_interaction(client_id: str, summary: InteractionSummary) -> bool:
     """Log interaction summary to CRM with topics, preferences, and follow-ups."""
+
 
 @tool
 def create_followup_reminder(client_id: str, reminder: FollowUpReminder) -> bool:
@@ -185,6 +188,7 @@ def query_product_info(query: str, product_category: str | None = None) -> KBRes
 def assess_risk_appetite(responses: list[QuestionnaireResponse]) -> RiskProfile:
     """Evaluate client risk appetite from structured questionnaire responses."""
 
+
 @tool
 def get_risk_questionnaire() -> list[RiskQuestion]:
     """Retrieve the risk assessment questionnaire for the client."""
@@ -196,6 +200,7 @@ def get_risk_questionnaire() -> list[RiskQuestion]:
 @tool
 def check_upcoming_maturities(client_id: str, days_ahead: int = 30) -> list[MaturityEvent]:
     """Check for deposit/investment maturities within specified timeframe."""
+
 
 @tool
 def detect_large_outflows(client_id: str, threshold_amount: float) -> list[OutflowEvent]:
@@ -209,6 +214,7 @@ def detect_large_outflows(client_id: str, threshold_amount: float) -> list[Outfl
 def check_kyc_status(client_id: str) -> KYCStatus:
     """Verify client's KYC documentation is current."""
 
+
 @tool
 def flag_aml_activity(client_id: str, activity: TransactionActivity) -> AMLFlag:
     """Flag suspicious transaction activity for AML compliance review."""
@@ -219,9 +225,7 @@ def flag_aml_activity(client_id: str, activity: TransactionActivity) -> AMLFlag:
 ```python
 @tool
 def escalate_to_human_rm(
-    client_id: str, 
-    reason: EscalationReason, 
-    context: InteractionContext
+    client_id: str, reason: EscalationReason, context: InteractionContext
 ) -> EscalationTicket:
     """Escalate case to Human RM with full interaction context."""
 ```
@@ -232,11 +236,11 @@ Amazon Bedrock Guardrails configuration for input/output filtering:
 
 ```python
 class GuardrailConfig:
-    content_filters: list[ContentFilter]       # Hate, Insults, Sexual, Violence, Misconduct
-    denied_topics: list[DeniedTopic]           # Override attempts, out-of-scope topics
-    sensitive_info_filters: list[PIIFilter]    # Credit card, PIN, CVV, OTP, password patterns
-    word_filters: list[str]                    # Blocked terms
-    prompt_attack_filter: PromptAttackConfig   # Injection detection settings
+    content_filters: list[ContentFilter]  # Hate, Insults, Sexual, Violence, Misconduct
+    denied_topics: list[DeniedTopic]  # Override attempts, out-of-scope topics
+    sensitive_info_filters: list[PIIFilter]  # Credit card, PIN, CVV, OTP, password patterns
+    word_filters: list[str]  # Blocked terms
+    prompt_attack_filter: PromptAttackConfig  # Injection detection settings
 ```
 
 ### 4. Session Manager (`aria/session/manager.py`)
@@ -280,9 +284,9 @@ class EventHandler:
 class ClientProfile:
     client_id: str
     name: str
-    segment: Segment                    # PREMIER | IMPERIA
-    segment_flags: list[str]            # e.g., ["HNI", "NRI", "SENIOR_CITIZEN"]
-    risk_appetite: RiskLevel | None     # CONSERVATIVE | MODERATE | AGGRESSIVE
+    segment: Segment  # PREMIER | IMPERIA
+    segment_flags: list[str]  # e.g., ["HNI", "NRI", "SENIOR_CITIZEN"]
+    risk_appetite: RiskLevel | None  # CONSERVATIVE | MODERATE | AGGRESSIVE
     family_members: list[FamilyMember]
     accounts: list[AccountSummary]
     wallet_profile: WalletProfile | None
@@ -291,9 +295,11 @@ class ClientProfile:
     created_at: datetime
     updated_at: datetime
 
+
 class Segment(str, Enum):
     PREMIER = "PREMIER"
     IMPERIA = "IMPERIA"
+
 
 class RiskLevel(str, Enum):
     CONSERVATIVE = "CONSERVATIVE"
@@ -312,6 +318,7 @@ class WalletProfile:
     estimated_external_assets: float
     consolidation_opportunities: list[ConsolidationOpportunity]
     last_updated: datetime
+
 
 @dataclass
 class ConsolidationOpportunity:
@@ -337,13 +344,14 @@ class InteractionSummary:
     escalation: EscalationTicket | None
     sentiment: str  # POSITIVE | NEUTRAL | NEGATIVE
 
+
 @dataclass
 class FollowUpAction:
     action_type: str
     description: str
     due_date: datetime
     assigned_to: str  # "ARIA" or Human RM identifier
-    status: str       # PENDING | COMPLETED | CANCELLED
+    status: str  # PENDING | COMPLETED | CANCELLED
 ```
 
 ### Maturity Event
@@ -353,12 +361,13 @@ class FollowUpAction:
 class MaturityEvent:
     client_id: str
     account_id: str
-    product_type: str          # FD, RD, BOND, MF_SIP
+    product_type: str  # FD, RD, BOND, MF_SIP
     maturity_date: date
     principal_amount: float
     current_rate: float
     days_until_maturity: int
     reinvestment_options: list[ReinvestmentOption]
+
 
 @dataclass
 class ReinvestmentOption:
@@ -380,11 +389,12 @@ class EscalationTicket:
     reason: EscalationReason
     context_summary: str
     interaction_history: list[str]
-    priority: str              # HIGH | MEDIUM | LOW
+    priority: str  # HIGH | MEDIUM | LOW
     assigned_to: str | None
     expected_response_time: str
     created_at: datetime
-    status: str                # OPEN | IN_PROGRESS | RESOLVED
+    status: str  # OPEN | IN_PROGRESS | RESOLVED
+
 
 class EscalationReason(str, Enum):
     HIGH_VALUE_CREDIT = "HIGH_VALUE_CREDIT"
@@ -406,16 +416,19 @@ class RiskQuestion:
     options: list[RiskOption]
     weight: float
 
+
 @dataclass
 class RiskOption:
     option_id: str
     option_text: str
     score: int  # 1=conservative, 5=aggressive
 
+
 @dataclass
 class QuestionnaireResponse:
     question_id: str
     selected_option_id: str
+
 
 @dataclass
 class RiskProfile:
@@ -436,6 +449,7 @@ class KYCStatus:
     expiry_date: date | None
     missing_documents: list[str]
     verification_level: str  # FULL | PARTIAL | EXPIRED | MISSING
+
 
 @dataclass
 class AMLFlag:
@@ -463,9 +477,10 @@ class Session:
     last_activity: datetime
     state: dict  # Flexible key-value state for ongoing workflows
 
+
 @dataclass
 class Message:
-    role: str          # "user" | "assistant" | "tool"
+    role: str  # "user" | "assistant" | "tool"
     content: str
     timestamp: datetime
     metadata: dict | None
@@ -480,6 +495,7 @@ class KBResponse:
     citations: list[Citation]
     confidence_score: float
     source_date: date | None
+
 
 @dataclass
 class Citation:
@@ -637,9 +653,11 @@ class Citation:
 ```python
 class ServiceUnavailableError(AriaError):
     """Raised when an external service is unreachable."""
+
     service_name: str
     retry_count: int
     last_error: str
+
 
 async def call_with_retry(func, max_retries=3, backoff_base=1.0):
     """Retry external calls with exponential backoff."""
@@ -649,11 +667,9 @@ async def call_with_retry(func, max_retries=3, backoff_base=1.0):
         except (ConnectionError, TimeoutError) as e:
             if attempt == max_retries - 1:
                 raise ServiceUnavailableError(
-                    service_name=func.__name__,
-                    retry_count=max_retries,
-                    last_error=str(e)
+                    service_name=func.__name__, retry_count=max_retries, last_error=str(e)
                 )
-            await asyncio.sleep(backoff_base * (2 ** attempt))
+            await asyncio.sleep(backoff_base * (2**attempt))
 ```
 
 #### 2. Knowledge Base Fallback
@@ -756,7 +772,7 @@ from hypothesis import strategies as st
 PROPERTY_TEST_SETTINGS = settings(
     max_examples=100,
     suppress_health_check=[HealthCheck.too_slow],
-    deadline=None  # Allow for async operations with mocks
+    deadline=None,  # Allow for async operations with mocks
 )
 ```
 
@@ -765,8 +781,7 @@ PROPERTY_TEST_SETTINGS = settings(
 # Feature: ai-relationship-manager, Property 12: Sensitive Credential Detection and Rejection
 @PROPERTY_TEST_SETTINGS
 @given(message=credential_bearing_message_strategy())
-def test_credential_detection_and_rejection(message):
-    ...
+def test_credential_detection_and_rejection(message): ...
 ```
 
 **Key Custom Strategies**:

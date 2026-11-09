@@ -10,6 +10,7 @@ htmlcov/
 .venv/
 .venv311/
 *.egg-info/
+build-artifacts/
 
 # Environment and secrets
 .env
@@ -20,8 +21,13 @@ htmlcov/
 cdk.out/
 cdk/.pytest_cache/
 
+# AgentCore CLI previews
+.agentcore-generated/
+.agentcore-preview/
+
 # Local Graphify output
 # Keep graphify-out/ only if the repository intentionally versions the graph.
+graphify-out/cache/ast/
 
 # IDE and OS
 .idea/

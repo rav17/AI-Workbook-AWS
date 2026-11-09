@@ -16,4 +16,8 @@ Lead stage: operate.
   Reference actual monitoring/incident/rollback evidence or explicitly reviewed
   planned/untested work. Do not run live probes, deploy or approve the gate.
 
-Boundaries: only a human approves gates and learned rules. Record lifecycle actions with `--actor agent:operations`. Return a concise result to the conductor.
+Boundaries: only a human approves gates and learned rules. Use the conductor's
+delegated-stage context; do not re-enter workflow or start/done stages.
+Use `agent:operations` for allowed helper commands. Return artifacts, actual
+operational evidence and errors to the conductor; no live-resource changes
+without separate explicit authorization.

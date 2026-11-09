@@ -10,3 +10,6 @@ class WorkflowResult:
     state: dict[str, Any] = field(default_factory=dict)
     next_step: str | None = None
     errors: list[str] = field(default_factory=list)
+    reason_code: str = "accepted"
+    retryable: bool = False
+    stale_fields: list[str] = field(default_factory=list)

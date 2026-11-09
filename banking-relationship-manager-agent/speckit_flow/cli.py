@@ -15,6 +15,7 @@ from speckit_flow import contracts as contracts_mod
 from speckit_flow import custom as custom_mod
 from speckit_flow import doctor as doctor_mod
 from speckit_flow import knowledge as knowledge_mod
+from speckit_flow import orchestration as orchestration_mod
 from speckit_flow import plugins as plugins_mod
 from speckit_flow import profiles as profiles_mod
 from speckit_flow import questions as questions_mod
@@ -169,6 +170,11 @@ def _build_parser() -> argparse.ArgumentParser:
     begin = workflow_sub.add_parser("begin", parents=[common])
     begin.add_argument("--stages", required=True)
     begin.add_argument("--gates", required=True)
+    recommend = workflow_sub.add_parser("recommend", parents=[common])
+    recommend.add_argument("description")
+    recommend.add_argument("--profile")
+    dispatch = workflow_sub.add_parser("dispatch", parents=[common])
+    dispatch.add_argument("--stage", choices=STAGES)
 
     agents = sub.add_parser("agents", parents=[common])
     agents_sub = agents.add_subparsers(dest="action", required=True)
@@ -709,7 +715,29 @@ def _run(args: argparse.Namespace) -> int:
     if args.command == "compose":
         return _run_compose(args, actor)
     if args.command == "workflow":
+        if args.action == "recommend":
+            result = orchestration_mod.recommend(
+                args.description, load_profiles(profiles_dir), args.profile
+            )
+            _emit(
+                args, result,
+                f"{result['profile'] or 'ask user'}: {result['reason']} "
+                "(confirmation required)",
+            )
+            return 0
         feature_dir = _feature_dir(args.feature_dir)
+        if args.action == "dispatch":
+            result = orchestration_mod.dispatch(
+                feature_dir, args.stage, profiles_dir=profiles_dir,
+                roster_file=Path(args.roster_file), root=_REPO_ROOT,
+            )
+            _emit(
+                args, result,
+                f"{result['status']}: profile={result['profile']} "
+                f"stage={result.get('stage', 'none')} "
+                f"lead={result.get('lead', {}).get('agent_name', 'none')}",
+            )
+            return 0
         st = flow_state.begin_workflow(
             feature_dir,
             _parse_route_arg(args.stages, "workflow stages"),

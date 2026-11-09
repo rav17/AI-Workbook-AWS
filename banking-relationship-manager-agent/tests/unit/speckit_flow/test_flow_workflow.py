@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -161,45 +161,24 @@ def test_workflow_begin_cli_rejects_missing_route_options(
     assert not (feature_dir / "state.json").exists()
 
 
-def test_workflow_yaml_wraps_commands_and_audits_gate_choices() -> None:
+def test_workflow_yaml_dispatches_profile_aware_session() -> None:
     yaml = pytest.importorskip("yaml")
     repo = Path(__file__).resolve().parents[3]
     workflow = yaml.safe_load(
         (repo / ".specify" / "workflows" / "speckit" / "workflow.yml").read_text(encoding="utf-8")
     )
-    steps = workflow["steps"]
-    command_names = [step["command"].split(".")[1] for step in steps if "command" in step]
-    assert command_names == ["specify", "plan", "tasks", "implement"]
-
-    specify_index = next(
-        i for i, step in enumerate(steps) if step.get("command") == "speckit.specify"
-    )
-    assert "workflow begin" in steps[specify_index + 1]["run"]
-    assert "stage start specify" in steps[specify_index + 2]["run"]
-    assert "stage done specify" in steps[specify_index + 3]["run"]
-
-    for command in ("plan", "tasks", "implement"):
-        index = next(
-            i for i, step in enumerate(steps) if step.get("command") == f"speckit.{command}"
-        )
-        start = next(
-            step
-            for step in reversed(steps[:index])
-            if step.get("type") == "shell" and f"stage start {command}" in step.get("run", "")
-        )
-        assert start["type"] == "shell"
-        assert steps[index + 1]["type"] == "shell"
-        assert f"stage done {command}" in steps[index + 1]["run"]
-
-    gate_steps = [step for step in steps if step.get("type") == "gate"]
-    assert [step["id"] for step in gate_steps] == ["review-spec", "review-plan"]
-    assert all(step["on_reject"] == "skip" for step in gate_steps)
-    branches = [step for step in steps if step.get("type") == "if"]
-    assert len(branches) == 2
-    for branch in branches:
-        assert "approve" in branch["then"][0]["run"]
-        assert "reject" in branch["else"][0]["run"]
-        assert branch["else"][1]["type"] == "shell"
+    assert len(workflow["steps"]) == 1
+    session = workflow["steps"][0]
+    assert session["type"] == "prompt"
+    assert session["integration"] == "{{ inputs.integration }}"
+    assert "{{ inputs.spec }}" in session["prompt"]
+    assert "speckit-workflow" in session["prompt"]
+    assert "speckit-conductor" in session["prompt"]
+    assert "workflow dispatch" in session["prompt"]
+    assert "human gates" in session["prompt"]
+    assert "Session completion" in session["prompt"]
+    assert "stage start specify" not in session["prompt"]
+    assert workflow["requires"]["integrations"]["any"] == ["copilot"]
 
 
 def test_workflow_stage_transition_order(feature_dir: Path) -> None:
@@ -252,13 +231,18 @@ def test_status_and_resume_fail_on_broken_audit(feature_dir: Path) -> None:
         assert main([command, "--feature-dir", str(feature_dir), "--actor", H]) == 1
 
 
-def test_workflow_yaml_gate_branches_parse_as_boolean_expressions() -> None:
+def test_workflow_registry_matches_profile_aware_definition() -> None:
     yaml = pytest.importorskip("yaml")
     repo = Path(__file__).resolve().parents[3]
-    workflow: dict[str, Any] = yaml.safe_load(
+    workflow = yaml.safe_load(
         (repo / ".specify" / "workflows" / "speckit" / "workflow.yml").read_text(encoding="utf-8")
     )
-    assert len([step for step in workflow["steps"] if step.get("type") == "if"]) == 2
+    registry = json.loads(
+        (repo / ".specify" / "workflows" / "workflow-registry.json").read_text("utf-8")
+    )
+    installed = registry["workflows"]["speckit"]
+    assert installed["version"] == workflow["workflow"]["version"]
+    assert installed["name"] == workflow["workflow"]["name"]
 
 
 def test_workflow_definition_passes_installed_engine_validation() -> None:

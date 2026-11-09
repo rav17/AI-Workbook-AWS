@@ -22,17 +22,16 @@ Right-size the Spec Kit ceremony for the kind of work. Each profile in `.specify
 ## Procedure
 
 1. **Choose a profile**
-   - If the user named one, use it. Otherwise run `python -m speckit_flow profiles suggest "<description>"` and present the suggestion with its stage list from `python -m speckit_flow profiles list`.
-   - **Always ask the user to confirm** the profile before starting. Default is `feature`, which equals the standard specify, plan, tasks, implement route.
+   - Use `speckit-workflow` for new requests or execution. It runs `python -m speckit_flow workflow recommend "<description>" --json`; pass `--profile <id>` for an explicit selection. An ambiguous request requires a question, not a silent fallback.
+   - **Always ask the user to confirm** before initializing. New features recommend `full-lifecycle`, bugs/hotfixes `bugfix`, security fixes `security-patch`. Preserve an already initialized feature's route.
    - Unknown names: show the valid profiles and stop.
 
-2. **Initialize** once the feature directory exists (after `/speckit-specify` creates it):
-   `python -m speckit_flow init --profile <id> --actor agent:copilot`
+2. **Initialize** once the confirmed entry skill has allocated the feature directory (before ideation when that stage is routed):
+   `python -m speckit_flow init --profile <id> --actor agent:conductor`
    Stages omitted by the profile are recorded as skipped with a reason.
 
 3. **Run only the stages in the route**, in order. Around each stage:
-   - `python -m speckit_flow stage start <stage>` before running the `/speckit-<stage>` skill
-   - `python -m speckit_flow stage done <stage>` when it finishes
+   - Use `speckit-workflow` to run dispatch preflight and invoke the conductor. Do not execute stage bodies in the caller; the conductor owns start/done, assigned lead dispatch and the recursion-safe stage brief.
    - If the profile gates the stage (`pending_gate` is set), ask the human to approve or reject, then record it with `gate approve <stage>` or `gate reject <stage> --reason "<short reason>"`. Use `--actor human:<name>` for human decisions. Do not start the next stage while a gate is pending.
    - Honor depth: `minimal` means brief artifacts, `comprehensive` means full detail and all checklists.
 
@@ -51,5 +50,5 @@ Right-size the Spec Kit ceremony for the kind of work. Each profile in `.specify
 
 - Keep `--reason` and other free text short and free of secrets, credentials or customer data; the tool rejects text that looks sensitive.
 - If a command fails, show the error to the user; do not continue silently and do not work around the audit trail.
-- Without an initialized profile, behave exactly as before (the `feature` route).
+- Without an initialized profile, use the confirmed profile-aware entry flow. The legacy `init` default remains `feature` for explicit CLI clients, not an automatic selection policy.
 - `status`/`resume` report `lead_agent` for the next stage. Delegate that stage to the matching `speckit-<id>` agent through the `speckit-conductor` agent, and record work with `--actor agent:<id>`. Never approve or reject gates as an agent; only a `human:` actor may.

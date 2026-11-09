@@ -24,13 +24,28 @@ When a request requires the Spec Kit workflow, this is GitHub Copilot's activati
 
 ## Feature Development Process
 
-Whenever any code change is requested, including a new feature, bugfix, hotfix, small fix, or tweak, follow the Spec Kit workflow before editing code:
+For every code-change request, use `/speckit-workflow` before editing code.
+Classify the request with `python -m speckit_flow workflow recommend "<request>" --json`.
+Recommend `full-lifecycle` for a new feature, `bugfix` for a bug/hotfix,
+`security-patch` for a security fix, or the appropriate refactor/infra/POC profile.
+If intent is unclear or mixed, ask the user what kind of work it is. An explicit
+profile takes precedence but still requires confirmation. Present stages/gates
+and ask before initializing; never silently select the legacy default.
 
-1. `/speckit-specify` - Turn the request into `specs/<NNN>-<name>/spec.md`.
-2. `/speckit-plan` - Produce `plan.md`, `research.md`, `data-model.md`, and `quickstart.md`.
-3. `/speckit-tasks` - Produce a dependency-ordered `tasks.md` organized by user story.
-4. `/speckit-implement` - Execute the tasks.
+For explicitly resumed work, preserve the initialized feature/profile. Ask
+whether to create new work or resume if the scope is uncertain. Profile changes
+require explicit confirmation at a stage boundary.
 
-Apply this workflow uniformly regardless of change size. Do not jump straight to code, even for a small or fully specified fix.
+Use the shared entry skill and `workflow dispatch` preflight to invoke the
+`speckit-conductor` custom agent, which delegates to assigned leads/supports and
+independent reviewers. Do not silently run stage work in the parent and call it
+delegation. If host subagents are unavailable, report the limitation and stop.
+Direct stage skills use the same handoff; only a matching delegated lead follows
+their bodies, using the conductor's stage marker and feature directory.
+
+Execute only the confirmed route in order, preserving specification, planning
+and task artifacts where routed, sensors and human gates. Never approve gates,
+verification commands or learned rules without the actual human decision.
+Full-lifecycle is not permission to deploy or change live resources.
 
 This repository uses Spec Kit with shared templates and specifications stored in `.specify/` and `specs/`. Copilot skills are installed under `.github/skills/`. The generated artifacts are the source of truth for resuming, reviewing, and handing off work.

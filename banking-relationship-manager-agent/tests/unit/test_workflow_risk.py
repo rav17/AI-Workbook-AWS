@@ -27,6 +27,58 @@ def test_workflow_state_patch_applies_revision():
     assert updated.workflow_version == 2
 
 
+def test_workflow_state_applies_multiple_operations_atomically():
+    state = WorkflowState(client_id="CUST-1")
+    patch = StatePatch.multi(
+        [("risk_appetite", "moderate"), ("segment", "premier")],
+        reason="profile_update",
+    )
+
+    updated = state.apply_patch(patch, expected_revision=1)
+
+    assert updated.risk_appetite == "moderate"
+    assert updated.segment == "premier"
+    assert updated.revision == 2
+
+
+def test_workflow_state_rejects_stale_or_locked_atomic_patches():
+    state = WorkflowState(client_id="CUST-1")
+
+    try:
+        state.apply_patch(
+            StatePatch.multi([("risk_appetite", "high"), ("unknown", "value")]),
+            expected_revision=1,
+        )
+    except ValueError as exc:
+        assert str(exc) == "unknown_field"
+    else:
+        raise AssertionError("unknown fields must reject the complete patch")
+
+    try:
+        state.apply_patch(
+            StatePatch(field="segment", value="retail"),
+            expected_revision=0,
+        )
+    except RuntimeError as exc:
+        assert str(exc) == "stale_revision"
+    else:
+        raise AssertionError("stale revisions must be retryable conflicts")
+
+    try:
+        state.apply_patch(
+            StatePatch(field="segment", value="retail"),
+            locked_fields={"segment"},
+        )
+    except ValueError as exc:
+        assert str(exc) == "locked_field"
+    else:
+        raise AssertionError("locked fields must reject the complete patch")
+
+    assert state.risk_appetite is None
+    assert state.segment is None
+    assert state.revision == 1
+
+
 def test_query_product_info_returns_sourced_answer():
     answer = query_product_info(
         "What is the rate on a savings account?",
