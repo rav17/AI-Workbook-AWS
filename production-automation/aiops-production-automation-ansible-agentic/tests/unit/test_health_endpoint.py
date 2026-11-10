@@ -24,6 +24,18 @@ from src.app import _check_sqs_health, _check_dynamodb_health
 pytestmark = pytest.mark.unit
 
 
+@pytest.fixture(autouse=True)
+def _reset_cached_health_clients():
+    """Reset module-level cached boto3 clients so each test injects its own mock."""
+    import src.app as app_module
+
+    app_module._sqs_health_client = None
+    app_module._dynamodb_health_client = None
+    yield
+    app_module._sqs_health_client = None
+    app_module._dynamodb_health_client = None
+
+
 class TestCheckSqsHealth:
     """Tests for _check_sqs_health function."""
 

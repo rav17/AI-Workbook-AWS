@@ -14,7 +14,6 @@ import json
 import os
 import subprocess
 import sys
-import time
 
 
 # ============================================================================
@@ -63,18 +62,18 @@ def confirm_destroy(environment: str) -> bool:
 
     if environment == "prod":
         print("  ⚠️  THIS IS THE PRODUCTION ENVIRONMENT!")
-        print(f"  Type the environment name to confirm: ", end="")
+        print("  Type the environment name to confirm: ", end="")
         confirm = input()
         if confirm != "prod":
             print("  Aborted.")
             return False
-        print(f"  Type 'DESTROY' to double-confirm: ", end="")
+        print("  Type 'DESTROY' to double-confirm: ", end="")
         confirm2 = input()
         if confirm2 != "DESTROY":
             print("  Aborted.")
             return False
     else:
-        print(f"  Are you sure? (y/n): ", end="")
+        print("  Are you sure? (y/n): ", end="")
         confirm = input()
         if confirm.lower() != "y":
             print("  Aborted.")

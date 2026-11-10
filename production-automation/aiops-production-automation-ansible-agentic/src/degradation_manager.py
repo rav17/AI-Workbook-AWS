@@ -16,12 +16,11 @@ Auto-recovers to FULL when dependencies heal.
 """
 
 import logging
-import os
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from threading import Lock
-from typing import Callable, Optional
+from typing import Callable
 
 logger = logging.getLogger(__name__)
 

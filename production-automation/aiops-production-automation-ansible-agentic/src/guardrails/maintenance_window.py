@@ -232,7 +232,7 @@ class MaintenanceWindowManager:
             List of MaintenanceWindow objects, or None if invalid.
         """
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
         except (yaml.YAMLError, OSError) as e:
             logger.error("Failed to load maintenance windows config: %s", e)

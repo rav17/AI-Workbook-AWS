@@ -81,7 +81,7 @@ class PlanValidator(GuardrailCheck):
             return
 
         try:
-            with open(self._config_path, "r") as f:
+            with open(self._config_path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f) or {}
 
             # Load denied patterns

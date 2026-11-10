@@ -17,7 +17,7 @@ below 30, or above 900; otherwise the effective window SHALL equal the provided 
 """
 
 import pytest
-from hypothesis import given, settings, assume
+from hypothesis import HealthCheck, given, settings, assume
 from hypothesis import strategies as st
 
 from src.agentic_ai.models.domain import RemediationPlan, RemediationStep
@@ -211,13 +211,23 @@ class TestRemediationPlanStructureValidity:
             )
 
     @given(
-        reasoning=st.text(
-            min_size=2049,
-            max_size=5000,
-            alphabet=st.characters(blacklist_categories=("Cs",)),
+        # Random >2048-char unicode text overflows Hypothesis' buffer (Unsatisfiable);
+        # build a long string from a random char x random length instead.
+        reasoning=st.builds(
+            lambda ch, n: ch * n,
+            st.characters(blacklist_categories=("Cs",)),
+            st.integers(min_value=2049, max_value=5000),
         ),
     )
-    @settings(max_examples=50)
+    # Inputs must exceed 2048 chars by design, so the large-example check is expected.
+    @settings(
+        max_examples=50,
+        suppress_health_check=[
+            HealthCheck.large_base_example,
+            HealthCheck.data_too_large,
+            HealthCheck.too_slow,
+        ],
+    )
     def test_reasoning_exceeding_2048_chars_rejected(self, reasoning: str) -> None:
         """RemediationPlan SHALL reject reasoning_explanation exceeding 2048 characters.
 

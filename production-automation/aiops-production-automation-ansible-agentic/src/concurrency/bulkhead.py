@@ -105,7 +105,7 @@ class BulkheadManager:
             return
 
         try:
-            with open(self._config_path, "r") as f:
+            with open(self._config_path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
 
             if not data or not isinstance(data, dict):
@@ -175,7 +175,6 @@ class BulkheadManager:
         """
         # Get or create service semaphore
         semaphore = self._get_semaphore(service_name)
-        config = self._configs.get(service_name, self._default_config)
 
         # Check service-level capacity (non-blocking)
         if not self._try_acquire_nowait(semaphore):

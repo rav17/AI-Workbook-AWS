@@ -15,6 +15,7 @@ from aws_cdk import (
     aws_lambda as _lambda,
     aws_logs as logs,
     aws_secretsmanager as secretsmanager,
+    aws_servicediscovery as servicediscovery,
     aws_ssm as ssm,
 )
 from constructs import Construct
@@ -238,12 +239,22 @@ class ComputeStack(cdk.Stack):
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
         )
 
-        # Bedrock InvokeModel — allow all foundation models for fallback support
+        # Bedrock InvokeModel — foundation-model/* is required for the fallback chain.
+        # Current Claude models are only invocable via US cross-region inference
+        # profiles ("us." prefix), which route to us-east-1/us-east-2/us-west-2.
+        # IAM must allow the profile ARN AND the underlying model in each routed region.
+        bedrock_model_regions = (
+            ["us-east-1", "us-east-2", "us-west-2"]
+            if context.aws_region.startswith("us-")
+            else [context.aws_region]
+        )
         self.task_role.add_to_policy(
             iam.PolicyStatement(
                 actions=["bedrock:InvokeModel"],
                 resources=[
-                    f"arn:aws:bedrock:{context.aws_region}::foundation-model/*"
+                    *[f"arn:aws:bedrock:{r}::foundation-model/*" for r in bedrock_model_regions],
+                    f"arn:aws:bedrock:{context.aws_region}:{context.aws_account}"
+                    ":inference-profile/us.*",
                 ],
             )
         )
@@ -268,6 +279,10 @@ class ComputeStack(cdk.Stack):
                     "dynamodb:UpdateItem",
                     "dynamodb:Query",
                     "dynamodb:DescribeTable",
+                    # DeleteItem: host-lock release + fingerprint cleanup (lock_store.py).
+                    # Scan: severity lookup fallback (incident_store.py).
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Scan",
                 ],
                 resources=[
                     data_stack.table.table_arn,
@@ -460,6 +475,12 @@ class ComputeStack(cdk.Stack):
             removal_policy=cdk.RemovalPolicy.RETAIN,
         )
 
+        # Create the api-gateway-key secret BEFORE the container definition so the
+        # task definition references the construct (implicit CFN dependency).
+        # Previously it was referenced by name only, so CloudFormation could create the
+        # task definition / service before the secret existed (ResourceInitializationError).
+        self._create_secrets(env_name)
+
         container = task_def.add_container(
             "AiopsContainer",
             image=ecs.ContainerImage.from_registry(
@@ -480,13 +501,13 @@ class ComputeStack(cdk.Stack):
                 "OPERATOR_EMAIL": context.cost_center_email,
                 "SERVICE_BASE_URL": "",  # Set via SSM at runtime; see _create_api_gateway
                 "APPROVAL_EXPIRY_SECONDS": "1800",
+                # Rule-matched playbooks run only after a human confirms the
+                # approval email. Set to "false" to allow unattended execution.
+                "REQUIRE_HUMAN_APPROVAL": "true",
             },
             secrets={
                 "API_GATEWAY_KEY": ecs.Secret.from_secrets_manager(
-                    secretsmanager.Secret.from_secret_name_v2(
-                        self, "ApiKeySecretRef",
-                        secret_name=f"/aiops/{env_name}/api-gateway-key",
-                    ),
+                    self.api_gateway_key_secret,
                     field="api_key",
                 ),
                 "APPROVAL_SIGNING_SECRET": ecs.Secret.from_secrets_manager(
@@ -498,6 +519,16 @@ class ComputeStack(cdk.Stack):
                 log_group=self.log_group,
             ),
             stop_timeout=Duration.seconds(30),
+            # ECS ignores the Dockerfile HEALTHCHECK; define it on the container so the
+            # deployment circuit breaker can detect unhealthy tasks. Same path as the
+            # Dockerfile and the CD health gate (/health).
+            health_check=ecs.HealthCheck(
+                command=["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"],
+                interval=Duration.seconds(30),
+                timeout=Duration.seconds(5),
+                retries=3,
+                start_period=Duration.seconds(60),
+            ),
         )
         container.add_port_mappings(
             ecs.PortMapping(container_port=8080, protocol=ecs.Protocol.TCP)
@@ -538,10 +569,12 @@ class ComputeStack(cdk.Stack):
             max_healthy_percent=200,
             capacity_provider_strategies=capacity_provider_strategies,
             enable_execute_command=is_dev,  # ECS Exec for dev debugging
+            # Roll back automatically if new tasks fail to reach steady state.
+            circuit_breaker=ecs.DeploymentCircuitBreaker(enable=True, rollback=True),
             cloud_map_options=ecs.CloudMapOptions(
                 name="aiops-service",
                 container_port=8080,
-                dns_record_type=ecs.DnsRecordType.SRV,
+                dns_record_type=servicediscovery.DnsRecordType.SRV,
             ),
         )
 
@@ -607,7 +640,7 @@ class ComputeStack(cdk.Stack):
             self,
             "CloudMapPortFixLambda",
             function_name=f"aiops-cloudmap-port-fix-{env_name}",
-            runtime=_lambda.Runtime.PYTHON_3_11,
+            runtime=_lambda.Runtime.PYTHON_3_12,  # python3.11: Lambda creation disabled 2026-07-31
             handler="index.handler",
             code=_lambda.Code.from_inline(
                 'import boto3\n'
@@ -626,7 +659,7 @@ class ComputeStack(cdk.Stack):
                 '            sd.register_instance(ServiceId=svc_id, InstanceId=inst["Id"], Attributes=attrs)\n'
                 '    cfnresponse.send(event, context, cfnresponse.SUCCESS, {"Updated": str(len(instances))})\n'
             ),
-            timeout=Duration.seconds(30),
+            timeout=Duration.seconds(60),  # Standards: Lambda timeout >= 60s
         )
         cloudmap_fix_lambda.add_to_role_policy(
             iam.PolicyStatement(
@@ -651,10 +684,8 @@ class ComputeStack(cdk.Stack):
         # ---------------------------------------------------------------
         self._create_ssm_parameters(env_name, context, data_stack)
 
-        # ---------------------------------------------------------------
-        # Secrets Manager — /aiops/{environment}/ (Requirements 4.2, 4.8)
-        # ---------------------------------------------------------------
-        self._create_secrets(env_name)
+        # Secrets Manager secrets are created earlier (before the container
+        # definition) — see self._create_secrets(env_name) above.
 
         # ---------------------------------------------------------------
         # CloudFormation Outputs
@@ -900,7 +931,7 @@ class ComputeStack(cdk.Stack):
             self,
             "ApiKeyRotationLambda",
             function_name=f"aiops-api-key-rotation-{env_name}",
-            runtime=_lambda.Runtime.PYTHON_3_11,
+            runtime=_lambda.Runtime.PYTHON_3_12,  # python3.11: Lambda creation disabled 2026-07-31
             handler="index.handler",
             code=_lambda.Code.from_inline(
                 _API_KEY_ROTATION_LAMBDA_CODE

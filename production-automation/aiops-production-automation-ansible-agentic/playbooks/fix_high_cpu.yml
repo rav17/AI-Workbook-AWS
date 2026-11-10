@@ -36,10 +36,13 @@
 
     - name: Verify CPU is back to normal
       ansible.builtin.shell: |
-        CPU_IDLE=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}')
+        # top prints e.g. "0.0 ni,100.0 id," — the idle value can be glued to the
+        # previous field, so extract the number that precedes " id" instead of
+        # using a fixed awk column (which returned "id," and always passed).
+        CPU_IDLE=$(top -bn1 | grep "Cpu(s)" | sed 's/.*, *\([0-9.]*\)%* id.*/\1/')
         echo "CPU idle: ${CPU_IDLE}%"
-        # Fail if idle < 20% (meaning usage > 80%)
-        python3 -c "import sys; sys.exit(0 if float('${CPU_IDLE}') > 20 else 1)"
+        # Fail if idle <= 20% (meaning usage >= 80%); empty value counts as failure.
+        awk -v idle="${CPU_IDLE:-0}" 'BEGIN { exit (idle + 0 > 20) ? 0 : 1 }'
       register: cpu_check
       retries: 3
       delay: 10

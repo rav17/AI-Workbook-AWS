@@ -142,7 +142,6 @@ async def get_poisoned_hosts() -> dict:
     Poisoned hosts have all queued actions rejected until they are
     unpoisoned (manual or via successful health probe).
     """
-    from src.concurrency.host_poisoning import HostPoisonManager
     # Access via module-level import pattern
     if _concurrency_manager is None:
         return {"hosts": [], "message": "Not initialized"}

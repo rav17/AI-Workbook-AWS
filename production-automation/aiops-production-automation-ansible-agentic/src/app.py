@@ -131,6 +131,19 @@ audit_logger = AuditLogger(log_file_path=AUDIT_LOG_PATH)
 # --- Approval handler for human-in-the-loop (email-based) ---
 approval_handler = ApprovalHandler(base_url=_service_base_url.value)
 
+def _require_human_approval() -> bool:
+    """Return whether rule-matched remediations must wait for human approval.
+
+    Fail-safe: approval is required unless REQUIRE_HUMAN_APPROVAL is explicitly
+    set to a false value. Any typo or unexpected value keeps the gate ON.
+    """
+    raw = os.environ.get("REQUIRE_HUMAN_APPROVAL", "true").strip().lower()
+    return raw not in ("false", "0", "no", "off")
+
+
+REQUIRE_HUMAN_APPROVAL = _require_human_approval()
+logger.info("Human approval required before remediation: %s", REQUIRE_HUMAN_APPROVAL)
+
 orchestrator = Orchestrator(
     normalizer=normalizer,
     enricher=enricher,
@@ -139,6 +152,9 @@ orchestrator = Orchestrator(
     dispatcher=dispatcher,
     audit_logger=audit_logger,
     metrics_collector=metrics_collector,
+    # Without this, the pipeline executed the playbook immediately AND sent an
+    # "approval" email afterwards — the approval was meaningless.
+    require_human_approval=REQUIRE_HUMAN_APPROVAL,
 )
 
 # --- Initialize DynamoDB-backed Deferred Actions Store ---
@@ -421,7 +437,7 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
     4. If match found → send approval email with "Approve Auto-Remediation" button
     5. If no match → invoke AI agent to analyze → send advisory email with suggested steps
     """
-    from src.email_notifier import EmailNotifier, build_rca_email
+    from src.email_notifier import EmailNotifier
 
     # Run the pipeline (normalize → enrich → match → execute)
     incident_ids = await orchestrator.process_alert_payload(payload)
@@ -509,6 +525,10 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
                 playbook_path=playbook_path,
                 extra_vars={"service_name": service_name, "incident_id": incident_id},
             )
+            if approval is None:
+                # Same alert/host/playbook already has a pending approval
+                # (e.g. direct trigger + CloudWatch alarm for one CPU spike).
+                continue
             try:
                 notifier = EmailNotifier(
                     approval_handler=approval_handler,
@@ -656,7 +676,7 @@ Incident: {incident_id}
 
     # Send via SES
     try:
-        ses = boto3.client("ses")
+        ses = _get_ses_client()
         ses.send_email(
             Source=SES_FROM_ADDRESS,
             Destination={"ToAddresses": [OPERATOR_EMAIL]},
@@ -766,6 +786,15 @@ async def health() -> JSONResponse:
 # --- Module-level AWS clients for health checks (reused across calls) ---
 _sqs_health_client = None
 _dynamodb_health_client = None
+_ses_client = None
+
+
+def _get_ses_client():
+    """Get or create the SES client used for advisory emails (reused across alerts)."""
+    global _ses_client
+    if _ses_client is None:
+        _ses_client = boto3.client("ses")
+    return _ses_client
 
 
 def _get_sqs_client():

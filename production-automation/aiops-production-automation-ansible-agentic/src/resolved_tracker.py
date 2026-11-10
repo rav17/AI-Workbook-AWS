@@ -191,8 +191,8 @@ class ResolvedAlertTracker:
                 return ResolutionDecision(
                     should_cancel=False,
                     reason=(
-                        f"Alert resolved during active execution — "
-                        f"letting remediation complete (fail-safe)"
+                        "Alert resolved during active execution — "
+                        "letting remediation complete (fail-safe)"
                     ),
                     incident_state=IncidentState.EXECUTING,
                 )

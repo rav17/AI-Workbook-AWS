@@ -76,6 +76,7 @@ class Orchestrator:
         baking_validator: Optional["BakingValidator"] = None,
         fleet_breaker=None,
         deferred_store: Optional[DynamoDeferredActionsStore] = None,
+        require_human_approval: bool = False,
     ) -> None:
         """Initialize the Orchestrator with all pipeline components.
 
@@ -105,6 +106,10 @@ class Orchestrator:
                 When provided, deferred actions survive task restarts and can
                 be re-evaluated by any task in the fleet. Falls back to
                 in-memory list if not provided.
+            require_human_approval: When True, the pipeline stops after the
+                guardrail checks pass and does NOT execute the playbook. The
+                caller is responsible for requesting approval; execution then
+                happens via the approval path (which re-runs guardrails).
         """
         self._normalizer = normalizer
         self._enricher = enricher
@@ -119,6 +124,7 @@ class Orchestrator:
         self._baking_validator = baking_validator
         self._fleet_breaker = fleet_breaker
         self._deferred_store = deferred_store
+        self._require_human_approval = require_human_approval
         self._semaphore = asyncio.Semaphore(MAX_CONCURRENT_PIPELINES)
         # Legacy in-memory fallback (used only when deferred_store is None)
         self._deferred_actions: list[dict] = []
@@ -334,6 +340,30 @@ class Orchestrator:
                         notification_status=f"guardrail_defer:{decision.denying_check}",
                     )
                     return incident_id
+
+            # Stage 3.7: Human approval gate.
+            # Stop here BEFORE acquiring host locks or executing anything. The
+            # approval email path executes the playbook only after a human
+            # confirms (and re-runs every guardrail except the approval gate).
+            if self._require_human_approval:
+                logger.info(
+                    "Remediation awaiting human approval — not executing",
+                    extra={
+                        "incident_id": incident_id,
+                        "alert_name": alert.alert_name,
+                        "playbook": playbook_match.playbook_path,
+                        "target_host": target_host,
+                    },
+                )
+                self._write_audit_record(
+                    incident_id=incident_id,
+                    alert=alert,
+                    enriched_alert=enriched_alert,
+                    playbook_match=playbook_match,
+                    execution_result=None,
+                    notification_status="awaiting_approval",
+                )
+                return incident_id
 
             if self._concurrency_manager is not None:
 

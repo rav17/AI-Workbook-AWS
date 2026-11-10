@@ -336,7 +336,7 @@ def write_artifact(image_tag: str, digest: str) -> None:
         "image_tag": image_tag,
         "digest": digest,
     }
-    with open("image-tag.json", "w") as f:
+    with open("image-tag.json", "w", encoding="utf-8") as f:
         json.dump(artifact, f, indent=2)
     print("Wrote deployment artifact: image-tag.json")
     print(f"  image_tag: {image_tag}")
@@ -359,15 +359,25 @@ def main():
     # Create ECR client
     ecr_client = get_ecr_client(config.region)
 
-    # Step 1: Login to ECR
-    print("[1/4] Logging in to ECR...")
-    registry_uri = ecr_login(ecr_client, config.region)
-    print()
+    # SCAN_ONLY=true: the image was already pushed (e.g. by docker/build-push-action
+    # in CI, which does not load a local "aiops:local" image). Skip login/tag/push.
+    scan_only = os.environ.get("SCAN_ONLY", "").strip().lower() == "true"
 
-    # Step 2: Tag and push image
-    print("[2/4] Tagging and pushing image to ECR...")
-    digest = tag_and_push_image(config, registry_uri)
-    print()
+    if scan_only:
+        print("[1/4] SCAN_ONLY=true - skipping ECR login")
+        print("[2/4] SCAN_ONLY=true - skipping tag/push (image already in ECR)")
+        digest = os.environ.get("IMAGE_DIGEST", "")
+        print()
+    else:
+        # Step 1: Login to ECR
+        print("[1/4] Logging in to ECR...")
+        registry_uri = ecr_login(ecr_client, config.region)
+        print()
+
+        # Step 2: Tag and push image
+        print("[2/4] Tagging and pushing image to ECR...")
+        digest = tag_and_push_image(config, registry_uri)
+        print()
 
     # Step 3: Poll scan results
     print("[3/4] Polling ECR scan results...")

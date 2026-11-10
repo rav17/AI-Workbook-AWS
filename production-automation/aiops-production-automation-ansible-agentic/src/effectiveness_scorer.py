@@ -16,7 +16,7 @@ import json
 import logging
 import os
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from threading import Lock
 from typing import Optional
 
@@ -201,7 +201,7 @@ class EffectivenessScorer:
 
         try:
             os.makedirs(os.path.dirname(self._persistence_path), exist_ok=True)
-            with open(self._persistence_path, "w") as f:
+            with open(self._persistence_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             logger.debug("Effectiveness scores persisted (%d records)", len(data))
         except Exception as e:
@@ -234,7 +234,7 @@ class EffectivenessScorer:
             return
 
         try:
-            with open(self._persistence_path, "r") as f:
+            with open(self._persistence_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
             for key, entry in data.items():

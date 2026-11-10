@@ -153,8 +153,8 @@ def step_verify_ses_email():
     else:
         print(f"  Sending verification email to {email}...")
         run(f"aws ses verify-email-identity --email-address {email} --region {AWS_REGION}")
-        print(f"  [ACTION REQUIRED] Check your inbox and click the verification link.")
-        print(f"  Waiting 30 seconds for verification...")
+        print("  [ACTION REQUIRED] Check your inbox and click the verification link.")
+        print("  Waiting 30 seconds for verification...")
         time.sleep(30)
 
         # Re-check
@@ -167,7 +167,7 @@ def step_verify_ses_email():
         status = attrs.get("VerificationAttributes", {}).get(email, {}).get("VerificationStatus")
         if status != "Success":
             print(f"  WARNING: Email not yet verified (status: {status})")
-            print(f"  Deployment will continue but emails won't send until verified.")
+            print("  Deployment will continue but emails won't send until verified.")
 
 
 def step_create_ecr_and_push_image(environment: str, skip_docker: bool):
@@ -217,7 +217,7 @@ def step_create_ecr_and_push_image(environment: str, skip_docker: bool):
     run(f"{container_cmd} build --network=host -t {full_uri} .")
 
     # Push image (with Docker v2 format for ECR compatibility)
-    print(f"  Pushing to ECR...")
+    print("  Pushing to ECR...")
     run(f"{container_cmd} push --format=v2s2 {full_uri}")
 
     print(f"  [OK] Image pushed: {image_tag}")

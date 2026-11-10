@@ -47,7 +47,7 @@ class ResourceConflictRegistry:
         self._config_path = path
 
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
         except (OSError, yaml.YAMLError) as e:
             logger.error("Failed to load resource conflict config from %s: %s", path, e)

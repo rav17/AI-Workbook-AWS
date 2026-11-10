@@ -145,6 +145,8 @@ class ApprovalHandler:
 
         # Fallback in-memory store (used only when DynamoDB is unavailable)
         self._memory_store: dict[str, StoredApproval] = {}
+        # Fallback duplicate-suppression locks: dedup_key -> (owner_token, lock_until)
+        self._memory_dedup: dict[str, tuple[str, float]] = {}
 
     def create_approval(
         self,
@@ -157,11 +159,17 @@ class ApprovalHandler:
         proposed_action: str,
         playbook_path: str,
         extra_vars: dict = None,
-    ) -> StoredApproval:
+    ) -> Optional[StoredApproval]:
         """Create a pending approval with a signed token.
 
         Persists to DynamoDB for cross-task durability. Falls back to
         in-memory if DynamoDB is unavailable.
+
+        Duplicate suppression: if an approval for the same alert, host and
+        playbook is already pending (not expired, not yet used), no new
+        approval is created and None is returned, so the caller sends no
+        second email. Example: a direct alert and the CloudWatch alarm for the
+        same CPU spike. Fails open (creates the approval) if DynamoDB errors.
 
         Args:
             incident_id: Unique incident identifier.
@@ -175,9 +183,24 @@ class ApprovalHandler:
             extra_vars: Extra variables for playbook execution.
 
         Returns:
-            StoredApproval with the generated token.
+            StoredApproval with the generated token, or None if an equivalent
+            approval is already pending.
         """
         token = self._generate_token(incident_id)
+        dedup_key = self._dedup_key(alert_name, affected_host, playbook_path)
+        lock_until = time.time() + self._expiry_seconds
+
+        if not self._claim_dedup(dedup_key, token, lock_until):
+            logger.info(
+                "Duplicate approval suppressed: a pending approval already exists for "
+                "alert=%s host=%s playbook=%s (incident %s not emailed)",
+                alert_name,
+                affected_host,
+                playbook_path,
+                incident_id,
+                extra={"incident_id": incident_id},
+            )
+            return None
 
         approval = StoredApproval(
             token=token,
@@ -191,6 +214,7 @@ class ApprovalHandler:
             playbook_path=playbook_path,
             extra_vars=extra_vars or {},
             expiry_seconds=self._expiry_seconds,
+            dedup_key=dedup_key,
         )
 
         # Persist to DynamoDB (primary) or memory (fallback)
@@ -256,6 +280,8 @@ class ApprovalHandler:
 
         approval.consumed = True
         approval.consumed_at = time.time()
+        if self._memory_dedup.get(approval.dedup_key, ("", 0.0))[0] == token:
+            del self._memory_dedup[approval.dedup_key]
         logger.info(
             "Approval consumed (memory): incident=%s", approval.incident_id
         )
@@ -312,6 +338,30 @@ class ApprovalHandler:
         for token in expired_tokens:
             del self._memory_store[token]
         return len(expired_tokens)
+
+    @staticmethod
+    def _dedup_key(alert_name: str, affected_host: str, playbook_path: str) -> str:
+        """Stable key for 'the same remediation': alert + host + playbook."""
+        raw = f"{alert_name}|{affected_host}|{playbook_path}"
+        return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
+
+    def _claim_dedup(self, dedup_key: str, token: str, lock_until: float) -> bool:
+        """Claim the duplicate-suppression lock. Returns False only for a real duplicate.
+
+        Uses DynamoDB (shared by all ECS tasks) when available, otherwise an
+        in-process dict. A DynamoDB error fails open (returns True) because a
+        duplicate email is safer than a suppressed approval request.
+        """
+        if self._store is not None:
+            claimed = self._store.claim_dedup(dedup_key, token, lock_until)
+            return claimed is not False  # None (store error) -> fail open
+
+        now = time.time()
+        existing = self._memory_dedup.get(dedup_key)
+        if existing is not None and existing[1] > now:
+            return False
+        self._memory_dedup[dedup_key] = (token, lock_until)
+        return True
 
     @staticmethod
     def _generate_token(incident_id: str) -> str:

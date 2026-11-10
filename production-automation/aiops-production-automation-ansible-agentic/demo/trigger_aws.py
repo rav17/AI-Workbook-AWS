@@ -77,12 +77,12 @@ def send_alert(alert_name: str, severity: str, instance: str, service_name: str)
     )
 
     msg_id = response["MessageId"]
-    print(f"\n  ✓ Alert sent to SQS!")
+    print("\n  ✓ Alert sent to SQS!")
     print(f"    Message ID: {msg_id}")
     print(f"    Alert: {alert_name} ({severity})")
     print(f"    Instance: {instance}")
     print(f"    Service: {service_name}")
-    print(f"\n  Check logs: aws logs tail /aiops/dev/ecs --region us-east-1 --since 1m")
+    print("\n  Check logs: aws logs tail /aiops/dev/ecs --region us-east-1 --since 1m")
 
 
 def main():

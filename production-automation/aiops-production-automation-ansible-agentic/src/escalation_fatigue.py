@@ -14,7 +14,6 @@ import logging
 import time
 from dataclasses import dataclass
 from threading import Lock
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 

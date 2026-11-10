@@ -188,3 +188,31 @@ def sample_execution_result():
         "playbook_path": "playbooks/restart_service.yml",
         "target_host": "web-server-01",
     }
+
+
+# --- Directory-based marker assignment ---
+
+_DIR_MARKERS = {
+    "unit": "unit",
+    "property": "property",
+    "integration": "integration",
+    "cdk": "cdk",
+}
+
+
+def pytest_collection_modifyitems(config, items):
+    """Apply unit/property/integration/cdk markers based on the test's directory.
+
+    Ensures `pytest -m unit` (and the other CI marker filters) selects every test
+    in the matching directory, even if the file lacks an explicit `pytestmark`.
+    """
+    for item in items:
+        parts = item.path.parts
+        if "tests" not in parts:
+            continue
+        idx = parts.index("tests")
+        if idx + 1 < len(parts):
+            marker = _DIR_MARKERS.get(parts[idx + 1])
+            # Note: item.keywords contains directory names, so check real markers instead.
+            if marker and item.get_closest_marker(marker) is None:
+                item.add_marker(getattr(pytest.mark, marker))

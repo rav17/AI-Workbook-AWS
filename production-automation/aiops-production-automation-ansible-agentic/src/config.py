@@ -43,9 +43,15 @@ class JsonFormatter(logging.Formatter):
             "logger": record.name,
             "message": record.getMessage(),
         }
+        # Correlation fields passed via logger.x(..., extra={...}). Without this,
+        # incident_id was silently dropped from every log line.
+        for key in ("incident_id", "pipeline_stage", "alert_name", "severity", "duration_ms"):
+            value = getattr(record, key, None)
+            if value is not None:
+                log_entry[key] = value
         if record.exc_info and record.exc_info[0] is not None:
             log_entry["exception"] = self.formatException(record.exc_info)
-        return json.dumps(log_entry)
+        return json.dumps(log_entry, default=str)
 
 
 def load_config() -> dict:

@@ -1,7 +1,7 @@
 """Generate the Stand and Deliver presentation for the GenAI SRE/DevOps badge."""
 
 from pptx import Presentation
-from pptx.util import Inches, Pt, Cm, Emu
+from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
@@ -142,7 +142,7 @@ def add_screenshot_slide(title, caption):
     tf = placeholder.text_frame
     tf.vertical_anchor = MSO_ANCHOR.MIDDLE
     p = tf.paragraphs[0]
-    p.text = f"[INSERT SCREENSHOT HERE]"
+    p.text = "[INSERT SCREENSHOT HERE]"
     p.font.size = Pt(24)
     p.font.color.rgb = LIGHT_GRAY
     p.alignment = PP_ALIGN.CENTER

@@ -94,7 +94,6 @@ class LockStore:
 
             # Start heartbeat if manager is available
             if self._heartbeat_manager is not None:
-                import asyncio
                 try:
                     token = await self._heartbeat_manager.start_heartbeat(
                         host, incident_id, ttl_seconds

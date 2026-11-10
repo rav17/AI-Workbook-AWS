@@ -1,12 +1,10 @@
 """Generate a polished Stand and Deliver presentation with better visuals."""
 
 from pptx import Presentation
-from pptx.util import Inches, Pt, Cm, Emu
+from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.oxml.ns import qn
-from copy import deepcopy
 import os
 
 prs = Presentation()

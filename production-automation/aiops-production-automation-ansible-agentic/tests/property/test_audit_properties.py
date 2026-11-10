@@ -9,7 +9,7 @@ import os
 import tempfile
 from datetime import datetime, timezone
 
-from hypothesis import given, settings, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from src.audit_logger import AuditLogger, MAX_OUTPUT_SUMMARY_LENGTH
 from src.models import AuditRecord
@@ -80,7 +80,13 @@ def audit_record_with_long_output_strategy():
         ),
         execution_duration=st.one_of(st.none(), st.floats(min_value=0.0, max_value=600.0)),
         notification_status=st.sampled_from(["sent", "failed", "partial"]),
-        output_summary=st.text(min_size=2049, max_size=5000),
+        # Random >2048-char unicode text overflows Hypothesis' buffer (Unsatisfiable);
+        # build a long string from a random char x random length instead.
+        output_summary=st.builds(
+            lambda ch, n: ch * n,
+            st.characters(blacklist_categories=("Cs",)),
+            st.integers(min_value=2049, max_value=5000),
+        ),
     )
 
 
@@ -224,7 +230,16 @@ def test_audit_logger_writes_multiple_records_as_separate_lines(records: list):
 
 
 @given(record=audit_record_with_long_output_strategy())
-@settings(max_examples=100, deadline=5000)
+# Inputs must exceed 2048 chars by design, so the large-example check is expected.
+@settings(
+    max_examples=100,
+    deadline=5000,
+    suppress_health_check=[
+        HealthCheck.large_base_example,
+        HealthCheck.data_too_large,
+        HealthCheck.too_slow,
+    ],
+)
 def test_audit_logger_truncates_long_output_summary(record: AuditRecord):
     """When output_summary exceeds 2048 characters, the AuditLogger SHALL
     truncate it to exactly 2048 characters before writing.
