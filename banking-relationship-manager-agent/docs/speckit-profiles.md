@@ -24,6 +24,17 @@ Profiles are JSON files in `.specify/profiles/`. Add a team profile by dropping 
 
 Rules enforced by validation: `specify` is first (optionally after `ideation`), stages are in canonical order (`ideation, specify, clarify, plan, tasks, analyze, implement, deploy, operate`), `implement` needs `tasks` unless the profile declares `implement-without-tasks`, `deploy` needs `implement`, `operate` needs `deploy`, and every gate must be a stage in the route. Schema: `specs/009-workflow-profiles-audit/contracts/profile.schema.json`.
 
+On `full-lifecycle`, the stage leads use `.github/skills/speckit-diagrams/` to
+create applicable, feature-local draw.io views under
+`<feature-dir>/architecture/diagrams/`. The skill maps context, overview,
+component, interaction, deployment, and operations views to lifecycle stages
+and maintains an `index.md` with applicability and source references. Named
+cloud services use the matching provider/service icon and readable service
+label; unselected services remain neutral shapes. It does not require every
+view for every feature. After creating or changing diagrams, run
+`python -m speckit_flow diagrams validate --feature-dir <feature-dir>`; this
+checks XML and graph references, not icon identity or architecture correctness.
+
 ## Commands
 
 ### Optional walking-skeleton checkpoint

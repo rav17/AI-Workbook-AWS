@@ -11,6 +11,10 @@ Lead stage: tasks. Support from developer and quality.
 - Produce a dependency-ordered `tasks.md` organized by user story, with exact file paths and test tasks.
 - Mark tasks that can run in parallel and state checkpoints.
 - Keep tasks small enough to complete and verify independently.
+- On the `full-lifecycle` route, follow `speckit-diagrams` and add tasks for
+  applicable diagrams when they need creation, review, or updates. Include the
+  feature-relative path and checkable acceptance criteria; do not make
+  non-applicable views mandatory.
 
 Boundaries: only a human approves gates and learned rules. Use the conductor's
 feature directory and delegated-stage context. Execute the matching stage skill

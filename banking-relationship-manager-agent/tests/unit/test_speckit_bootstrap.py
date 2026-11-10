@@ -47,6 +47,11 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stdout + result.stderr
     assert (target / "speckit_flow" / "__main__.py").is_file()
     assert (target / ".github" / "skills" / "speckit-specify" / "SKILL.md").is_file()
+    assert (target / "speckit_flow" / "diagrams.py").is_file()
+    assert (target / ".github" / "skills" / "speckit-diagrams" / "SKILL.md").is_file()
+    assert (
+        target / ".github" / "skills" / "speckit-diagrams" / "assets" / "index-template.md"
+    ).is_file()
     assert not (target / "aria").exists()
     assert not (target / ".specify" / "memory" / "constitution.md").exists()
     assert not (target / ".specify" / "knowledge" / "banking-compliance.md").exists()
@@ -124,6 +129,25 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
         cwd=target, env=env, capture_output=True, text=True, timeout=120,
     )
     assert initialized.returncode == 0, initialized.stdout + initialized.stderr
+    diagrams_dir = feature / "architecture" / "diagrams"
+    diagrams_dir.mkdir(parents=True)
+    (diagrams_dir / "context.drawio").write_text(
+        """<mxfile><diagram name="Context"><mxGraphModel><root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        </root></mxGraphModel></diagram></mxfile>""",
+        encoding="utf-8",
+    )
+    diagram_validation = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "diagrams", "validate",
+            "--feature-dir", str(feature), "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert diagram_validation.returncode == 0, (
+        diagram_validation.stdout + diagram_validation.stderr
+    )
+    assert json.loads(diagram_validation.stdout)["count"] == 1
     preflight = subprocess.run(
         [
             sys.executable, "-m", "speckit_flow", "workflow", "dispatch",

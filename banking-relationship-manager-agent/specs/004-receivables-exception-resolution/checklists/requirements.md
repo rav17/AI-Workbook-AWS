@@ -1,35 +1,42 @@
 # Specification Quality Checklist: Virtual Account Receivables Exception Resolution
 
-**Purpose**: Validate specification completeness and project fit before planning
-**Created**: 2026-10-01
+**Purpose**: Validate the specification artifact, not implementation or operational readiness.  
+**Created**: 2026-11-10  
 **Feature**: [spec.md](../spec.md)
 
-## Scope and Aria Fit
+## Content Quality
 
-- [x] Capability is defined as an Aria specialist subagent, not a second production Runtime
-- [x] Aria retains authentication, tenant/session identity, and final-response ownership
-- [x] MVP boundaries specify one corporate customer, one currency, and three exception categories
-- [x] Live banking, multi-customer/multi-currency, and financial-crime screening are explicitly out of scope
+- [x] No implementation details such as languages, frameworks, APIs, or deployment steps
+- [x] Focused on user value and business needs
+- [x] Written for product, operations, and control stakeholders
+- [x] Mandatory specification sections are complete
 
-## Financial Safety and Governance
+## Requirement Completeness
 
-- [x] Source systems are read-only in the MVP
-- [x] Deterministic rules own variance, tolerance, date, eligibility, and duplicate checks
-- [x] Human approval gates the only allowed case-management write
-- [x] Prohibited ledger/account/payment/virtual-account/master-data changes are explicit
-- [x] Low-confidence, duplicate, missing mapping, conflict, and unsupported procedure outcomes fail safely
-- [x] Payer/remittance text is treated as untrusted data
-- [x] Tolerance, matching weights, confidence thresholds, and procedures are supplied by approved owners, not invented
+- [x] No `[NEEDS CLARIFICATION]` markers or template placeholders remain
+- [x] Requirements are testable and unambiguous as specification requirements
+- [x] Success criteria have proposed, reproducible calculation conventions; owner agreement remains outstanding
+- [x] Success criteria are technology-agnostic
+- [x] User stories include acceptance scenarios
+- [x] Edge cases are identified
+- [x] Scope boundaries are explicit
+- [x] Assumptions and outstanding prerequisites are identified
 
-## Requirements and Evaluation
+## Specification Artifact Readiness (Not Runtime or Business Readiness)
 
-- [x] User stories have independent tests and acceptance scenarios
-- [x] Every recommendation requires source evidence and deterministic variance evidence
-- [x] Evaluation thresholds match the source requirements and are measurable
-- [x] Audit requirements cover reads, rules, recommendations, analyst decisions, and approved case-task writes
-- [x] No unresolved clarification markers or template placeholders remain
+- [x] Functional requirements state observable outcomes
+- [x] User scenarios cover investigation, analyst decision, and evaluation
+- [x] Proposed measurable targets and prerequisites for making claims are stated
+- [x] No implementation details are included
+
+## Outstanding Prerequisites (Not Specification Defects)
+
+- **Q2 — Synthetic policy and procedure inputs:** The human committed to review a proposed synthetic policy at the plan gate. The proposal has not yet been authored or approved; no policy values, business thresholds, or production procedure and rules are established by this choice.
+- **Q3 — Synthetic fixtures and permitted write:** The human approved the mock-write scope as create-only in isolated test/demo storage with idempotent retries. Synthetic fixture contents remain to be authored, reviewed, and approved. The mock role `receivables_operations_analyst` is for synthetic fixtures only and does not establish production authorization.
+- **Q4 — Evaluation set and labels:** The human committed to review the proposed synthetic labelled evaluation set at the plan gate. Fixture strata, labelled ground truth, acceptable candidate labels, escalation applicability/correctness, denominators, and proposed evaluation commands remain to be authored and approved. The proposed SC-001–SC-004 conventions require that review; no performance has been measured or approved for claim.
+- Detailed rationale format and freshness presentation are not settled; the specification requires evidence identifiers and disclosure of availability/freshness limitations without inventing a freshness cutoff.
 
 ## Notes
 
-- This checklist records specification quality, not implementation completion.
-- Implementation is blocked from real-data use until approved procedure/tolerance inputs and the labelled evaluation set are supplied.
+- **Q5 ? Internal persistence boundary:** Human approval is limited to persistence of internal proposals, analyst decisions, confirmation/idempotency bindings, and audit in isolated synthetic local test/demo storage. The create-only mock case task remains the sole business write. This does not approve the plan, policy contents or values, fixture contents or construction commands, evaluation labels or denominators, production authorization, financial writes, or measured performance.
+- Checked items assess the completeness and quality of this specification artifact only. They do not assert runtime behavior, implementation completion, policy approval, fixture or mock-write approval, evaluation-set approval, or measured performance.

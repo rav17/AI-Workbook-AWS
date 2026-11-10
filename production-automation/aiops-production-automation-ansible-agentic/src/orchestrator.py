@@ -253,7 +253,12 @@ class Orchestrator:
                     severity=alert.severity.value,
                 )
 
-                decision = await self._guardrail_engine.evaluate(guardrail_action)
+                # With human approval on, approval happens via the email flow (and the
+                # approve path re-runs guardrails), so skip the in-process ApprovalGate,
+                # which would otherwise DENY for lack of a notification handler.
+                decision = await self._guardrail_engine.evaluate(
+                    guardrail_action, skip_approval=self._require_human_approval
+                )
 
                 if decision.decision_type == GuardrailDecisionType.DENY:
                     logger.info(

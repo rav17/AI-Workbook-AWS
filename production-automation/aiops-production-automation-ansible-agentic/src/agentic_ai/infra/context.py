@@ -20,6 +20,8 @@ class CdkContext:
     image_tag: str = "latest-dev"
     vpc_cidr: str = "10.0.0.0/16"
     monthly_budget_usd: str = "200"
+    # AWS DevOps Agent Phase 1: forward selected incidents for investigation
+    devops_agent_enabled: bool = False
 
 
 def validate_cdk_context(raw: dict) -> CdkContext:
@@ -49,6 +51,10 @@ def validate_cdk_context(raw: dict) -> CdkContext:
     if not raw.get("costCenterEmail", "").strip():
         errors.append("costCenterEmail is required for budget alerts")
 
+    devops_agent_raw = str(raw.get("devopsAgentEnabled", "false")).strip().lower()
+    if devops_agent_raw not in ("true", "false", ""):
+        errors.append(f"devopsAgentEnabled must be 'true' or 'false', got '{devops_agent_raw}'")
+
     if errors:
         raise ValueError(f"CDK context validation failed: {'; '.join(errors)}")
 
@@ -62,4 +68,5 @@ def validate_cdk_context(raw: dict) -> CdkContext:
         image_tag=raw.get("imageTag", f"latest-{env}"),
         vpc_cidr=raw.get("vpcCidr", "10.0.0.0/16"),
         monthly_budget_usd=raw.get("monthlyBudgetUsd", "200"),
+        devops_agent_enabled=devops_agent_raw == "true",
     )

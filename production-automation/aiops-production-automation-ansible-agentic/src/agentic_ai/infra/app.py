@@ -28,6 +28,7 @@ def main() -> None:
         "imageTag": app.node.try_get_context("imageTag") or "",
         "vpcCidr": app.node.try_get_context("vpcCidr") or "",
         "monthlyBudgetUsd": app.node.try_get_context("monthlyBudgetUsd") or "",
+        "devopsAgentEnabled": str(app.node.try_get_context("devopsAgentEnabled") or "false"),
     }
     context = validate_cdk_context(raw_context)
 

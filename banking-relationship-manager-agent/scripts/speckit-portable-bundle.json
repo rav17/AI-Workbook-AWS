@@ -3,7 +3,7 @@
   "files": [
     {"source": "speckit_flow", "destination": "speckit_flow", "category": "engine", "include": [
       "__init__.py", "__main__.py", "agents.py", "audit.py", "cli.py", "codebase.py", "compose.py",
-      "contracts.py", "custom.py", "doctor.py", "knowledge.py", "models.py", "orchestration.py", "plugins.py", "profiles.py",
+      "contracts.py", "custom.py", "diagrams.py", "doctor.py", "knowledge.py", "models.py", "orchestration.py", "plugins.py", "profiles.py",
       "questions.py", "readiness.py", "reviews.py", "rules.py", "sensors.py", "session.py", "stagedefs.py",
       "state.py", "trace.py", "units.py"
     ]},
@@ -12,7 +12,8 @@
       "speckit-compose/SKILL.md", "speckit-codebase/SKILL.md", "speckit-constitution/SKILL.md", "speckit-converge/SKILL.md",
       "speckit-contracts/SKILL.md", "speckit-implement/SKILL.md", "speckit-learn/SKILL.md", "speckit-plan/SKILL.md",
       "speckit-profile/SKILL.md", "speckit-readiness/SKILL.md", "speckit-review/SKILL.md", "speckit-specify/SKILL.md",
-      "speckit-tasks/SKILL.md", "speckit-taskstoissues/SKILL.md", "speckit-skeleton/SKILL.md", "speckit-workflow/SKILL.md"
+      "speckit-tasks/SKILL.md", "speckit-taskstoissues/SKILL.md", "speckit-skeleton/SKILL.md", "speckit-workflow/SKILL.md",
+      "speckit-diagrams/SKILL.md", "speckit-diagrams/assets/index-template.md"
     ]},
     {"source": ".github/agents", "destination": ".github/agents", "category": "agents", "include": [
       "speckit-architect.agent.md", "speckit-architecture-reviewer.agent.md",
