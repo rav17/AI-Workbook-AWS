@@ -7,7 +7,7 @@ approval gate.
 
 | Phase | Scope | Status |
 |---|---|---|
-| 1 | Forward selected incidents to a DevOps Agent generic webhook (HMAC) | **Implemented** |
+| 1 | Forward selected incidents to a DevOps Agent generic webhook (HMAC) | **Implemented, verified end to end in dev (2026-11-10)** |
 | 2 | Consume DevOps Agent mitigation plans via EventBridge → approval → SSM | Planned (future) |
 | 3 | Custom MCP server, agent skills, release readiness review | Planned (future) |
 
@@ -49,18 +49,62 @@ Rule-matched, non-critical alerts are **not** forwarded; the fast rule path is u
 CDK creates the secret with **empty `url`/`web_app_url` and a random placeholder
 `secret`**, so ECS tasks always start. Forwarding stays inactive until real values are stored.
 
-### Setup steps
+### Current dev setup (created 2026-11-10, us-east-1)
 
-1. **Create an Agent Space** in a supported Region (us-east-1 works for this project) and associate the AWS account.
-2. **Create a generic webhook:** Agent Space → *Capabilities* → *Agent Space Webhook* → *Add webhook* → **HMAC**. Copy the URL and secret. The secret is shown only once.
-3. **Store them in Secrets Manager.** Keep the JSON keys exactly as shown; a missing key stops ECS tasks from starting.
+| Resource | Value |
+|---|---|
+| Agent Space | `aiops-dev` (`2a6779d7-b19a-440c-8417-b06295e9da84`), elevated actions **off** |
+| Agent Space role | `aiops-dev-DevOpsAgentRole-AgentSpace`: AWS managed `AIDevOpsAgentAccessPolicy` + inline Resource Explorer service-linked-role permission |
+| Operator app role | `aiops-dev-DevOpsAgentRole-WebappAdmin`: AWS managed `AIDevOpsOperatorAppAccessPolicy` |
+| Account association | `533267042240` as `monitor` |
+| Operator web app | https://2a6779d7-b19a-440c-8417-b06295e9da84.aidevops.global.app.aws |
+| Generic webhook | HMAC, association `831cd395-703e-497f-ba32-d24a2ddb3463`, stored in `/aiops/dev/devops-agent-webhook` |
+
+Both roles trust only `aidevops.amazonaws.com`, conditioned on `aws:SourceAccount`
+and `aws:SourceArn = arn:aws:aidevops:us-east-1:533267042240:agentspace/*`.
+
+### Setup steps (CLI)
+
+Requires AWS CLI **2.39 or newer** (2.34 has no `devops-agent` commands). The steps follow the
+[AWS DevOps Agent CLI onboarding guide](https://docs.aws.amazon.com/devopsagent/latest/userguide/getting-started-with-aws-devops-agent-cli-onboarding-guide.html).
+
+1. **IAM roles:** create the two roles above with the trust policy from the onboarding guide, and attach the managed policies.
+2. **Agent Space:**
+
+   ```powershell
+   aws devops-agent create-agent-space --name aiops-dev --tags project=aiops-self-healing,environment=dev --region us-east-1 --profile mfa
+   ```
+
+3. **Associate the account** (configuration JSON in a file, to avoid shell-quoting problems):
+
+   ```json
+   {"aws":{"assumableRoleArn":"arn:aws:iam::533267042240:role/aiops-dev-DevOpsAgentRole-AgentSpace","accountId":"533267042240","accountType":"monitor"}}
+   ```
+
+   ```powershell
+   aws devops-agent associate-service --agent-space-id <id> --service-id aws --configuration file://assoc.json --region us-east-1 --profile mfa
+   aws devops-agent enable-operator-app --agent-space-id <id> --auth-flow iam --operator-app-role-arn arn:aws:iam::533267042240:role/aiops-dev-DevOpsAgentRole-WebappAdmin --region us-east-1 --profile mfa
+   ```
+
+4. **Create the generic webhook.** A generic webhook is an `eventChannel` association, and HMAC is the default:
+
+   ```powershell
+   aws devops-agent associate-service --agent-space-id <id> --service-id event_channel --configuration file://eventchannel.json --region us-east-1 --profile mfa
+   # eventchannel.json: {"eventChannel":{}}
+   ```
+
+   The response contains `webhook.webhookUrl` and `webhook.webhookSecret`. **The secret is returned only once.** Write it straight to Secrets Manager (step 5) without printing it. `aws devops-agent list-webhooks` returns the URL but never the secret.
+
+   *Console alternative:* Agent Space → *Capabilities* → *Agent Space Webhook* → *Add webhook* → **HMAC**.
+
+5. **Store them in Secrets Manager.** Keep the JSON keys exactly as shown; a missing key stops ECS tasks from starting.
 
    ```powershell
    $value = @{ url = "<webhook-url>"; secret = "<hmac-secret>"; web_app_url = "<optional web app url>" } | ConvertTo-Json -Compress
    aws secretsmanager put-secret-value --secret-id /aiops/dev/devops-agent-webhook --secret-string $value --profile mfa --region us-east-1
    ```
 
-4. **Enable and deploy** (or just restart the tasks if the flag is already on). ECS reads secrets at task start:
+6. **Enable and deploy** (or just restart the tasks if the flag is already on). ECS reads secrets at task start:
 
    ```powershell
    npx aws-cdk@2 deploy Aiops-dev-Compute --context environment=dev --context devopsAgentEnabled=true --profile mfa
@@ -70,8 +114,38 @@ CDK creates the secret with **empty `url`/`web_app_url` and a random placeholder
 
    Every `cdk deploy` must pass `--context devopsAgentEnabled=true`, otherwise forwarding is switched off again.
 
-5. **Verify.** The startup log should show `DevOps Agent forwarding: active=True`. Then send an alert with no matching playbook (for example `python demo/break_target.py --mode network --trigger-alert`). Expect `Incident forwarded to AWS DevOps Agent (trigger=unmatched, http=200)` in `/aiops/dev/ecs`, and a new investigation in the Agent Space.
-6. **Rotating the secret:** rotate it in the Agent Space, update the Secrets Manager value (step 3), then force a new ECS deployment.
+7. **Verify.** The startup log should show `DevOps Agent forwarding: active=True`. Then send an alert with no matching playbook (for example `python demo/break_target.py --mode network`). Expect `Incident forwarded to AWS DevOps Agent (trigger=unmatched, http=200)` in `/aiops/dev/ecs`, and a new investigation:
+
+   ```powershell
+   aws devops-agent list-backlog-tasks --agent-space-id <id> --region us-east-1 --profile mfa
+   ```
+
+   The task's `reference.referenceId` is `aiops-<incident_id>-unmatched`. Read the findings with `list-journal-records --execution-id <executionId>`, or in the operator web app.
+8. **Rotating the secret:** rotate it in the Agent Space console, update the Secrets Manager value (step 5), then force a new ECS deployment.
+
+### Verified end-to-end run (dev, 2026-11-10)
+
+| UTC | Event |
+|---|---|
+| 08:49:37 | `demo/break_target.py --mode network` ran on `i-0bde43c900bac00c7` and fired `NetworkFloodDetected` |
+| 08:49:44 | Pipeline: no playbook match |
+| 08:49:45 | `Incident forwarded to AWS DevOps Agent (trigger=unmatched, http=200)` |
+| 08:49:45 | DevOps Agent `INVESTIGATION` task created, priority CRITICAL, reference `aiops-4acb31c9-…-unmatched` |
+| 08:49:48 | Advisory email sent |
+| 08:53:38 | Investigation `COMPLETED` (about 4 minutes) |
+
+DevOps Agent identified the triggering SSM command as a deliberate, self-terminating demo and
+recommended no rollback. It also flagged two real gaps, both still to be confirmed:
+
+- The flood targeted only link-local endpoints (IMDS, VPC DNS), which CloudWatch network metrics likely don't count, so the network alarm may not measure what the alert claims.
+- The instance's `Name` tag (`aiops-target-dev`) doesn't match the alarm naming, which could break Name-based matching.
+
+### Cost notes
+
+- Billed per active agent-second (about $0.0083/s). This account is pay-as-you-go, with no trial.
+- A new Agent Space runs billed `SYSTEM_LEARNING` tasks while it maps the account.
+- Check usage with `aws devops-agent get-account-usage --region us-east-1`.
+- To remove everything: `aws devops-agent delete-agent-space --agent-space-id <id>`, then delete the two IAM roles and set `/aiops/dev/devops-agent-webhook` back to an empty `url`. Deleting the space can't be undone.
 
 ---
 
@@ -93,7 +167,9 @@ Open questions before building:
 - Map free-text mitigation steps to allow-listed actions; never run raw shell from a plan.
 - Decide whether to manage the Agent Space and webhook as IaC (`AWS::DevOpsAgent::*` resources). The webhook secret is not returned by CloudFormation and must be rotated after deploy.
 
-**Prerequisite:** fix guardrail engine initialisation first (see *Known issue* below). Phase 2 depends on PlanValidator actually running.
+**Prerequisites:** guardrail engine initialisation is fixed, and PlanValidator now runs. `concurrency_guard`
+and `health_checker` still need implementations (see *Guardrails status* below). Also enable Bedrock model
+access for Claude Sonnet/Haiku 4.5: our own AI path returned `AccessDeniedException` in the dev test.
 
 ## Phase 3 — Deeper integration (planned, future)
 
@@ -105,10 +181,20 @@ Open questions before building:
 
 ---
 
-## Known issue (blocks Phase 2)
+## Guardrails status (prerequisite for Phase 2)
 
-At startup, `src/app.py` fails to initialise the guardrail engine:
-`ConcurrencyGuard.__init__() missing 2 required positional arguments: 'lock_store' and 'service_registry'`.
-The error is caught as "non-fatal", so **no guardrail checks run** (self-protection,
-maintenance windows, circuit breaker, blast radius, approval gate, PlanValidator).
-Confirmed in the deployed dev logs.
+**Fixed 2026-11-10.** The guardrail engine previously failed at startup
+(`ConcurrencyGuard.__init__() missing 2 required positional arguments`). The error was logged as
+"non-fatal", so **no guardrail checks ran**.
+
+It now starts with 6 checks: self_protection, maintenance_window, circuit_breaker,
+blast_radius_classifier, approval_gate and plan_validator. If initialisation fails, the service
+**refuses to start**. Verified in the deployed dev logs.
+
+Still not active, because their dependencies have no implementation yet:
+
+- `concurrency_guard`: needs a guardrails LockStore. The `concurrency.LockStore` PK/SK schema doesn't match `AiopsIncidentMemory`.
+- `health_checker`: needs a ServiceRegistry.
+
+A warning is logged at startup. Both should be implemented before Phase 2 lets DevOps Agent plans
+drive execution.
