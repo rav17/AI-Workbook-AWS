@@ -1,0 +1,8 @@
+{
+  "id": "contract-driven",
+  "description": "Feature workflow with explicit stage contracts and required-output checks at human gates.",
+  "stages": ["specify", "plan", "tasks", "implement"],
+  "depth": "standard",
+  "gates": ["specify", "plan"],
+  "stage_contracts": true
+}

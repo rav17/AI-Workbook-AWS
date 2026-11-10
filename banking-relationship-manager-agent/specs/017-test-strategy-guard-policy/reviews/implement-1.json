@@ -1,0 +1,42 @@
+{
+  "id": "implement-1",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:implementation",
+  "verdict": "block",
+  "created_at": "2026-11-05T11:35:12+00:00",
+  "files": {
+    "speckit_flow/sensors.py": "a5025df6bd3a8c131098641fcf85a5dcd656160aee0603d1017543e58ca216cf",
+    "speckit_flow/questions.py": "cb2f91ea75eb751f492efed0b7ea91391805b8a6276152e52f85fa56026363b6",
+    "speckit_flow/state.py": "be099e1a693cca4627e414db13259e85512de2ba3408fb4adc5a6d4b14ed8751",
+    "speckit_flow/cli.py": "1ba0b30acf4f349ef172e968397d682d52b5f4e0f4ce4fadeae34d579dcf03db",
+    "scripts/speckit_guard.py": "947f00a59c16bbab6bb0ab05e0dd0550271f179f9d538458785dd10389258c95",
+    "speckit_flow/models.py": "4f264d3dff59c96900129ce38630457a7a1a3ddbebe4fde91db097758d946116"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "speckit_flow/sensors.py",
+      "section": "load_sensors overlay merge",
+      "note": "A custom entry with a required core sensor's ID is checked only for required=true and retaining stages; it may replace the builtin/command and its options. For example, replacing required consistency with an always-successful command preserves those fields while removing the core check, so the overlay weakens a mandatory gate sensor."
+    },
+    {
+      "severity": "blocker",
+      "file": "speckit_flow/cli.py",
+      "section": "actor identity for question answers",
+      "note": "Human-only answer enforcement trusts the caller-supplied actor string: _actor accepts --actor human:anything and _check_agent_actor does not authenticate that identity. An agent can invoke questions answer with a human-prefixed actor and mark an open question answered; the preToolUse guard does not block this command. This violates deterministic authorization and makes strict open-question checks bypassable."
+    },
+    {
+      "severity": "major",
+      "file": "speckit_flow/state.py",
+      "section": "decide_gate strict policy fallback",
+      "note": "profile_for errors are swallowed and strictness falls back to persisted depth only. If a basic-depth profile has guard_policy=strict and profile loading then fails (for example malformed/missing custom overlay), strict becomes false and the gate skips current-review and closed-question requirements rather than failing closed."
+    },
+    {
+      "severity": "major",
+      "file": "speckit_flow/questions.py",
+      "section": "load_questions markdown parsing",
+      "note": "Only exact matching Q headers are parsed; other headings/records are silently ignored instead of raising a parse error. A small hand-edit/formatting deviation can make an unanswered question disappear from load_questions, causing both the questions sensor and strict gate check to report no open questions."
+    }
+  ]
+}

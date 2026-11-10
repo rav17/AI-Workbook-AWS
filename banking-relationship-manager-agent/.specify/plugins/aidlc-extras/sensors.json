@@ -1,0 +1,14 @@
+{
+  "sensors": [
+    {
+      "id": "nfr-section",
+      "description": "The plan must contain a non-empty Non-functional requirements section",
+      "kind": "builtin",
+      "builtin": "section",
+      "options": {"heading": "Non-functional requirements", "artifact": "plan.md"},
+      "stages": ["nfr-design"],
+      "required": true,
+      "profiles": ["nfr-hardening"]
+    }
+  ]
+}

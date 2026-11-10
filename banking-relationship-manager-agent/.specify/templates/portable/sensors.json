@@ -1,0 +1,37 @@
+{
+  "sensors": [
+    {
+      "id": "consistency",
+      "description": "Stage artifacts exist, are non-empty and have no template placeholders",
+      "kind": "builtin",
+      "builtin": "consistency",
+      "stages": ["specify", "plan", "tasks"],
+      "required": true
+    },
+    {
+      "id": "no-open-questions",
+      "description": "No clarifying questions are left unanswered",
+      "kind": "builtin",
+      "builtin": "questions",
+      "stages": ["plan"],
+      "required": true
+    },
+    {
+      "id": "traceability",
+      "description": "Every requirement is cited by at least one task",
+      "kind": "builtin",
+      "builtin": "traceability",
+      "stages": ["tasks"],
+      "required": true
+    },
+    {
+      "id": "traceability-tests",
+      "description": "Every requirement is cited by at least one test task",
+      "kind": "builtin",
+      "builtin": "traceability",
+      "options": {"require_tests": true},
+      "stages": ["analyze"],
+      "required": false
+    }
+  ]
+}

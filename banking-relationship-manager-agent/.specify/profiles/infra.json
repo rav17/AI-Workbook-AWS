@@ -1,0 +1,7 @@
+{
+  "id": "infra",
+  "description": "Environments, infrastructure as code, deployment foundations or cost work.",
+  "stages": ["specify", "plan", "tasks", "implement"],
+  "depth": "standard",
+  "gates": ["plan"]
+}

@@ -1,0 +1,41 @@
+{
+  "feature": "032-profile-aware-orchestration",
+  "profile": "feature",
+  "depth": "standard",
+  "current_stage": null,
+  "pending_gate": null,
+  "revision": 11,
+  "updated_at": "2026-11-09T21:21:28+00:00",
+  "stages": {
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T20:49:17+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-09T20:49:13+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T20:51:37+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T20:51:48+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-09T20:49:13+00:00"
+    },
+    "implement": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T21:21:28+00:00"
+    }
+  }
+}

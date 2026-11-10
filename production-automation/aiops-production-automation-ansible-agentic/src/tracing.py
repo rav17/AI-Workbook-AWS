@@ -27,9 +27,8 @@ it falls back to no-op implementations.
 import functools
 import logging
 import os
-import time
 from contextlib import contextmanager
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 logger = logging.getLogger(__name__)
 

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Review Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["stage", "reviewer", "author", "verdict", "findings", "files"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z]+-[0-9]+$" },
+    "stage": { "type": "string" },
+    "reviewer": { "enum": ["spec", "plan", "code"] },
+    "author": { "type": "string", "minLength": 1 },
+    "verdict": { "enum": ["pass", "concerns", "block"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "files": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "file", "section", "note"],
+        "properties": {
+          "severity": { "enum": ["info", "warning", "major", "blocker"] },
+          "file": { "type": "string", "minLength": 1 },
+          "section": { "type": "string", "minLength": 1 },
+          "note": { "type": "string", "maxLength": 500 }
+        }
+      }
+    }
+  }
+}

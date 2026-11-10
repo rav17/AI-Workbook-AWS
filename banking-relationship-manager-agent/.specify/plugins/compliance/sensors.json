@@ -1,0 +1,14 @@
+{
+  "sensors": [
+    {
+      "id": "compliance-section",
+      "description": "The specify and plan artifacts must contain a non-empty Compliance section",
+      "kind": "builtin",
+      "builtin": "section",
+      "options": {"heading": "Compliance"},
+      "stages": ["specify", "plan"],
+      "required": true,
+      "profiles": ["compliance"]
+    }
+  ]
+}

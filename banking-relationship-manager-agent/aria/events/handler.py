@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
+from aria.tools.maturity_tool import evaluate_maturity_event, evaluate_outflow_event
+
 
 def normalize_event(event: dict[str, Any]) -> dict[str, Any]:
     detail = event.get("detail", event)
@@ -35,4 +37,26 @@ def handle_event(
         "status": "processed",
         "event_id": normalized["event_id"],
         "result": result,
+    }
+
+
+def process_event(event: dict[str, Any]) -> dict[str, Any]:
+    normalized = normalize_event(event)
+    event_type = normalized["event_type"].lower()
+    payload = normalized["payload"]
+    if "outflow" in event_type:
+        result = evaluate_outflow_event(payload)
+        category = "outflow"
+    elif "maturity" in event_type or "mature" in event_type:
+        result = evaluate_maturity_event(payload)
+        category = "maturity"
+    else:
+        result = {"status": "ignored", "recommended_action": "no_action"}
+        category = "unknown"
+
+    return {
+        "event_id": normalized["event_id"],
+        "client_id": normalized["client_id"],
+        "event_type": category,
+        **result,
     }

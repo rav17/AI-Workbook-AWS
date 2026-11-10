@@ -8,6 +8,14 @@ metadata:
 ---
 
 
+## Lifecycle Handoff
+
+Unless this is the assigned lead executing a conductor brief containing
+`SPECKIT_DELEGATED_STAGE=implement`, invoke `speckit-workflow` with the original
+request and requested stage `implement`, then return without executing this body.
+Only the matching delegated lead follows the body below. Use the supplied
+feature directory; the conductor owns stage transitions and human gates.
+
 ## User Input
 
 ```text

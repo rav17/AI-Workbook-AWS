@@ -4,7 +4,7 @@
 
 ## Phase 1: Setup
 
-- [ ] T001 Create the Python package structure under `aria/` and `tests/` according to `plan.md`.
+- [x] T001 Create the Python package structure under `aria/` and `tests/` according to `plan.md`.
 - [X] T002 Create `pyproject.toml`, `requirements.txt`, and `requirements-dev.txt` with the approved runtime and test dependencies.
 - [X] T003 [P] Create `aria/config.py` and `aria/constants.py` with environment-driven configuration and non-secret defaults.
 - [X] T004 [P] Create `tests/conftest.py` and shared fixtures for client, CRM, knowledge-base, guardrail, and AWS mocks.
@@ -15,9 +15,9 @@
 - [ ] T006 Create typed error, result, logging, and provider-client abstractions in `aria/`.
 - [ ] T007 [P] Implement domain models in `aria/models/` from `data-model.md` with validation and serialization tests.
 - [ ] T008 [P] Implement safe secret and environment configuration loading in `aria/config.py` without committing credentials.
-- [ ] T009 Implement fail-closed guardrail result handling and structured audit logging in `aria/guardrails/`.
+- [x] T009 Implement fail-closed guardrail result handling and structured audit logging in `aria/guardrails/`.
 - [ ] T010 [P] Add common retry, timeout, and graceful-degradation policies in `aria/providers/`.
-- [ ] T011 Verify the foundation with `pytest tests/unit` and `ruff check .` before story work begins.
+- [x] T011 Verify the foundation with `pytest tests/unit` and `ruff check .` before story work begins.
 
 **Production foundation requirements**: T058-T066 below are mandatory before enabling the agent against live client data or side-effecting tools.
 
@@ -27,10 +27,10 @@
 
 **Independent Test**: Profile, family, and risk fixtures produce the expected CRM updates, questionnaire sequence, and CTG suggestion.
 
-- [ ] T012 [US1] Implement `get_risk_questionnaire` and `assess_risk_appetite` in `aria/tools/risk_tool.py`.
-- [ ] T013 [US1] Implement profile retrieval and structured updates in `aria/tools/crm_tool.py`.
-- [ ] T014 [US1] Implement client greeting, family detection, and CTG suggestion rules in `aria/agent.py`.
-- [ ] T015 [US1] Add unit tests for profile updates, risk thresholds, and family-account CTG behavior in `tests/unit/`.
+- [x] T012 [US1] Implement `get_risk_questionnaire` and `assess_risk_appetite` in `aria/tools/risk_tool.py`.
+- [x] T013 [US1] Implement profile retrieval and structured updates in `aria/tools/crm_tool.py`.
+- [x] T014 [US1] Implement client greeting, family detection, and CTG suggestion rules in `aria/agent.py`.
+- [x] T015 [US1] Add unit tests for profile updates, risk thresholds, and family-account CTG behavior in `tests/unit/`.
 
 ## Phase 4: User Story 5 - Service Query Resolution (Priority: P1)
 
@@ -38,9 +38,9 @@
 
 **Independent Test**: Mocked knowledge responses produce sourced answers, step-by-step procedures, concise options, or escalation.
 
-- [ ] T016 [US5] Implement `query_product_info` with confidence and source-date handling in `aria/tools/knowledge_tool.py`.
-- [ ] T017 [US5] Implement service query routing and unresolved-query escalation in `aria/agent.py`.
-- [ ] T018 [US5] Add knowledge retrieval, stale/low-confidence, and escalation tests in `tests/unit/`.
+- [x] T016 [US5] Implement `query_product_info` with confidence and source-date handling in `aria/tools/knowledge_tool.py`.
+- [x] T017 [US5] Route detected service queries through an injected trusted knowledge provider, preserve source/confidence results, and fail to human escalation when unavailable in `aria/agent.py`.
+- [x] T018 [US5] Add knowledge retrieval, stale/low-confidence, and escalation tests in `tests/unit/`.
 
 ## Phase 5: User Story 6 - CRM Interaction Logging (Priority: P1)
 
@@ -48,9 +48,9 @@
 
 **Independent Test**: A completed session creates a structured CRM record with topics, preferences, flags, date, and reminders.
 
-- [ ] T019 [US6] Implement `log_interaction` and `create_followup_reminder` in `aria/tools/crm_tool.py`.
-- [ ] T020 [US6] Implement summary completeness and segment/date tagging in `aria/models/interaction.py`.
-- [ ] T021 [US6] Add CRM logging and reminder tests in `tests/unit/`.
+- [x] T019 [US6] Implement `log_interaction` and `create_followup_reminder` in `aria/tools/crm_tool.py`.
+- [x] T020 [US6] Implement a validated `InteractionSummary` with required client/session/topic fields, UTC interaction date, segment tags, follow-up actions, and safe CRM serialization in `aria/models/interaction.py` and `aria/tools/crm_tool.py`.
+- [x] T021 [US6] Add CRM logging and reminder tests in `tests/unit/`.
 
 ## Phase 6: User Story 7 - Sensitive Credential Protection (Priority: P1)
 
@@ -58,8 +58,8 @@
 
 **Independent Test**: Credential-bearing messages are blocked before model and tool processing and do not appear in persistence or logs.
 
-- [ ] T022 [US7] Configure credential filters and prompt-attack filters in `aria/guardrails/config.py`.
-- [ ] T023 [US7] Implement input and output processing with fail-closed behavior in `aria/guardrails/processor.py`.
+- [x] T022 [US7] Configure credential filters and prompt-attack filters in `aria/guardrails/config.py`.
+- [x] T023 [US7] Implement input and output processing with fail-closed behavior in `aria/guardrails/processor.py`.
 - [ ] T024 [US7] Add unit and property tests for PIN, CVV, OTP, password, and combined credential inputs in `tests/`.
 
 ## Phase 7: User Story 8 - Market Risk Disclosure (Priority: P1)
@@ -68,8 +68,8 @@
 
 **Independent Test**: Market-linked and fixed-income responses are checked for required disclosure, source date, and prohibited claims.
 
-- [ ] T025 [US8] Add risk-disclosure and prohibited-claim rules to the agent system behavior in `aria/agent.py`.
-- [ ] T026 [US8] Add response validation tests for market-linked and fixed-income products in `tests/unit/`.
+- [x] T025 [US8] Add risk-disclosure and prohibited-claim rules to the agent system behavior in `aria/agent.py`.
+- [x] T026 [US8] Add response validation tests for market-linked and fixed-income products in `tests/unit/`.
 
 ## Phase 8: User Story 9 - Regulatory Compliance (Priority: P1)
 
@@ -77,9 +77,9 @@
 
 **Independent Test**: Current, expired, missing, and threshold-breaching fixtures produce the required gate or escalation.
 
-- [ ] T027 [US9] Implement `check_kyc_status` and `flag_aml_activity` in `aria/tools/compliance_tool.py`.
-- [ ] T028 [US9] Implement KYC gating and compliance escalation in `aria/agent.py`.
-- [ ] T029 [US9] Add KYC and AML unit/property tests in `tests/`.
+- [x] T027 [US9] Implement `check_kyc_status` and `flag_aml_activity` in `aria/tools/compliance_tool.py`.
+- [x] T028 [US9] Implement KYC gating and compliance escalation in `aria/agent.py`.
+- [x] T029 [US9] Add KYC and AML unit/property tests, including missing, malformed, negative activity and invalid-threshold inputs in `tests/unit/test_service_and_compliance.py`.
 
 ## Phase 9: User Story 10 - Human RM Escalation (Priority: P1)
 
@@ -87,9 +87,9 @@
 
 **Independent Test**: Each escalation category creates the correct ticket, priority, team, context, and client-visible timeline.
 
-- [ ] T030 [US10] Implement escalation reason, priority, assignment, and timeline mapping in `aria/tools/escalation_tool.py`.
-- [ ] T031 [US10] Add escalation routing to the agent and CRM interaction context in `aria/agent.py`.
-- [ ] T032 [US10] Add escalation category and timeline tests in `tests/unit/`.
+- [x] T030 [US10] Implement escalation reason, priority, assignment, and timeline mapping in `aria/tools/escalation_tool.py`.
+- [x] T031 [US10] Escalate unresolved or unavailable service queries with client/session/segment context and a guardrail-sanitized question in `aria/agent.py` and `aria/tools/escalation_tool.py`.
+- [x] T032 [US10] Add escalation category and timeline tests in `tests/unit/`.
 
 ## Phase 10: User Story 12 - Prompt Injection Defense (Priority: P1)
 
@@ -97,7 +97,7 @@
 
 **Independent Test**: Injection fixtures never reach the agent reasoning loop and produce a safe refusal with an audit record.
 
-- [ ] T033 [US12] Implement prompt injection detection and denied-topic handling in `aria/guardrails/processor.py`.
+- [x] T033 [US12] Implement prompt injection detection and denied-topic handling in `aria/guardrails/processor.py`.
 - [ ] T034 [US12] Add adversarial input and no-system-detail-leakage tests in `tests/property/`.
 
 ## Phase 11: User Story 13 - Knowledge Base Accuracy (Priority: P1)
@@ -106,8 +106,8 @@
 
 **Independent Test**: Mocked current, stale, conflicting, and absent knowledge results produce safe responses and escalation.
 
-- [ ] T035 [US13] Add source-date extraction, citation formatting, and confidence thresholds to `aria/tools/knowledge_tool.py`.
-- [ ] T036 [US13] Add rate citation and unavailable-knowledge tests in `tests/unit/`.
+- [x] T035 [US13] Add source-date extraction, citation formatting, and confidence thresholds to `aria/tools/knowledge_tool.py`.
+- [x] T036 [US13] Add rate citation and unavailable-knowledge tests in `tests/unit/`.
 
 ## Phase 12: User Story 14 - CRM and API Context (Priority: P1)
 
@@ -116,53 +116,53 @@
 **Independent Test**: Session fixtures verify segment-aware behavior, limited functionality, and incident logging.
 
 - [ ] T037 [US14] Implement `SessionManager` in `aria/session/manager.py` with DynamoDB persistence and recovery.
-- [ ] T038 [US14] Implement authenticated WebSocket and REST handlers in `aria/api/`.
+- [x] T038 [US14] Implement authenticated WebSocket and REST handlers in `aria/api/`.
 - [ ] T039 [US14] Implement CRM session context loading and unavailable-CRM degradation in `aria/agent.py`.
 - [ ] T040 [US14] Add session, API authentication, rate-limit, and CRM outage tests in `tests/integration/`.
 
 ## Phase 13: User Story 2 - Wallet Profiling and Consolidation (Priority: P2)
 
-- [ ] T041 [US2] Implement wallet profile updates and consolidation opportunity models in `aria/tools/crm_tool.py` and `aria/models/wallet.py`.
-- [ ] T042 [US2] Add benefit-focused consolidation response behavior in `aria/agent.py`.
-- [ ] T043 [US2] Add wallet disclosure and no-pressure messaging tests in `tests/unit/`.
+- [x] T041 [US2] Implement wallet profile updates and consolidation opportunity models in `aria/tools/crm_tool.py` and `aria/models/wallet.py`.
+- [x] T042 [US2] Add benefit-focused consolidation response behavior in `aria/agent.py`.
+- [x] T043 [US2] Add wallet disclosure and no-pressure messaging tests in `tests/unit/`.
 
 ## Phase 14: User Story 3 - Financial Product Recommendations (Priority: P2)
 
-- [ ] T044 [US3] Implement risk-to-product mapping and balance-qualified offer rules in `aria/constants.py` and `aria/agent.py`.
-- [ ] T045 [US3] Add protection, lending, payment, fee-waiver, and concierge recommendation behavior in `aria/agent.py`.
-- [ ] T046 [US3] Add profile-sensitive recommendation tests in `tests/property/`.
+- [x] T044 [US3] Implement risk-to-product mapping and balance-qualified offer rules in `aria/constants.py` and `aria/agent.py`.
+- [x] T045 [US3] Add protection, lending, payment, fee-waiver, and concierge recommendation behavior in `aria/agent.py`.
+- [x] T046 [US3] Add profile-sensitive recommendation tests in `tests/property/`.
 
 ## Phase 15: User Story 4 - Retention and Maturity Management (Priority: P2)
 
-- [ ] T047 [US4] Implement maturity and outflow tools in `aria/tools/maturity_tool.py`.
-- [ ] T048 [US4] Implement EventBridge handlers in `aria/events/handler.py` and `aria/events/lambda_handler.py`.
-- [ ] T049 [US4] Add exact-30-day, 31-day, outflow-threshold, and reinvestment-rate tests in `tests/unit/test_maturity_tool.py`.
+- [x] T047 [US4] Implement maturity and outflow tools in `aria/tools/maturity_tool.py`.
+- [x] T048 [US4] Implement EventBridge handlers in `aria/events/handler.py` and `aria/events/lambda_handler.py`.
+- [x] T049 [US4] Add exact-30-day, 31-day, outflow-threshold, and reinvestment-rate tests in `tests/unit/test_maturity_tool.py`.
 
 ## Phase 16: User Story 11 - Actionable Conversation Style (Priority: P2)
 
-- [ ] T050 [US11] Implement name personalization, empathetic tone, bullet formatting, and next-step response rules in `aria/agent.py`.
-- [ ] T051 [US11] Add response-style and personalization property tests in `tests/property/`.
+- [x] T050 [US11] Implement name personalization, empathetic tone, bullet formatting, and next-step response rules in `aria/agent.py`.
+- [x] T051 [US11] Add response-style and personalization property tests in `tests/property/`.
 
 ## Phase 17: Agent Assembly and Cross-Cutting Validation
 
-- [ ] T052 Implement complete tool registration and orchestration in `aria/agent.py`.
+- [x] T052 Implement complete tool registration and orchestration in `aria/agent.py`.
 - [ ] T053 [P] Add the 20 behavioral property tests described by the source Kiro task plan in `tests/property/`.
-- [ ] T054 [P] Add structured CloudWatch logging and X-Ray tracing in `aria/observability.py` around requests, tools, guardrails, and escalations.
-- [ ] T055 [P] Add deployment configuration in `infra/` for Lambda/API Gateway/EventBridge and document required parameters in `docs/deployment.md`.
+- [x] T054 [P] Add structured CloudWatch logging and X-Ray tracing in `aria/observability.py` around requests, tools, guardrails, and escalations.
+- [x] T055 [P] Add deployment configuration in `infra/` for Lambda/API Gateway/EventBridge and document required parameters in `docs/deployment.md`.
 - [ ] T056 Run the scenarios in `quickstart.md`, full test suite, linting, and security review.
 - [ ] T057 Update provider contracts, operational limits, data retention, and the production runbook in `docs/`.
 
 ## Phase 18: Production Best-Practice Hardening
 
-- [ ] T058 Create `aria/workflow/state.py`, `aria/workflow/patch.py`, and `aria/workflow/result.py` with typed workflow state, atomic patch operations, revisioning, and safe reason codes.
-- [ ] T059 Create `aria/workflow/validator.py` with deterministic authorization, immutable-field, domain-rule, KYC/AML, and confirmation validation that does not depend on model instructions.
-- [ ] T060 Create `aria/workflow/dependencies.py` and `aria/workflow/next_step.py` with declarative transitive invalidation and earliest-affected-step resolution.
-- [ ] T061 Add optimistic concurrency, idempotency keys, conditional writes, and retry-safe side-effect handling in `aria/persistence/` and `aria/tools/`.
-- [ ] T062 Integrate the pinned Strands session/context-management APIs in `aria/agent.py`, including bounded context, compact tool results, token/turn limits, cancellation, and explicit handling of guardrail stop reasons.
-- [ ] T063 Integrate AgentCore Runtime session mapping and restart recovery in `aria/api/` and `aria/session/`, ensuring one authenticated user/conversation maps to one reused runtime session ID and concurrent writers are rejected or serialized.
-- [ ] T064 Integrate scoped AgentCore Memory retrieval and extraction in `aria/memory/`, with tenant isolation, bounded top-k retrieval, retention/deletion policy, and current-workflow-state precedence.
-- [ ] T065 Integrate AgentCore Gateway capability filtering and semantic discovery in `aria/tools/`, while enforcing authorization through IAM, Gateway policy, OAuth scopes, and backend checks.
-- [ ] T066 Add Python quality gates in `pyproject.toml` and CI for Ruff format/lint, static typing, pytest, Hypothesis, dependency auditing, secret scanning, and coverage thresholds.
+- [x] T058 Create `aria/workflow/state.py`, `aria/workflow/patch.py`, and `aria/workflow/result.py` with typed workflow state, atomic patch operations, revisioning, and safe reason codes.
+- [x] T059 Create `aria/workflow/validator.py` with deterministic authorization, immutable-field, domain-rule, KYC/AML, and confirmation validation that does not depend on model instructions.
+- [x] T060 Create `aria/workflow/dependencies.py` and `aria/workflow/next_step.py` with declarative transitive invalidation and earliest-affected-step resolution.
+- [x] T061 Add optimistic concurrency, idempotency keys, conditional writes, and retry-safe side-effect handling in `aria/persistence/` and `aria/tools/`.
+- [ ] T062 Integrate pinned Strands session/context APIs in `aria/agent.py`, including measured token/turn budgets, cancellation, and stop handling; Runtime now invokes Strands with bounded history and guardrails, but budgets/hooks are not complete.
+- [x] T063 Integrate AgentCore Runtime invocation/session recovery in `aria/api/` and `aria/session/`; REST and WebSocket requests use the IAM Runtime client and DynamoDB-backed user/conversation mapping, with fake-backed recovery tests. AWS invocation remains unverified.
+- [ ] T064 Integrate scoped AgentCore Memory retrieval and extraction in `aria/framework/agentcore.py`, with tenant isolation, bounded retrieval, retention/deletion and workflow-state precedence; retrieval is wired, but safe writes/extraction and deletion lifecycle are not.
+- [ ] T065 Integrate AgentCore Gateway discovery and semantic filtering in `aria/tools/`, with policy engine/OAuth/backend authorization; Lambda event dispatch and allowlist are fixed, but policy/discovery and principal-scoped backend authorization are incomplete.
+- [x] T066 Add Python quality gates in `pyproject.toml` and CI for Ruff format/lint, static typing, pytest, Hypothesis, dependency auditing, secret scanning, and coverage thresholds.
 - [ ] T067 Add redaction-safe structured observability in `aria/observability.py` for correlation ID, runtime session, workflow revision, changed fields, validation result, stale fields, selected tools, model/tool latency, retries, and error category.
 - [ ] T068 Add tests for corrections, multiple atomic updates, transitive invalidation, locked fields, memory conflicts, Runtime restart recovery, Gateway tool visibility, authorization, guardrail intervention, context growth, and concurrent session writes in `tests/`.
 - [ ] T069 Document environment configuration, SDK version pins, data retention, deletion, SLOs, provider contracts, operational runbooks, and rollback strategy in `docs/`.
@@ -172,7 +172,7 @@
 - [X] T070 Create the greenfield CDK v2 application under `cdk/` with pinned runtime and development dependencies, environment configuration, and no synthesis-time side effects.
 - [X] T071 Define `cdk/stacks/stateful_stack.py` for DynamoDB, KMS, Secrets Manager, queues/topics, and event resources with environment-specific retention, encryption, termination protection, and backup policies.
 - [ ] T072 Define `cdk/stacks/shared_stack.py`, `gateway_stack.py`, `runtime_stack.py`, and `observability_stack.py` only where lifecycle or deployment boundaries justify them; keep unrelated stacks independent.
-- [ ] T073 Apply the organization permissions boundary with the CDK `PermissionsBoundary` API and implement least-privilege grants using L2 grant methods before any manual policy statements.
+- [x] T073 Apply the organization permissions boundary with the CDK `PermissionsBoundary` API and implement least-privilege grants using L2 grant methods before any manual policy statements.
 - [ ] T074 Implement environment tags, log groups, retention, data protection, alarms, X-Ray configuration, and CDK Nag checks in `cdk/constructs/` with documented, resource-scoped suppressions.
 - [ ] T075 Implement cross-stack handoffs in `cdk/stacks/` using direct CDK references within the app and SSM only for independently deployed or runtime-resolved values; add parameter ownership and missing-parameter tests in `cdk/tests/`.
 - [X] T076 Add `cdk.context.json` only for reviewed context lookups and make `cdk synth` deterministic without account mutation or network calls during normal CI synthesis.

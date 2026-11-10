@@ -1,0 +1,7 @@
+{
+  "id": "brownfield",
+  "description": "Understand an existing codebase before designing and implementing a change.",
+  "stages": ["specify", "codebase-analysis", "clarify", "plan", "tasks", "analyze", "implement"],
+  "depth": "standard",
+  "gates": ["specify", "plan", "implement"]
+}

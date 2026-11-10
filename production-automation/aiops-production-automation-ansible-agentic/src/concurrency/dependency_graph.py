@@ -44,7 +44,7 @@ class DependencyGraph:
         Retains previous graph on failure.
         """
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
         except (OSError, yaml.YAMLError) as e:
             logger.error("Failed to load dependency graph from %s: %s", path, e)

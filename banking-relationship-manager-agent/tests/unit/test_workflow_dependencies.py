@@ -22,3 +22,13 @@ def test_next_step_selects_earliest_affected_step():
         steps, changed_fields={"risk_appetite"}, graph=WorkflowDependencyGraph()
     )
     assert next_step == "risk_questionnaire"
+
+
+def test_dependency_graph_resolves_transitive_invalidation_and_reason():
+    graph = WorkflowDependencyGraph()
+
+    affected = graph.invalidates_for("client_profile")
+
+    assert "risk_questionnaire" in affected
+    assert "product_recommendation" in affected
+    assert graph.reason_for("risk_appetite") == "risk_profile_changed"

@@ -8,6 +8,14 @@ metadata:
 ---
 
 
+## Lifecycle Handoff
+
+Unless this is the assigned lead executing a conductor brief containing
+`SPECKIT_DELEGATED_STAGE=clarify`, invoke `speckit-workflow` with the original
+request and requested stage `clarify`, then return without executing this body.
+Only the matching delegated lead follows the body below. Use the supplied
+feature directory; the conductor owns stage transitions and human gates.
+
 ## User Input
 
 ```text
@@ -57,6 +65,19 @@ You **MUST** consider the user input before proceeding (if not empty).
 Goal: Detect and reduce ambiguity or missing decision points in the active feature specification and record the clarifications directly in the spec file.
 
 Note: This clarification workflow is expected to run (and be completed) BEFORE invoking `/speckit-plan`. If the user explicitly states they are skipping clarification (e.g., exploratory spike), you may proceed, but must warn that downstream rework risk increases.
+
+### Interaction modes and the questions file
+
+Every clarifying question is also recorded in `<FEATURE_DIR>/questions.md` through the flow CLI, so open questions are audited and block the `plan` gate (`no-open-questions` sensor). Choose the mode from the user input, defaulting to **guided**:
+
+- **guided** (default): run the sequential loop below. Before asking each question, record it with `python -m speckit_flow questions add "<question>" --role <roster id> --feature-dir <FEATURE_DIR>`, tagging the role best placed to answer (for example `product`, `architect`, `compliance`; `questions add` rejects ids not in the roster).
+- **file**: record all candidate questions (still max 5) with `questions add`, then stop and tell the user to answer them by editing `questions.md` (write the answer after the empty `**Answer:**` marker under the question) or by running `questions answer <id> "<text>"`. Resume when `questions check` exits 0.
+- **discussion**: the user asked to talk it through freely. Discuss without the one-question-at-a-time format, record each open point with `questions add`, and capture agreed outcomes in the spec's Clarifications section.
+
+Rules for all modes:
+- Agents MUST NOT run `questions answer`; the guard hook blocks it and only a human decision closes a question. After integrating a user's answer into the spec, tell the user the exact `questions answer <id> "<text>"` command (or that they can edit `questions.md`) to close it.
+- Use `questions list --open [--role <role>]` to show who still owes an answer, and `questions check` to confirm none remain before reporting completion.
+- If the flow CLI is unavailable, continue in guided mode without recording and say so.
 
 Execution steps:
 

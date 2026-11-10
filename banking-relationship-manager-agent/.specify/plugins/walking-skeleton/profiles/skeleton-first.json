@@ -1,0 +1,10 @@
+{
+  "id": "skeleton-first",
+  "description": "Verify a minimal end-to-end slice and obtain human approval before full implementation.",
+  "stages": ["specify", "plan", "tasks", "walking-skeleton", "implement"],
+  "depth": "standard",
+  "gates": ["specify", "plan", "walking-skeleton"],
+  "assignments": {
+    "walking-skeleton": {"lead": "developer", "support": ["quality"]}
+  }
+}

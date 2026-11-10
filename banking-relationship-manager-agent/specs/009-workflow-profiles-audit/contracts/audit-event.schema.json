@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Audit Event (one JSON object per line)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["seq", "ts", "type", "stage", "actor", "detail", "prev_hash"],
+  "properties": {
+    "seq": { "type": "integer", "minimum": 1 },
+    "ts": { "type": "string", "format": "date-time" },
+    "type": {
+      "enum": [
+        "profile_selected", "profile_changed", "stage_started", "stage_completed",
+        "stage_skipped", "gate_approved", "gate_rejected", "failure"
+      ]
+    },
+    "stage": { "type": ["string", "null"] },
+    "actor": { "type": "string", "pattern": "^(human|agent):.+" },
+    "detail": { "type": "string", "maxLength": 500 },
+    "prev_hash": { "type": "string" }
+  }
+}

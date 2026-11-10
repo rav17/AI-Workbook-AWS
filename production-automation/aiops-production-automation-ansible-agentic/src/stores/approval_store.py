@@ -19,7 +19,6 @@ Design decisions:
 
 from __future__ import annotations
 
-import json
 import logging
 import time
 from collections import OrderedDict
@@ -28,7 +27,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 import boto3
-from botocore.exceptions import BotoCoreError, ClientError
+from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +73,8 @@ class StoredApproval:
     expiry_seconds: int = DEFAULT_EXPIRY_SECONDS
     consumed: bool = False
     consumed_at: float = 0.0
+    # Key of the duplicate-suppression lock held by this approval (see claim_dedup)
+    dedup_key: str = ""
 
     @property
     def is_expired(self) -> bool:
@@ -170,6 +171,7 @@ class DynamoApprovalStore:
             ),
             # Record type marker for queries
             "record_type": "APPROVAL",
+            "dedup_key": approval.dedup_key,
         }
 
         try:
@@ -308,6 +310,11 @@ class DynamoApprovalStore:
         approval.consumed_at = now
         self._cache_put(token, approval)
 
+        # Free the duplicate-suppression lock so a NEW occurrence of the same
+        # problem (after this fix) can request approval again.
+        if approval.dedup_key:
+            self.release_dedup(approval.dedup_key, token)
+
         logger.info(
             "Approval consumed: incident=%s token=%s...",
             approval.incident_id,
@@ -349,6 +356,59 @@ class DynamoApprovalStore:
             )
             return None
 
+    def claim_dedup(self, dedup_key: str, token: str, lock_until: float) -> Optional[bool]:
+        """Atomically claim the duplicate-suppression lock for a remediation.
+
+        Ensures only ONE pending approval exists per (alert, host, playbook),
+        across all ECS tasks. The lock is a single item; the conditional write
+        succeeds only if no lock exists or the existing lock has expired.
+
+        Args:
+            dedup_key: Stable key identifying the remediation (see ApprovalHandler).
+            token: Token of the approval that will own the lock.
+            lock_until: Unix timestamp when the lock expires (approval expiry).
+
+        Returns:
+            True if claimed, False if another pending approval already holds it,
+            None if DynamoDB failed (caller should fail open and send the email).
+        """
+        now = time.time()
+        try:
+            self._table.put_item(
+                Item={
+                    "incident_id": f"APPROVAL_DEDUP#{dedup_key}",
+                    "timestamp": "LOCK",
+                    "token": f"DEDUP#{token}",  # namespaced: never matches a real token
+                    "owner_token": token,
+                    "lock_until": int(lock_until),
+                    "expiry_timestamp": int(lock_until + 3600),  # TTL cleanup
+                    "record_type": "APPROVAL_DEDUP",
+                },
+                ConditionExpression="attribute_not_exists(#pk) OR #lu < :now",
+                ExpressionAttributeNames={"#pk": "incident_id", "#lu": "lock_until"},
+                ExpressionAttributeValues={":now": int(now)},
+            )
+            return True
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
+                return False
+            logger.warning("Approval dedup claim failed (failing open): %s", e)
+            return None
+
+    def release_dedup(self, dedup_key: str, token: str) -> None:
+        """Release the dedup lock, but only if this approval still owns it."""
+        try:
+            self._table.delete_item(
+                Key={"incident_id": f"APPROVAL_DEDUP#{dedup_key}", "timestamp": "LOCK"},
+                ConditionExpression="#owner = :token",
+                ExpressionAttributeNames={"#owner": "owner_token"},
+                ExpressionAttributeValues={":token": token},
+            )
+        except ClientError as e:
+            if e.response["Error"]["Code"] != "ConditionalCheckFailedException":
+                # Non-fatal: the lock still expires on its own at lock_until.
+                logger.warning("Failed to release approval dedup lock: %s", e)
+
     def _item_to_approval(self, item: dict) -> StoredApproval:
         """Convert a DynamoDB item to a StoredApproval dataclass."""
         return StoredApproval(
@@ -366,6 +426,7 @@ class DynamoApprovalStore:
             expiry_seconds=int(item.get("expiry_seconds", DEFAULT_EXPIRY_SECONDS)),
             consumed=bool(item.get("consumed", False)),
             consumed_at=float(item.get("consumed_at", 0)),
+            dedup_key=item.get("dedup_key", ""),
         )
 
     def _cache_put(self, token: str, approval: StoredApproval) -> None:

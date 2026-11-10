@@ -7,10 +7,12 @@ def test_workflow_result_records_patch_outcome():
         valid=True,
         state={"client_id": "CUST-1", "risk_appetite": "moderate"},
         next_step="risk_questionnaire",
+        reason_code="accepted",
     )
 
     assert result.valid is True
     assert result.next_step == "risk_questionnaire"
+    assert result.reason_code == "accepted"
 
 
 def test_validator_rejects_locked_field_updates():

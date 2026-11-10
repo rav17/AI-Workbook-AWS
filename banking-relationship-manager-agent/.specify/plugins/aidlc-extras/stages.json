@@ -1,0 +1,7 @@
+{
+  "stages": [
+    {"id": "market-research", "phase": "inception", "optional": true, "after": "ideation", "lead": "product", "description": "Size the opportunity: users, alternatives and evidence. Use templates/market-research.md"},
+    {"id": "nfr-design", "phase": "design", "optional": true, "after": "plan", "lead": "architect", "description": "Turn non-functional needs into design decisions. Use templates/nfr-design.md"},
+    {"id": "perf-validation", "phase": "construction", "optional": true, "after": "implement", "lead": "quality", "description": "Measure the build against performance targets. Use templates/perf-validation.md"}
+  ]
+}

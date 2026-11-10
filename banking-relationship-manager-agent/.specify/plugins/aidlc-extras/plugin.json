@@ -1,0 +1,6 @@
+{
+  "name": "aidlc-extras",
+  "version": "1.0.0",
+  "description": "Extra AI-DLC-style stages (market research, NFR design, performance validation) and two profiles that use them.",
+  "enabled": false
+}

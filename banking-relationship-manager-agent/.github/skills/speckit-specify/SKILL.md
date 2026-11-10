@@ -8,6 +8,16 @@ metadata:
 ---
 
 
+## Lifecycle Handoff
+
+Unless this is the assigned lead executing a conductor brief containing
+`SPECKIT_DELEGATED_STAGE=specify`, invoke `speckit-workflow` with the original
+request and requested stage `specify`, then return without executing this body.
+If the confirmed route starts with ideation, explain that prerequisite; do not
+silently skip it. The delegated lead reuses the supplied feature directory and
+pointer instead of allocating another one; create the spec in that directory.
+The conductor owns stage transitions and human gates.
+
 ## User Input
 
 ```text

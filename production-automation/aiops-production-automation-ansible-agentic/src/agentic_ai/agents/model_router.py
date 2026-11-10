@@ -42,7 +42,8 @@ class RoutingDecision:
 MODEL_TIERS = {
     AlertComplexity.SIMPLE: "amazon.nova-lite-v1:0",
     AlertComplexity.MODERATE: "amazon.nova-pro-v1:0",
-    AlertComplexity.COMPLEX: "anthropic.claude-3-sonnet-20240229-v1:0",
+    # Claude 3 Sonnet is end-of-life on Bedrock; use the US inference profile.
+    AlertComplexity.COMPLEX: "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
 }
 
 # Escalation path: SIMPLE → MODERATE → COMPLEX

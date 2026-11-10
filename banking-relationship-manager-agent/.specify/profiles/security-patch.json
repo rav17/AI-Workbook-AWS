@@ -1,0 +1,7 @@
+{
+  "id": "security-patch",
+  "description": "CVE or focused vulnerability response.",
+  "stages": ["specify", "tasks", "implement"],
+  "depth": "minimal",
+  "gates": ["specify"]
+}

@@ -12,8 +12,7 @@ Uses a thread-safe sliding window counter with O(1) operations.
 import logging
 import os
 import time
-from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from threading import Lock
 from typing import Optional
 

@@ -1,0 +1,7 @@
+{
+  "id": "release-ready",
+  "description": "Prepare a release and operational handoff with current local evidence and human decisions.",
+  "stages": ["specify", "plan", "tasks", "implement", "deploy", "operate"],
+  "depth": "standard",
+  "gates": ["specify", "plan", "implement", "deploy", "operate"]
+}

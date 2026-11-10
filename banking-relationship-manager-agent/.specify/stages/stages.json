@@ -1,0 +1,13 @@
+{
+  "stages": [
+    {"id": "ideation", "phase": "inception", "optional": true, "description": "Capture intent, users and outcomes"},
+    {"id": "specify", "phase": "inception", "description": "Write the feature specification"},
+    {"id": "clarify", "phase": "inception", "description": "Resolve underspecified areas"},
+    {"id": "plan", "phase": "design", "description": "Technical plan and design artifacts"},
+    {"id": "tasks", "phase": "design", "description": "Dependency-ordered task list"},
+    {"id": "analyze", "phase": "design", "description": "Cross-artifact consistency analysis"},
+    {"id": "implement", "phase": "construction", "description": "Build the tasks"},
+    {"id": "deploy", "phase": "operation", "optional": true, "requires": ["implement"], "description": "Pipeline and deployment plan"},
+    {"id": "operate", "phase": "operation", "optional": true, "requires": ["deploy"], "description": "Observability and incident response"}
+  ]
+}

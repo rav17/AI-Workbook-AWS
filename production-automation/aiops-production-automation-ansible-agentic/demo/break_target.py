@@ -70,7 +70,7 @@ def break_cpu(instance_id: str, region: str, env_name: str, duration: int):
     if "INSTALL FAILED" in install_result.get("StandardOutputContent", ""):
         print("  ERROR: Failed to install stress-ng on target instance")
         sys.exit(1)
-    print(f"  stress-ng confirmed available")
+    print("  stress-ng confirmed available")
 
     # Run stress via the SSM document
     print(f"  Starting CPU stress for {duration}s...")
@@ -109,7 +109,7 @@ def break_cpu(instance_id: str, region: str, env_name: str, duration: int):
     )
     verify_output = verify_result.get("StandardOutputContent", "").strip()
     if verify_output:
-        print(f"  Verified: stress-ng is running")
+        print("  Verified: stress-ng is running")
         print(f"    {verify_output.splitlines()[0]}")
     else:
         print("  WARNING: stress-ng process not found — may have exited early")
@@ -257,7 +257,7 @@ def _trigger_alert(instance_id: str, region: str, env_name: str, mode: str):
     result = json.loads(response["Payload"].read())
     status_code = result.get("status", response.get("StatusCode"))
     print(f"  Alert fired: {payload['alert_name']} → status={status_code}")
-    print(f"  Pipeline is now processing the alert...")
+    print("  Pipeline is now processing the alert...")
 
 
 def _stress_memory(instance_id: str, region: str, duration: int):

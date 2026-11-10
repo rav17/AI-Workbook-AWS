@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Protocol, runtime_checkable
 
+from aria.framework.memory import MemoryEntry
+
 
 @runtime_checkable
 class PromptBuilder(Protocol):
@@ -29,11 +31,17 @@ class RuntimeClient(Protocol):
     def create_or_recover_session(self, session_id: str) -> str: ...
 
 
+class MemoryRetriever(Protocol):
+    def retrieve(self, tenant_id: str, limit: int = 5) -> list[MemoryEntry]: ...
+
+
 @runtime_checkable
 class MemoryClient(Protocol):
-    def retrieve(self, tenant_id: str, limit: int) -> list[dict[str, Any]]: ...
+    def retrieve(self, tenant_id: str, limit: int, query: str) -> list[dict[str, Any]]: ...
 
     def add(self, tenant_id: str, key: str, value: str) -> None: ...
+
+    def delete(self, tenant_id: str, key: str | None = None) -> int: ...
 
 
 @runtime_checkable

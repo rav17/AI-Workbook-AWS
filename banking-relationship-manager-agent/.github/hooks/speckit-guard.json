@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "python3 scripts/speckit_guard.py",
+        "powershell": "python scripts/speckit_guard.py",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

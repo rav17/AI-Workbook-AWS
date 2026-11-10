@@ -10,8 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install the AWS SSM connection plugin for Ansible
-RUN ansible-galaxy collection install community.aws amazon.aws --force
+# Install the AWS SSM connection plugin for Ansible.
+# Install into the system-wide collections path: running as root would otherwise put
+# them in /root/.ansible, which the non-root "appuser" (USER below) cannot see.
+RUN ansible-galaxy collection install community.aws amazon.aws --force \
+    -p /usr/share/ansible/collections
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash appuser

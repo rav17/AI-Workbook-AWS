@@ -173,7 +173,7 @@ class BlastRadiusClassifier:
     def _load_config(self, path: str) -> Optional[dict]:
         """Load and validate the risk classification config."""
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
         except (yaml.YAMLError, OSError) as e:
             logger.error("Failed to load risk classification config: %s", e)

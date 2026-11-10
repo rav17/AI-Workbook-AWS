@@ -155,7 +155,7 @@ jobs:
         id: diff
         run: |
           set +e
-          DIFF_OUTPUT=$(npx aws-cdk@2 diff NetworkStack \
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff Aiops-${{ needs.prepare.outputs.environment }}-Network \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
           DIFF_EXIT=$?
@@ -179,7 +179,7 @@ jobs:
       - name: Deploy NetworkStack
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          npx aws-cdk@2 deploy NetworkStack \
+          npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Network \
             --require-approval never \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }}
@@ -221,7 +221,7 @@ jobs:
         id: diff
         run: |
           set +e
-          DIFF_OUTPUT=$(npx aws-cdk@2 diff DataStack \
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff Aiops-${{ needs.prepare.outputs.environment }}-Data \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
           set -e
@@ -243,7 +243,7 @@ jobs:
       - name: Deploy DataStack
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          npx aws-cdk@2 deploy DataStack \
+          npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Data \
             --require-approval never \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }}
@@ -285,7 +285,7 @@ jobs:
         id: diff
         run: |
           set +e
-          DIFF_OUTPUT=$(npx aws-cdk@2 diff ComputeStack \
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff Aiops-${{ needs.prepare.outputs.environment }}-Compute \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
           set -e
@@ -311,7 +311,7 @@ jobs:
           if [[ "${{ needs.prepare.outputs.is_dev }}" == "true" ]]; then
             HOTSWAP_FLAG="--hotswap"
           fi
-          npx aws-cdk@2 deploy ComputeStack \
+          npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Compute \
             --require-approval never \
             ${HOTSWAP_FLAG} \
             --context environment=${{ needs.prepare.outputs.environment }} \
@@ -387,10 +387,16 @@ jobs:
           ")
           echo "Previous manifest: ${MANIFEST}"
 
-          PREV_IMAGE_TAG=$(echo "$MANIFEST" | jq -r '.image_tag')
+          PREV_IMAGE_TAG=$(echo "$MANIFEST" | jq -r '.image_tag // empty')
+          # get_manifest() returns None when no previous manifest exists (e.g. first
+          # deploy). Never deploy imageTag=null — fail loudly for manual intervention.
+          if [[ -z "${PREV_IMAGE_TAG}" ]]; then
+            echo "::error::No previous deployment manifest found — cannot auto-rollback."
+            exit 1
+          fi
           echo "Rolling back to image tag: ${PREV_IMAGE_TAG}"
 
-          npx aws-cdk@2 deploy ComputeStack \
+          npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Compute \
             --require-approval never \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${PREV_IMAGE_TAG}
@@ -445,7 +451,7 @@ jobs:
         id: diff
         run: |
           set +e
-          DIFF_OUTPUT=$(npx aws-cdk@2 diff ObservabilityStack \
+          DIFF_OUTPUT=$(npx aws-cdk@2 diff Aiops-${{ needs.prepare.outputs.environment }}-Observability \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
           set -e
@@ -467,7 +473,7 @@ jobs:
       - name: Deploy ObservabilityStack
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          npx aws-cdk@2 deploy ObservabilityStack \
+          npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Observability \
             --require-approval never \
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }}

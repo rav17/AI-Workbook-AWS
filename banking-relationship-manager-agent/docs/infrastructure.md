@@ -31,6 +31,10 @@ it to source control.
 - The stateful stack provisions a DynamoDB session table, KMS key, encrypted provider
 	secret, SQS workflow queue with a dead-letter queue, an environment-scoped EventBridge
 	bus, and a retained workflow log group.
+- The AgentCore stacks provision an encrypted AgentCore Memory resource, an IAM-authorized
+	MCP Gateway with a Lambda target, and an AgentCore Runtime with the Aria code asset.
+- AgentCore resources are managed by CDK CloudFormation resources and deploy with the
+	application stack dependency order: stateful -> application -> gateway -> runtime.
 - Encryption, point-in-time recovery, retention, and removal policies are configured at
 	the resource level with explicit lifecycle settings.
 - No synthesis-time network or account mutation is performed during normal CI synthesis.

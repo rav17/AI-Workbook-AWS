@@ -1,0 +1,7 @@
+{
+  "id": "refactor",
+  "description": "Improve existing code without changing product behavior.",
+  "stages": ["specify", "plan", "tasks", "implement"],
+  "depth": "minimal",
+  "gates": ["plan"]
+}

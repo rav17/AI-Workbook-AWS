@@ -1,0 +1,13 @@
+{
+  "sensors": [
+    {
+      "id": "walking-skeleton",
+      "kind": "builtin",
+      "builtin": "skeleton",
+      "stages": ["walking-skeleton"],
+      "required": true,
+      "profiles": ["skeleton-first"],
+      "description": "Require actual task references, tracked source/test/report and current approved unit checkpoint."
+    }
+  ]
+}

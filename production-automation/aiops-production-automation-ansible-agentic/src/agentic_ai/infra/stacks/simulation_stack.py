@@ -335,16 +335,16 @@ class SimulationStack(cdk.Stack):
         # When EC2 CPU > 80% for 1 minute, Lambda sends Alertmanager
         # payload to the self-healing webhook endpoint.
         # -----------------------------------------------------------
-        # Get API Gateway URL from SSM (set by ComputeStack)
-        api_url_param = f"/aiops/{env_name}/service-base-url"
+        # API Gateway URL is read by the Lambda from SSM
+        # (/aiops/{env}/service-base-url, set by ComputeStack).
 
         alert_lambda = _lambda.Function(
             self,
             "AlertTriggerLambda",
             function_name=f"aiops-alert-trigger-{env_name}",
-            runtime=_lambda.Runtime.PYTHON_3_11,
+            runtime=_lambda.Runtime.PYTHON_3_12,  # python3.11: Lambda creation disabled 2026-07-31
             handler="index.handler",
-            timeout=Duration.seconds(30),
+            timeout=Duration.seconds(60),  # Standards: Lambda timeout >= 60s
             code=_lambda.Code.from_inline(_ALERT_LAMBDA_CODE),
             environment={
                 "ENVIRONMENT": env_name,
@@ -407,9 +407,9 @@ class SimulationStack(cdk.Stack):
             self,
             "NetworkAlertLambda",
             function_name=f"aiops-network-alert-{env_name}",
-            runtime=_lambda.Runtime.PYTHON_3_11,
+            runtime=_lambda.Runtime.PYTHON_3_12,  # python3.11: Lambda creation disabled 2026-07-31
             handler="index.handler",
-            timeout=Duration.seconds(30),
+            timeout=Duration.seconds(60),  # Standards: Lambda timeout >= 60s
             code=_lambda.Code.from_inline(_ALERT_LAMBDA_CODE),
             environment={
                 "ENVIRONMENT": env_name,

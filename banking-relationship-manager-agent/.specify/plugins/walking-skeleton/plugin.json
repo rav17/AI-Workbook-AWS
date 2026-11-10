@@ -1,0 +1,6 @@
+{
+  "name": "walking-skeleton",
+  "version": "1.0.0",
+  "description": "Prove a source-bound thin journey before full implementation, then stop for human review.",
+  "enabled": false
+}

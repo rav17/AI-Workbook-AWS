@@ -1,0 +1,6 @@
+{
+  "name": "codebase-analysis",
+  "version": "1.0.0",
+  "description": "Optional existing-codebase evidence before planning, with audited greenfield skipping.",
+  "enabled": false
+}

@@ -1,0 +1,72 @@
+{
+  "bundle_version": "1.0.0",
+  "files": [
+    {"source": "speckit_flow", "destination": "speckit_flow", "category": "engine", "include": [
+      "__init__.py", "__main__.py", "agents.py", "audit.py", "cli.py", "codebase.py", "compose.py",
+      "contracts.py", "custom.py", "doctor.py", "knowledge.py", "models.py", "orchestration.py", "plugins.py", "profiles.py",
+      "questions.py", "readiness.py", "reviews.py", "rules.py", "sensors.py", "session.py", "stagedefs.py",
+      "state.py", "trace.py", "units.py"
+    ]},
+    {"source": ".github/skills", "destination": ".github/skills", "category": "skills", "include": [
+      "speckit-analyze/SKILL.md", "speckit-checklist/SKILL.md", "speckit-clarify/SKILL.md",
+      "speckit-compose/SKILL.md", "speckit-codebase/SKILL.md", "speckit-constitution/SKILL.md", "speckit-converge/SKILL.md",
+      "speckit-contracts/SKILL.md", "speckit-implement/SKILL.md", "speckit-learn/SKILL.md", "speckit-plan/SKILL.md",
+      "speckit-profile/SKILL.md", "speckit-readiness/SKILL.md", "speckit-review/SKILL.md", "speckit-specify/SKILL.md",
+      "speckit-tasks/SKILL.md", "speckit-taskstoissues/SKILL.md", "speckit-skeleton/SKILL.md", "speckit-workflow/SKILL.md"
+    ]},
+    {"source": ".github/agents", "destination": ".github/agents", "category": "agents", "include": [
+      "speckit-architect.agent.md", "speckit-architecture-reviewer.agent.md",
+      "speckit-aws-platform.agent.md", "speckit-compliance-reviewer.agent.md",
+      "speckit-compliance.agent.md", "speckit-composer.agent.md", "speckit-conductor.agent.md",
+      "speckit-delivery.agent.md", "speckit-design.agent.md", "speckit-developer.agent.md",
+      "speckit-devsecops.agent.md", "speckit-operations.agent.md", "speckit-pipeline-deploy.agent.md",
+      "speckit-product-lead.agent.md", "speckit-product.agent.md", "speckit-quality.agent.md"
+    ]},
+    {"source": ".github/hooks", "destination": ".github/hooks", "category": "hooks",
+     "include": ["speckit-guard.json", "speckit-session.json"]},
+    {"source": ".github/instructions/speckit-workflow.instructions.md", "destination": ".github/instructions/speckit-workflow.instructions.md", "category": "instructions"},
+    {"source": ".specify/templates/portable/roster.json", "destination": ".specify/agents/roster.json", "category": "configuration", "seed": true},
+    {"source": ".specify/.gitignore", "destination": ".specify/.gitignore", "category": "configuration"},
+    {"source": ".specify/profiles", "destination": ".specify/profiles", "category": "configuration", "seed": true,
+     "include": ["bugfix.json", "enterprise.json", "express.json", "feature.json", "full-lifecycle.json", "infra.json", "poc.json", "refactor.json", "security-patch.json"]},
+    {"source": ".specify/templates/portable/rules.json", "destination": ".specify/rules/rules.json", "category": "configuration", "seed": true},
+    {"source": ".specify/stages/stages.json", "destination": ".specify/stages/stages.json", "category": "configuration", "seed": true},
+    {"source": ".specify/plugins", "destination": ".specify/plugins", "category": "plugins", "seed": true, "include": [
+      "aidlc-extras/plugin.json", "aidlc-extras/README.md", "aidlc-extras/sensors.json", "aidlc-extras/stages.json",
+      "aidlc-extras/profiles/discovery.json", "aidlc-extras/profiles/nfr-hardening.json",
+      "aidlc-extras/templates/market-research.md", "aidlc-extras/templates/nfr-design.md",
+      "aidlc-extras/templates/perf-validation.md", "compliance/plugin.json", "compliance/README.md",
+      "compliance/sensors.json", "compliance/agents.json", "compliance/profiles/compliance.json",
+      "codebase-analysis/plugin.json", "codebase-analysis/README.md",
+      "codebase-analysis/stages.json", "codebase-analysis/profiles/brownfield.json",
+      "operational-readiness/plugin.json", "operational-readiness/README.md",
+      "operational-readiness/sensors.json", "operational-readiness/profiles/release-ready.json",
+      "operational-readiness/templates/release.md", "operational-readiness/templates/runbook.md",
+      "walking-skeleton/plugin.json", "walking-skeleton/README.md",
+      "walking-skeleton/stages.json", "walking-skeleton/sensors.json",
+      "walking-skeleton/profiles/skeleton-first.json", "walking-skeleton/templates/skeleton.md",
+      "stage-contracts/plugin.json", "stage-contracts/sensors.json",
+      "stage-contracts/profiles/contract-driven.json",
+      "stage-contracts/contracts/stages.json"
+    ]},
+    {"source": ".specify/scripts/powershell", "destination": ".specify/scripts/powershell", "category": "scripts", "include": [
+      "check-prerequisites.ps1", "common.ps1", "create-new-feature.ps1", "resolve-template.ps1", "setup-plan.ps1", "setup-tasks.ps1"
+    ]},
+    {"source": ".specify/templates", "destination": ".specify/templates", "category": "templates", "seed": true, "include": [
+      "agent-file-template.md", "checklist-template.md", "constitution-template.md", "ideation-template.md",
+      "plan-template.md", "release-template.md", "runbook-template.md", "spec-template.md", "tasks-template.md"
+    ]},
+    {"source": ".specify/workflows", "destination": ".specify/workflows", "category": "workflow",
+     "include": ["workflow-registry.json", "speckit/workflow.yml"]},
+    {"source": ".specify/integrations/copilot.manifest.json", "destination": ".specify/integrations/copilot.manifest.json", "category": "integration"},
+    {"source": ".specify/integrations/speckit.manifest.json", "destination": ".specify/integrations/speckit.manifest.json", "category": "integration"},
+    {"source": ".specify/knowledge/README.md", "destination": ".specify/knowledge/README.md", "category": "documentation"},
+    {"source": ".specify/templates/portable/init-options.json", "destination": ".specify/init-options.json", "category": "configuration", "seed": true},
+    {"source": ".specify/templates/portable/integration.json", "destination": ".specify/integration.json", "category": "configuration", "seed": true},
+    {"source": ".specify/templates/portable/sensors.json", "destination": ".specify/sensors/sensors.json", "category": "configuration", "seed": true},
+    {"source": "scripts/speckit_guard.py", "destination": "scripts/speckit_guard.py", "category": "scripts"},
+    {"source": "scripts/speckit_session.py", "destination": "scripts/speckit_session.py", "category": "scripts"},
+    {"source": "docs/speckit-profiles.md", "destination": "docs/speckit-profiles.md", "category": "documentation"},
+    {"source": "docs/speckit-portability.md", "destination": "docs/speckit-portability.md", "category": "documentation"}
+  ]
+}

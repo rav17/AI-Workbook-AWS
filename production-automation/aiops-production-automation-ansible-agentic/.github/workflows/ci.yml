@@ -23,8 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install ruff
-        run: pip install ruff
+      - name: Install ruff (pinned to match pyproject dev extras)
+        run: pip install ruff==0.6.9
       - name: Run lint and format check
         run: |
           ruff check .
@@ -164,12 +164,25 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
       - uses: aws-actions/amazon-ecr-login@v2
         id: ecr-login
+      # ECS runtime platform: dev = X86_64, staging/prod = ARM64 (Graviton).
+      # The image architecture MUST match or tasks fail with "exec format error".
+      - name: Resolve target platform
+        id: platform
+        run: |
+          if [[ "${{ needs.docker-build.outputs.environment }}" == "dev" ]]; then
+            echo "platform=linux/amd64" >> $GITHUB_OUTPUT
+          else
+            echo "platform=linux/arm64" >> $GITHUB_OUTPUT
+          fi
+      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - name: Build and push image to ECR
         uses: docker/build-push-action@v5
         id: push
         with:
           context: .
+          platforms: ${{ steps.platform.outputs.platform }}
+          provenance: false
           push: true
           tags: |
             ${{ steps.ecr-login.outputs.registry }}/aiops:${{ needs.docker-build.outputs.image-tag }}
@@ -182,6 +195,9 @@ jobs:
           IMAGE_TAG: ${{ needs.docker-build.outputs.image-tag }}
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           ECR_REPOSITORY: aiops
+          # Image was already pushed by build-push-action; only poll the scan.
+          SCAN_ONLY: "true"
+          IMAGE_DIGEST: ${{ steps.push.outputs.digest }}
       - name: Write deployment artifact
         run: |
           cat > image-tag.json <<EOF

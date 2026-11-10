@@ -481,16 +481,15 @@ class ObservabilityStack(cdk.Stack):
             9.5: CloudWatch Synthetics canary for endpoint monitoring.
             10.6: Dev environment excluded from canary creation.
         """
-        region = self._context.aws_region
-        account = self._context.aws_account
-
         # --- S3 Bucket for canary artifacts ---
         canary_artifacts_bucket = s3.Bucket(
             self,
             "CanaryArtifactsBucket",
-            bucket_name=f"aiops-canary-artifacts-{env_name}-{account}",
-            removal_policy=RemovalPolicy.DESTROY,
-            auto_delete_objects=True,
+            # No fixed bucket_name: a RETAINed bucket with a fixed name would block
+            # re-creation. auto_delete_objects is removed because CDK 2.160's
+            # auto-delete provider uses nodejs20.x (Lambda creation disabled 2026-06-01).
+            # Objects still expire after 30 days via the lifecycle rule below.
+            removal_policy=RemovalPolicy.RETAIN,
             encryption=s3.BucketEncryption.S3_MANAGED,
             lifecycle_rules=[
                 s3.LifecycleRule(
@@ -575,7 +574,8 @@ class ObservabilityStack(cdk.Stack):
             name=f"aiops-canary-{env_name}",
             artifact_s3_location=f"s3://{canary_artifacts_bucket.bucket_name}/",
             execution_role_arn=canary_role.role_arn,
-            runtime_version="syn-python-selenium-3.0",
+            # syn-python-selenium-3.0 was deprecated 2026-02-03 (creation fails).
+            runtime_version="syn-python-selenium-6.0",
             schedule=synthetics.CfnCanary.ScheduleProperty(
                 expression="rate(5 minutes)",
             ),
@@ -809,7 +809,8 @@ def handler(event, context):
             name=f"aiops-waf-{env_name}",
             scope="REGIONAL",
             default_action=wafv2.CfnWebACL.DefaultActionProperty(allow={}),
-            description=f"WAF for AIOps API Gateway ({env_name})",
+            # WAF descriptions reject parentheses (cfn-lint E3031).
+            description=f"WAF for AIOps API Gateway - {env_name}",
             rules=[rate_limit_rule, size_constraint_rule, managed_rules],
             visibility_config=wafv2.CfnWebACL.VisibilityConfigProperty(
                 sampled_requests_enabled=True,
@@ -901,7 +902,7 @@ def handler(event, context):
         )
 
         # --- Dashboard Layout ---
-        dora_dashboard = cloudwatch.Dashboard(
+        cloudwatch.Dashboard(
             self,
             "DoraDashboard",
             dashboard_name=f"AIOps-Deployments-{env_name}",

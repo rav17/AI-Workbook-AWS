@@ -1,0 +1,7 @@
+{
+  "id": "discovery",
+  "description": "Early-stage idea work: ideation and market research before specifying and planning.",
+  "stages": ["ideation", "market-research", "specify", "clarify", "plan"],
+  "depth": "standard",
+  "gates": ["specify", "plan"]
+}

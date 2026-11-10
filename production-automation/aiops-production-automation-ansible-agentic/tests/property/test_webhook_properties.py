@@ -32,7 +32,37 @@ from hypothesis import given, settings, assume
 from hypothesis import strategies as st
 from httpx import AsyncClient, ASGITransport
 
-from src.app import app
+import pytest
+
+from src.app import app, limiter
+
+
+@pytest.fixture(autouse=True, scope="module")
+def _disable_rate_limiter():
+    """Disable the slowapi per-IP limiter (60/minute) for these property tests.
+
+    Hypothesis sends hundreds of requests from the same test-client address, so the
+    limiter returns 429 and masks the validation behaviour under test (400/415).
+    Module scope avoids Hypothesis' function-scoped-fixture health check.
+    """
+    from unittest.mock import AsyncMock
+
+    import src.app as app_module
+
+    previous = limiter.enabled
+    limiter.enabled = False
+    # Storm detection keeps a sliding-window alert rate across requests; after many
+    # Hypothesis examples it flips to storm mode and returns "storm_suppressed",
+    # which is correct runtime behaviour but not what these validation tests check.
+    previous_storm = app_module.storm_detector._enabled
+    app_module.storm_detector._enabled = False
+    # Starlette runs BackgroundTasks inside the request under ASGITransport, so a
+    # valid payload would execute the full pipeline (Bedrock, SES) with real AWS
+    # calls. These tests only assert on the HTTP response, so stub the task out.
+    with patch("src.app._process_and_notify", new=AsyncMock(return_value=None)):
+        yield
+    limiter.enabled = previous
+    app_module.storm_detector._enabled = previous_storm
 
 
 # --- Helper ---

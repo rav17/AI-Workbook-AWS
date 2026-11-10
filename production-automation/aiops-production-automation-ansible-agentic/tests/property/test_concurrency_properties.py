@@ -28,7 +28,8 @@ pytestmark = pytest.mark.property
 
 @given(
     severities=st.lists(
-        st.sampled_from(["P1", "P2", "P3", "P4", "P5"]),
+        # Severity defines P1-P3 only (src/models.py); P4/P5 are not valid members.
+        st.sampled_from([s.value for s in Severity]),
         min_size=2,
         max_size=15,
     )
@@ -36,7 +37,7 @@ pytestmark = pytest.mark.property
 @settings(max_examples=100)
 def test_priority_queue_severity_ordering(severities):
     """Priority queue dequeues in severity order (P1 first)."""
-    queue = PriorityQueue()
+    queue = PriorityQueue(config=ConcurrencyConfig())
     host = "test-host"
 
     for i, sev in enumerate(severities):
@@ -95,7 +96,9 @@ def test_deduplicator_fingerprint_deterministic(alert_name, target_host, severit
 @settings(max_examples=100)
 def test_priority_queue_max_depth(num_entries):
     """Priority queue enforces max depth per host (default 20)."""
-    queue = PriorityQueue(max_depth_per_host=20)
+    config = ConcurrencyConfig()
+    config.max_queue_depth_per_host = 20
+    queue = PriorityQueue(config=config)
     host = "test-host"
     enqueued = 0
 
@@ -123,10 +126,11 @@ def test_priority_queue_max_depth(num_entries):
 
 @given(level=st.sampled_from(list(RiskLevel)))
 @settings(max_examples=100)
-def test_risk_level_elevate_capped():
-    """RiskLevel.elevate() never goes above CRITICAL."""
-    for level in RiskLevel:
-        elevated = level.elevate()
-        assert elevated in list(RiskLevel)
-        # Verify CRITICAL stays CRITICAL
-        assert RiskLevel.CRITICAL.elevate() == RiskLevel.CRITICAL
+def test_risk_level_elevate_capped(level):
+    """RiskLevel.elevate() never goes above CRITICAL and never lowers the level."""
+    order = list(RiskLevel)
+    elevated = level.elevate()
+    assert elevated in order
+    assert order.index(elevated) >= order.index(level)
+    # CRITICAL stays CRITICAL
+    assert RiskLevel.CRITICAL.elevate() == RiskLevel.CRITICAL

@@ -1,0 +1,13 @@
+{
+  "sensors": [
+    {
+      "id": "operational-readiness",
+      "kind": "builtin",
+      "builtin": "readiness",
+      "description": "Require complete release and runbook evidence structure; human review is still required.",
+      "stages": ["deploy", "operate"],
+      "required": true,
+      "profiles": ["release-ready"]
+    }
+  ]
+}

@@ -9,11 +9,11 @@ Requirements: 1.1, 1.4, 1.5, 1.6, 1.7, 9.2
 import json
 import logging
 import os
-import time
 from dataclasses import dataclass
 from typing import Optional
 
 import boto3
+from botocore.config import Config as BotoConfig
 from botocore.exceptions import (
     BotoCoreError,
     ClientError,
@@ -31,6 +31,32 @@ DEFAULT_MAX_INPUT_TOKENS = 4000
 MIN_INPUT_TOKENS = 1000
 MAX_INPUT_TOKENS = 16000
 MAX_HISTORICAL_INCIDENTS = 50
+
+# Socket-level timeouts so a hung Bedrock call releases its executor thread.
+# Retries are handled by _invoke_with_retry (backoff + model fallback), so botocore
+# retries are kept minimal to avoid multiplying total latency.
+_BEDROCK_CLIENT_CONFIG = BotoConfig(
+    connect_timeout=5,
+    read_timeout=REASONING_TIMEOUT_SECONDS,
+    retries={"max_attempts": 1, "mode": "standard"},
+)
+
+# One bedrock-runtime client per region, reused across requests (boto3 clients are
+# thread-safe; creating one per alert adds connection overhead and memory churn).
+_bedrock_clients: dict[str, object] = {}
+
+
+def _get_bedrock_client(region_name: str):
+    """Return a cached bedrock-runtime client for the given region."""
+    client = _bedrock_clients.get(region_name)
+    if client is None:
+        client = boto3.client(
+            "bedrock-runtime",
+            region_name=region_name,
+            config=_BEDROCK_CLIENT_CONFIG,
+        )
+        _bedrock_clients[region_name] = client
+    return client
 
 
 @dataclass
@@ -50,11 +76,13 @@ class AgentConfig:
     guardrail_id: str = ""
     guardrail_version: str = ""
 
-    # Ordered list of models to try (first available wins)
+    # Ordered list of models to try (first available wins).
+    # Claude 3 Sonnet/Haiku reached end-of-life on Bedrock; current Claude models
+    # are invocable only via cross-region inference profiles ("us." prefix).
     FALLBACK_MODELS = [
-        "anthropic.claude-3-sonnet-20240229-v1:0",
+        "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
         "amazon.nova-pro-v1:0",
-        "anthropic.claude-3-haiku-20240307-v1:0",
+        "us.anthropic.claude-haiku-4-5-20251001-v1:0",
         "amazon.nova-lite-v1:0",
     ]
 
@@ -97,10 +125,7 @@ class AIReasoningAgent:
         if bedrock_client:
             self._client = bedrock_client
         else:
-            self._client = boto3.client(
-                "bedrock-runtime",
-                region_name=self._config.region_name,
-            )
+            self._client = _get_bedrock_client(self._config.region_name)
 
     async def reason(
         self,

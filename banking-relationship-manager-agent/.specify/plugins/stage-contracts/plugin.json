@@ -1,0 +1,6 @@
+{
+  "name": "stage-contracts",
+  "version": "1.0.0",
+  "description": "Structured stage inputs, outputs and acceptance criteria with human-gate evidence checks.",
+  "enabled": false
+}

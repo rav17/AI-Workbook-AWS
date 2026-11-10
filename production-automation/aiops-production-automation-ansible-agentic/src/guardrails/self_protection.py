@@ -153,7 +153,7 @@ class SelfProtectionGuard:
             Set of lowercase hostnames, or None if config is invalid.
         """
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
         except (yaml.YAMLError, OSError) as e:
             logger.error("Failed to load protected hosts config: %s", e)

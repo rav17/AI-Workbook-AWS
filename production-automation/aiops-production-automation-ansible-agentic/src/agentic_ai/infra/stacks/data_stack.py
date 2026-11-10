@@ -46,27 +46,17 @@ class DataStack(cdk.Stack):
         env_name = context.environment
         is_prod = env_name == "prod"
 
-        # --- ECR Repository ---
-        self.ecr_repository = ecr.Repository(
-            self,
-            "EcrRepo",
-            repository_name="aiops",
-            image_scan_on_push=True,
-            image_tag_mutability=ecr.TagMutability.MUTABLE,
-            lifecycle_rules=[
-                ecr.LifecycleRule(
-                    description="Remove untagged images after 7 days",
-                    tag_status=ecr.TagStatus.UNTAGGED,
-                    max_image_age=Duration.days(7),
-                    rule_priority=1,
-                ),
-                ecr.LifecycleRule(
-                    description="Keep last 20 images",
-                    max_image_count=20,
-                    rule_priority=10,
-                ),
-            ],
-            removal_policy=cdk.RemovalPolicy.RETAIN,
+        # --- ECR Repository (shared, pre-existing) ---
+        # The "aiops" repository is shared by all environments (image tags carry the
+        # env suffix, e.g. "abc1234-dev") and CI pushes to it BEFORE CD deploys any
+        # stack, so it must exist as an account-level prerequisite. Creating it here
+        # with a fixed name collides across environments in the same account and with
+        # the previously RETAINed repository. Reference it instead.
+        # Bootstrap once per account/region:
+        #   aws ecr create-repository --repository-name aiops \
+        #     --image-scanning-configuration scanOnPush=true
+        self.ecr_repository = ecr.Repository.from_repository_name(
+            self, "EcrRepo", "aiops"
         )
 
         # --- SQS Dead-Letter Queue ---

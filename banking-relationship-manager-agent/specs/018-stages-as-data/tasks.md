@@ -1,0 +1,10 @@
+# Tasks: Stages as Data (018)
+
+- [x] T001 Create `.specify/stages/stages.json` with the 9 core stages (FR-001)
+- [x] T002 Add `speckit_flow/stagedefs.py` loader and overlay validation (FR-001, FR-005, FR-006)
+- [x] T003 Derive stage constants and profile rules from data in `models.py` (FR-002, FR-003, FR-004)
+- [x] T004 Support stage `lead` in `agents.py` roster validation and assignments (FR-007)
+- [x] T005 Add `stages` CLI command and doctor stages check (FR-008)
+- [x] T006 Protect `.specify/stages/` in the guard hook (FR-009)
+- [x] T007 Add tests in `tests/unit/speckit_flow/test_flow_stagedefs.py` for loader, overlay, refusals and CLI (FR-001 to FR-008)
+- [x] T008 Document in `docs/speckit-profiles.md` (FR-005)

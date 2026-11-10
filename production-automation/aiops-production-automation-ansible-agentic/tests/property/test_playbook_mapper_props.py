@@ -1133,7 +1133,8 @@ class TestNonExistentPlaybookPath:
         severity=severity_strategy,
         nonexistent_path=nonexistent_path_strategy,
     )
-    @settings(max_examples=100)
+    # Writes temp config files per example; 200ms default deadline is too tight on Windows.
+    @settings(max_examples=100, deadline=2000)
     def test_nonexistent_playbook_path_returns_none(
         self,
         alert_name: str,
@@ -1204,7 +1205,8 @@ class TestNonExistentPlaybookPath:
         severity=severity_strategy,
         nonexistent_path=nonexistent_path_strategy,
     )
-    @settings(max_examples=100)
+    # Writes temp config files per example; 200ms default deadline is too tight on Windows.
+    @settings(max_examples=100, deadline=2000)
     def test_nonexistent_path_among_multiple_rules_still_unmatched(
         self,
         alert_name: str,
@@ -1274,7 +1276,8 @@ class TestNonExistentPlaybookPath:
         alert_name=alert_name_strategy,
         severity=severity_strategy,
     )
-    @settings(max_examples=100)
+    # Writes temp config files per example; 200ms default deadline is too tight on Windows.
+    @settings(max_examples=100, deadline=2000)
     def test_existing_playbook_path_returns_match(
         self,
         alert_name: str,
