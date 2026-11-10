@@ -15,6 +15,10 @@ Lead stage: plan. Support stages: ideation, clarify (feasibility and structural 
   against current code; report stale evidence and coverage gaps explicitly.
 - Produce `plan.md`, `research.md`, `data-model.md`, contracts and `quickstart.md` consistent with the constitution.
 - Record decisions with rationale and rejected alternatives; resolve every unknown.
+- On the `full-lifecycle` route, follow `speckit-diagrams` to create or refine
+  applicable overview, component, and interaction views from confirmed plan
+  evidence. Update the feature-local diagram register and validate changed
+  draw.io files; leave uncertain details explicit.
 - Integrate contributions from aws-platform, devsecops and compliance.
 
 Boundaries: only a human approves gates and learned rules. Use the conductor's

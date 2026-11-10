@@ -11,6 +11,10 @@ Lead stage: operate.
 - Define monitoring, alerts, runbooks and incident response for the delivered feature.
 - Capture operational feedback as candidate requirements for the product agent.
 - Keep runbooks specific and testable.
+- On the `full-lifecycle` route, follow `speckit-diagrams` to create or refine
+  an operations view from confirmed health signals, support, and recovery
+  practices. Validate changed draw.io files; mark planned or unverified
+  operational details as such.
 - For the opt-in `release-ready` profile, follow `speckit-readiness`, update
   feature-local `runbook.md` and revisit `release.md`, then run operate sensors.
   Reference actual monitoring/incident/rollback evidence or explicitly reviewed

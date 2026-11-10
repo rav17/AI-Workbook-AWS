@@ -48,6 +48,7 @@ from src.notification import NotificationDispatcher
 from src.audit_logger import AuditLogger
 from src.metrics import MetricsCollector
 from src.approval_handler import ApprovalHandler
+from src.devops_agent import DevOpsAgentForwarder
 
 logger = logging.getLogger(__name__)
 
@@ -142,6 +143,9 @@ def _require_human_approval() -> bool:
 
 
 REQUIRE_HUMAN_APPROVAL = _require_human_approval()
+
+# --- AWS DevOps Agent forwarder (Phase 1: investigation only, never executes) ---
+devops_forwarder = DevOpsAgentForwarder()
 logger.info("Human approval required before remediation: %s", REQUIRE_HUMAN_APPROVAL)
 
 orchestrator = Orchestrator(
@@ -222,29 +226,43 @@ try:
     from src.guardrails.self_protection import SelfProtectionGuard
     from src.guardrails.maintenance_window import MaintenanceWindowManager
     from src.guardrails.circuit_breaker import CircuitBreaker
-    from src.guardrails.concurrency_guard import ConcurrencyGuard
     from src.guardrails.classifier import BlastRadiusClassifier
-    from src.guardrails.health_checker import HealthChecker
     from src.guardrails.approval import ApprovalGate
     from src.guardrails.plan_validator import PlanValidator
 
+    # Order matters: the classifier sets risk_level, which ApprovalGate reads.
     guardrail_checks = [
         SelfProtectionGuard(),
         MaintenanceWindowManager(),
         CircuitBreaker(),
-        ConcurrencyGuard(),
         BlastRadiusClassifier(),
-        HealthChecker(),
         ApprovalGate(),
         PlanValidator(),  # Improvement 5: AI plan safety validation
     ]
 
     _guardrail_engine = GuardrailEngine(checks=guardrail_checks)
     orchestrator._guardrail_engine = _guardrail_engine
-    logger.info("Guardrail engine initialized with %d checks (including PlanValidator)", len(guardrail_checks))
+    logger.info(
+        "Guardrail engine initialized with %d checks: %s",
+        len(guardrail_checks),
+        ", ".join(c.name for c in guardrail_checks),
+    )
+    # Not wired (no implementation of their dependencies exists yet):
+    # - ConcurrencyGuard needs a guardrails LockStore; concurrency.LockStore uses a
+    #   PK/SK schema that does not match AiopsIncidentMemory (incident_id/timestamp),
+    #   and nothing calls acquire()/release(). Duplicate approvals are suppressed by
+    #   ApprovalHandler instead.
+    # - HealthChecker needs a ServiceRegistry; without one it treats every host as a
+    #   single instance and denies all HIGH-risk actions.
+    logger.warning(
+        "Guardrails NOT active: concurrency_guard, health_checker "
+        "(no LockStore/ServiceRegistry implementation)"
+    )
 except Exception as e:
-    logger.warning("Guardrail engine initialization failed (non-fatal): %s", e)
-    # Guardrails are optional — system operates without them if init fails
+    # Fail CLOSED: never run remediation with the safety checks silently missing.
+    # Previously this was logged as "non-fatal" and the service ran with NO guardrails.
+    logger.critical("Guardrail engine initialization failed — refusing to start: %s", e)
+    raise
 
 # --- Initialize Stop Conditions Monitor (Improvement 2) ---
 try:
@@ -539,7 +557,33 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
             except Exception as e:
                 logger.error("Failed to send approval email: %s", str(e))
 
+            # Critical alerts: also ask AWS DevOps Agent to investigate in parallel.
+            # Placed after duplicate suppression so one problem = one investigation.
+            if severity.lower() == "critical":
+                await devops_forwarder.forward_async(
+                    incident_id=incident_id,
+                    trigger="critical",
+                    alert_name=alert_name,
+                    severity=severity,
+                    host=instance,
+                    service_name=service_name,
+                    summary=root_cause,
+                    detail=f"Matched playbook {playbook_path}; awaiting human approval.",
+                )
+
         else:
+            # --- No playbook match: hand the investigation to AWS DevOps Agent ---
+            # Forward regardless of local AI availability (that is when it helps most).
+            devops_result = await devops_forwarder.forward_async(
+                incident_id=incident_id,
+                trigger="unmatched",
+                alert_name=alert_name,
+                severity=severity,
+                host=instance,
+                service_name=service_name,
+                summary=root_cause,
+            )
+
             # --- AI AGENT MODE: No playbook match, invoke AI for analysis ---
             if not use_ai:
                 logger.info(
@@ -562,6 +606,7 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
                 root_cause=root_cause,
                 labels=alert.labels,
                 annotations=annotations,
+                devops_agent_forwarded=(devops_result.status == "sent"),
             )
 
 
@@ -574,6 +619,7 @@ async def _send_ai_advisory_email(
     root_cause: str,
     labels: dict,
     annotations: dict,
+    devops_agent_forwarded: bool = False,
 ) -> None:
     """Invoke AI agent to analyze the alert and send advisory email with suggested steps."""
     from src.agentic_ai.agents.reasoning_agent import AIReasoningAgent, AgentConfig
@@ -608,6 +654,26 @@ async def _send_ai_advisory_email(
             f"  2. Check system resources: top, df -h, journalctl\n"
             f"  3. Investigate alert: {alert_name}\n"
             f"  4. Apply appropriate fix based on findings"
+        )
+
+    # Note about the parallel AWS DevOps Agent investigation (Phase 1 integration)
+    devops_html = ""
+    devops_text = ""
+    if devops_agent_forwarded:
+        ref = f"aiops-{incident_id}-unmatched"
+        link = devops_forwarder.web_app_url
+        link_html = f' <a href="{link}">Open the DevOps Agent web app</a>.' if link else ""
+        devops_html = (
+            '<div style="background: #e7f1ff; border: 1px solid #0d6efd; border-radius: 4px;'
+            ' padding: 12px; margin-top: 20px;"><p style="margin: 0; font-size: 13px;">'
+            "<strong>AWS DevOps Agent is investigating this incident.</strong> "
+            f"Look for incident reference <code>{ref}</code> in the Agent Space."
+            f"{link_html}</p></div>"
+        )
+        devops_text = (
+            f"\nAWS DEVOPS AGENT: investigation requested (reference: {ref})"
+            + (f"\nOpen: {link}" if link else "")
+            + "\n"
         )
 
     # Build advisory email (no approval button — operator executes manually)
@@ -649,6 +715,7 @@ async def _send_ai_advisory_email(
         Please execute the suggested steps manually or create a playbook for future automation.
     </p>
 </div>
+{devops_html}
 
 <hr style="border: none; border-top: 1px solid #dee2e6; margin: 20px 0;">
 <p style="color: #6c757d; font-size: 12px;">
@@ -671,7 +738,7 @@ SUGGESTED STEPS:
 {suggested_steps}
 
 NOTE: No automated playbook available. Please execute manually.
-Incident: {incident_id}
+{devops_text}Incident: {incident_id}
 """
 
     # Send via SES
@@ -1081,6 +1148,20 @@ async def _execute_approved_remediation(approval) -> None:
                 alert_name=approval.alert_name,
                 severity=approval.severity,
             )
+            # The approved fix did not work: ask AWS DevOps Agent to investigate.
+            await devops_forwarder.forward_async(
+                incident_id=approval.incident_id,
+                trigger="failed",
+                alert_name=approval.alert_name,
+                severity=approval.severity,
+                host=approval.affected_host,
+                service_name=approval.service_name,
+                summary=approval.root_cause,
+                detail=(
+                    f"Playbook {approval.playbook_path} finished with status "
+                    f"{result.status.value} (rc={result.return_code})."
+                ),
+            )
 
         # --- Record outcome for guardrail engine (circuit breaker tracking) ---
         if guardrail_engine is not None:
@@ -1093,6 +1174,16 @@ async def _execute_approved_remediation(approval) -> None:
             "Approved remediation failed: incident=%s error=%s",
             approval.incident_id,
             str(e),
+        )
+        await devops_forwarder.forward_async(
+            incident_id=approval.incident_id,
+            trigger="failed",
+            alert_name=approval.alert_name,
+            severity=approval.severity,
+            host=approval.affected_host,
+            service_name=approval.service_name,
+            summary=approval.root_cause,
+            detail=f"Playbook {approval.playbook_path} raised {type(e).__name__}.",
         )
         # Record failure for circuit breaker
         if guardrail_engine is not None:

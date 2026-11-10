@@ -13,6 +13,7 @@ from speckit_flow import codebase as codebase_mod
 from speckit_flow import compose as compose_mod
 from speckit_flow import contracts as contracts_mod
 from speckit_flow import custom as custom_mod
+from speckit_flow import diagrams as diagrams_mod
 from speckit_flow import doctor as doctor_mod
 from speckit_flow import knowledge as knowledge_mod
 from speckit_flow import orchestration as orchestration_mod
@@ -99,6 +100,10 @@ def _build_parser() -> argparse.ArgumentParser:
 
     codebase = sub.add_parser("codebase", parents=[common])
     codebase.add_argument("action", choices=["scan"])
+
+    diagrams = sub.add_parser("diagrams", parents=[common])
+    diagrams_sub = diagrams.add_subparsers(dest="action", required=True)
+    diagrams_sub.add_parser("validate", parents=[common])
 
     prof = sub.add_parser("profiles", parents=[common])
     prof_sub = prof.add_subparsers(dest="action", required=True)
@@ -750,6 +755,10 @@ def _run(args: argparse.Namespace) -> int:
     if args.command == "codebase":
         inventory = codebase_mod.scan(_REPO_ROOT)
         _emit(args, inventory.to_dict(), inventory.markdown())
+        return 0
+    if args.command == "diagrams":
+        payload, text = diagrams_mod.validate(_feature_dir(args.feature_dir))
+        _emit(args, payload, text)
         return 0
     if args.command == "profiles":
         if args.action == "list":

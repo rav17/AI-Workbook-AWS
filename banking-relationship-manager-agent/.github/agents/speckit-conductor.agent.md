@@ -47,6 +47,16 @@ For one requested stage (use the explicit feature directory on every command):
    existing `skeleton.md`. Require source-bound checkpoint and stage sensor
    results; present actual journey assertions and limitations to the human.
    Do not start full implementation before the skeleton gate is approved.
+   For `full-lifecycle`, include `.github/skills/speckit-diagrams/SKILL.md`
+   and its index template in the lead brief for applicable stages. The lead
+   creates or updates only stage-relevant diagrams in the feature directory.
+   After a diagram is created or changed, run
+   `python -m speckit_flow diagrams validate --feature-dir <path>` and report
+   the result; this checks XML structure, not architectural correctness.
+   For independent architecture or quality reviews of full-lifecycle diagrams,
+   include the diagram skill and ask reviewers to verify that each named cloud
+   service uses the matching provider/service icon and readable service label.
+   The XML validator does not verify icon identity or architectural accuracy.
    For deploy/operate in profile `release-ready`, include `speckit-readiness`
    and existing `release.md`/`runbook.md`. The lead must prepare/update both
    records and run stage sensors; report missing evidence or failing checks

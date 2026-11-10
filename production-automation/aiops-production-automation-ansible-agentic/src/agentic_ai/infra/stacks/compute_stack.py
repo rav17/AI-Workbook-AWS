@@ -481,6 +481,27 @@ class ComputeStack(cdk.Stack):
         # task definition / service before the secret existed (ResourceInitializationError).
         self._create_secrets(env_name)
 
+        # AWS DevOps Agent webhook (Phase 1). Created with EMPTY url/web_app_url and a
+        # random placeholder secret so ECS tasks always start (ecs.Secret fields must
+        # exist). Forwarding stays off until an operator stores the real Agent Space
+        # webhook URL + HMAC secret (see docs/devops-agent-integration.md).
+        self.devops_agent_webhook_secret = secretsmanager.Secret(
+            self,
+            "DevOpsAgentWebhookSecret",
+            secret_name=f"/aiops/{env_name}/devops-agent-webhook",
+            description=(
+                "AWS DevOps Agent generic webhook (HMAC). JSON keys: url, secret, "
+                "web_app_url. Populate after creating the webhook in the Agent Space."
+            ),
+            generate_secret_string=secretsmanager.SecretStringGenerator(
+                secret_string_template='{"url": "", "web_app_url": ""}',
+                generate_string_key="secret",
+                exclude_punctuation=True,
+                password_length=32,
+            ),
+            removal_policy=cdk.RemovalPolicy.DESTROY,
+        )
+
         container = task_def.add_container(
             "AiopsContainer",
             image=ecs.ContainerImage.from_registry(
@@ -504,6 +525,10 @@ class ComputeStack(cdk.Stack):
                 # Rule-matched playbooks run only after a human confirms the
                 # approval email. Set to "false" to allow unattended execution.
                 "REQUIRE_HUMAN_APPROVAL": "true",
+                # AWS DevOps Agent Phase 1 (investigation only; never executes fixes)
+                "DEVOPS_AGENT_ENABLED": "true" if context.devops_agent_enabled else "false",
+                "DEVOPS_AGENT_FORWARD_ON": "unmatched,failed,critical",
+                "DEVOPS_AGENT_MAX_PER_HOUR": "20",  # cost guard: billed per agent-second
             },
             secrets={
                 "API_GATEWAY_KEY": ecs.Secret.from_secrets_manager(
@@ -512,6 +537,15 @@ class ComputeStack(cdk.Stack):
                 ),
                 "APPROVAL_SIGNING_SECRET": ecs.Secret.from_secrets_manager(
                     self.approval_signing_secret,
+                ),
+                "DEVOPS_AGENT_WEBHOOK_URL": ecs.Secret.from_secrets_manager(
+                    self.devops_agent_webhook_secret, field="url"
+                ),
+                "DEVOPS_AGENT_WEBHOOK_SECRET": ecs.Secret.from_secrets_manager(
+                    self.devops_agent_webhook_secret, field="secret"
+                ),
+                "DEVOPS_AGENT_WEB_APP_URL": ecs.Secret.from_secrets_manager(
+                    self.devops_agent_webhook_secret, field="web_app_url"
                 ),
             },
             logging=ecs.LogDrivers.aws_logs(

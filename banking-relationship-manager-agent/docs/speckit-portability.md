@@ -43,6 +43,14 @@ AI-DLC-inspired capabilities: lifecycle stages, profiles, agents, human gates,
 reviews, audit/state, rules, knowledge support, sensors, units, verification,
 and optional plugins.
 
+The full-lifecycle profile also includes the draw.io diagram skill, its register
+template, and the engine's structural diagram validator. Stage agents use
+provider-specific draw.io icons for cloud services explicitly selected by the
+receiving project's artifacts; icon availability is recorded in the feature's
+diagram register. The validator checks XML and graph references, not service
+icon identity or architectural correctness. See the architecture diagram
+workflow in [speckit-profiles.md](./speckit-profiles.md#profiles).
+
 Optional plugin packs are installed disabled. Before enabling one, review its
 guidance and confirm its required agents are listed in the conductor.
 Source-project plugin enablement is not inherited. Source-project learned rules
