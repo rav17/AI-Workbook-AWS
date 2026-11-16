@@ -287,7 +287,9 @@ jobs:
           set +e
           DIFF_OUTPUT=$(npx aws-cdk@2 diff Aiops-${{ needs.prepare.outputs.environment }}-Compute \
             --context environment=${{ needs.prepare.outputs.environment }} \
-            --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} \
+            --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }} 2>&1)
           set -e
           echo "$DIFF_OUTPUT" > cdk-diff-compute.txt
           echo "$DIFF_OUTPUT"
@@ -315,7 +317,9 @@ jobs:
             --require-approval never \
             ${HOTSWAP_FLAG} \
             --context environment=${{ needs.prepare.outputs.environment }} \
-            --context imageTag=${{ needs.prepare.outputs.image_tag }}
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} \
+            --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }}
 
       - name: Skip deployment (no changes)
         if: steps.diff.outputs.has_changes == 'false'
@@ -399,7 +403,9 @@ jobs:
           npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Compute \
             --require-approval never \
             --context environment=${{ needs.prepare.outputs.environment }} \
-            --context imageTag=${PREV_IMAGE_TAG}
+            --context imageTag=${PREV_IMAGE_TAG} \
+            --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }}
 
       - name: Re-run Health Gate after rollback
         run: |
@@ -453,7 +459,9 @@ jobs:
           set +e
           DIFF_OUTPUT=$(npx aws-cdk@2 diff Aiops-${{ needs.prepare.outputs.environment }}-Observability \
             --context environment=${{ needs.prepare.outputs.environment }} \
-            --context imageTag=${{ needs.prepare.outputs.image_tag }} 2>&1)
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} \
+            --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }} 2>&1)
           set -e
           echo "$DIFF_OUTPUT" > cdk-diff-observability.txt
           echo "$DIFF_OUTPUT"
@@ -476,7 +484,9 @@ jobs:
           npx aws-cdk@2 deploy Aiops-${{ needs.prepare.outputs.environment }}-Observability \
             --require-approval never \
             --context environment=${{ needs.prepare.outputs.environment }} \
-            --context imageTag=${{ needs.prepare.outputs.image_tag }}
+            --context imageTag=${{ needs.prepare.outputs.image_tag }} \
+            --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }}
 
       - name: Skip deployment (no changes)
         if: steps.diff.outputs.has_changes == 'false'

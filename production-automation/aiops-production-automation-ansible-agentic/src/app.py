@@ -14,6 +14,7 @@ Improvements integrated:
 import logging
 import os
 import shutil
+import uuid
 
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
@@ -460,13 +461,19 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
     # Run the pipeline (normalize → enrich → match → execute)
     incident_ids = await orchestrator.process_alert_payload(payload)
 
-    for alert in payload.alerts:
+    for index, alert in enumerate(payload.alerts):
         alert_name = alert.labels.get("alertname", "Unknown")
         severity = alert.labels.get("severity", "warning")
         instance = alert.labels.get("instance", "unknown-host")
         service_name = alert.labels.get("service_name", "unknown")
         annotations = alert.annotations
-        incident_id = incident_ids[0] if incident_ids else "unknown"
+        # The orchestrator returns one incident id per alert, in payload order.
+        # (Previously every alert in a batch used incident_ids[0], so batched
+        # alerts shared one id and the DevOps Agent de-duplication skipped them.)
+        if index < len(incident_ids):
+            incident_id = incident_ids[index]
+        else:
+            incident_id = f"unknown-{uuid.uuid4().hex[:12]}"
         root_cause = annotations.get("summary", f"{alert_name} detected on {instance}")
 
         # --- Resolved Alert Auto-Cancellation ---
@@ -478,6 +485,15 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
                     alert_name, instance,
                 )
                 metrics_collector.increment_storm_suppressed(alert_name, severity)
+            # Opt-in (DEVOPS_AGENT_FORWARD_ON includes "resolved"): tell DevOps
+            # Agent the alert recovered. No-op unless we forwarded it earlier.
+            await devops_forwarder.forward_resolved_async(
+                alert_name=alert_name,
+                host=instance,
+                severity=severity,
+                service_name=service_name,
+                summary=root_cause,
+            )
             continue  # Don't process resolved alerts through email/AI path
 
         # --- Alert Inhibition Check ---
@@ -569,6 +585,8 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
                     service_name=service_name,
                     summary=root_cause,
                     detail=f"Matched playbook {playbook_path}; awaiting human approval.",
+                    labels=alert.labels,
+                    runbook_url=annotations.get("runbook_url", ""),
                 )
 
         else:
@@ -582,6 +600,8 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
                 host=instance,
                 service_name=service_name,
                 summary=root_cause,
+                labels=alert.labels,
+                runbook_url=annotations.get("runbook_url", ""),
             )
 
             # --- AI AGENT MODE: No playbook match, invoke AI for analysis ---
@@ -1161,6 +1181,7 @@ async def _execute_approved_remediation(approval) -> None:
                     f"Playbook {approval.playbook_path} finished with status "
                     f"{result.status.value} (rc={result.return_code})."
                 ),
+                excluded_playbook=approval.playbook_path,
             )
 
         # --- Record outcome for guardrail engine (circuit breaker tracking) ---
@@ -1184,6 +1205,7 @@ async def _execute_approved_remediation(approval) -> None:
             service_name=approval.service_name,
             summary=approval.root_cause,
             detail=f"Playbook {approval.playbook_path} raised {type(e).__name__}.",
+            excluded_playbook=approval.playbook_path,
         )
         # Record failure for circuit breaker
         if guardrail_engine is not None:

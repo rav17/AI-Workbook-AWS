@@ -527,7 +527,7 @@ class ComputeStack(cdk.Stack):
                 "REQUIRE_HUMAN_APPROVAL": "true",
                 # AWS DevOps Agent Phase 1 (investigation only; never executes fixes)
                 "DEVOPS_AGENT_ENABLED": "true" if context.devops_agent_enabled else "false",
-                "DEVOPS_AGENT_FORWARD_ON": "unmatched,failed,critical",
+                "DEVOPS_AGENT_FORWARD_ON": context.devops_agent_forward_on,
                 "DEVOPS_AGENT_MAX_PER_HOUR": "20",  # cost guard: billed per agent-second
             },
             secrets={

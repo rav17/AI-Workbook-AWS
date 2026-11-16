@@ -175,3 +175,33 @@ class TestValidateCdkContext:
         raw["awsRegion"] = region
         result = validate_cdk_context(raw)
         assert result.aws_region == region
+
+
+class TestDevOpsAgentForwardOn:
+    """devopsAgentForwardOn selects which incidents are forwarded to DevOps Agent."""
+
+    def test_default_when_absent_or_empty(self):
+        raw = _valid_context()
+        assert (
+            validate_cdk_context(raw).devops_agent_forward_on
+            == "unmatched,failed,critical"
+        )
+        raw["devopsAgentForwardOn"] = ""
+        assert (
+            validate_cdk_context(raw).devops_agent_forward_on
+            == "unmatched,failed,critical"
+        )
+
+    def test_accepts_resolved_and_normalises(self):
+        raw = _valid_context()
+        raw["devopsAgentForwardOn"] = " Unmatched, resolved ,unmatched"
+        assert validate_cdk_context(raw).devops_agent_forward_on == "unmatched,resolved"
+
+    @pytest.mark.parametrize(
+        "value", ["bogus", "unmatched,bogus", ",", "unmatched;failed"]
+    )
+    def test_rejects_unknown_triggers(self, value):
+        raw = _valid_context()
+        raw["devopsAgentForwardOn"] = value
+        with pytest.raises(ValueError, match="devopsAgentForwardOn"):
+            validate_cdk_context(raw)
