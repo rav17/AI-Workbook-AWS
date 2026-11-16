@@ -461,7 +461,8 @@ jobs:
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }} \
             --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
-            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }} 2>&1)
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }} \
+            --context devopsAgentFindingsEnabled=${{ vars.DEVOPS_AGENT_FINDINGS_ENABLED || 'false' }} 2>&1)
           set -e
           echo "$DIFF_OUTPUT" > cdk-diff-observability.txt
           echo "$DIFF_OUTPUT"
@@ -486,7 +487,8 @@ jobs:
             --context environment=${{ needs.prepare.outputs.environment }} \
             --context imageTag=${{ needs.prepare.outputs.image_tag }} \
             --context devopsAgentEnabled=${{ vars.DEVOPS_AGENT_ENABLED || 'false' }} \
-            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }}
+            --context devopsAgentForwardOn=${{ vars.DEVOPS_AGENT_FORWARD_ON || 'unmatched,failed,critical' }} \
+            --context devopsAgentFindingsEnabled=${{ vars.DEVOPS_AGENT_FINDINGS_ENABLED || 'false' }}
 
       - name: Skip deployment (no changes)
         if: steps.diff.outputs.has_changes == 'false'

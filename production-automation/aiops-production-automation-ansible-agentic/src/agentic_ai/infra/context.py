@@ -28,6 +28,9 @@ class CdkContext:
     devops_agent_enabled: bool = False
     # Comma-separated triggers forwarded to DevOps Agent (see src/devops_agent.py)
     devops_agent_forward_on: str = DEFAULT_DEVOPS_AGENT_FORWARD_ON
+    # Phase 2: email DevOps Agent's findings to the operator (EventBridge + Lambda)
+    devops_agent_findings_enabled: bool = False
+
 
 def validate_cdk_context(raw: dict) -> CdkContext:
     """Validate CDK context values; raise ValueError naming the first invalid key."""
@@ -60,6 +63,12 @@ def validate_cdk_context(raw: dict) -> CdkContext:
     if devops_agent_raw not in ("true", "false", ""):
         errors.append(f"devopsAgentEnabled must be 'true' or 'false', got '{devops_agent_raw}'")
 
+    findings_raw = str(raw.get("devopsAgentFindingsEnabled", "false")).strip().lower()
+    if findings_raw not in ("true", "false", ""):
+        errors.append(
+            f"devopsAgentFindingsEnabled must be 'true' or 'false', got '{findings_raw}'"
+        )
+
     forward_on_raw = str(raw.get("devopsAgentForwardOn", "") or "").strip().lower()
     forward_on = DEFAULT_DEVOPS_AGENT_FORWARD_ON
     if forward_on_raw:
@@ -88,4 +97,5 @@ def validate_cdk_context(raw: dict) -> CdkContext:
         monthly_budget_usd=raw.get("monthlyBudgetUsd", "200"),
         devops_agent_enabled=devops_agent_raw == "true",
         devops_agent_forward_on=forward_on,
+        devops_agent_findings_enabled=findings_raw == "true",
     )

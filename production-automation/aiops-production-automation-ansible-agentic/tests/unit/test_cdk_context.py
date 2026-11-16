@@ -177,6 +177,32 @@ class TestValidateCdkContext:
         assert result.aws_region == region
 
 
+class TestDevOpsAgentFindingsEnabled:
+    """devopsAgentFindingsEnabled turns on the findings Lambda (default off)."""
+
+    def test_defaults_to_off(self):
+        assert (
+            validate_cdk_context(_valid_context()).devops_agent_findings_enabled
+            is False
+        )
+
+    @pytest.mark.parametrize(
+        ("value", "expected"),
+        [("true", True), (" TRUE ", True), ("false", False), ("", False)],
+    )
+    def test_accepts_booleans(self, value, expected):
+        raw = _valid_context()
+        raw["devopsAgentFindingsEnabled"] = value
+        assert validate_cdk_context(raw).devops_agent_findings_enabled is expected
+
+    @pytest.mark.parametrize("value", ["yes", "1", "enabled"])
+    def test_rejects_other_values(self, value):
+        raw = _valid_context()
+        raw["devopsAgentFindingsEnabled"] = value
+        with pytest.raises(ValueError, match="devopsAgentFindingsEnabled"):
+            validate_cdk_context(raw)
+
+
 class TestDevOpsAgentForwardOn:
     """devopsAgentForwardOn selects which incidents are forwarded to DevOps Agent."""
 

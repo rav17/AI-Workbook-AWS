@@ -89,6 +89,15 @@ jobs:
         run: pip install -e ".[dev,cdk]"
       - name: CDK synth all stacks
         run: npx aws-cdk@2 synth --all --context environment=dev
+      # The findings Lambda bundles its pinned boto3 with pip at synth time. The default
+      # synth above leaves the feature off, so exercise the bundling path here too, into a
+      # separate output directory so the cdk-out artifact below is unchanged.
+      - name: CDK synth with DevOps Agent findings enabled (exercises Lambda bundling)
+        run: >
+          npx aws-cdk@2 synth Aiops-dev-Observability
+          --context environment=dev
+          --context devopsAgentFindingsEnabled=true
+          --output cdk.out.findings
       - uses: actions/upload-artifact@v4
         with:
           name: cdk-out
