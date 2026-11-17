@@ -1,0 +1,26 @@
+{
+  "id": "specify-9",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-16T17:42:16+00:00",
+  "files": {
+    "spec.md": "a7272f203b509366957a49808537b8f1992d8f29cb8c3199ce10ca997dca2679",
+    "checklists/requirements.md": "e559cda745e67ffd18ba822826cbb2adc7a06c904a1bd4c5277f1382e1e7fb60"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "FR-002 \u2014 Snapshot fidelity; SC-001 \u2014 Complete bounded package",
+      "note": "The baseline is not pinned to a named captured snapshot or required per-file identity; \u201csufficiently\u201d and later drift disclosure leave the comparison baseline ambiguous. Specify the snapshot identifier and reproducible inventory/content evidence needed before assembly so the 100%/zero-difference result is independently verifiable."
+    },
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "Edge Cases; FR-001 \u2014 Bounded independent deliverable",
+      "note": "Assembly preflights the destination but does not define behavior if a filesystem error or interruption occurs after copying starts. State whether a partial package remains and the safe recovery/retry rule, without implying cleanup of user data."
+    }
+  ]
+}

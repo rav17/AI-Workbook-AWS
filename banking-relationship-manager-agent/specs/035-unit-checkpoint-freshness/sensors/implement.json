@@ -1,0 +1,24 @@
+{
+  "results": {
+    "lint": {
+      "status": "pass",
+      "ts": "2026-11-13T23:57:41+00:00",
+      "reason": "exit code 0",
+      "fingerprints": {
+        "spec.md": "2a24e12afa54667055d253eafa5bbccc4025abb5ec38fbd6b7b6a3fede27c715",
+        "plan.md": "f27e50bc6ec017099b6a6a1563fdd63813ea55ff06403a77124f095a79456668",
+        "tasks.md": "cd42671cc5eb2b08b46b7d6037c1dba940232d2c35ba195c4dc353c7d4378887"
+      }
+    },
+    "unit-tests": {
+      "status": "pass",
+      "ts": "2026-11-14T00:02:10+00:00",
+      "reason": "exit code 0",
+      "fingerprints": {
+        "spec.md": "2a24e12afa54667055d253eafa5bbccc4025abb5ec38fbd6b7b6a3fede27c715",
+        "plan.md": "f27e50bc6ec017099b6a6a1563fdd63813ea55ff06403a77124f095a79456668",
+        "tasks.md": "cd42671cc5eb2b08b46b7d6037c1dba940232d2c35ba195c4dc353c7d4378887"
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "plan-4",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T21:50:38+00:00",
+  "files": {
+    "plan.md": "cd60f926480d4d2e8dcf7dc04bd459f536db71e047dc86d6f41e012ddc852686",
+    "research.md": "2246157a6e8bd556286444e33180bf772bef856e38be5f6a5e1dea6d71aa6c72",
+    "data-model.md": "5582a9efb7ddbe2f903c861ef4dcfa86ee53d9b9b6ebae54ea537ba9f3dc7ff7",
+    "contracts/recovery-adapter.md": "6df1b094e0ca98894c53bf0c613bfc41ea1e22c2200ce8bdf92b04f664e9503e",
+    "quickstart.md": "a6b32547acb99a6bf45f768234bafc785034775d8099de6299a52195599b2a9e"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Requirement Coverage",
+      "note": "The mappings use forms such as \u201cFR-001?003\u201d and \u201cFR-004?006\u201d, which are not unambiguous requirement ranges. Replace with explicit IDs or a clear range notation so each FR can be audited against its design and acceptance evidence."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Post-Design Constitution Re-check",
+      "note": "The constitution requires structured logs, metrics and traces with redaction, but the plan specifies recovery audit records without an observability/correlation approach or an explicit scoped exception and compensating checks. Define a minimal privacy-safe observability plan before claiming Constitution VI alignment."
+    },
+    {
+      "severity": "warning",
+      "file": "data-model.md",
+      "section": "Proposed SQLite schema, transactions and crash consistency",
+      "note": "The local-filesystem boundary is explicit, but \u201cSQLite-supported journaling and synchronous durability options\u201d leaves the actual durability profile undecided. Specify the supported journal/synchronous settings and the expected power-loss, backup/restore and filesystem failure envelope before treating committed ownership as durable."
+    },
+    {
+      "severity": "warning",
+      "file": "data-model.md",
+      "section": "Proposed SQLite schema, transactions and crash consistency",
+      "note": "The outbox is included in every final commit although no projection consumer or required projection contract is defined, and projections are described as optional future work. Defer the table until needed, or define its owner, delivery/idempotency semantics, retention and failure tests."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Technical Context \u2014 Performance Goals",
+      "note": "The 10-second overall and <=2-second adapter limits are correctly marked unmeasured proposals, but SC-001 depends on a configured deadline. Keep them explicitly non-acceptance values until a human selects/configures a bound and deterministic tests verify deadline behavior; do not imply the suggested default is validated."
+    }
+  ]
+}

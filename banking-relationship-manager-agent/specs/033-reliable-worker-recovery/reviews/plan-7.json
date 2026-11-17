@@ -1,0 +1,18 @@
+{
+  "id": "plan-7",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "pass",
+  "created_at": "2026-11-13T22:07:35+00:00",
+  "files": {
+    "plan.md": "1602b5e543e0699bc29b5e7b798186fc298e7b12c58d64c4b4d0589f205d9717",
+    "research.md": "600e2f55a89926b893af9cbcc7e6e69e721ceec401132f81c655b29b8bddcf1c",
+    "data-model.md": "08075e610b6fe4c4d8a24be1d44474fe99269c93e950c5a4df8c75347964c26b",
+    "contracts/recovery-adapter.md": "cfd5d35dcbddd3eed6d02ffbe52be513de1db15f00a1d1d145603a40e617b5ab",
+    "quickstart.md": "590248622261730bcfd1d75815a91790b8ecb4538ef125512dbc881e18977794",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a",
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e"
+  },
+  "findings": []
+}

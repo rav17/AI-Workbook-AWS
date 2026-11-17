@@ -1,0 +1,24 @@
+{
+  "id": "plan-10",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T22:31:54+00:00",
+  "files": {
+    "plan.md": "43a4e1e34c411cf443abbeb38971db2e97067fff54c27f5a03031dc735e207a9",
+    "research.md": "cd804d7368169362a36c575903fe290c4a11b3d540190aeac5ac75a3780cb789",
+    "data-model.md": "351beb9a387c5c9447bd0b14cc75767ece3fd30aafcf414271ba9f61973e3687",
+    "contracts/recovery-adapter.md": "d6b07eb8a34f0079373d9a66cb32184a0b3503db6614229d3bfb63f0c4a13ed5",
+    "quickstart.md": "bb07dfae3b16dc8b1415afe8f78a1af2ff2642c51148f19563a3388a2ee94ec7",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "contracts/recovery-adapter.md",
+      "section": "PROPOSED invocation supervision and deadline contract",
+      "note": "The gate correctly leaves Windows unsupported today, but future native qualification does not specify how ownership/cancellation survives the CreateProcess-to-Job-attachment window or launcher/supervisor loss. Suspended creation prevents code execution before containment but does not itself terminate an orphan or resolve cancel-vs-resume races. Define a concrete broker/outer-containment mechanism and evidence, or keep Windows unsupported; requirements alone are not qualification."
+    }
+  ]
+}

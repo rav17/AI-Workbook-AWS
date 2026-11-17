@@ -1,0 +1,20 @@
+{
+  "id": "specify-8",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-14T11:46:22+00:00",
+  "files": {
+    "spec.md": "a7272f203b509366957a49808537b8f1992d8f29cb8c3199ce10ca997dca2679",
+    "checklists/requirements.md": "e559cda745e67ffd18ba822826cbb2adc7a06c904a1bd4c5277f1382e1e7fb60"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "spec.md",
+      "section": "Functional Requirements ? FR-005; Success Criteria ? A-01, A-02, A-09, A-10",
+      "note": "The spec distinguishes approving, non-approving, missing, and malformed verdicts but defines no valid verdict vocabulary or criterion for malformed/unusable values. Specify the accepted verdict set and validation rule so tests can consistently classify valid versus invalid results and determine whether a result satisfies review requirements."
+    }
+  ]
+}

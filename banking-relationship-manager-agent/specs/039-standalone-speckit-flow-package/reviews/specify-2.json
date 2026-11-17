@@ -1,0 +1,13 @@
+{
+  "id": "specify-2",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "pass",
+  "created_at": "2026-11-16T18:32:35+00:00",
+  "files": {
+    "spec.md": "e9229754cf37d88b5886a24cfca2d131e7b8aecabecfa1368e959784a8017af5",
+    "checklists/requirements.md": "dfe7cbbb9f4d50f1f9eba4875ae2827a7da5e5d345bd983aac9b50f421106955"
+  },
+  "findings": []
+}

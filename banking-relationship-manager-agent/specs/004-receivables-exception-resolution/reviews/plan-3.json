@@ -1,0 +1,20 @@
+{
+  "id": "plan-3",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "pass",
+  "created_at": "2026-11-10T02:40:20+00:00",
+  "files": {
+    "plan.md": "3637a2f0f0049a0b7bb9f973352dc181763733c33e4174fd3ac80ab8f51169ae",
+    "research.md": "4c7364d9c402e75b499ae921a9857fdc0ae613811d65e9565b856e3ffc2d550c",
+    "data-model.md": "23c71717abcf35ca41d780979efad22bdeda3191dbed0cd5c7cbee9c8f4fdcfe",
+    "quickstart.md": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431",
+    "contracts/investigation-and-approval.md": "ea60e9e0535cfffaebc00221945df0c8081b9167c2fb316fec7847b8aa751a2d",
+    "synthetic-policy.md": "effcaaa811c072e11c3ded05d06648f01f0246fd6c1476fac943d523f7a34734",
+    "synthetic-fixtures.json": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+    "spec.md": "1f2cf63aa21bde64f5e02600552eb1f897aa1b85f9155a40afd59cc73d1bcb6c",
+    "questions.md": "709e01ea8dd5321fa57ece2fb0e55445880ac5f02377f6a26efa40831165adcc"
+  },
+  "findings": []
+}

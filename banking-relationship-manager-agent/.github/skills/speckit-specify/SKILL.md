@@ -10,13 +10,21 @@ metadata:
 
 ## Lifecycle Handoff
 
+For an assigned worker, inspect the active invocation brief, not marker examples
+in this file. A missing, conflicting or mismatched stage marker is a failed
+handoff: stop and report it to the conductor; do not invoke workflow or conductor.
+An unassigned direct stage command may hand off once as described below.
+
 Unless this is the assigned lead executing a conductor brief containing
-`SPECKIT_DELEGATED_STAGE=specify`, invoke `speckit-workflow` with the original
-request and requested stage `specify`, then return without executing this body.
+`SPECKIT_DELEGATED_STAGE=specify`, or the workflow host executing an eligible
+inline brief containing `SPECKIT_INLINE_STAGE=specify`, invoke
+`speckit-workflow` with the original request and requested stage `specify`,
+then return without executing this body.
 If the confirmed route starts with ideation, explain that prerequisite; do not
 silently skip it. The delegated lead reuses the supplied feature directory and
 pointer instead of allocating another one; create the spec in that directory.
-The conductor owns stage transitions and human gates.
+The workflow host owns inline stage transitions; the conductor owns delegated
+transitions. Only humans decide gates.
 
 ## User Input
 
@@ -129,7 +137,16 @@ Given that feature description, do this:
     2. Extract key concepts from description
        Identify: actors, actions, data, constraints
     3. For unclear aspects:
-       - Make informed guesses based on context and industry standards
+       - First consult relevant existing project documents and approved
+         decisions; use stage-filtered knowledge listings to locate references,
+         not a repository-wide document sweep. Follow the document-grounded
+         clarification guidance in `docs/speckit-profiles.md`.
+       - Reuse explicit, current answers with path/section citations. Present
+         inferred material answers as proposals for human confirmation in the
+         existing question/gate interaction; never treat silence as agreement.
+         Ask only for gaps, conflicts or material decisions still unresolved.
+       - For non-material details, use documented assumptions based on context
+         and industry standards; do not override explicit project decisions.
        - Only mark with [NEEDS CLARIFICATION: specific question] if:
          - The choice significantly impacts feature scope or user experience
          - Multiple reasonable interpretations exist with different implications

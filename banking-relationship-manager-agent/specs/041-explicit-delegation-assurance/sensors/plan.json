@@ -1,0 +1,22 @@
+{
+  "results": {
+    "consistency": {
+      "status": "pass",
+      "ts": "2026-11-17T07:09:26+00:00",
+      "reason": "artifacts consistent",
+      "fingerprints": {
+        "spec.md": "765b070398c881e7ffeb05d709935848fe66967898f9fbd24f07cf37ba5717ed",
+        "plan.md": "920fccff33426f49d86492ee9c79a25d0c9e2d53b5fe4ee6229d5de7c0c41587"
+      }
+    },
+    "no-open-questions": {
+      "status": "pass",
+      "ts": "2026-11-17T07:09:26+00:00",
+      "reason": "no open questions",
+      "fingerprints": {
+        "spec.md": "765b070398c881e7ffeb05d709935848fe66967898f9fbd24f07cf37ba5717ed",
+        "plan.md": "920fccff33426f49d86492ee9c79a25d0c9e2d53b5fe4ee6229d5de7c0c41587"
+      }
+    }
+  }
+}

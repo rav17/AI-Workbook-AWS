@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -23,12 +22,8 @@ SCAN_PATHS = [
 
 
 def main() -> int:
-    scanner = shutil.which("detect-secrets")
-    if scanner is None:
-        executable = "detect-secrets.exe" if sys.platform == "win32" else "detect-secrets"
-        scanner = str(Path(sys.executable).resolve().parent / executable)
     completed = subprocess.run(
-        [scanner, "scan", "--force-use-all-plugins", *SCAN_PATHS],
+        [sys.executable, "-m", "detect_secrets", "scan", "--force-use-all-plugins", *SCAN_PATHS],
         cwd=ROOT,
         capture_output=True,
         check=True,

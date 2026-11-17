@@ -1,0 +1,41 @@
+{
+  "feature": "036-lean-workflow-validation",
+  "profile": "quick",
+  "depth": "minimal",
+  "current_stage": null,
+  "pending_gate": null,
+  "revision": 10,
+  "updated_at": "2026-11-14T00:30:20+00:00",
+  "stages": {
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T00:14:23+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile quick",
+      "updated_at": "2026-11-14T00:14:20+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T00:14:25+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T00:14:27+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile quick",
+      "updated_at": "2026-11-14T00:14:20+00:00"
+    },
+    "implement": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T00:30:20+00:00"
+    }
+  }
+}

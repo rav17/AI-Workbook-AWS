@@ -1,0 +1,20 @@
+{
+  "id": "plan-1",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T02:32:47+00:00",
+  "files": {
+    "plan.md": "962f341906046d24b8ccdffd92aa6557d3eb26430a3d3cdf8aa52a9ca44889eb",
+    "spec.md": "2c0fd94040071ce7d92707de35ab802417eff463bf496d053fd486e4997f912a"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "5. Architecture decisions (D-INT-1 Integration shape)",
+      "note": "D-INT-1 defers registration in the Aria Runtime and leaves only a synthetic demo parent, while spec.md FR-001 requires the specialist to operate within Aria with trusted identity/session boundaries. Treat this as a deliberate MVP scope limitation, not a delivered Runtime capability; reconcile the scope/requirement before claiming FR-001 is met."
+    }
+  ]
+}

@@ -20,8 +20,14 @@ def roster() -> dict[str, ag.Agent]:
 def test_roster_counts_and_valid(roster: dict[str, ag.Agent]) -> None:
     counts: dict[str, int] = {}
     for a in roster.values():
+        if a.id == "hybrid-plan-reviewer":
+            continue
         counts[a.role] = counts.get(a.role, 0) + 1
     assert counts == ag.EXPECTED_COUNTS
+    reviewer = roster["hybrid-plan-reviewer"]
+    assert reviewer.role == "reviewer"
+    assert reviewer.supports == ("plan",)
+    assert not reviewer.can_edit
     assert ag.validate_roster(roster) == []
 
 

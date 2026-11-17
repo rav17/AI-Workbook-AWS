@@ -286,13 +286,15 @@ def validate_profile(profile: Profile, specify_dir: Path = DEFAULT_SPECIFY_DIR) 
             for output in contract.outputs
             if output.required and output.path is not None
         )
+        if profile.contract_inputs:
+            checked_paths.update(item.path for item in contract.inputs if item.path is not None)
     if len(checked_paths) > MAX_OUTPUTS:
         raise FlowError(
             f"profile {profile.id}: contract outputs exceed the {MAX_OUTPUTS}-file limit"
         )
 
 
-def _output_path(feature_dir: Path, relative: str) -> tuple[Path | None, str | None]:
+def artifact_path(feature_dir: Path, relative: str) -> tuple[Path | None, str | None]:
     try:
         root = feature_dir.resolve(strict=True)
     except OSError as exc:
@@ -343,7 +345,7 @@ def check_outputs(
         if output.path is None:
             unchecked.append(output.id)
             continue
-        _, problem = _output_path(feature_dir, output.path)
+        _, problem = artifact_path(feature_dir, output.path)
         if problem:
             problems.append(f"{output.path} {problem}")
     details = problems + ([f"not path-checkable: {', '.join(unchecked)}"] if unchecked else [])
@@ -354,8 +356,27 @@ def check_outputs(
     return True, f"{len(required)} required output(s) present and non-empty"
 
 
-def fingerprints(
+def check_inputs(
     feature_dir: Path, stage: str, specify_dir: Path = DEFAULT_SPECIFY_DIR
+) -> tuple[bool, str]:
+    contract = load_contracts(specify_dir).get(stage)
+    if contract is None:
+        raise FlowError(f"no stage contract found for {stage!r}")
+    problems: list[str] = []
+    checked = 0
+    for item in contract.inputs:
+        if item.path is not None:
+            checked += 1
+            _, problem = artifact_path(feature_dir, item.path)
+            if problem:
+                problems.append(f"input {item.path} {problem}")
+    note = f"{checked} path-bound input(s) present; pathless inputs require human review"
+    return not problems, "; ".join(problems) if problems else note
+
+
+def fingerprints(
+    feature_dir: Path, stage: str, specify_dir: Path = DEFAULT_SPECIFY_DIR,
+    *, include_inputs: bool = False,
 ) -> dict[str, str]:
     """Return bounded content hashes for the contract and path-bound required outputs."""
     contract = load_contracts(specify_dir).get(stage)
@@ -363,11 +384,17 @@ def fingerprints(
         raise FlowError(f"no stage contract found for {stage!r}")
     encoded = json.dumps(contract.to_dict(), sort_keys=True, separators=(",", ":")).encode()
     result = {f"contract:{stage}": hashlib.sha256(encoded).hexdigest()}
-    for output in contract.outputs:
-        if not output.required or output.path is None:
-            continue
-        key = f"output:{output.path}"
-        path, problem = _output_path(feature_dir, output.path)
+    paths = [
+        ("output", output.path) for output in contract.outputs
+        if output.required and output.path is not None
+    ]
+    if include_inputs:
+        paths.extend(("input", item.path) for item in contract.inputs if item.path is not None)
+    if len({relative for _, relative in paths}) > MAX_OUTPUTS:
+        raise FlowError(f"contract paths exceed the {MAX_OUTPUTS}-file limit")
+    for kind, relative in paths:
+        key = f"{kind}:{relative}"
+        path, problem = artifact_path(feature_dir, relative)
         if problem:
             result[key] = hashlib.sha256(problem.encode()).hexdigest()
             continue
@@ -379,7 +406,7 @@ def fingerprints(
                     data = handle.read(MAX_OUTPUT_BYTES + 1)
         except OSError as exc:
             raise FlowError(
-                f"cannot fingerprint contract output {output.path!r}: {type(exc).__name__}"
+                f"cannot fingerprint contract {kind} {relative!r}: {type(exc).__name__}"
             ) from exc
         if len(data) > MAX_OUTPUT_BYTES:
             result[key] = hashlib.sha256(b"oversized").hexdigest()

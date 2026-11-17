@@ -472,7 +472,11 @@ class ComputeStack(cdk.Stack):
                 exclude_punctuation=True,
                 password_length=64,
             ),
-            removal_policy=cdk.RemovalPolicy.RETAIN,
+            # dev: delete with the stack (a retained secret with this fixed name blocks the
+            # next create). staging/prod: retain so outstanding approval links stay valid.
+            removal_policy=(
+                cdk.RemovalPolicy.DESTROY if env_name == "dev" else cdk.RemovalPolicy.RETAIN
+            ),
         )
 
         # Create the api-gateway-key secret BEFORE the container definition so the

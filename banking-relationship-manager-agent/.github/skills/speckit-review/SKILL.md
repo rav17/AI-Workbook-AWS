@@ -26,6 +26,8 @@ You **MUST** consider the user input before proceeding (if not empty). The argum
 ## Procedure
 
 1. Pick the role matching the stage. Read only the artifacts that role needs.
+   Review once and return actionable, cited findings together, prioritized by
+   severity. Do not launch additional agents or review perspectives.
 2. Review with fresh eyes: you must **not** be the author of the output. Set `author` to whoever produced it (for example `agent:copilot`); the tool rejects a reviewer equal to the author.
 3. Write a JSON file in the session scratch area (not the repo):
 
@@ -46,10 +48,16 @@ You **MUST** consider the user input before proceeding (if not empty). The argum
    - Any `blocker` forces `block`. `pass` is invalid with `major` or `blocker`. An empty findings list is only valid for `pass`.
 4. Save it: `python -m speckit_flow review save <stage> --file <path> --actor agent:<name>`.
 5. Show the user the verdict and findings. If the stage has a gate, the human decides; for `block`, approval needs `--override-reason` from a human.
-6. If artifacts change after the review, it is stale; re-run the review. `python -m speckit_flow review list <stage>` shows STALE.
+6. If reviewed artifacts change, the review is stale and cannot serve as current
+   gate evidence. `python -m speckit_flow review list <stage>` shows STALE.
+   Batch changes before re-review; obey the conductor's limit of one automatic
+   follow-up per reviewer and ask for user direction if another is needed.
 
 ## Rules
 
 - Be specific and evidence-based; no finding without a citation.
 - Never edit saved reviews by hand.
 - Run reviews through the `speckit-product-lead` or `speckit-architecture-reviewer` agent (read-only tools); save with `--actor agent:<id>`. The reviewer must differ from the stage's lead agent.
+- A current `pass` or `concerns` is a result; report open findings rather than
+  repeatedly revising solely to obtain a perfect pass. Never treat a stale,
+  failed or missing review as current evidence.

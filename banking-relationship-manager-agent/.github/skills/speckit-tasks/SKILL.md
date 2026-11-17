@@ -10,11 +10,18 @@ metadata:
 
 ## Lifecycle Handoff
 
+For an assigned worker, inspect the active invocation brief, not marker examples
+in this file. A missing, conflicting or mismatched stage marker is a failed
+handoff: stop and report it to the conductor; do not invoke workflow or conductor.
+An unassigned direct stage command may hand off once as described below.
+
 Unless this is the assigned lead executing a conductor brief containing
-`SPECKIT_DELEGATED_STAGE=tasks`, invoke `speckit-workflow` with the original
+`SPECKIT_DELEGATED_STAGE=tasks`, or the workflow host executing an eligible
+inline brief containing `SPECKIT_INLINE_STAGE=tasks`, invoke `speckit-workflow` with the original
 request and requested stage `tasks`, then return without executing this body.
-Only the matching delegated lead follows the body below. Use the supplied
-feature directory; the conductor owns stage transitions and human gates.
+Only the matching delegated lead or inline host follows the body below. Use the
+supplied feature directory; the workflow host owns inline stage transitions and
+the conductor owns delegated transitions. Only humans decide gates.
 
 ## User Input
 
@@ -86,7 +93,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Phase 1: Setup tasks (project initialization)
    - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
    - Phase 3+: One phase per user story (in priority order from spec.md)
-   - Each phase includes: story goal, independent test criteria, tests (if requested), implementation tasks
+   - Each phase includes: story goal, independent test criteria, acceptance/regression test tasks for changed behavior, implementation tasks
    - Final Phase: Polish & cross-cutting concerns
    - All tasks must follow the strict checklist format (see Task Generation Rules below)
    - Clear file paths for each task
@@ -147,7 +154,19 @@ The tasks.md should be immediately executable - each task must be specific enoug
 
 **CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
 
-**Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature specification or if user requests TDD approach.
+**Verification follows the change**: Include acceptance and regression test
+tasks for changed behavior, reusing existing tests and tooling. Each behavioral
+requirement must cite its `FR-...` identifier in implementation and test tasks.
+For bug fixes, include a reproducer and checks for behavior that must not change.
+Use property-based tests only for useful invariants and existing suitable
+tooling; do not add a framework merely for ceremony. For documentation-only
+changes or behavior that cannot be automated, record the reason and concrete
+manual verification instead of inventing a passing test.
+
+For `quick`, omit empty setup/foundation phases and unnecessary parallel
+examples. Keep one concise dependency/verification section in `tasks.md`, with
+exact check commands, expected outcomes and the acceptance criteria they cover.
+Do not treat a test task's presence as evidence that the test passed.
 
 ### Checklist Format (REQUIRED)
 
@@ -189,12 +208,12 @@ Every task MUST strictly follow this format:
      - Models needed for that story
      - Services needed for that story
      - Interfaces/UI needed for that story
-     - If tests requested: Tests specific to that story
+     - Acceptance and regression tests specific to changed story behavior
    - Mark story dependencies (most stories should be independent)
 
 2. **From Contracts**:
    - Map each interface contract → to the user story it serves
-   - If tests requested: Each interface contract → contract test task [P] before implementation in that story's phase
+   - Each changed interface contract maps to an appropriate test task before implementation in that story's phase; mark [P] only when safe.
 
 3. **From Data Model**:
    - Map each entity to the user story(ies) that need it

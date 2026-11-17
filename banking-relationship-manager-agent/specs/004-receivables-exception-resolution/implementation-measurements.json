@@ -1,0 +1,3960 @@
+{
+  "schema": "uc8-implementation-recovery-measurements/v1",
+  "generated_at": "2026-11-10T19:30:33.394111+00:00",
+  "actor": "agent:developer",
+  "scope": "synthetic local only; evidence, not approval or a global conformance claim",
+  "provenance": "approval-provenance.md (unchanged); bounded findings reviews/implement-5.json and implement-6.json (read only)",
+  "approved_artifacts": {
+    "plan.md": {
+      "before": "3637a2f0f0049a0b7bb9f973352dc181763733c33e4174fd3ac80ab8f51169ae",
+      "after": "3637a2f0f0049a0b7bb9f973352dc181763733c33e4174fd3ac80ab8f51169ae",
+      "unchanged": true
+    },
+    "quickstart.md": {
+      "before": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431",
+      "after": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431",
+      "unchanged": true
+    },
+    "synthetic-policy.md": {
+      "before": "effcaaa811c072e11c3ded05d06648f01f0246fd6c1476fac943d523f7a34734",
+      "after": "effcaaa811c072e11c3ded05d06648f01f0246fd6c1476fac943d523f7a34734",
+      "unchanged": true
+    },
+    "synthetic-fixtures.json": {
+      "before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+      "after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+      "unchanged": true
+    }
+  },
+  "verified_source_sha256": {
+    "aria/agents/aria/receivables/__init__.py": "c82a7c2535fca2744ffa785f4c90aca79bbe88dcd6dc68906b2873721a448adf",
+    "aria/agents/aria/receivables/agent.py": "9a35d841a104af4fe25c98e9fabc48ec471d56cdfbe9a1d648ad4598a80e29bb",
+    "aria/agents/aria/receivables/engine.py": "65c4a39af511e070645e908e8a8d9b603aed399f90b49c47d494e3c783e1c46c",
+    "aria/agents/aria/receivables/freshness.py": "e79592752f49d9ef3711e5a3493e9853b284cee8cdb26dc75b0ead5f7950f5d0",
+    "aria/agents/aria/receivables/metrics.py": "2090a1a4d9114203ad3f436c8183b3f6673d9e14deedbea4e67a8edbab9787e2",
+    "aria/agents/aria/receivables/models.py": "eed4214248ab4b774d2c9208cef9564bf71eb37864f866e1166a85db929be50d",
+    "aria/agents/aria/receivables/policy.py": "9b54f41cb8d3aa09d232146e58ad82d207415f0390596b82e5c71b044b415a1e",
+    "aria/agents/aria/receivables/ports.py": "146c23187500c9d978eb960fee3fd85c02533ab301212afc626c17c1f96d1e5b",
+    "aria/agents/aria/receivables/rules.py": "63ace9a3eb488de9e038e3fde6ddb8dd86f9aefdf0aed41d8b92ff9bb119b1c3",
+    "aria/agents/aria/receivables/trusted_context.py": "9066377846b0f3737e47db66e27e539d18dd33819049e6bfcbe83f6498facdaa",
+    "demo/receivables_exception/__init__.py": "0e883cfeb03c699664be750df9f3730bcc3f6a0cfe1e614ae570af3fa9e23825",
+    "demo/receivables_exception/adapters.py": "ad9e2fe52513d4ddb52c7973fe324a4c319d0f5434f05d24af09c3808b931640",
+    "demo/receivables_exception/app.py": "225cf21f0e38974f431595703b4e5151f422d29f2d7a0ae61b8bbbdc27e06725",
+    "demo/receivables_exception/service.py": "a6e1392a558934f3930b6ee18291722d8bb46ca328e2f67711facafadd4dad1c",
+    "demo/receivables_exception/store.py": "69f12ca37d49772f3d133375e90ed7b5dfd5627babb537b7a3f743ad043c221a",
+    "tests/framework/test_receivables_agent_as_tool.py": "15d97c46081f18c962e6d2bdc0af36a8f154fba13ddb77614900aeda72059439",
+    "tests/framework/test_receivables_subagent.py": "17f4617cc9353cf904a0b00d576fb66913279e8e50b7dac1137bbd4d72b81e89",
+    "tests/property/test_receivables_properties.py": "b2b761b930ace62dfb4c5848ae0adebca30117a780b73261f5f4047a3eb321f3",
+    "tests/unit/test_receivables_fixtures.py": "906ad0518254d755225bca4f60792e85d0fd1a8ed5b685474ebc68c84c3f1d55",
+    "tests/unit/test_receivables_metrics.py": "46dffa2e341c687277add6cc0b563e18ae734567c2640392681a2755e76b3a13",
+    "tests/unit/test_receivables_rules.py": "67c98ee31cbcec2dd5e0c58bf398e6e1ea6f11f7f363c9294c300a11f3253559",
+    "tests/unit/test_receivables_store.py": "3d79bbc41697b02afe79ddc4b34867174af6dd6a68bca7aea08a205c462422da",
+    "tests/unit/test_receivables_trusted_context.py": "c40c68372b7542467b30fc6512011027d5aed63d91403777379d5934917f1f16"
+  },
+  "verification": [
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m pytest tests/unit/test_receivables_rules.py tests/unit/test_receivables_fixtures.py tests/unit/test_receivables_metrics.py tests/unit/test_receivables_store.py tests/unit/test_receivables_trusted_context.py -q",
+      "exit_code": 0,
+      "result": "95 passed in 29.47s"
+    },
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m pytest tests/framework/test_receivables_subagent.py tests/framework/test_receivables_agent_as_tool.py -q",
+      "exit_code": 0,
+      "result": "12 passed in 3.85s"
+    },
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m pytest tests/property/test_receivables_properties.py -q",
+      "exit_code": 0,
+      "result": "3 passed in 2.38s"
+    },
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m pytest tests/framework/test_agentcore_entrypoint.py tests/framework/test_kyc_aml_subagent.py tests/framework/test_statement_subagent.py tests/unit/test_statement_gateway_handler.py tests/unit/test_kyc_aml_verification.py -q",
+      "exit_code": 0,
+      "result": "39 passed, 1 third-party Pydantic deprecation warning in 7.55s"
+    },
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m ruff check aria/agents/aria/receivables demo/receivables_exception tests/unit/test_receivables_rules.py tests/unit/test_receivables_fixtures.py tests/unit/test_receivables_metrics.py tests/unit/test_receivables_store.py tests/unit/test_receivables_trusted_context.py tests/framework/test_receivables_subagent.py tests/framework/test_receivables_agent_as_tool.py tests/property/test_receivables_properties.py",
+      "exit_code": 0,
+      "result": "All checks passed!"
+    },
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m ruff format --check aria/agents/aria/receivables demo/receivables_exception",
+      "exit_code": 0,
+      "result": "16 files already formatted"
+    },
+    {
+      "command": ".\\.venv311\\Scripts\\python.exe -m mypy aria/agents/aria/receivables demo/receivables_exception",
+      "exit_code": 0,
+      "result": "Success: no issues found in 15 source files"
+    }
+  ],
+  "measurement_capture": {
+    "environment": "RECEIVABLES_EVIDENCE_DIR=build-artifacts/uc8-review-evidence",
+    "mechanism": "Approved unit pytest path captures actual adapters, real SQLite execute attempts/returns, committed rows and audit events. No standalone evaluation command.",
+    "counts": "SQL attempts count executions; successful calls mean SQL returned and may roll back. Committed rows are separate. W11: one failed confirmation audit INSERT after task/state writes is not persisted; the separate retrieval sink fault is not a SQL attempt. Unexercised is not a passing zero. DDL via executescript is outside DML coverage."
+  },
+  "E": {
+    "path": "E",
+    "cases_exercised": 57,
+    "guard_cases": 5,
+    "proposals_returned": 56,
+    "guard_attempts": {
+      "cases": 5,
+      "engine_invocations": 4,
+      "returned_proposals": 4,
+      "router_only_rejections": 1,
+      "source_reads": 0
+    },
+    "metrics": {
+      "error_cases": [],
+      "recommendation_evidence_checks": [
+        {
+          "case_id": "A01",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A02",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A03",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A04",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A05",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A06",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A07",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A08",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A09",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A10",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A11",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A12",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        },
+        {
+          "case_id": "A13",
+          "distinct_citation_types": [
+            "allocation_ledger",
+            "customer",
+            "invoice",
+            "payment",
+            "payment_history",
+            "policy",
+            "virtual_account"
+          ],
+          "missing_citation_types": [],
+          "variance_recomputed_exactly": true,
+          "availability": {
+            "payment": "available",
+            "virtual_account": "available",
+            "customer": "available",
+            "invoice": "available",
+            "payment_history": "available",
+            "allocation_ledger": "available",
+            "policy": "available"
+          }
+        }
+      ],
+      "fixture_label_checks": {
+        "primary_reason": {
+          "denominator": 52,
+          "correct": 52
+        },
+        "variance": {
+          "denominator": 16,
+          "correct": 16
+        },
+        "duplicate_status": {
+          "denominator": 18,
+          "correct": 18
+        },
+        "prior_allocation_status": {
+          "denominator": 16,
+          "correct": 16
+        }
+      },
+      "fixture_label_mismatches": [],
+      "variance_recomputation": {
+        "correct": 13,
+        "denominator": 13
+      },
+      "classification": {
+        "correct": 50,
+        "denominator": 50,
+        "unscored_by_label": 2,
+        "by_expected_class": {
+          "amount_reference_mismatch": 37,
+          "invalid_mapping": 8,
+          "suspected_duplicate": 5
+        },
+        "rate": 1.0
+      },
+      "top_candidate": {
+        "correct": 13,
+        "denominator": 13,
+        "rate": 1.0
+      },
+      "recommendation": {
+        "precision_numerator": 13,
+        "precision_denominator": 13,
+        "precision": 1.0,
+        "incorrect_allocations": 0,
+        "incorrect_allocation_denominator": 13,
+        "confident_nonallocatable": 0
+      },
+      "citation_completeness": {
+        "complete_recommendations": 13,
+        "recommendations": 13,
+        "rate": 1.0
+      },
+      "escalation": {
+        "labelled_cases": 52,
+        "correct_required": 36,
+        "required_denominator": 36,
+        "false_escalations": 0,
+        "not_required_denominator": 16,
+        "correct": 36,
+        "denominator": 36,
+        "rate": 1.0
+      },
+      "strata": {
+        "S1_allocatable": {
+          "total": 13,
+          "classification_correct": 13,
+          "top_candidate_correct": 13,
+          "escalation_required": 0,
+          "escalation_correct": 0
+        },
+        "S2_invalid_mapping": {
+          "total": 7,
+          "classification_correct": 7,
+          "top_candidate_correct": 0,
+          "escalation_required": 7,
+          "escalation_correct": 7
+        },
+        "S3_duplicate_prior": {
+          "total": 5,
+          "classification_correct": 5,
+          "top_candidate_correct": 0,
+          "escalation_required": 5,
+          "escalation_correct": 5
+        },
+        "S4_ineligible_conflict_competing": {
+          "total": 4,
+          "classification_correct": 4,
+          "top_candidate_correct": 0,
+          "escalation_required": 4,
+          "escalation_correct": 4
+        },
+        "S5_low_confidence_no_candidate": {
+          "total": 6,
+          "classification_correct": 6,
+          "top_candidate_correct": 0,
+          "escalation_required": 6,
+          "escalation_correct": 6
+        },
+        "S6_out_of_tolerance": {
+          "total": 3,
+          "classification_correct": 3,
+          "top_candidate_correct": 0,
+          "escalation_required": 0,
+          "escalation_correct": 0
+        },
+        "S7_degraded_evidence": {
+          "total": 9,
+          "classification_correct": 7,
+          "top_candidate_correct": 0,
+          "escalation_required": 9,
+          "escalation_correct": 9
+        },
+        "S8_policy_fail_closed": {
+          "total": 5,
+          "classification_correct": 5,
+          "top_candidate_correct": 0,
+          "escalation_required": 5,
+          "escalation_correct": 5
+        }
+      },
+      "dispositions": {
+        "recommend": 13,
+        "escalate": 36,
+        "no_recommendation": 3
+      },
+      "abstentions": 39,
+      "errors": 0,
+      "unlabelled_cases": 0,
+      "citation_trace": {
+        "valid": 939,
+        "cited": 939,
+        "failures": 0
+      },
+      "coverage": {
+        "payment": {
+          "calls": 52,
+          "status": "measured"
+        },
+        "virtual_account": {
+          "calls": 52,
+          "status": "measured"
+        },
+        "customer": {
+          "calls": 52,
+          "status": "measured"
+        },
+        "invoice": {
+          "calls": 52,
+          "status": "measured"
+        },
+        "payment_history": {
+          "calls": 52,
+          "status": "measured"
+        },
+        "allocation_ledger": {
+          "calls": 52,
+          "status": "measured"
+        },
+        "policy": {
+          "calls": 52,
+          "status": "measured"
+        }
+      },
+      "claims": "no success-target claim; synthetic conformance only"
+    },
+    "retrieval_correspondence": {
+      "expected": 364,
+      "observed": 364,
+      "matched": 364,
+      "matches": true,
+      "missing": [],
+      "unexpected": []
+    },
+    "audit_correspondence": {
+      "expected": {
+        "retrieval:payment": 52,
+        "retrieval:virtual_account": 52,
+        "retrieval:customer": 52,
+        "retrieval:invoice": 52,
+        "retrieval:payment_history": 52,
+        "retrieval:allocation_ledger": 52,
+        "retrieval:policy": 52,
+        "check": 52,
+        "proposal": 56
+      },
+      "observed": {
+        "retrieval:payment": 52,
+        "retrieval:virtual_account": 52,
+        "retrieval:customer": 52,
+        "retrieval:invoice": 52,
+        "retrieval:payment_history": 52,
+        "retrieval:allocation_ledger": 52,
+        "retrieval:policy": 52,
+        "check": 52,
+        "proposal": 56
+      },
+      "matches": true,
+      "missing": {},
+      "proposal_bindings": {
+        "returned": 56,
+        "audited": 56,
+        "matches": true
+      }
+    },
+    "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+    "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+    "writers": "No workflow store in E; proposal/decision/binding/state/task/SQLite audit writers unexercised; in-memory audit sink measured"
+  },
+  "W": [
+    {
+      "path": "W01",
+      "fixture_expected": "created; exactly one task; audit rows for retrieval, proposal, decision, confirmation binding, confirmation and task_result",
+      "measurement": {
+        "source_reads": 14,
+        "source_surfaces": {
+          "payment": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 2,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 22,
+            "calls": 22,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 1,
+          "audit": 22
+        },
+        "tasks_created": 1,
+        "audit_events": 22,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "observed": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "created"
+        ],
+        "retrieval_correspondence": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 2,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W02",
+      "fixture_expected": "replayed; same case_task_id; no second row",
+      "measurement": {
+        "source_reads": 14,
+        "source_surfaces": {
+          "payment": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 2,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 23,
+            "calls": 23,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 1,
+          "audit": 23
+        },
+        "tasks_created": 1,
+        "audit_events": 23,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1,
+            "replay": 1
+          },
+          "observed": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1,
+            "replay": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "created",
+          "replayed"
+        ],
+        "retrieval_correspondence": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 2,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W03",
+      "fixture_expected": "conflict; no creation, rebinding or mutation",
+      "measurement": {
+        "source_reads": 7,
+        "source_surfaces": {
+          "payment": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 1,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 12,
+            "calls": 12,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 0,
+          "audit": 12
+        },
+        "tasks_created": 0,
+        "audit_events": 12,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "rejection": 1
+          },
+          "observed": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "rejection": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "conflict"
+        ],
+        "retrieval_correspondence": {
+          "expected": 7,
+          "observed": 7,
+          "matched": 7,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 1,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W04",
+      "fixture_expected": "stale_confirmation; zero tasks",
+      "measurement": {
+        "source_reads": 14,
+        "source_surfaces": {
+          "payment": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 2,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 22,
+            "calls": 22,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 2,
+          "bindings": 1,
+          "case_tasks": 0,
+          "audit": 22
+        },
+        "tasks_created": 0,
+        "audit_events": 22,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "rejection": 1
+          },
+          "observed": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "rejection": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "stale_confirmation"
+        ],
+        "retrieval_correspondence": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 2,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W05",
+      "fixture_expected": "stale_confirmation; zero tasks",
+      "measurement": {
+        "source_reads": 14,
+        "source_surfaces": {
+          "payment": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 2,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 22,
+            "calls": 22,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 2,
+          "bindings": 1,
+          "case_tasks": 0,
+          "audit": 22
+        },
+        "tasks_created": 0,
+        "audit_events": 22,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "rejection": 1
+          },
+          "observed": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "rejection": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "stale_confirmation"
+        ],
+        "retrieval_correspondence": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 2,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W06",
+      "fixture_expected": "task unchanged; decision recorded; trigger blocks UPDATE/DELETE of case_tasks",
+      "measurement": {
+        "source_reads": 14,
+        "source_surfaces": {
+          "payment": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 2,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 3,
+            "calls": 3,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 1,
+            "calls": 0,
+            "status": "measured"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 23,
+            "calls": 23,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 2,
+          "bindings": 1,
+          "case_tasks": 1,
+          "audit": 23
+        },
+        "tasks_created": 1,
+        "audit_events": 23,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "observed": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "created"
+        ],
+        "retrieval_correspondence": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 2,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W07",
+      "fixture_expected": "replayed same committed task although decision state is stale; no rebinding or second task",
+      "measurement": {
+        "source_reads": 14,
+        "source_surfaces": {
+          "payment": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 2,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 2,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 3,
+            "calls": 3,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 1,
+            "calls": 0,
+            "status": "measured"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 24,
+            "calls": 24,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 2,
+          "bindings": 1,
+          "case_tasks": 1,
+          "audit": 24
+        },
+        "tasks_created": 1,
+        "audit_events": 24,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1,
+            "replay": 1
+          },
+          "observed": {
+            "retrieval:payment": 2,
+            "retrieval:virtual_account": 2,
+            "retrieval:customer": 2,
+            "retrieval:invoice": 2,
+            "retrieval:payment_history": 2,
+            "retrieval:allocation_ledger": 2,
+            "retrieval:policy": 2,
+            "check": 2,
+            "proposal": 2,
+            "decision": 2,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1,
+            "replay": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "created",
+          "replayed"
+        ],
+        "retrieval_correspondence": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 2,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W08",
+      "fixture_expected": "v1 identity cannot be rebound and is stale/conflict with no task; v2 uses its distinct identity and can create only after current checks pass",
+      "measurement": {
+        "source_reads": 28,
+        "source_surfaces": {
+          "payment": {
+            "calls": 4,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 4,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 4,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 4,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 4,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 4,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 4,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 4,
+            "calls": 4,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 3,
+            "calls": 3,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 44,
+            "calls": 44,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 2,
+          "states": 1,
+          "decisions": 3,
+          "bindings": 2,
+          "case_tasks": 1,
+          "audit": 44
+        },
+        "tasks_created": 1,
+        "audit_events": 44,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 4,
+            "retrieval:virtual_account": 4,
+            "retrieval:customer": 4,
+            "retrieval:invoice": 4,
+            "retrieval:payment_history": 4,
+            "retrieval:allocation_ledger": 4,
+            "retrieval:policy": 4,
+            "check": 4,
+            "proposal": 4,
+            "decision": 3,
+            "confirmation_binding": 2,
+            "confirmation": 1,
+            "task_result": 1,
+            "rejection": 1
+          },
+          "observed": {
+            "retrieval:payment": 4,
+            "retrieval:virtual_account": 4,
+            "retrieval:customer": 4,
+            "retrieval:invoice": 4,
+            "retrieval:payment_history": 4,
+            "retrieval:allocation_ledger": 4,
+            "retrieval:policy": 4,
+            "check": 4,
+            "proposal": 4,
+            "decision": 3,
+            "confirmation_binding": 2,
+            "rejection": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "stale_confirmation",
+          "created"
+        ],
+        "retrieval_correspondence": {
+          "expected": 28,
+          "observed": 28,
+          "matched": 28,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 4,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W09",
+      "fixture_expected": "unavailable; no write path",
+      "measurement": {
+        "source_reads": 7,
+        "source_surfaces": {
+          "payment": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 1,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 9,
+            "calls": 9,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 0,
+          "bindings": 0,
+          "case_tasks": 0,
+          "audit": 9
+        },
+        "tasks_created": 0,
+        "audit_events": 9,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1
+          },
+          "observed": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [],
+        "retrieval_correspondence": {
+          "expected": 7,
+          "observed": 7,
+          "matched": 7,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 1,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W10",
+      "fixture_expected": "first result unconfirmed or error, never success; retry reconciles by key",
+      "measurement": {
+        "source_reads": 21,
+        "source_surfaces": {
+          "payment": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 3,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 31,
+            "calls": 31,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 1,
+          "audit": 31
+        },
+        "tasks_created": 1,
+        "audit_events": 31,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 3,
+            "retrieval:virtual_account": 3,
+            "retrieval:customer": 3,
+            "retrieval:invoice": 3,
+            "retrieval:payment_history": 3,
+            "retrieval:allocation_ledger": 3,
+            "retrieval:policy": 3,
+            "check": 3,
+            "proposal": 3,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "observed": {
+            "retrieval:payment": 3,
+            "retrieval:virtual_account": 3,
+            "retrieval:customer": 3,
+            "retrieval:invoice": 3,
+            "retrieval:payment_history": 3,
+            "retrieval:allocation_ledger": 3,
+            "retrieval:policy": 3,
+            "check": 3,
+            "proposal": 3,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "created"
+        ],
+        "retrieval_correspondence": {
+          "expected": 21,
+          "observed": 21,
+          "matched": 21,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 3,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W11",
+      "fixture_expected": "rolled back; zero tasks; not success",
+      "measurement": {
+        "source_reads": 21,
+        "source_surfaces": {
+          "payment": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 3,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 3,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 3,
+            "calls": 3,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 2,
+            "calls": 2,
+            "status": "measured"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 33,
+            "calls": 32,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 1,
+          "audit": 32
+        },
+        "tasks_created": 1,
+        "audit_events": 32,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 3,
+            "retrieval:virtual_account": 3,
+            "retrieval:customer": 3,
+            "retrieval:invoice": 3,
+            "retrieval:payment_history": 3,
+            "retrieval:allocation_ledger": 3,
+            "retrieval:policy": 3,
+            "check": 3,
+            "proposal": 3,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1,
+            "replay": 1
+          },
+          "observed": {
+            "retrieval:payment": 3,
+            "retrieval:virtual_account": 3,
+            "retrieval:customer": 3,
+            "retrieval:invoice": 3,
+            "retrieval:payment_history": 3,
+            "retrieval:allocation_ledger": 3,
+            "retrieval:policy": 3,
+            "check": 3,
+            "proposal": 3,
+            "decision": 1,
+            "confirmation_binding": 1,
+            "confirmation": 1,
+            "task_result": 1,
+            "replay": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [
+          "created",
+          "replayed"
+        ],
+        "retrieval_correspondence": {
+          "expected": 21,
+          "observed": 21,
+          "matched": 21,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 3,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 1,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W12",
+      "fixture_expected": "unauthorized or stale; replay scope not shared",
+      "measurement": {
+        "source_reads": 7,
+        "source_surfaces": {
+          "payment": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 1,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 11,
+            "calls": 11,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 0,
+          "audit": 11
+        },
+        "tasks_created": 0,
+        "audit_events": 11,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1
+          },
+          "observed": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [],
+        "retrieval_correspondence": {
+          "expected": 7,
+          "observed": 7,
+          "matched": 7,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 1,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W13",
+      "fixture_expected": "unauthorized; no task",
+      "measurement": {
+        "source_reads": 7,
+        "source_surfaces": {
+          "payment": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 1,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 11,
+            "calls": 11,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 0,
+          "audit": 11
+        },
+        "tasks_created": 0,
+        "audit_events": 11,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1
+          },
+          "observed": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [],
+        "retrieval_correspondence": {
+          "expected": 7,
+          "observed": 7,
+          "matched": 7,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 1,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    },
+    {
+      "path": "W14",
+      "fixture_expected": "stale_confirmation; zero tasks",
+      "measurement": {
+        "source_reads": 7,
+        "source_surfaces": {
+          "payment": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "virtual_account": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "customer": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "invoice": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "payment_history": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "allocation_ledger": {
+            "calls": 1,
+            "status": "measured"
+          },
+          "policy": {
+            "calls": 1,
+            "status": "measured"
+          }
+        },
+        "writer_surfaces": {
+          "insert:proposals": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:proposals": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:states": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "delete:states": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:decisions": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:decisions": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:bindings": {
+            "attempts": 1,
+            "calls": 1,
+            "status": "measured"
+          },
+          "update:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:bindings": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "update:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:case_tasks": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "insert:audit": {
+            "attempts": 11,
+            "calls": 11,
+            "status": "measured"
+          },
+          "update:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          },
+          "delete:audit": {
+            "attempts": 0,
+            "calls": 0,
+            "status": "unexercised"
+          }
+        },
+        "committed_rows": {
+          "proposals": 1,
+          "states": 1,
+          "decisions": 1,
+          "bindings": 1,
+          "case_tasks": 0,
+          "audit": 11
+        },
+        "tasks_created": 0,
+        "audit_events": 11,
+        "audit_correspondence": {
+          "missing": {},
+          "unexpected": {},
+          "expected": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1
+          },
+          "observed": {
+            "retrieval:payment": 1,
+            "retrieval:virtual_account": 1,
+            "retrieval:customer": 1,
+            "retrieval:invoice": 1,
+            "retrieval:payment_history": 1,
+            "retrieval:allocation_ledger": 1,
+            "retrieval:policy": 1,
+            "check": 1,
+            "proposal": 1,
+            "decision": 1,
+            "confirmation_binding": 1
+          },
+          "matches": true
+        },
+        "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+        "fixture_unchanged": true,
+        "unmeasured": [
+          "network",
+          "AWS",
+          "production_writers"
+        ],
+        "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+        "audit_failures": {},
+        "store_confirmation_results": [],
+        "retrieval_correspondence": {
+          "expected": 7,
+          "observed": 7,
+          "matched": 7,
+          "matches": true,
+          "missing": [],
+          "unexpected": []
+        },
+        "proposals_returned": 1,
+        "audit_failure_classification": {
+          "failed_transactional_audit_insert_attempts": 0,
+          "failed_attempt_persisted": false,
+          "injected_expected_failure_missing": {},
+          "unexplained_missing_events": {},
+          "returned_proposal_audit_gap": 0,
+          "scope": "Committed events match; W11 failed confirmation audit INSERT is not persisted"
+        }
+      }
+    }
+  ],
+  "demo": {
+    "path": "demo",
+    "journey": [
+      {
+        "path": "/",
+        "status": "200 OK"
+      },
+      {
+        "path": "/investigate",
+        "status": "200 OK"
+      },
+      {
+        "path": "/decision",
+        "status": "200 OK"
+      },
+      {
+        "path": "/confirm",
+        "status": "200 OK"
+      },
+      {
+        "path": "/confirm",
+        "status": "200 OK"
+      }
+    ],
+    "stale_ttl_subcases": [
+      {
+        "elapsed_seconds": 660,
+        "stale_retries": 2,
+        "tasks": 0
+      },
+      {
+        "elapsed_seconds": 1860,
+        "stale_retries": 2,
+        "tasks": 0
+      }
+    ],
+    "clock": "main composition shared LogicalDemoClock; controlled monotonic",
+    "measurement": {
+      "source_reads": 14,
+      "source_surfaces": {
+        "payment": {
+          "calls": 2,
+          "status": "measured"
+        },
+        "virtual_account": {
+          "calls": 2,
+          "status": "measured"
+        },
+        "customer": {
+          "calls": 2,
+          "status": "measured"
+        },
+        "invoice": {
+          "calls": 2,
+          "status": "measured"
+        },
+        "payment_history": {
+          "calls": 2,
+          "status": "measured"
+        },
+        "allocation_ledger": {
+          "calls": 2,
+          "status": "measured"
+        },
+        "policy": {
+          "calls": 2,
+          "status": "measured"
+        }
+      },
+      "writer_surfaces": {
+        "insert:proposals": {
+          "attempts": 1,
+          "calls": 1,
+          "status": "measured"
+        },
+        "update:proposals": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "delete:proposals": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "insert:states": {
+          "attempts": 1,
+          "calls": 1,
+          "status": "measured"
+        },
+        "update:states": {
+          "attempts": 2,
+          "calls": 2,
+          "status": "measured"
+        },
+        "delete:states": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "insert:decisions": {
+          "attempts": 1,
+          "calls": 1,
+          "status": "measured"
+        },
+        "update:decisions": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "delete:decisions": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "insert:bindings": {
+          "attempts": 1,
+          "calls": 1,
+          "status": "measured"
+        },
+        "update:bindings": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "delete:bindings": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "insert:case_tasks": {
+          "attempts": 1,
+          "calls": 1,
+          "status": "measured"
+        },
+        "update:case_tasks": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "delete:case_tasks": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "insert:audit": {
+          "attempts": 23,
+          "calls": 23,
+          "status": "measured"
+        },
+        "update:audit": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        },
+        "delete:audit": {
+          "attempts": 0,
+          "calls": 0,
+          "status": "unexercised"
+        }
+      },
+      "committed_rows": {
+        "proposals": 1,
+        "states": 1,
+        "decisions": 1,
+        "bindings": 1,
+        "case_tasks": 1,
+        "audit": 23
+      },
+      "tasks_created": 1,
+      "audit_events": 23,
+      "audit_correspondence": {
+        "missing": {},
+        "unexpected": {},
+        "expected": {
+          "retrieval:payment": 2,
+          "retrieval:virtual_account": 2,
+          "retrieval:customer": 2,
+          "retrieval:invoice": 2,
+          "retrieval:payment_history": 2,
+          "retrieval:allocation_ledger": 2,
+          "retrieval:policy": 2,
+          "check": 2,
+          "proposal": 2,
+          "decision": 1,
+          "confirmation_binding": 1,
+          "confirmation": 1,
+          "task_result": 1,
+          "replay": 1
+        },
+        "observed": {
+          "retrieval:payment": 2,
+          "retrieval:virtual_account": 2,
+          "retrieval:customer": 2,
+          "retrieval:invoice": 2,
+          "retrieval:payment_history": 2,
+          "retrieval:allocation_ledger": 2,
+          "retrieval:policy": 2,
+          "check": 2,
+          "proposal": 2,
+          "decision": 1,
+          "confirmation_binding": 1,
+          "confirmation": 1,
+          "task_result": 1,
+          "replay": 1
+        },
+        "matches": true
+      },
+      "fixture_hash_before": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+      "fixture_hash_after": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+      "fixture_unchanged": true,
+      "unmeasured": [
+        "network",
+        "AWS",
+        "production_writers"
+      ],
+      "claim_scope": "instrumented local synthetic surfaces only; successful SQL calls may roll back",
+      "retrieval_correspondence": {
+        "expected": 14,
+        "observed": 14,
+        "matched": 14,
+        "matches": true,
+        "missing": [],
+        "unexpected": []
+      },
+      "proposal_audit_bindings": [
+        {
+          "proposal_id": "PROP-SYN-A02-1",
+          "proposal_version": 1,
+          "source_refs": [
+            "PAY-SYN-A02",
+            "VA-SYN-001",
+            "CORP-SYN-001",
+            "INV-SYN-1001",
+            "INV-SYN-1002",
+            "INV-SYN-1003",
+            "INV-SYN-1004",
+            "INV-SYN-1005",
+            "INV-SYN-1006",
+            "INV-SYN-1007",
+            "INV-SYN-1008",
+            "INV-SYN-1009",
+            "INV-SYN-1010",
+            "INV-SYN-1011",
+            "PAY-SYN-A02",
+            "empty-scope:PAY-SYN-A02",
+            "POLICY-SYN-RX-V1",
+            "INV-SYN-1002"
+          ]
+        },
+        {
+          "proposal_id": "PROP-SYN-A02-1",
+          "proposal_version": 1,
+          "source_refs": [
+            "PAY-SYN-A02",
+            "VA-SYN-001",
+            "CORP-SYN-001",
+            "INV-SYN-1001",
+            "INV-SYN-1002",
+            "INV-SYN-1003",
+            "INV-SYN-1004",
+            "INV-SYN-1005",
+            "INV-SYN-1006",
+            "INV-SYN-1007",
+            "INV-SYN-1008",
+            "INV-SYN-1009",
+            "INV-SYN-1010",
+            "INV-SYN-1011",
+            "PAY-SYN-A02",
+            "empty-scope:PAY-SYN-A02",
+            "POLICY-SYN-RX-V1",
+            "INV-SYN-1002"
+          ]
+        }
+      ],
+      "proposals_returned": 2
+    },
+    "scope": "in-process WSGI journey; no browser, HTTP listener, network, real model or AWS"
+  },
+  "W_aggregate": {
+    "scenarios_exercised": 14,
+    "source_reads": 189,
+    "source_calls": {
+      "payment": 27,
+      "virtual_account": 27,
+      "customer": 27,
+      "invoice": 27,
+      "payment_history": 27,
+      "allocation_ledger": 27,
+      "policy": 27
+    },
+    "write_attempts": {
+      "insert:proposals": 15,
+      "update:proposals": 0,
+      "delete:proposals": 0,
+      "insert:states": 15,
+      "update:states": 27,
+      "delete:states": 0,
+      "insert:decisions": 19,
+      "update:decisions": 0,
+      "delete:decisions": 0,
+      "insert:bindings": 14,
+      "update:bindings": 0,
+      "delete:bindings": 0,
+      "insert:case_tasks": 8,
+      "update:case_tasks": 2,
+      "delete:case_tasks": 0,
+      "insert:audit": 298,
+      "update:audit": 0,
+      "delete:audit": 0
+    },
+    "successful_sql_calls": {
+      "insert:proposals": 15,
+      "update:proposals": 0,
+      "delete:proposals": 0,
+      "insert:states": 15,
+      "update:states": 27,
+      "delete:states": 0,
+      "insert:decisions": 19,
+      "update:decisions": 0,
+      "delete:decisions": 0,
+      "insert:bindings": 14,
+      "update:bindings": 0,
+      "delete:bindings": 0,
+      "insert:case_tasks": 8,
+      "update:case_tasks": 0,
+      "delete:case_tasks": 0,
+      "insert:audit": 297,
+      "update:audit": 0,
+      "delete:audit": 0
+    },
+    "committed_rows": {
+      "proposals": 15,
+      "states": 14,
+      "decisions": 19,
+      "bindings": 14,
+      "case_tasks": 7,
+      "audit": 297
+    },
+    "audit_expected": {
+      "retrieval:payment": 27,
+      "retrieval:virtual_account": 27,
+      "retrieval:customer": 27,
+      "retrieval:invoice": 27,
+      "retrieval:payment_history": 27,
+      "retrieval:allocation_ledger": 27,
+      "retrieval:policy": 27,
+      "check": 27,
+      "proposal": 27,
+      "decision": 19,
+      "confirmation_binding": 14,
+      "confirmation": 7,
+      "task_result": 7,
+      "replay": 3,
+      "rejection": 4
+    },
+    "audit_observed": {
+      "retrieval:payment": 27,
+      "retrieval:virtual_account": 27,
+      "retrieval:customer": 27,
+      "retrieval:invoice": 27,
+      "retrieval:payment_history": 27,
+      "retrieval:allocation_ledger": 27,
+      "retrieval:policy": 27,
+      "check": 27,
+      "proposal": 27,
+      "decision": 19,
+      "confirmation_binding": 14,
+      "confirmation": 7,
+      "task_result": 7,
+      "replay": 3,
+      "rejection": 4
+    },
+    "audit_expected_total": 297,
+    "audit_observed_total": 297,
+    "missing_audits": {},
+    "scenario_correspondence_matches": 14,
+    "retrievals_expected": 189,
+    "retrievals_matched": 189,
+    "fixture_hashes_unchanged": true,
+    "proposals_returned": 27,
+    "proposal_audit_correspondence": {
+      "returned": 27,
+      "persisted_events": 27,
+      "matches": true
+    },
+    "injected_failure": {
+      "scenario": "W11",
+      "surface": "store.confirm confirmation audit INSERT after task/state writes",
+      "failed_insert_attempts": 1,
+      "failed_event_persisted": false,
+      "rolled_back_task_inserts": 1,
+      "successful_exact_retry_tasks": 1,
+      "subsequent_exact_replay": true
+    },
+    "successful_event_correspondence": {
+      "expected": 297,
+      "observed": 297,
+      "matches": true,
+      "scope": "Committed event correspondence, not a claim that failed audit attempts persisted"
+    }
+  },
+  "remaining_acceptance_errors": [],
+  "limits": [
+    "Partial FR-001 is the approved harness scope; Runtime registration and production identity integration remain deferred, not full FR-001 conformance.",
+    "No network, real model invocation, AWS, deployment, production authentication or global write-safety evidence.",
+    "Freeform analyst rationale remains bounded local synthetic-only text; no sensitive-content filtering guarantee.",
+    "E uses an in-memory audit sink, not SQLite audit persistence; workflow writers are unexercised in E.",
+    "W11 real SQL audit failure is a failed attempt, never a persisted failure event. Committed events match after retry. The separately identified retrieval-audit sink subcase retains one missing payment retrieval event and is excluded from all14 aggregate.",
+    "W14 extra proposal-TTL subcase and the two default-composed WSGI TTL subcases are asserted separately and excluded from main-path aggregate counters.",
+    "Demo evidence uses main default composition and shared LogicalDemoClock with controllable monotonic time, but no browser, HTTP listener or accessibility certification.",
+    "External source freshness is not locked atomically with SQLite commit; only local synthetic transactional guarantees are measured.",
+    "No security/dependency network scan executed: outside approved command scope.",
+    "Passing tests establish local synthetic results, not human acceptance approval."
+  ],
+  "diagram_validation": {
+    "command": ".\\.venv311\\Scripts\\python.exe -m speckit_flow diagrams validate --feature-dir specs/004-receivables-exception-resolution",
+    "exit_code": 0,
+    "output": "4 draw.io diagram(s) valid",
+    "changed_view": "architecture/diagrams/interactions.drawio",
+    "register_updated": true,
+    "meaning": "XML/graph structure only; not semantic or human approval"
+  },
+  "graphify": {
+    "command": "graphify update .",
+    "exit_code": 0,
+    "final_topology": "4702 nodes, 9868 edges, 346 communities",
+    "last_refresh": "No code-graph topology changes detected; outputs left untouched.",
+    "limitation": "AST-only. Community labels stale; no model-based relabeling run."
+  },
+  "recovery_verification": {
+    "generated_at": "2026-11-10T19:30:33.394111+00:00",
+    "actor": "agent:developer",
+    "scope": "implement-5 / implement-6 only",
+    "task_status": "37/37 existing task IDs remain checked; T008/T017/T019/T020/T021/T023/T030 refined by bounded corrections",
+    "approved_artifacts_unchanged": true,
+    "pytest_total": 149,
+    "remaining_bounded_findings": 0,
+    "limitations": [
+      "Partial FR-001 is the approved harness scope; Runtime registration and production identity integration remain deferred, not full FR-001 conformance.",
+      "No network, real model invocation, AWS, deployment, production authentication or global write-safety evidence.",
+      "Freeform analyst rationale remains bounded local synthetic-only text; no sensitive-content filtering guarantee.",
+      "E uses an in-memory audit sink, not SQLite audit persistence; workflow writers are unexercised in E.",
+      "W11 real SQL audit failure is a failed attempt, never a persisted failure event. Committed events match after retry. The separately identified retrieval-audit sink subcase retains one missing payment retrieval event and is excluded from all14 aggregate.",
+      "W14 extra proposal-TTL subcase and the two default-composed WSGI TTL subcases are asserted separately and excluded from main-path aggregate counters.",
+      "Demo evidence uses main default composition and shared LogicalDemoClock with controllable monotonic time, but no browser, HTTP listener or accessibility certification.",
+      "External source freshness is not locked atomically with SQLite commit; only local synthetic transactional guarantees are measured.",
+      "No security/dependency network scan executed: outside approved command scope.",
+      "Passing tests establish local synthetic results, not human acceptance approval."
+    ]
+  },
+  "separate_retrieval_audit_failure": {
+    "path": "separate retrieval-audit sink failure, not W11",
+    "failed_result": "unconfirmed",
+    "failed_task_count": 0,
+    "failed_attempts": {
+      "retrieval:payment": 1
+    },
+    "failed_retrieval_correspondence": {
+      "expected": 8,
+      "observed": 7,
+      "matched": 7,
+      "matches": false,
+      "missing": [
+        {
+          "source_type": "payment",
+          "source_refs": [
+            "PAY-SYN-A02"
+          ],
+          "availability": "available",
+          "calls": 1
+        }
+      ],
+      "unexpected": []
+    },
+    "after_retry_tasks": 1,
+    "failed_event_persisted": false,
+    "scope": "Rejected retrieval audit missing; excluded from all14 aggregate"
+  },
+  "intermediate_errors": [
+    {
+      "phase": "test construction",
+      "result": "Ruff formatter rejected malformed SQL-trigger string quoting; corrected before execution."
+    },
+    {
+      "phase": "unit attempt 1",
+      "exit_code": 1,
+      "result": "1 failed, 94 passed in 28.71s",
+      "cause": "TTL subcase used a non-recommending payment; switched independent stores to A02."
+    },
+    {
+      "phase": "unit attempt 2",
+      "exit_code": 1,
+      "result": "1 failed, 94 passed in 27.36s",
+      "cause": "TTL form omitted required exception_type; corrected form to match actual UI."
+    },
+    {
+      "phase": "static checks during edits",
+      "result": "Import order and test-only line-length findings; corrected. Final exact lint/format/mypy commands passed."
+    },
+    {
+      "phase": "documentation update",
+      "result": "Windows cp1252 decoding failed before any write; retried successfully with explicit UTF-8."
+    }
+  ]
+}

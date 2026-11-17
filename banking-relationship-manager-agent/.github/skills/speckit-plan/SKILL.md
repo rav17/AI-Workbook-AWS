@@ -10,11 +10,18 @@ metadata:
 
 ## Lifecycle Handoff
 
+For an assigned worker, inspect the active invocation brief, not marker examples
+in this file. A missing, conflicting or mismatched stage marker is a failed
+handoff: stop and report it to the conductor; do not invoke workflow or conductor.
+An unassigned direct stage command may hand off once as described below.
+
 Unless this is the assigned lead executing a conductor brief containing
-`SPECKIT_DELEGATED_STAGE=plan`, invoke `speckit-workflow` with the original
+`SPECKIT_DELEGATED_STAGE=plan`, or the workflow host executing an eligible
+inline brief containing `SPECKIT_INLINE_STAGE=plan`, invoke `speckit-workflow` with the original
 request and requested stage `plan`, then return without executing this body.
-Only the matching delegated lead follows the body below. Use the supplied
-feature directory; the conductor owns stage transitions and human gates.
+Only the matching delegated lead or inline host follows the body below. Use the
+supplied feature directory; the workflow host owns inline stage transitions and
+the conductor owns delegated transitions. Only humans decide gates.
 
 ## User Input
 
@@ -71,6 +78,17 @@ You **MUST** consider the user input before proceeding (if not empty).
    inventory is not architecture validation or proof that tests ran. Do not
    require this optional artifact in default/greenfield workflows.
 
+   Discover project practices inline using
+   `python -m speckit_flow codebase practices --json`. For affected nested
+   packages use `--project-dir <package-root>` as well. This read-only command
+   fingerprints convention sources; it does not extract commands or run checks.
+   Read only relevant source sections and keep a compact **Project practices**
+   summary in `plan.md`: project/package root and fingerprint, exact commands
+   with working directories and path/line citations, applicable coding
+   conventions, and unknowns/conflicts. Use document-grounded clarification
+   before asking about missing practices. Follow freshness and safety guidance
+   in `docs/speckit-profiles.md`; no discovery agent, new artifact or gate.
+
 3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
    - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
    - Fill Constitution Check section from constitution
@@ -78,6 +96,19 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
    - Phase 1: Generate data-model.md, contracts/, quickstart.md
    - Re-evaluate Constitution Check post-design
+
+   For the confirmed `quick` profile, keep the plan concise. Put necessary
+   decisions, affected interfaces/data, risks and runnable acceptance/regression
+   checks in `plan.md`; create separate research, data-model, contract or
+   quickstart artifacts only when the change or project policy needs them.
+   Resolve material unknowns and run mandatory hooks as usual. This exception
+   does not apply to other profiles.
+
+   For an existing codebase, describe the change, not a redesign of the whole
+   system: cite reusable components, list affected files/interfaces, state what
+   behavior must remain unchanged, and identify acceptance/regression checks.
+   For fixes, include reproduction and the observed root cause. Keep these
+   details in the existing plan; do not introduce another document or gate.
 
 ## Mandatory Post-Execution Hooks
 
@@ -116,7 +147,8 @@ Check if `.specify/extensions.yml` exists in the project root.
 
 ## Completion Report
 
-Command ends after Phase 1 design. Report branch, IMPL_PLAN path, and generated artifacts.
+Command ends after design. Report branch, IMPL_PLAN path, generated artifacts
+and any intentionally omitted quick-profile artifacts.
 
 ## Phases
 
@@ -127,25 +159,23 @@ Command ends after Phase 1 design. Report branch, IMPL_PLAN path, and generated 
    - For each dependency → best practices task
    - For each integration → patterns task
 
-2. **Generate and dispatch research agents**:
-
-   ```text
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
-   ```
+2. Research consequential unknowns and technology choices directly using the
+   smallest relevant sources. Delegate only independent work needing substantial
+   separate context and only where the confirmed execution mode permits it. Do
+   not spawn an agent for each dependency, integration or unknown.
 
 3. **Consolidate findings** in `research.md` using format:
    - Decision: [what was chosen]
    - Rationale: [why chosen]
    - Alternatives considered: [what else evaluated]
 
-**Output**: research.md with all NEEDS CLARIFICATION resolved
+**Output**: all material NEEDS CLARIFICATION items resolved. Record decisions
+in `research.md`, or in `plan.md` for the confirmed `quick` profile.
 
 ### Phase 1: Design & Contracts
 
-**Prerequisites:** `research.md` complete
+**Prerequisites:** research decisions are complete (`research.md`, or `plan.md`
+for the confirmed `quick` profile).
 
 1. **Extract entities from feature spec** → `data-model.md`:
    - Entity name, fields, relationships
@@ -165,7 +195,8 @@ Command ends after Phase 1 design. Report branch, IMPL_PLAN path, and generated 
    - Do not include full implementation code, model/service/controller bodies, migrations, or complete test suites
    - Keep this artifact as a validation/run guide; implementation details belong in `tasks.md` and the implementation phase
 
-**Output**: data-model.md, /contracts/*, quickstart.md
+**Output**: data-model.md, /contracts/* and quickstart.md where applicable;
+for `quick`, keep necessary details in the plan unless separate files are needed.
 
 ## Key rules
 

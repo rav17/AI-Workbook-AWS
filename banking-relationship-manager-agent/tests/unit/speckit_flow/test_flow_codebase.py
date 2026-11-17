@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import stat
@@ -122,6 +123,164 @@ def test_cli_inventory_does_not_require_feature(
     monkeypatch.setattr(cli, "_REPO_ROOT", tmp_path)
     assert cli.main(["codebase", "scan", "--json"]) == 0
     assert json.loads(capsys.readouterr().out)["sources"] == ["app.py"]
+
+
+def test_practices_are_read_only_sorted_and_do_not_emit_content(tmp_path: Path) -> None:
+    for name in (
+        "pyproject.toml", "README.md", ".github/workflows/check.yml",
+        ".github/instructions/python.instructions.md", ".github/copilot-instructions.md",
+        "src/app.py", ".env", "node_modules/package.json", "child/package.json",
+    ):
+        _file(tmp_path, name)
+    before = {p: p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
+    snapshot = codebase.practices(tmp_path)
+    assert snapshot["status"] == "found"
+    assert snapshot["project_root"] == str(tmp_path.resolve())
+    paths = [source["path"] for source in snapshot["sources"]]
+    assert paths == [
+        ".github/copilot-instructions.md",
+        ".github/instructions/python.instructions.md",
+        ".github/workflows/check.yml", "README.md", "pyproject.toml",
+    ]
+    assert all(
+        source["sha256"] == hashlib.sha256(b"not executed or copied").hexdigest()
+        for source in snapshot["sources"]
+    )
+    assert "not executed or copied" not in json.dumps(snapshot)
+    assert before == {p: p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
+    assert codebase.practices(tmp_path) == snapshot
+    assert "No commands were executed" in snapshot["notice"]
+
+
+@pytest.mark.parametrize("change", ["edit", "add", "delete", "rename"])
+def test_practices_fingerprint_tracks_source_changes(tmp_path: Path, change: str) -> None:
+    path = tmp_path / "pyproject.toml"
+    path.write_text("before", encoding="utf-8")
+    stamp = path.stat()
+    before = codebase.practices(tmp_path)["fingerprint"]
+    if change == "edit":
+        path.write_text("after!", encoding="utf-8")
+        os.utime(path, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    elif change == "add":
+        _file(tmp_path, "Makefile")
+    elif change == "delete":
+        path.unlink()
+    else:
+        path.rename(tmp_path / "ruff.toml")
+    assert codebase.practices(tmp_path)["fingerprint"] != before
+
+
+def test_practices_empty_and_nested_package_scope(tmp_path: Path) -> None:
+    nested = tmp_path / "frontend"
+    _file(nested, "package.json")
+    assert codebase.practices(tmp_path)["status"] == "empty"
+    snapshot = codebase.practices(nested)
+    assert snapshot["status"] == "found"
+    assert [s["path"] for s in snapshot["sources"]] == ["package.json"]
+
+
+@pytest.mark.parametrize(
+    ("limit", "value", "message"),
+    [
+        ("max_bytes", 1, "byte limit"),
+        ("max_sources", 1, "source limit"),
+        ("max_entries", 1, "entry limit"),
+        ("max_sources", 0, "positive"),
+    ],
+)
+def test_practices_limits_fail_explicitly(
+    tmp_path: Path, limit: str, value: int, message: str
+) -> None:
+    _file(tmp_path, "pyproject.toml")
+    _file(tmp_path, "Makefile")
+    with pytest.raises(FlowError, match=message):
+        codebase.practices(tmp_path, **{limit: value})
+
+
+def test_practices_io_failures_are_explicit(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _file(tmp_path, "pyproject.toml")
+
+    def denied(*args: object, **kwargs: object) -> None:
+        raise PermissionError("fixture denied")
+
+    monkeypatch.setattr(Path, "open", denied)
+    with pytest.raises(FlowError, match="cannot inspect practices.*fixture denied"):
+        codebase.practices(tmp_path)
+
+
+def test_practices_exact_limits_and_ignored_changes(tmp_path: Path) -> None:
+    (tmp_path / "package.json").write_bytes(b"{}")
+    snapshot = codebase.practices(tmp_path, max_bytes=2, max_sources=1, max_entries=1)
+    _file(tmp_path, ".env")
+    assert codebase.practices(tmp_path)["fingerprint"] == snapshot["fingerprint"]
+
+
+@pytest.mark.parametrize("invalid", ["root", "source", "directory"])
+def test_practices_reject_invalid_file_types(tmp_path: Path, invalid: str) -> None:
+    if invalid == "root":
+        _file(tmp_path, "root.txt")
+        root = tmp_path / "root.txt"
+    else:
+        root = tmp_path
+        if invalid == "source":
+            (tmp_path / "package.json").mkdir()
+        else:
+            _file(tmp_path, ".github")
+    with pytest.raises(FlowError, match="non-symlink"):
+        codebase.practices(root)
+
+
+def test_practices_reject_relevant_symlinks(tmp_path: Path) -> None:
+    target = tmp_path / "source.txt"
+    _file(tmp_path, "source.txt")
+    try:
+        (tmp_path / "pyproject.toml").symlink_to(target)
+    except OSError:
+        pytest.skip("symlink creation unavailable")
+    with pytest.raises(FlowError, match="non-symlink"):
+        codebase.practices(tmp_path)
+
+
+def test_practices_reject_junction_metadata(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    github = tmp_path / ".github"
+    github.mkdir()
+    original = Path.lstat
+
+    def junction(path: Path) -> os.stat_result:
+        if path == github:
+            return Mock(
+                spec=os.stat_result, st_mode=stat.S_IFDIR,
+                st_file_attributes=stat.FILE_ATTRIBUTE_REPARSE_POINT,
+            )
+        return original(path)
+
+    monkeypatch.setattr(Path, "lstat", junction)
+    with pytest.raises(FlowError, match="non-symlink directory"):
+        codebase.practices(tmp_path)
+
+
+def test_practices_cli_needs_no_feature_and_reports_errors(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr(cli, "_REPO_ROOT", tmp_path)
+    assert cli.main(["codebase", "practices", "--json"]) == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "empty"
+    package = tmp_path / "package"
+    _file(package, "package.json")
+    assert cli.main([
+        "codebase", "practices", "--project-dir", str(package), "--json",
+    ]) == 0
+    assert json.loads(capsys.readouterr().out)["project_root"] == str(package.resolve())
+    assert cli.main([
+        "codebase", "practices", "--project-dir", str(tmp_path / "missing"), "--json",
+    ]) == 1
+    assert "cannot inspect practices" in capsys.readouterr().err
 
 
 @pytest.mark.parametrize(

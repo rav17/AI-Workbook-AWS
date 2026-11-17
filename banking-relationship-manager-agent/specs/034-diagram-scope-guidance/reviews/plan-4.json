@@ -1,0 +1,19 @@
+{
+  "id": "plan-4",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:speckit-architect",
+  "verdict": "pass",
+  "created_at": "2026-11-13T18:59:49+00:00",
+  "files": {
+    ".github/skills/speckit-plan/SKILL.md": "aae1f671c32a6c7de45e127356da541f3f9ae5b1bebd8df6159c05689a9cfb8d",
+    ".specify/templates/plan-template.md": "7e637502d41eccf0ca672496636365691fdca62ef37b27ec07fcb412dbfa90d4",
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e",
+    "specs/034-diagram-scope-guidance/spec.md": "a6943c6db427c9a75ac5a99c4924c9849f52a9d04699f44227d8c2723facd452",
+    "specs/034-diagram-scope-guidance/plan.md": "d8bcdef032b925c1b5ce80890d9262c92488cee0fbba515831c9ca8ae6a442c0",
+    "specs/034-diagram-scope-guidance/research.md": "c435c98231f47ad6fd7a118dfe965dbf4c66d9f068441a6530cba728610edb02",
+    "specs/034-diagram-scope-guidance/data-model.md": "a53fab14ebb4e3bdc8de2e0b8ceb3e486219413cb522fb88251d2fe42c2edd3f",
+    "specs/034-diagram-scope-guidance/quickstart.md": "99e176fa466527faedb3548c595ec9f2374a2995a8ae1387d88667cf00de455e"
+  },
+  "findings": []
+}

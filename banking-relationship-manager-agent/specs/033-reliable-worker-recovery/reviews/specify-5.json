@@ -1,0 +1,32 @@
+{
+  "id": "specify-5",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T21:09:41+00:00",
+  "files": {
+    "spec.md": "9c69477b26d6d6c2796b18c06cfff403bea0a48e741491110ff4ce0d2e5ca308",
+    "checklists/requirements.md": "28020ecb7000aa773864957ab12d50aee98bb35b32e423eaa39ffb9575e36f38"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "Functional Requirements (FR-007?FR-008); Assumptions",
+      "note": "Checkpoint validity is central to resume safety, but the spec defers exact evidence rules and does not give observable criteria for deciding when completion evidence or relevant changes invalidate a checkpoint. The interruption scenarios therefore lack a stable pass/fail classification for valid versus stale/invalid evidence; define a contract-level validity rule or an explicit fail-closed outcome."
+    },
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "Success Criteria (SC-001?SC-006)",
+      "note": "The criteria quantify results across ?every? or ?the? portable scenario set, but the set has no minimum inventory or coverage boundary. Since the outcomes depend on scenario selection, a small or selectively scoped set could satisfy the percentages while missing specified edge cases. Tie each criterion to a bounded set derived from the listed acceptance scenarios and edge cases."
+    },
+    {
+      "severity": "warning",
+      "file": "checklists/requirements.md",
+      "section": "Requirement Completeness (CHK-006, CHK-007, CHK-013)",
+      "note": "These checked items assert all requirements are testable, success criteria measurable, and every FR covered. That overstates the artifacts: checkpoint-validity classification is deferred to planning and the success-criteria scenario denominator is not bounded. Reassess these checks after the corresponding spec gaps are resolved."
+    }
+  ]
+}

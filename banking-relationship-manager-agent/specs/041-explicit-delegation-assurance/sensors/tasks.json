@@ -1,0 +1,24 @@
+{
+  "results": {
+    "consistency": {
+      "status": "pass",
+      "ts": "2026-11-17T07:12:24+00:00",
+      "reason": "artifacts consistent",
+      "fingerprints": {
+        "spec.md": "765b070398c881e7ffeb05d709935848fe66967898f9fbd24f07cf37ba5717ed",
+        "plan.md": "920fccff33426f49d86492ee9c79a25d0c9e2d53b5fe4ee6229d5de7c0c41587",
+        "tasks.md": "f30935f27924256cd868a4bb06d0cd0f2a47beb173343490b9657f9e8d5549bf"
+      }
+    },
+    "traceability": {
+      "status": "pass",
+      "ts": "2026-11-17T07:12:24+00:00",
+      "reason": "all requirements covered",
+      "fingerprints": {
+        "spec.md": "765b070398c881e7ffeb05d709935848fe66967898f9fbd24f07cf37ba5717ed",
+        "plan.md": "920fccff33426f49d86492ee9c79a25d0c9e2d53b5fe4ee6229d5de7c0c41587",
+        "tasks.md": "f30935f27924256cd868a4bb06d0cd0f2a47beb173343490b9657f9e8d5549bf"
+      }
+    }
+  }
+}

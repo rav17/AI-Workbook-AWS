@@ -11,6 +11,24 @@ class FlowError(Exception):
     """Raised for any user-facing validation or state error."""
 
 
+class ReviewEvidenceError(FlowError):
+    """A review failure with an explicit input-boundary classification."""
+
+    def __init__(self, state: str, message: str) -> None:
+        super().__init__(message)
+        self.state = state
+
+
+class ReviewSelectionError(FlowError):
+    """A hybrid reviewer selection failure with an operator-facing status."""
+
+    def __init__(self, state: str, reason: str, next_action: str) -> None:
+        super().__init__(reason)
+        self.state = state
+        self.reason = reason
+        self.next_action = next_action
+
+
 def _load_stage_table() -> list[StageDef]:
     try:
         return load_stage_defs()
@@ -50,6 +68,12 @@ EVENT_TYPES: tuple[str, ...] = (
     "question_answered",
     "unit_defined",
     "unit_checkpoint",
+    "call_reserved",
+    "call_finished",
+    "calls_reset",
+    "host_evidence_recorded",
+    "inline_work_recorded",
+    "delegation_assurance_accepted",
 )
 STATUSES: tuple[str, ...] = ("pending", "in_progress", "done", "skipped")
 EXEMPTIONS: tuple[str, ...] = ("implement-without-tasks",)
@@ -69,6 +93,8 @@ _PROFILE_FIELDS = {
     "guard_policy",
     "ceremony",
     "stage_contracts",
+    "execution",
+    "contract_inputs",
 }
 CEREMONY_KEYS: tuple[str, ...] = ("learning", "reviews")
 TEST_STRATEGIES: tuple[str, ...] = ("standard", "required")
@@ -101,6 +127,8 @@ class Profile:
     guard_policy: str = ""
     ceremony: dict[str, bool] = field(default_factory=dict)
     stage_contracts: bool = False
+    execution: str = "delegated"
+    contract_inputs: bool = False
 
     def ceremony_on(self, name: str) -> bool:
         """Optional ceremony defaults to on; a profile can switch a named item off."""
@@ -127,6 +155,9 @@ class Profile:
         stage_contracts = data.get("stage_contracts", False)
         if not isinstance(stage_contracts, bool):
             raise FlowError("profile stage_contracts must be true or false")
+        contract_inputs = data.get("contract_inputs", False)
+        if not isinstance(contract_inputs, bool):
+            raise FlowError("profile contract_inputs must be true or false")
         profile = cls(
             id=str(data["id"]),
             description=str(data["description"]),
@@ -139,11 +170,59 @@ class Profile:
             guard_policy=str(data.get("guard_policy", "")),
             ceremony=_parse_ceremony(data.get("ceremony")),
             stage_contracts=stage_contracts,
+            execution=data.get("execution", "delegated"),
+            contract_inputs=contract_inputs,
         )
         profile.validate(expected_id)
         return profile
 
     def validate(self, expected_id: str | None = None) -> None:
+        if self.contract_inputs and not self.stage_contracts:
+            raise FlowError(f"profile {self.id}: contract_inputs requires stage_contracts")
+        if self.execution not in ("inline", "delegated", "hybrid", "selective"):
+            raise FlowError(
+                f"profile {self.id}: execution must be inline, delegated, hybrid or selective"
+            )
+        if self.execution == "selective":
+            if self.id != "selective":
+                raise FlowError("selective execution requires the opt-in selective profile")
+            if set(self.assignments) != set(self.stages):
+                raise FlowError(f"profile {self.id}: selective stages need explicit assignments")
+            if any(
+                stage not in ("specify", "clarify", "plan", "tasks", "analyze", "implement")
+                for stage in self.stages
+            ):
+                raise FlowError(f"profile {self.id}: selective execution has unsupported stages")
+        if self.execution == "hybrid":
+            expected_leads = {
+                "specify": "product",
+                "plan": "architect",
+                "tasks": "delivery",
+                "implement": "developer",
+            }
+            if (
+                self.id != "hybrid-plan"
+                or self.strict
+                or not self.ceremony_on("reviews")
+                or self.stages != tuple(expected_leads)
+                or self.gates != ("specify", "plan")
+                or set(self.assignments) != set(expected_leads)
+                or any(
+                    entry.get("lead") != lead or entry.get("support")
+                    for stage, lead in expected_leads.items()
+                    if isinstance((entry := self.assignments.get(stage)), dict)
+                )
+            ):
+                raise FlowError(f"profile {self.id}: invalid hybrid plan route")
+        if self.execution == "inline" and (self.strict or self.ceremony_on("reviews")):
+            raise FlowError(
+                f"profile {self.id}: inline execution requires non-strict guard and reviews off"
+            )
+        if self.execution == "inline" and any(
+            stage not in ("specify", "clarify", "plan", "tasks", "analyze", "implement")
+            for stage in self.stages
+        ):
+            raise FlowError(f"profile {self.id}: inline execution has unsupported stages")
         if self.strict and not self.ceremony_on("reviews"):
             raise FlowError(f"profile {self.id}: strict guard policy needs ceremony reviews on")
         if self.test_strategy not in TEST_STRATEGIES:
@@ -228,6 +307,10 @@ class Profile:
             out["ceremony"] = dict(self.ceremony)
         if self.stage_contracts:
             out["stage_contracts"] = True
+        if self.execution != "delegated":
+            out["execution"] = self.execution
+        if self.contract_inputs:
+            out["contract_inputs"] = True
         return out
 
 
@@ -356,8 +439,17 @@ class Review:
     findings: tuple[Finding, ...]
     files: dict[str, str]
     created_at: str
+    host_call_id: str = ""
+    reservation_id: int = 0
 
     def validate(self) -> None:
+        if (
+            not isinstance(self.host_call_id, str)
+            or type(self.reservation_id) is not int
+            or (bool(self.host_call_id) != (self.reservation_id > 0))
+            or self.reservation_id < 0
+        ):
+            raise FlowError("review host invocation references are invalid")
         if self.reviewer not in REVIEWERS:
             raise FlowError(f"reviewer must be one of {list(REVIEWERS)}")
         if self.stage not in STAGES:
@@ -373,6 +465,14 @@ class Review:
         for path, digest in self.files.items():
             if not _SHA_RE.match(digest):
                 raise FlowError(f"bad fingerprint for {path!r}")
+        if any(
+            not all(
+                isinstance(value, str)
+                for value in (finding.severity, finding.file, finding.section, finding.note)
+            )
+            for finding in self.findings
+        ):
+            raise FlowError("finding severity, file, section and note must be strings")
         severities = {f.severity for f in self.findings}
         for finding in self.findings:
             if finding.severity not in SEVERITIES:
@@ -398,6 +498,10 @@ class Review:
             "author": self.author,
             "verdict": self.verdict,
             "created_at": self.created_at,
+            **(
+                {"host_call_id": self.host_call_id, "reservation_id": self.reservation_id}
+                if self.host_call_id else {}
+            ),
             "files": dict(self.files),
             "findings": [f.to_dict() for f in self.findings],
         }

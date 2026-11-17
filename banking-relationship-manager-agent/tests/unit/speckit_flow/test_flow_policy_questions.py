@@ -120,3 +120,29 @@ def test_test_strategy_required_blocks_untested_requirement(tmp_path: Path) -> N
         state.decide_gate(d, "tasks", True, H, profiles_dir=pdir)
     (d / "tasks.md").write_text("- [ ] T001 Build FR-001\n- [ ] T002 Test FR-001\n")
     assert state.decide_gate(d, "tasks", True, H, profiles_dir=pdir).pending_gate is None
+
+
+@pytest.mark.parametrize(
+    ("text", "message"),
+    [
+        ("- [ ] T001 test FR-001 FR-999\n", "T001:FR-999"),
+        ("# No tasks\n", "invalid requirement trace"),
+        ("- [ ] T001 test FR-001\n- [ ] T001 duplicate\n", "duplicate task"),
+    ],
+)
+def test_required_test_gate_reports_bad_trace_inputs(
+    tmp_path: Path, text: str, message: str,
+) -> None:
+    pdir = _profiles(tmp_path, test_strategy="required", stages=["specify", "tasks"],
+                     gates=["specify", "tasks"])
+    d = _feature(tmp_path)
+    state.init_state(d, "feature", H, pdir)
+    state.start_stage(d, "specify", H)
+    state.done_stage(d, "specify", H, pdir)
+    state.decide_gate(d, "specify", True, H, profiles_dir=pdir)
+    state.start_stage(d, "tasks", H)
+    (d / "tasks.md").write_text(text, encoding="utf-8")
+    state.done_stage(d, "tasks", H, pdir)
+    with pytest.raises(FlowError, match=message):
+        state.decide_gate(d, "tasks", True, H, profiles_dir=pdir)
+    assert state.load_state(d).pending_gate == "tasks"

@@ -1,0 +1,56 @@
+{
+  "feature": "033-reliable-worker-recovery",
+  "profile": "feature",
+  "depth": "standard",
+  "current_stage": "tasks",
+  "pending_gate": null,
+  "revision": 11,
+  "updated_at": "2026-11-13T22:50:25+00:00",
+  "stages": {
+    "ideation": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-13T20:59:55+00:00"
+    },
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-13T21:16:23+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-13T20:59:55+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-13T22:48:21+00:00"
+    },
+    "tasks": {
+      "status": "in_progress",
+      "reason": null,
+      "updated_at": "2026-11-13T22:50:25+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-13T20:59:55+00:00"
+    },
+    "implement": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-13T20:59:55+00:00"
+    },
+    "deploy": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-13T20:59:55+00:00"
+    },
+    "operate": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-13T20:59:55+00:00"
+    }
+  }
+}

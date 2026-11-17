@@ -1,0 +1,33 @@
+{
+  "id": "specify-1",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product-lead",
+  "verdict": "concerns",
+  "created_at": "2026-11-14T08:28:25+00:00",
+  "files": {
+    ".github/skills/speckit-specify/SKILL.md": "040710337bfd5050b6929664f062dc3ec6ae9aa63cebcc7a1b08a7cfae23c22e",
+    "specs/038-hybrid-plan-review/spec.md": "0ff9a395865703cf198f313aa40217b289ce26cefe43f408fa8f7fef62b00045",
+    "specs/038-hybrid-plan-review/checklists/requirements.md": "8cccd3852400748274572dc755ca14f3a3542226092364b6795a43b8626bb6bc"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "Assumptions; FR-003; User Story 3, Acceptance Scenario 2",
+      "note": "Independence is operationalized only as reviewer != producer. Two distinct assistant identities can still share the same session or planning context, so the acceptance test could pass without genuinely independent scrutiny. Define a verifiable boundary for independent review (what identity/context separation establishes it) and require explicit failure when that boundary cannot be established."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "FR-005; User Story 3; Edge Cases",
+      "note": "The spec handles invocation failure and non-approving verdicts, but not a successful invocation that returns no verdict or an unusable/incomplete result. FR-005 separates invocation success from verdict, but does not state whether such a response can satisfy required review. Specify a distinct invalid/incomplete-result status, prohibit treating it as satisfying required review, and cover it with an acceptance scenario."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "Success Criteria ? Measurable Outcomes",
+      "note": "SC-001?SC-005 measure conformance within unspecified acceptance/test cases (for example, 100% of tested cases), not outcomes across a defined user/run population. A small or self-selected test set could satisfy them. Define the denominator/evaluation method and an observable user-facing outcome/target, or explain why conformance-only criteria are appropriate for this increment."
+    }
+  ]
+}

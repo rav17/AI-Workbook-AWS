@@ -1,0 +1,41 @@
+{
+  "feature": "037-feature-profile-trial",
+  "profile": "feature",
+  "depth": "standard",
+  "current_stage": "specify",
+  "pending_gate": null,
+  "revision": 1,
+  "updated_at": "2026-11-14T00:27:13+00:00",
+  "stages": {
+    "specify": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-14T00:27:13+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-14T00:27:13+00:00"
+    },
+    "plan": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-14T00:27:13+00:00"
+    },
+    "tasks": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-14T00:27:13+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-14T00:27:13+00:00"
+    },
+    "implement": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-14T00:27:13+00:00"
+    }
+  }
+}

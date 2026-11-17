@@ -1,0 +1,15 @@
+{
+  "id": "selective",
+  "description": "Opt-in inline stage work with explicitly confirmed specialist input and independent plan review.",
+  "stages": ["specify", "plan", "tasks", "implement"],
+  "depth": "standard",
+  "gates": ["specify", "plan"],
+  "execution": "selective",
+  "ceremony": {"learning": false, "reviews": true},
+  "assignments": {
+    "specify": {"lead": "product", "support": []},
+    "plan": {"lead": "architect", "support": ["architecture-reviewer"]},
+    "tasks": {"lead": "delivery", "support": []},
+    "implement": {"lead": "developer", "support": []}
+  }
+}

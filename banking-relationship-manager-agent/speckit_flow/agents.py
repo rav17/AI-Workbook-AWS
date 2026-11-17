@@ -159,6 +159,7 @@ def _check_agent_file(agent: Agent, roster: dict[str, Agent], root: Path) -> lis
             a.agent_name for a in roster.values() if a.role != "conductor" and a.source == "core"
         }
         everyone = {a.agent_name for a in roster.values() if a.role != "conductor"}
+        everyone.add("speckit-hybrid-plan-reviewer")
         listed = set(meta.get("agents") or [])
         if not core <= listed <= everyone:
             problems.append(
@@ -194,10 +195,18 @@ def undispatchable(roster: dict[str, Agent], root: Path = REPO_ROOT) -> list[str
 def validate_roster(roster: dict[str, Agent], root: Path = REPO_ROOT) -> list[str]:
     problems: list[str] = []
     for role, expected in EXPECTED_COUNTS.items():
-        found = sum(1 for a in roster.values() if a.role == role and a.source == "core")
+        found = sum(
+            1 for a in roster.values()
+            if a.role == role and a.source == "core" and a.id != "hybrid-plan-reviewer"
+        )
         if found != expected:
             problems.append(f"expected {expected} {role} agent(s), found {found}")
     for agent in roster.values():
+        if agent.id == "hybrid-plan-reviewer" and (
+            agent.role != "reviewer" or agent.can_edit
+            or agent.leads or agent.supports != ("plan",)
+        ):
+            problems.append("hybrid-plan-reviewer must be a non-editing plan-only reviewer")
         if not _ID_RE.match(agent.id):
             problems.append(f"invalid agent id {agent.id!r}")
         if agent.role not in ROLES:

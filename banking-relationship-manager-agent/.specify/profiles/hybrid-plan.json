@@ -1,0 +1,15 @@
+{
+  "id": "hybrid-plan",
+  "description": "Opt-in inline planning with a selected no-tool reviewer; requires human-approved and verified Copilot event evidence.",
+  "stages": ["specify", "plan", "tasks", "implement"],
+  "depth": "standard",
+  "gates": ["specify", "plan"],
+  "execution": "hybrid",
+  "ceremony": {"learning": false, "reviews": true},
+  "assignments": {
+    "specify": {"lead": "product", "support": []},
+    "plan": {"lead": "architect", "support": []},
+    "tasks": {"lead": "delivery", "support": []},
+    "implement": {"lead": "developer", "support": []}
+  }
+}

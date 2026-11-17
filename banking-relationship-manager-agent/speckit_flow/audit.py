@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -100,26 +101,61 @@ def is_parked(feature_dir: Path) -> bool:
 
 def verify_chain(feature_dir: Path) -> str | None:
     """Return a description of the first broken line, or None when the chain is intact."""
+    return snapshot(feature_dir).problem
+
+
+@dataclass(frozen=True)
+class AuditSnapshot:
+    event_count: int = 0
+    parked: bool = False
+    problem: str | None = None
+    assurance_acceptances: tuple[AuditEvent, ...] = ()
+
+
+def snapshot(feature_dir: Path) -> AuditSnapshot:
+    """Inspect one stream, retaining integrity, parked state and latest stage acceptances."""
     path = feature_dir / AUDIT_FILE
     if not path.exists():
-        return None
+        return AuditSnapshot()
     prev_line: str | None = None
     expected_seq = 1
-    with path.open("r", encoding="utf-8") as handle:
-        for number, raw in enumerate(handle, start=1):
-            line = raw.rstrip("\n")
-            if not line.strip():
-                continue
-            try:
-                data = json.loads(line)
-                seq, prev_hash = int(data["seq"]), data["prev_hash"]
-            except (ValueError, KeyError, TypeError):
-                return f"line {number}: unreadable event"
-            if seq != expected_seq:
-                return f"line {number}: expected seq {expected_seq}, found {seq}"
-            expected = "" if prev_line is None else line_hash(prev_line)
-            if prev_hash != expected:
-                return f"line {number}: hash chain broken (an earlier line was modified)"
-            prev_line = line
-            expected_seq += 1
-    return None
+    parked = False
+    acceptances: dict[str | None, AuditEvent] = {}
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            for number, raw in enumerate(handle, start=1):
+                line = raw.rstrip("\n")
+                if not line.strip():
+                    continue
+                try:
+                    data = json.loads(line)
+                    event = AuditEvent(**data)
+                    seq = int(event.seq)
+                except (ValueError, TypeError):
+                    return AuditSnapshot(
+                        expected_seq - 1, parked, f"line {number}: unreadable event"
+                    )
+                if seq != expected_seq:
+                    return AuditSnapshot(
+                        expected_seq - 1, parked,
+                        f"line {number}: expected seq {expected_seq}, found {seq}",
+                    )
+                expected = "" if prev_line is None else line_hash(prev_line)
+                if event.prev_hash != expected:
+                    return AuditSnapshot(
+                        expected_seq - 1, parked,
+                        f"line {number}: hash chain broken (an earlier line was modified)",
+                    )
+                if event.type == "intent_parked":
+                    parked = True
+                elif event.type == "intent_resumed":
+                    parked = False
+                elif event.type == "delegation_assurance_accepted":
+                    acceptances[event.stage] = event
+                prev_line = line
+                expected_seq += 1
+    except (OSError, UnicodeError) as exc:
+        raise FlowError(f"cannot read audit trail: {exc}") from exc
+    return AuditSnapshot(
+        expected_seq - 1, parked, assurance_acceptances=tuple(acceptances.values())
+    )

@@ -1,0 +1,73 @@
+{
+  "id": "plan-2",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "pass",
+  "created_at": "2026-11-16T19:25:58+00:00",
+  "files": {
+    "plan.md": "47ae986d2584ec6b73b4632dec4cb8c101a023268422a082642cb64de8b2c6fd"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Design S1/S2 / Project Structure",
+      "note": "Package directory layout never explicitly stated; FR-006-FR-009 depend on the assembled tree mirroring source-relative layout so apply_bundle resolves manifest paths identically from inside the package. Make explicit in plan/data-model so tasks cannot get it wrong."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Design S2 step 5 / Acceptance check 2",
+      "note": "detect-secrets directory-scan behavior is version-sensitive (historically enumerates git-tracked files; destination is deliberately not a git repo). Specify an explicit file list from the in-memory capture set or verify full-coverage behavior rather than relying on directory-walk semantics."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Design S3 vs S1 step 6, S2 step 7, S5 verifier",
+      "note": "Internal inconsistency on metadata exclusion: S3 implies SNAPSHOT.json is listed in the inventory while S1/S2/S5 and the 151 count imply both SNAPSHOT.json and the marker are excluded. Correct S3 wording before tasks."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Summary / Project Structure (helper reuse)",
+      "note": "Import mechanism for underscore-private helpers from scripts/speckit_bootstrap.py is unspecified (scripts/ not described as importable); decide mechanism and coupling policy (pin via tests vs vendoring) explicitly."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Acceptance checks S6 / FR-006-FR-009 coverage",
+      "note": "Packaged installer's dry-run/update/conflict semantics never explicitly exercised from the package itself; one dry-run->install->update->conflict pass from the assembled package would close the gap cheaply; state in/out of scope."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Design S4 header / S5 item 6",
+      "note": "Reconcile FR numbering for S4/S5 against the actual spec text so traceability stays clean."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Success-criteria traceability",
+      "note": "Only SC-001 cited explicitly; add a short SC-to-check traceability table."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Design S5 (verify_snapshot.py)",
+      "note": "Self-verification claim slightly overstated: a tampered verifier can lie about its own digest; qualify rather than present as assurance."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "S6 regression list - marker-last ordering test",
+      "note": "Interruption-simulation mechanism unspecified under the subprocess test convention; decide at tasks time (fault-injection flag, planted secret, or induced drift)."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Design S1 step 5",
+      "note": "--label uniqueness is a human convention with no registry/enforcement; plan should not imply the tool enforces it."
+    }
+  ]
+}

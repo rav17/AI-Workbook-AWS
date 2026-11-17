@@ -1,0 +1,23 @@
+{
+  "id": "specify-1",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-09T22:43:22+00:00",
+  "files": {
+    "specs/004-receivables-exception-resolution/spec.md": "eba4a265e044e285a961be5f42abad1017a6c79d8e8ce0b0e61c9baa4c5ac783",
+    "specs/004-receivables-exception-resolution/checklists/requirements.md": "31e65f260902e1bc64d12aef0e1e42a7a1dea5f1a74c2d566d833bc9d5050bc5",
+    "specs/004-receivables-exception-resolution/contracts/investigation-and-approval.md": "17d1401d02464ba4b312a2908b4e686378e25e9c5067f5de2581ce7d12f72b1a",
+    "specs/004-receivables-exception-resolution/questions.md": "1867dc1c7dc33b29c4ec86f4a609e5109e57eaeecaa8f0499aa2a2c989d49ad6",
+    "specs/004-receivables-exception-resolution/ideation.md": "0a40ff85384a27fdcccb22af8ec7c9db1b53ceb89d155b016e90bc2dfc1d9e1f"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "specs/004-receivables-exception-resolution/spec.md",
+      "section": "Edge Cases; FR-012\u2013FR-015; User Story 3, Acceptance Scenarios",
+      "note": "Concurrent decision changes are listed as an edge case, but the spec does not define which decision wins or require stale approvals/confirmations to be rejected. Add a version/state rule and an acceptance test so a decision racing with task confirmation cannot authorize a stale write."
+    }
+  ]
+}

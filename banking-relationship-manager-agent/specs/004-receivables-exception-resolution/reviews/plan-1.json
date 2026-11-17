@@ -1,0 +1,69 @@
+{
+  "id": "plan-1",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T02:16:48+00:00",
+  "files": {
+    "spec.md": "f0f4f07111b36f87408eb88ea67b5f20bdce2668f60e852c5ac18cd27fc87841",
+    "questions.md": "1867dc1c7dc33b29c4ec86f4a609e5109e57eaeecaa8f0499aa2a2c989d49ad6",
+    "plan.md": "e42abe91bee020a10c73a10e453d0beb55b4a3a40f17ae13ef8ea0d1c890609d",
+    "research.md": "a8c3a8e3b3b33c25bc762a1cadb48fa8cd5a584fa95e96d6795f58c30d32d43b",
+    "data-model.md": "275535081d564e77f4044e659fe5e2dcc0da8da148321cac22d13f39a95718dd",
+    "quickstart.md": "2d172ad884734e8a6ca70a3f9416d1d3b0b679b18283ec786abb3a8c6a12c24e",
+    "contracts/investigation-and-approval.md": "3b8518c4cd7fbabf2706cfd5871d0e692fbde07fc88036db958eea71dade3c2a",
+    "synthetic-policy.md": "62cf09ad18aacba424d8d5be02e9effd1f7b7418aaf9e4917182e3e8e080179b",
+    "synthetic-fixtures.json": "d7f649af2153a4a5ab941ad1567948bdd8fc5c2607851bddf691755062cbd2f2"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "plan.md",
+      "section": "7. Atomic confirmation, idempotency and replay design",
+      "note": "The key hashes tenant, session, exception, proposal version, and payload hash, so changing version or payload yields a different key and bypasses UNIQUE(idempotency_key); confirm exposes no stable caller key. The design therefore does not demonstrate FR-015 rejection of changed content under a reused key. Define a stable retry identity and atomically bind it to the approved version/payload, with a conflict on changed binding."
+    },
+    {
+      "severity": "major",
+      "file": "contracts/investigation-and-approval.md",
+      "section": "C3. Investigation result",
+      "note": "The contract marks payer-name matches as inference but does not do so for reference-token/invoice matches, even though FR-005 requires both payer-name and reference matches be distinguished as inference. Define the reference-match evidence kind and presentation accordingly; it must not be presented as authoritative identity or fact."
+    },
+    {
+      "severity": "major",
+      "file": "plan.md",
+      "section": "5. Architecture decisions (D-A); 9. Open decisions",
+      "note": "D-A leaves unresolved whether persisted proposals, decisions, and audit are permitted under FR-014's 'only permitted write' boundary. These are writes to the proposed SQLite store. Constitution I and FR-018 also require durable state/audit. Obtain an explicit human interpretation and state the permitted internal-store boundary before treating this architecture as settled."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "3. Source evidence; 6. Trusted-context and fail-closed policy",
+      "note": "The plan calls tenant/user context parent-verified while documenting that resolve_runtime_identity accepts payload _verified_principal without provenance verification in this repository. Since those values still scope records, specify that TrustedContext is created only from a separately trusted server-side identity boundary; do not treat the payload field itself as proof. Runtime wiring is deferred, but the injection contract should be explicit."
+    },
+    {
+      "severity": "warning",
+      "file": "data-model.md",
+      "section": "EvidenceItem; SourceSnapshot",
+      "note": "The spec requires partial evidence to be disclosed and fail closed, but availability has no partial state and the policy/contract do not define how incomplete source responses map to evidence status and disposition. Define partial explicitly or normatively map it to unavailable/conflicting, with safe output and no-confidence behavior."
+    },
+    {
+      "severity": "warning",
+      "file": "data-model.md",
+      "section": "AnalystDecision; State transitions",
+      "note": "AnalystDecision.decision includes 'confirm', while contract C4 limits decisions to approve/revise/reject/escalate and C5 models confirmation as a separate operation. Clarify whether confirmation is an AnalystDecision or a distinct audit/state event so the persisted authority and transition model are consistent."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "8. Evaluation design summary; SC-006",
+      "note": "SC-006 is described as zero prohibited financial mutations in all test/demo paths, but the proposed measure observes write-capable calls through a recording fake over runs E/W; the plan itself notes this can be vacuous. Specify instrumentation/assertions that cover every mutation surface and test/demo path, or report the result as limited to observed paths rather than the broader criterion."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "8. Evaluation design summary; SC-001 denominator",
+      "note": "The denominator note says 50 classification-scored cases and also parenthetically says '49 labelled by owner is not claimed'; this is ambiguous against the 50 scored labels in the catalogue and the explicit statement that labels are pending human approval. Remove or clarify the 49 reference without implying owner approval."
+    }
+  ]
+}

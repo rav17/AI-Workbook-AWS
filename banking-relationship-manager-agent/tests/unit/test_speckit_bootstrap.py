@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -48,7 +49,11 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
     assert (target / "speckit_flow" / "__main__.py").is_file()
     assert (target / ".github" / "skills" / "speckit-specify" / "SKILL.md").is_file()
     assert (target / "speckit_flow" / "diagrams.py").is_file()
+    assert (target / "speckit_flow" / "host.py").is_file()
     assert (target / ".github" / "skills" / "speckit-diagrams" / "SKILL.md").is_file()
+    assert (target / ".github" / "agents" / "speckit-hybrid-plan-reviewer.agent.md").is_file()
+    assert (target / ".specify" / "profiles" / "quick.json").is_file()
+    assert (target / ".specify" / "profiles" / "hybrid-plan.json").is_file()
     assert (
         target / ".github" / "skills" / "speckit-diagrams" / "assets" / "index-template.md"
     ).is_file()
@@ -106,6 +111,8 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
 
     entry = target / ".github" / "skills" / "speckit-workflow" / "SKILL.md"
     assert "speckit-conductor" in entry.read_text(encoding="utf-8")
+    for reference in re.findall(r"\]\((\.\./[^)#]+\.md)(?:#[^)]+)?\)", entry.read_text("utf-8")):
+        assert (entry.parent / reference).is_file(), f"missing portable guidance: {reference}"
     routing = subprocess.run(
         [
             sys.executable, "-m", "speckit_flow", "workflow", "recommend",
@@ -115,9 +122,21 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
     )
     assert routing.returncode == 0, routing.stdout + routing.stderr
     advice = json.loads(routing.stdout)
-    assert advice["profile"] == "full-lifecycle"
+    assert advice["profile"] == "feature"
+    assert advice["execution"] == "delegated"
     assert advice["confirmation_required"] is True
     assert not list((target / "specs").glob("*/state.json"))
+    quick_routing = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "workflow", "recommend",
+            "Add a small reading-list feature", "--profile", "quick", "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert quick_routing.returncode == 0, quick_routing.stdout + quick_routing.stderr
+    quick_advice = json.loads(quick_routing.stdout)
+    assert quick_advice["profile"] == "quick"
+    assert quick_advice["execution"] == "inline"
 
     feature = target / "specs" / "001-reading-list"
     feature.mkdir(parents=True, exist_ok=True)
@@ -129,6 +148,51 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
         cwd=target, env=env, capture_output=True, text=True, timeout=120,
     )
     assert initialized.returncode == 0, initialized.stdout + initialized.stderr
+    context = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "context",
+            "--feature-dir", str(feature), "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert context.returncode == 0, context.stdout + context.stderr
+    context_payload = json.loads(context.stdout)
+    assert context_payload["profile"] == "full-lifecycle"
+    assert context_payload["tasks"]["status"] == "missing"
+    assert context_payload["artifacts"]["tasks.md"] is False
+    (target / "package.json").write_text(
+        '{"scripts": {"test": "must-not-execute"}}\n', encoding="utf-8"
+    )
+    practices = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "codebase", "practices", "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert practices.returncode == 0, practices.stdout + practices.stderr
+    practices_payload = json.loads(practices.stdout)
+    assert "package.json" in [s["path"] for s in practices_payload["sources"]]
+    assert "must-not-execute" not in practices.stdout
+    assert "Project practices" in (
+        target / ".github" / "skills" / "speckit-plan" / "SKILL.md"
+    ).read_text("utf-8")
+    (feature / "units.json").write_text(json.dumps({
+        "units": [{"id": "sample", "title": "Sample", "depends_on": [], "tasks": []}],
+        "checkpoints": {},
+    }), encoding="utf-8")
+    listed_units = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "units", "list",
+            "--feature-dir", str(feature), "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert listed_units.returncode == 0, listed_units.stdout + listed_units.stderr
+    unit_payload = json.loads(listed_units.stdout)
+    assert unit_payload["ready"] == []
+    assert unit_payload["units"][0]["status"] == "blocked"
+    assert unit_payload["units"][0]["coverage"] == "command-only"
+    assert not unit_payload["units"][0]["checkpoint_present"]
     diagrams_dir = feature / "architecture" / "diagrams"
     diagrams_dir.mkdir(parents=True)
     (diagrams_dir / "context.drawio").write_text(
@@ -160,6 +224,29 @@ def test_install_is_portable_and_target_doctor_passes(tmp_path: Path) -> None:
     assert brief["stage"] == "ideation"
     assert brief["lead"]["id"] == "product"
     assert brief["delegated_stage"] == "SPECKIT_DELEGATED_STAGE=ideation"
+    before_recovery = {
+        p.name: p.read_bytes() for p in feature.iterdir() if p.is_file()
+    }
+    recovery_review = subprocess.run(
+        [
+            sys.executable, "-m", "speckit_flow", "workflow", "recovery",
+            "--approval-package", "--feature-dir", str(feature), "--json",
+        ],
+        cwd=target, env=env, capture_output=True, text=True, timeout=120,
+    )
+    assert recovery_review.returncode == 0, recovery_review.stdout + recovery_review.stderr
+    recovery_package = json.loads(recovery_review.stdout)["approval_package"]
+    assert recovery_package["scope"]["stage"] == "ideation"
+    assert not recovery_package["decision"]["continuation_authorized"]
+    assert recovery_package["provenance"]["human_authorization"] == "not_recorded"
+    assert recovery_package["checkpoint_inventory"]["counts"]["blocked"] == 1
+    assert recovery_package["checkpoint_inventory"]["units"][0]["id"] == "sample"
+    assert recovery_package["evidence_snapshot"]["status"] == "stable_at_read_boundaries"
+    assert recovery_package["revalidation_plan"]["steps"][0]["unit"] == "sample"
+    assert not recovery_package["revalidation_plan"]["executable"]
+    assert before_recovery == {
+        p.name: p.read_bytes() for p in feature.iterdir() if p.is_file()
+    }
     assert existing_instructions.read_text(encoding="utf-8") == "project-owned instructions\n"
 
 

@@ -13,7 +13,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 from speckit_flow import audit
-from speckit_flow.models import FlowError
+from speckit_flow.models import AuditEvent, FlowError
 
 UNITS_FILE = "units.json"
 DEFAULT_VERIFY_FILE = Path(__file__).resolve().parent.parent / ".specify" / "verify.json"
@@ -38,7 +38,7 @@ def _write(path: Path, data: dict[str, Any]) -> None:
 def _read(path: Path, what: str) -> dict[str, Any]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError) as exc:
         raise FlowError(f"cannot read {what}: {exc}") from exc
     if not isinstance(data, dict):
         raise FlowError(f"{what} must be a JSON object")
@@ -115,16 +115,36 @@ def run_verify(root: Path, path: Path = DEFAULT_VERIFY_FILE) -> tuple[bool, str,
 
 
 def load_units(feature_dir: Path) -> list[dict[str, Any]]:
+    return _load_units(feature_dir)[0]
+
+
+def _load_units(feature_dir: Path) -> tuple[list[dict[str, Any]], list[str]]:
     path = feature_dir / UNITS_FILE
     if not path.is_file():
-        return []
+        return [], []
     items = _read(path, UNITS_FILE).get("units")
     if not isinstance(items, list):
         raise FlowError(f"{UNITS_FILE}: 'units' must be a list")
-    return items
+    return items, _validate(items)
 
 
-def _validate(units: list[dict[str, Any]]) -> None:
+def _validate(units: list[dict[str, Any]]) -> list[str]:
+    for unit in units:
+        if not isinstance(unit, dict) or not isinstance(unit.get("id"), str):
+            raise FlowError("unit must be an object with a string id")
+        if not _ID_RE.fullmatch(unit["id"]):
+            raise FlowError(f"invalid unit id {unit['id']!r}")
+        if not isinstance(unit.get("title"), str) or not unit["title"].strip():
+            raise FlowError("unit title is required")
+        for field in ("depends_on", "tasks"):
+            values = unit.get(field)
+            if not isinstance(values, list) or not all(isinstance(v, str) for v in values):
+                raise FlowError(f"unit {unit['id']}: {field} must be a list of strings")
+            if len(values) != len(set(values)):
+                raise FlowError(f"unit {unit['id']}: duplicate {field}")
+        if any(not _TASK_RE.fullmatch(task) for task in unit["tasks"]):
+            raise FlowError(f"unit {unit['id']}: invalid task id; expected T001 style")
+        _file_paths(unit.get("files", []))
     ids = [u["id"] for u in units]
     if len(set(ids)) != len(ids):
         raise FlowError("duplicate unit id")
@@ -133,12 +153,15 @@ def _validate(units: list[dict[str, Any]]) -> None:
             if dep not in ids:
                 raise FlowError(f"unit {unit['id']}: unknown dependency {dep!r}")
     remaining = {u["id"]: set(u["depends_on"]) for u in units}
+    ordered: list[str] = []
     while remaining:
         ready = [i for i, deps in remaining.items() if not deps & remaining.keys()]
         if not ready:
             raise FlowError("unit dependencies contain a cycle")
         for i in ready:
+            ordered.append(i)
             del remaining[i]
+    return ordered
 
 
 def add_unit(
@@ -176,32 +199,33 @@ def checkpointed(feature_dir: Path) -> dict[str, dict[str, Any]]:
     if not path.is_file():
         return {}
     cps = _read(path, UNITS_FILE).get("checkpoints", {})
-    return cps if isinstance(cps, dict) else {}
+    if not isinstance(cps, dict) or not all(isinstance(cp, dict) for cp in cps.values()):
+        raise FlowError(f"{UNITS_FILE}: checkpoints must map unit ids to objects")
+    return cps
 
 
 def checkpoint_unit(
-    feature_dir: Path, uid: str, actor: str, verify_file: Path = DEFAULT_VERIFY_FILE
+    feature_dir: Path, uid: str, actor: str, verify_file: Path | None = None
 ) -> tuple[bool, str]:
     units = load_units(feature_dir)
     unit = next((u for u in units if u["id"] == uid), None)
     if unit is None:
         raise FlowError(f"unknown unit {uid!r}")
     done = checkpointed(feature_dir)
-    tracked = bool(unit.get("files"))
-    if tracked:
-        done.pop(uid, None)
-        _write(feature_dir / UNITS_FILE, {"units": units, "checkpoints": done})
+    done.pop(uid, None)
+    _write(feature_dir / UNITS_FILE, {"units": units, "checkpoints": done})
     try:
-        return _checkpoint(feature_dir, unit, units, done, actor, verify_file)
+        return _checkpoint(
+            feature_dir, unit, units, done, actor, _verify_path(feature_dir, verify_file)
+        )
     except FlowError:
-        if tracked:
-            audit.append_event(
-                feature_dir,
-                "unit_checkpoint",
-                None,
-                actor,
-                f"{uid} failed: invalid evidence or policy",
-            )
+        audit.append_event(
+            feature_dir,
+            "unit_checkpoint",
+            None,
+            actor,
+            f"{uid} failed: invalid evidence or policy",
+        )
         raise
 
 
@@ -214,28 +238,46 @@ def _checkpoint(
     verify_file: Path,
 ) -> tuple[bool, str]:
     uid = unit["id"]
-    missing = [d for d in unit["depends_on"] if d not in done]
+    reports = _assess(feature_dir, units, done, verify_file)
+    missing = [d for d in unit["depends_on"] if not reports[d]["checkpointed"]]
     if missing:
-        raise FlowError(f"unit {uid}: dependencies not checkpointed: {', '.join(missing)}")
+        raise FlowError(
+            f"unit {uid}: dependencies not checkpointed or stale: {', '.join(missing)}"
+        )
+    dependencies = {dep: _definition(done[dep]) for dep in unit["depends_on"]}
     files = _file_paths(unit.get("files", []))
     before = tracked_fingerprints(feature_dir.parent.parent, files) if files else {}
     ok, note, digest = run_verify(feature_dir.parent.parent, verify_file)
-    if ok and files:
-        current = next((u for u in load_units(feature_dir) if u["id"] == uid), None)
+    current_units = load_units(feature_dir)
+    current_done = checkpointed(feature_dir)
+    if ok:
+        current = next((u for u in current_units if u["id"] == uid), None)
+        current_reports = _assess(feature_dir, current_units, current_done, verify_file)
+        dependency_changed = any(
+            dep not in current_reports
+            or not current_reports[dep]["checkpointed"]
+            or _definition(current_done[dep]) != dependencies[dep]
+            for dep in unit["depends_on"]
+        )
         if (
             tracked_fingerprints(feature_dir.parent.parent, files) != before
             or current != unit
             or _digest(approved_command(verify_file)) != digest
+            or dependency_changed
+            or uid in current_done
         ):
-            ok, note = False, "tracked files, definition or command changed during verification"
-    audit.append_event(
+            ok, note = False, (
+                "tracked files, definition, command or dependencies changed during verification"
+            )
+    event = audit.append_event(
         feature_dir, "unit_checkpoint", None, actor, f"{uid} {'passed' if ok else 'failed'}: {note}"
     )
     if ok:
-        done[uid] = {"at": audit.now_iso(), "command": digest, "actor": actor}
-        if files:
-            done[uid].update(files=before, definition=_definition(unit))
-        _write(feature_dir / UNITS_FILE, {"units": units, "checkpoints": done})
+        current_done[uid] = {
+            "at": event.ts, "command": digest, "actor": actor, "revision": event.seq,
+            "files": before, "definition": _definition(unit), "dependencies": dependencies,
+        }
+        _write(feature_dir / UNITS_FILE, {"units": current_units, "checkpoints": current_done})
     return ok, note
 
 
@@ -347,23 +389,187 @@ def skeleton_problems(feature_dir: Path) -> list[str]:
         cp = checkpointed(feature_dir).get(SKELETON_UNIT)
         if not cp:
             return ["walking-skeleton has no passing checkpoint"]
-        command = approved_command(feature_dir.parent.parent / ".specify" / "verify.json")
-        if (
-            cp.get("definition") != _definition(unit)
-            or cp.get("files") != tracked_fingerprints(feature_dir.parent.parent, files)
-            or cp.get("command") != _digest(command)
-        ):
-            return ["skeleton checkpoint is stale; run checkpoint again"]
+        report_status = next(
+            item for item in list_units(feature_dir)["units"] if item["id"] == SKELETON_UNIT
+        )
+        if not report_status["checkpointed"]:
+            return ["skeleton checkpoint is stale; " + "; ".join(report_status["reasons"])]
         return []
     except FlowError as exc:
         return [str(exc)]
 
 
-def unchecked_units(feature_dir: Path) -> list[str]:
-    done = checkpointed(feature_dir)
-    return [u["id"] for u in load_units(feature_dir) if u["id"] not in done]
+def _verify_path(feature_dir: Path, verify_file: Path | None) -> Path:
+    return verify_file if verify_file is not None else (
+        feature_dir.parent.parent / ".specify" / "verify.json"
+    )
 
 
-def list_units(feature_dir: Path) -> dict[str, Any]:
-    done = checkpointed(feature_dir)
-    return {"units": [{**u, "checkpointed": u["id"] in done} for u in load_units(feature_dir)]}
+def _assess(
+    feature_dir: Path,
+    units: list[dict[str, Any]],
+    done: dict[str, dict[str, Any]],
+    verify_file: Path | None,
+    *,
+    include_evidence: bool = False,
+    dependency_order: list[str] | None = None,
+) -> dict[str, dict[str, Any]]:
+    reports: dict[str, dict[str, Any]] = {}
+    if not units:
+        return reports
+    latest_checks: dict[str, AuditEvent] = {}
+    if include_evidence:
+        snapshot = audit.snapshot(feature_dir)
+        if snapshot.problem or not snapshot.event_count:
+            raise FlowError("checkpoint evidence requires an intact, nonempty audit trail")
+        for event in audit.read_events(feature_dir):
+            if event.type == "unit_checkpoint":
+                latest_checks[event.detail.split(" ", 1)[0]] = event
+    try:
+        command = _digest(approved_command(_verify_path(feature_dir, verify_file)))
+        policy_problem = ""
+    except FlowError as exc:
+        command, policy_problem = None, str(exc)
+    by_id = {unit["id"]: unit for unit in units}
+    for uid in dependency_order if dependency_order is not None else _validate(units):
+        unit = by_id[uid]
+        cp = done.get(uid)
+        present = uid in done
+        reasons: list[str] = []
+        reason_codes: list[str] = []
+        blocked = [dep for dep in unit["depends_on"] if not reports[dep]["checkpointed"]]
+        if blocked:
+            reasons.append("dependencies not verified: " + ", ".join(blocked))
+            reason_codes.append("dependencies_not_verified")
+        if policy_problem:
+            reasons.append(policy_problem)
+            reason_codes.append("verification_policy_not_approved")
+        try:
+            files = tracked_fingerprints(feature_dir.parent.parent, unit.get("files", []))
+        except FlowError as exc:
+            files = None
+            reasons.append(str(exc))
+            reason_codes.append("tracked_inputs_unavailable")
+        dependencies = {
+            dep: _definition(done[dep]) for dep in unit["depends_on"] if dep in done
+        }
+        if present:
+            assert cp is not None
+            if (
+                not all(key in cp for key in ("definition", "files", "dependencies", "revision"))
+                or type(cp.get("revision")) is not int
+                or cp["revision"] < 1
+            ):
+                reasons.append("legacy checkpoint lacks freshness metadata; run checkpoint again")
+                reason_codes.append("checkpoint_metadata_incomplete")
+            if cp.get("definition") != _definition(unit):
+                reasons.append("unit definition changed")
+                reason_codes.append("unit_definition_changed")
+            if cp.get("files") != files:
+                reasons.append("tracked files changed or unavailable")
+                reason_codes.append("tracked_inputs_changed")
+            if command is not None and cp.get("command") != command:
+                reasons.append("approved command changed")
+                reason_codes.append("verification_command_changed")
+            if cp.get("dependencies") != dependencies:
+                reasons.append("dependency checkpoint evidence changed")
+                reason_codes.append("dependency_evidence_changed")
+            status = "stale" if reasons else "verified"
+        else:
+            status = "blocked" if reasons else "ready"
+            if not reasons:
+                reasons.append("no checkpoint; dependencies and verification policy ready")
+            reason_codes.append("checkpoint_missing")
+        reports[uid] = {
+            "status": status, "checkpointed": status == "verified",
+            "checkpoint_present": present, "reasons": reasons, "blocked_by": blocked,
+            "coverage": "tracked-files" if unit.get("files") else "command-only",
+        }
+        if include_evidence:
+            check = latest_checks.get(uid)
+            revision = cp.get("revision") if cp else None
+            checkpoint_record_matches = (
+                check is not None
+                and cp is not None
+                and type(revision) is int
+                and revision > 0
+                and check.seq == revision
+                and check.ts == cp.get("at")
+                and check.actor == cp.get("actor")
+                and check.detail.startswith(f"{uid} passed: ")
+            )
+            verification = (
+                "recorded_pass" if check and check.detail.startswith(f"{uid} passed: ")
+                else "recorded_failure" if check and check.detail.startswith(f"{uid} failed: ")
+                else "not_verified" if check or cp is not None
+                else "not_recorded"
+            )
+            if verification == "recorded_failure":
+                reason_codes.append("verification_recorded_failure")
+            if present and not checkpoint_record_matches:
+                reason_codes.append("verification_record_unverified")
+            disposition = (
+                "stale" if status == "stale"
+                else "blocked" if status == "blocked"
+                else "missing" if not present
+                else "unverified" if not checkpoint_record_matches
+                else "command_only" if not unit.get("files")
+                else "current"
+            )
+            saved_files = cp.get("files") if cp else None
+            reports[uid]["checkpoint_evidence"] = {
+                "status": disposition,
+                "freshness": "current" if status == "verified" else (
+                    "stale" if status == "stale" else "not_verified"
+                ),
+                "reason_codes": reason_codes,
+                "changed_files": [
+                    name for name in unit.get("files", [])
+                    if cp is not None and files is not None
+                    and (not isinstance(saved_files, dict) or saved_files.get(name) != files[name])
+                ],
+                "checkpoint_revision": (
+                    revision if type(revision) is int and revision > 0 else None
+                ),
+                "verification_revision": check.seq if check else None,
+                "recorded_verification": verification,
+                "checkpoint_record_matches": checkpoint_record_matches,
+                "semantic_completion": "not_verified",
+                "fingerprints": {
+                    "definition": _definition(unit),
+                    "files": files,
+                    "approved_command": command,
+                    "dependencies": dependencies,
+                },
+            }
+    return reports
+
+
+def unchecked_units(feature_dir: Path, verify_file: Path | None = None) -> list[str]:
+    return [
+        unit["id"] for unit in list_units(feature_dir, verify_file)["units"]
+        if not unit["checkpointed"]
+    ]
+
+
+def list_units(
+    feature_dir: Path, verify_file: Path | None = None, *, include_evidence: bool = False
+) -> dict[str, Any]:
+    units, dependency_order = _load_units(feature_dir)
+    reports = _assess(
+        feature_dir, units, checkpointed(feature_dir), verify_file,
+        include_evidence=include_evidence,
+        dependency_order=dependency_order,
+    )
+    result = {
+        "units": [{**unit, **reports[unit["id"]]} for unit in units],
+        "ready": [uid for uid, report in reports.items() if report["status"] == "ready"],
+        "notice": (
+            "Read-only declared-input freshness, not test execution or dispatch authorization. "
+            "Command-only units have no source freshness guarantee. "
+            "Ready units still require normal gates and shared-file coordination."
+        ),
+    }
+    if include_evidence:
+        result["dependency_order"] = dependency_order
+    return result

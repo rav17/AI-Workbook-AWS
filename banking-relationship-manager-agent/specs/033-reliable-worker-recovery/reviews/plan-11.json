@@ -1,0 +1,24 @@
+{
+  "id": "plan-11",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T22:35:53+00:00",
+  "files": {
+    "plan.md": "9175a8721274fd96e447c755017bfacb9d90ecc4924d23cdfc314ff4f731f9b1",
+    "research.md": "77a0c54b74e89f0d37a6e04671324d8df567e98bbb5496b16384049ffa6bf605",
+    "data-model.md": "8c15e4c73d6a58d718a30795c65125aa4a91b395c860b15bb075ced840c3f368",
+    "contracts/recovery-adapter.md": "248591070b243a806711272ae8b2cc4957075b6c5c36ddedf4dc8693ae0fcb36",
+    "quickstart.md": "d518146b9a7fb212ece8ef97928ddac1b685e5a7f28eddf352932bc98828e38e",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "plan.md",
+      "section": "Requirement Coverage / Proposed Architecture and State Flow",
+      "note": "FR-003 unconditionally requires each status wait to end by its configured deadline, but this design only offers conditional return with a responsive supervisor and expressly disclaims return under supervisor/OS scheduling/termination failure. Keep such hosts unsupported, but resolve this requirement mismatch explicitly (for example via a human-approved operating-envelope clarification) before claiming FR-003 coverage; otherwise the proposed design cannot meet the approved MUST."
+    }
+  ]
+}

@@ -32,10 +32,15 @@ steps:
       Classify the work with python -m speckit_flow workflow recommend; ask the
       user to confirm the profile before initializing. Ask when ambiguous.
       Preserve an existing feature's route when explicitly resuming it.
-      Use python -m speckit_flow workflow dispatch preflight and invoke the
-      actual speckit-conductor custom agent, not a parent-only stage imitation.
+      Use python -m speckit_flow workflow dispatch preflight. For inline routes,
+      the host executes the matching stage skill. For delegated routes, an
+      already active speckit-conductor coordinates one stage directly; another
+      host invokes it once only if named-conductor and nested-worker invocation
+      are supported. With nesting disabled, select the conductor top-level.
+      Never invoke another conductor from the conductor or imitate named workers.
       Execute only eligible routed stages and stop at human gates or failures.
-      If this CLI session cannot ask the user or invoke nested subagents, report
-      the blocker and stop without initializing or bypassing confirmations.
+      If this session cannot ask the user or cannot invoke the workers required
+      by the chosen route, report the blocker once and stop without initializing
+      or bypassing confirmations. Do not re-enter the same handoff on no progress.
       Report lifecycle status and pending human action. Session completion is
       not feature completion and never authorizes deployment or gate approval.

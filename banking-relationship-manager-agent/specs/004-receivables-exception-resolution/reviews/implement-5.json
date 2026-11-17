@@ -1,0 +1,33 @@
+{
+  "id": "implement-5",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T19:13:34+00:00",
+  "files": {
+    "demo/receivables_exception/service.py": "9067b37ac6b7f1dcec7917eba70a30fdd72e92b33c37180b7dbab7e43cc3f363",
+    "aria/agents/aria/receivables/agent.py": "e372cccb9dc59c8e2ed30b4264da6e462f9a26aaa2d62347b006150a8aa7b0d9",
+    "demo/receivables_exception/store.py": "e53a3e574b649fff4d7306268d124002134668053335ae4c825b13b914f4c246"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "demo/receivables_exception/service.py",
+      "section": "ReceivablesWorkflowService.decide REVISE",
+      "note": "Revision decision/state commits before investigation/new proposal; failure leaves partial revision without explicit recovery state or tested retry."
+    },
+    {
+      "severity": "warning",
+      "file": "aria/agents/aria/receivables/agent.py",
+      "section": "get_proposal_status",
+      "note": "BaseModel return bypasses MAX_TOOL_OUTPUT_CHARS unlike dict path."
+    },
+    {
+      "severity": "warning",
+      "file": "demo/receivables_exception/store.py",
+      "section": "_new_decision",
+      "note": "Freeform rationale persists locally; explicitly documented synthetic-only limitation, no sensitive-content guarantee."
+    }
+  ]
+}

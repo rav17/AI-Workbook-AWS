@@ -1,0 +1,66 @@
+{
+  "id": "plan-1",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-16T19:23:36+00:00",
+  "files": {
+    "plan.md": "47ae986d2584ec6b73b4632dec4cb8c101a023268422a082642cb64de8b2c6fd",
+    "research.md": "77fd39962d8949adab79b7e9404939d6f714a75ecb210acc58ac8c2b32540e4c",
+    "data-model.md": "0b87bbe8cf8fd16ea41fa6d84a2cf13ac12c4381d4a540289160be54d168cf5f",
+    "quickstart.md": "cdc0cfc1f3c8f5c0cff0266da0530c1cb2464c63283a6da5c3b9c9db6036ba78",
+    "contracts/speckit-package-cli.md": "8f00aeedfae14d991bca185ca317d84a67098edd437a19ec85dcb7d811db9062",
+    "contracts/snapshot-inventory.schema.json": "c59028664da9fd6dffcdfc23d968c7c99c2fdf4cb2793d035e77b29a02b98e6d"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "plan.md",
+      "section": "Design S2 step 5 (also research.md D5; contracts/speckit-package-cli.md S2 step 4; quickstart.md SF)",
+      "note": "Specified screen invocation 'detect-secrets scan --force-use-all-plugins <abs dest dir>' empirically scans zero files and exits 0 on pinned detect-secrets 1.5.0/Windows (non-git destination; git ls-files enumeration). Blocking compliance gate is vacuous as specified. Fix: cwd=destination + 'scan --all-files' (verified working) + assert scan coverage >= inventory count."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "S6 acceptance/regression test list",
+      "note": "No positive-control test that a planted secret fails assembly; quickstart F only asserts empty results, so a no-op scan passes all planned checks."
+    },
+    {
+      "severity": "warning",
+      "file": "research.md",
+      "section": "D5 rationale / plan.md S2 steps 5-8",
+      "note": "Claim that the screen covers 'exactly the delivered bytes including freshly generated docs' is overstated: SNAPSHOT.json and the marker are written after the screen and never scanned; they embed unscreened free-text label/captured-by/source-ref."
+    },
+    {
+      "severity": "warning",
+      "file": "contracts/speckit-package-cli.md",
+      "section": "S2 --dest refusal row",
+      "note": "Destination existing as a regular file/symlink is not an enumerated exit-2 refusal; behavior falls to incidental mkdir errors."
+    },
+    {
+      "severity": "warning",
+      "file": "research.md",
+      "section": "D1",
+      "note": "Packager imports underscore-private helpers from speckit_bootstrap, whose bytes are simultaneously a frozen captured asset; no stability contract pins this coupling - add an import-surface test or installer-side note in tasks."
+    },
+    {
+      "severity": "info",
+      "file": "quickstart.md",
+      "section": "SB expected output",
+      "note": "'OK 151 files verified' hard-codes the count the plan says is never hard-coded; goes stale on any manifest edit."
+    },
+    {
+      "severity": "info",
+      "file": "contracts/snapshot-inventory.schema.json",
+      "section": "files.items.path pattern",
+      "note": "Regex alone permits empty segments (a//b) and omits reserved-name/trailing-dot rules; schema-only validators get weaker guarantees than the prose implies (procedural validation acknowledged)."
+    },
+    {
+      "severity": "info",
+      "file": "data-model.md",
+      "section": "S1 label",
+      "note": "Label uniqueness is asserted but unenforced/unregistered; should be stated as a human convention in the package README."
+    }
+  ]
+}

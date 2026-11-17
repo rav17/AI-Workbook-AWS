@@ -1,0 +1,36 @@
+{
+  "id": "plan-3",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T21:35:36+00:00",
+  "files": {
+    "plan.md": "4198812ae1f503f842a0648a572b54870372ab4753103069ad20a73fcb6ceb85",
+    "research.md": "43de720c4dc9726126e5d51126948820a2afda44f6c1179625d26e1d90547f63",
+    "data-model.md": "2567dd1cf570f7ffe5660832611141590071b7b403d543d4c893b7cb732a00ee",
+    "contracts/recovery-adapter.md": "4d8da1043dc226377968b4a7eb3c8afa4ef5bf8b0347d04829efc6f190c04592",
+    "quickstart.md": "16077577e333bafd6cb576c5e1e80a737738e5e3c28cf7dfc479868735f2dfb2",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "contracts/recovery-adapter.md",
+      "section": "Adapter requirements \u2014 Exclusion/fence (two distinct requirements)",
+      "note": "The host exclusion result is required before the SQLite commit, but the contract does not define its persistence/lease semantics or bind it to task, prior execution, and generation through commit. A host restart or redispatch between exclusion affirmation and the local ownership update could reopen overlap. Specify a durable exclusion/fencing token or equivalent atomic host protocol; SQLite generation checks alone do not close this TOCTOU gap."
+    },
+    {
+      "severity": "warning",
+      "file": "contracts/recovery-adapter.md",
+      "section": "Adapter requirements \u2014 Approval",
+      "note": "The contract requires authenticated provenance and exact scope, while tenant authorization is delegated to the receiving project, but it does not state what tenant/principal context the adapter must bind or validate against task and scope. Define that authorization context and rejection behavior before an adapter can safely serve multi-tenant projects; opaque task IDs and actor labels are not tenant controls."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Proposed SQLite ledger and consistency boundary",
+      "note": "The separate SQLite authority versus state.json/state.md/audit.jsonl boundary is clearly disclaimed, but task bootstrap and the read/write handoff for existing lifecycle progress are not defined. Specify which layer creates/imports task ownership and checkpoints and how status/reporting treats stale projections, so lifecycle views cannot imply a conflicting owner or verified-progress state."
+    }
+  ]
+}

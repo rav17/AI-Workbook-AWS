@@ -1,0 +1,15 @@
+{
+  "id": "specify-4",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "pass",
+  "created_at": "2026-11-09T22:46:12+00:00",
+  "files": {
+    "spec.md": "8fe2d94a76f7be9f3957d17581746f29b1c9f96dc78bd19e27968923f2d24722",
+    "checklists/requirements.md": "31e65f260902e1bc64d12aef0e1e42a7a1dea5f1a74c2d566d833bc9d5050bc5",
+    "contracts/investigation-and-approval.md": "e30e69c26419247b388ea03ef2e263ff5f4a880dd8b04446e822b4c07660aa4b",
+    "questions.md": "1867dc1c7dc33b29c4ec86f4a609e5109e57eaeecaa8f0499aa2a2c989d49ad6"
+  },
+  "findings": []
+}

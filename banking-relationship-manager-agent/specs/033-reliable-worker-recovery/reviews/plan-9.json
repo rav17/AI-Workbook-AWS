@@ -1,0 +1,24 @@
+{
+  "id": "plan-9",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "block",
+  "created_at": "2026-11-13T22:25:53+00:00",
+  "files": {
+    "plan.md": "776faf8d63d9304a20937562ee17fa6697b4b8e5a73f757db510479599ec649a",
+    "research.md": "c69983018181f34838013ddbe4f09ad65cd18ec2548ca53a0136dc7ce2c3ccde",
+    "data-model.md": "cc771f24013b0ce762cc1d0599eb27f7b0dbe5346ddf1511923dc166e895eb31",
+    "contracts/recovery-adapter.md": "2c3c9aa5e7e49e442e0865031c01aa5a00346ded3ce7f47ccffe64c916e6dfdc",
+    "quickstart.md": "d0473a624cf09b2151082de40b4d5549742aeb2c43dbceed59e881309167de17",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "contracts/recovery-adapter.md",
+      "section": "Windows spawn and late-child handling",
+      "note": "While Windows Process.start() is pending in the helper, the parent has no child handle to terminate. The contract requires late-child containment but gives no suspended-create/Job Object (or equivalent) mechanism; quarantine blocks new work, not a late child. Specify and validate a controllable launch path or explicitly mark these hosts unsupported."
+    }
+  ]
+}

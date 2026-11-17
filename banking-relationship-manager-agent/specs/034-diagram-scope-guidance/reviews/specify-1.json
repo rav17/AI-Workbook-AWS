@@ -1,0 +1,31 @@
+{
+  "id": "specify-1",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-12T17:23:58+00:00",
+  "files": {
+    "spec.md": "afbda111785a72670179b4682d8055f6f23639a7f9a2f90c701c562569c9800d"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "spec.md",
+      "section": "FR-010; User Stories & Testing",
+      "note": "FR-010 prohibits changing guidance documents, yet all user stories and FR-001\u2013FR-009 define the feature value as guidance content and SC-001\u2013SC-004 assess that content. No allowed delivery artifact is identified, leaving implementation unable to satisfy the acceptance criteria. Clarify the intended deliverable and reconcile it with the no-guidance-change boundary."
+    },
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "FR-007; User Story 3",
+      "note": "The requirement asks for a recorded review outcome but does not define who is authorized to review, which outcomes permit a shared-view change, or what happens after a rejection, conditional outcome, or pending review. As written, recording any outcome could satisfy the requirement without controlling whether the change proceeds."
+    },
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "FR-006; Edge Cases",
+      "note": "The trigger stale is not defined by a criterion (for example, superseding source/version or an explicit owner determination). Different authors may therefore disagree on when a gap must be recorded and review requested, weakening consistent testability."
+    }
+  ]
+}

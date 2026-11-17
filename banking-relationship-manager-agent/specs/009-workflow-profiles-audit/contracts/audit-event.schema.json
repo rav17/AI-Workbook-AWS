@@ -10,7 +10,13 @@
     "type": {
       "enum": [
         "profile_selected", "profile_changed", "stage_started", "stage_completed",
-        "stage_skipped", "gate_approved", "gate_rejected", "failure"
+        "stage_skipped", "gate_approved", "gate_rejected", "failure",
+        "review_recorded", "gate_overridden", "rule_proposed", "rule_approved",
+        "rule_discarded", "route_composed", "sensor_run", "intent_switched",
+        "intent_parked", "intent_resumed", "stage_redone", "question_asked",
+        "question_answered", "unit_defined", "unit_checkpoint", "call_reserved",
+        "call_finished", "calls_reset", "host_evidence_recorded", "inline_work_recorded",
+        "delegation_assurance_accepted"
       ]
     },
     "stage": { "type": ["string", "null"] },

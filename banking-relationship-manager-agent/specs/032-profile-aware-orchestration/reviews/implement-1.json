@@ -1,0 +1,75 @@
+{
+  "id": "implement-1",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "block",
+  "created_at": "2026-11-10T18:29:04+00:00",
+  "files": {
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e",
+    ".github/skills/speckit-review/SKILL.md": "6c4edaa5823594ae7b791b51ce9357f9ff967672c9bb7e3274e067890ecdda04",
+    ".github/skills/speckit-diagrams/SKILL.md": "ff68e62c0cfe1a39f257f4aedfc51312c9340f5e5d7a6f1a9d8937e7f6fa96dd",
+    ".github/skills/speckit-diagrams/assets/index-template.md": "c6f32aa0ef4ee72b06dfda676db7382b246b02c448dc3420c828224d6df7ce1d",
+    "specs/004-receivables-exception-resolution/spec.md": "1f2cf63aa21bde64f5e02600552eb1f897aa1b85f9155a40afd59cc73d1bcb6c",
+    "specs/004-receivables-exception-resolution/plan.md": "3637a2f0f0049a0b7bb9f973352dc181763733c33e4174fd3ac80ab8f51169ae",
+    "specs/004-receivables-exception-resolution/approval-provenance.md": "58c3e2fb99be10830ee2f19e3eef98d600a3e86bfdd90461645e965edc3feac0",
+    "specs/004-receivables-exception-resolution/data-model.md": "072d061a10340636b982e5f8df90f6b672b804e5ff024c70b9528879aab41c3b",
+    "specs/004-receivables-exception-resolution/synthetic-policy.md": "effcaaa811c072e11c3ded05d06648f01f0246fd6c1476fac943d523f7a34734",
+    "specs/004-receivables-exception-resolution/synthetic-fixtures.json": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+    "specs/004-receivables-exception-resolution/contracts/investigation-and-approval.md": "ea60e9e0535cfffaebc00221945df0c8081b9167c2fb316fec7847b8aa751a2d",
+    "specs/004-receivables-exception-resolution/tasks.md": "f4cf3eb794f56008e7321f329167d47ea2604b8d5d9e6f5d59437aeac4c00342",
+    "specs/004-receivables-exception-resolution/quickstart.md": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431",
+    "specs/004-receivables-exception-resolution/implementation-evidence.md": "bbd1b69d5580db5acfdc398671bb84a0d113d8550a700946552d93cab0e0e785",
+    "specs/004-receivables-exception-resolution/architecture/diagrams/index.md": "7faaeac57d5fc60d167756de121c9815c4c3c9b8838cca467f11ab9a0a0fc8a4",
+    "specs/004-receivables-exception-resolution/architecture/diagrams/context.drawio": "c95c7c8fad766074afbee88d8f86a918cdd4cde5bfa6484e7a69fac792b51aa6",
+    "specs/004-receivables-exception-resolution/architecture/diagrams/overview.drawio": "f39ae76d8879eb084710025c3405d5d8c92a1941066a0fe9191e6b97004c01d2",
+    "specs/004-receivables-exception-resolution/architecture/diagrams/components.drawio": "a7b3854493a14f1274b50f7c034b74c8bde288b27ade3d38d8f95fc3be149112",
+    "specs/004-receivables-exception-resolution/architecture/diagrams/interactions.drawio": "225ceb7a82f6d663d29e9da51b935273c88e8ae5460dbb6a57f0e344e2399088",
+    "aria/agents/aria/receivables/__init__.py": "c82a7c2535fca2744ffa785f4c90aca79bbe88dcd6dc68906b2873721a448adf",
+    "aria/agents/aria/receivables/models.py": "eed4214248ab4b774d2c9208cef9564bf71eb37864f866e1166a85db929be50d",
+    "aria/agents/aria/receivables/trusted_context.py": "9066377846b0f3737e47db66e27e539d18dd33819049e6bfcbe83f6498facdaa",
+    "aria/agents/aria/receivables/policy.py": "5b20f56a667916835d1b1deaaed43d33232a0c19be0c096237106b849fa0634c",
+    "aria/agents/aria/receivables/rules.py": "fb5c34dda490dcf836de6713863f59574b545ad1ff76e943a851c0343cf71b5c",
+    "aria/agents/aria/receivables/engine.py": "78ac7bf6c4171f6ed0986e2b39ad47a4c157feaa31bf5a2a1bc64b69ae790418",
+    "aria/agents/aria/receivables/freshness.py": "e79592752f49d9ef3711e5a3493e9853b284cee8cdb26dc75b0ead5f7950f5d0",
+    "aria/agents/aria/receivables/ports.py": "146c23187500c9d978eb960fee3fd85c02533ab301212afc626c17c1f96d1e5b",
+    "aria/agents/aria/receivables/agent.py": "e372cccb9dc59c8e2ed30b4264da6e462f9a26aaa2d62347b006150a8aa7b0d9",
+    "demo/receivables_exception/adapters.py": "3de5642454852b14e09483f1ea11be65e598122ce70d440e3a802cb7dd187886",
+    "demo/receivables_exception/store.py": "c960514c6e400349649cc4fbe27e109b843cc2f2da6820eed962ab5d3fef2448",
+    "demo/receivables_exception/service.py": "eedf9d929973b79fd53e312364b183fe827ce59578c08e7b11079a42e1d7cd88",
+    "demo/receivables_exception/app.py": "75805c01834a116bf693895fc43c12cc38da02f88d1fa353382792667f6cefb5",
+    "tests/unit/test_receivables_rules.py": "6b10829b1bfca691b91089886ba614c74a46cfd5658e10afc39653ce67bf0479",
+    "tests/unit/test_receivables_fixtures.py": "7f07feb9b9875746f4656a760731928c53c76d07ccc0bc3dc8ef393d191b8b67",
+    "tests/unit/test_receivables_store.py": "49cb8c1bd51c3153e3974ded6461c144fe10700ae578ebb2f83de21792429372",
+    "tests/unit/test_receivables_trusted_context.py": "c40c68372b7542467b30fc6512011027d5aed63d91403777379d5934917f1f16",
+    "tests/framework/test_receivables_agent_as_tool.py": "358304ff5134b6a6274fb4efce44a97a522ed19fe67a33ceaf78dd5dcb54aab1",
+    "tests/framework/test_receivables_subagent.py": "17f4617cc9353cf904a0b00d576fb66913279e8e50b7dac1137bbd4d72b81e89",
+    "tests/property/test_receivables_properties.py": "b2b761b930ace62dfb4c5848ae0adebca30117a780b73261f5f4047a3eb321f3"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "aria/agents/aria/receivables/rules.py",
+      "section": "prior_allocation_status",
+      "note": "For another payment on a candidate invoice this returns clear when the allocation is posted; it only blocks pending rows. This contradicts approved synthetic-policy.md section 2 (any pending/posted row blocks confidence) and FR-009, allowing a confident recommendation despite prior posted allocation. tests/unit/test_receivables_rules.py::test_only_pending_or_posted_allocations_block_candidates explicitly asserts the conflicting clear result."
+    },
+    {
+      "severity": "major",
+      "file": "demo/receivables_exception/service.py",
+      "section": "ReceivablesWorkflowService.confirm",
+      "note": "Confirmation validates the confirmation-binding expiry but never proposal.expires_at; LocalSQLiteStore.confirm likewise checks only binding expiry. Approval near the 30-minute proposal TTL can therefore create a task after proposal expiry while the 10-minute confirmation window remains open, contrary to contract C5 and task T014. Revalidate proposal TTL at confirmation and cover crossing the proposal-expiry boundary."
+    },
+    {
+      "severity": "major",
+      "file": "aria/agents/aria/receivables/engine.py",
+      "section": "ReceivablesInvestigationEngine.__init__ / _FixtureClock",
+      "note": "The default selects a fixed fixture clock, and demo/receivables_exception/app.py::main constructs the engine without an advancing clock; the service reuses it. In the actual default demo, evidence ages and proposal/confirmation times never advance, so freshness and expiry checks do not become stale after real waiting. Keep fixed time for evaluation only and verify elapsed-time behavior in the demo path."
+    },
+    {
+      "severity": "warning",
+      "file": "demo/receivables_exception/store.py",
+      "section": "_new_decision / record_decision",
+      "note": "Analyst-supplied rationale is persisted verbatim (up to 500 characters); the local UI accepts arbitrary text and there is no redaction or synthetic-only validation. This can persist real client details or credentials despite the synthetic-data-only boundary and constitution privacy rule. Avoid persisting free text or enforce a safe synthetic rationale policy."
+    }
+  ]
+}

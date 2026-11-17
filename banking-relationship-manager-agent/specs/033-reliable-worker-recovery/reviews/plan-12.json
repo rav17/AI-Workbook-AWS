@@ -1,0 +1,24 @@
+{
+  "id": "plan-12",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T22:41:03+00:00",
+  "files": {
+    "plan.md": "6ad941addfb612c5ff3eb343d4f15c5d2167545ef4c2f2cee448af0d0e7f7041",
+    "research.md": "340a966ad23e40123548534a720b057f6b10b9a2a1c4c2eca36ad56a563e07c1",
+    "data-model.md": "0051a255b9edfac2aec0aa4e0f1134b7395065acd374e2acd637643c4afa94f1",
+    "contracts/recovery-adapter.md": "57ad479839d2334065576ddc95a4d58ae8f33be93e6068701a4aab956bf99a7b",
+    "quickstart.md": "be595710c729f8c6ba84aba5f277ddc66301d0a13a2d1edeae52a15318453222",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "contracts/recovery-adapter.md",
+      "section": "Outcomes and constraints",
+      "note": "The statement that a blocked non-cooperative call cannot guarantee prompt return is broader than the guarantee for every admitted supported status request and does not explicitly say such calls are rejected before admission; clarify this to avoid an FR-003 exception. Also define admission feasibility when D-R is nonpositive or too small for bounded rendering/handoff, or specify a bounded pre-admission rejection."
+    }
+  ]
+}

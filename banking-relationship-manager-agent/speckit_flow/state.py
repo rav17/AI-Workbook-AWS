@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
 import tempfile
 from pathlib import Path
+from typing import Any
 
 from speckit_flow import audit, questions, reviews, trace
 from speckit_flow import sensors as sensors_mod
@@ -16,6 +18,7 @@ from speckit_flow.models import (
     FeatureState,
     FlowError,
     Profile,
+    ReviewSelectionError,
     Route,
     StageRecord,
 )
@@ -24,6 +27,9 @@ from speckit_flow.profiles import get_profile
 STATE_FILE = "state.json"
 STATE_MD = "state.md"
 ROUTE_FILE = "route.json"
+HYBRID_ROUTE_FILE = "hybrid-route.json"
+HYBRID_PROFILE = "hybrid-plan"
+SELECTIVE_ROUTE_FILE = "selective-route.json"
 _ARTIFACTS = {"specify": "spec.md", "plan": "plan.md", "tasks": "tasks.md"}
 _PROFILE_RE = re.compile(r"profile=([a-z][a-z0-9-]*)")
 TEST_GATED = ("tasks", "analyze", "implement")
@@ -116,14 +122,142 @@ def _build_state(feature_dir: Path, profile: Profile) -> FeatureState:
 
 
 def init_state(
-    feature_dir: Path, profile_id: str, actor: str, profiles_dir: Path | None = None
+    feature_dir: Path,
+    profile_id: str,
+    actor: str,
+    profiles_dir: Path | None = None,
+    *,
+    reviewer: str | None = None,
+    confirm_route: bool = False,
+    rationale: str = "",
+    roster_file: Path | None = None,
 ) -> FeatureState:
     if not feature_dir.is_dir():
         raise FlowError(f"feature directory not found: {feature_dir}")
     if (feature_dir / STATE_FILE).exists():
         raise FlowError("already initialized; use 'switch' to change the profile")
     profile = _lookup(profile_id, profiles_dir)
+    if profile.execution == "selective":
+        if reviewer is not None:
+            raise FlowError("selective workers must be declared in profile assignments")
+        if not confirm_route or not rationale.strip() or len(rationale.strip()) > 150:
+            raise FlowError(
+                "selective route requires --confirm-route and a 1-150 character rationale"
+            )
+        audit.check_redaction(rationale)
+        from speckit_flow import agents
+
+        roster = agents.load_roster(roster_file or agents.DEFAULT_ROSTER_FILE)
+        assignments = agents.resolve_assignments(profile, roster)
+        for stage, assignment in assignments.items():
+            for name in assignment["support"]:
+                worker = roster[name]
+                if name == "hybrid-plan-reviewer":
+                    raise FlowError("the no-tool hybrid reviewer requires the hybrid-plan route")
+                if worker.role not in ("domain", "reviewer") or stage not in worker.supports:
+                    raise FlowError(f"selective worker {name!r} cannot support {stage!r}")
+            if not profile.ceremony_on("reviews") and any(
+                roster[name].role == "reviewer" for name in assignment["support"]
+            ):
+                raise FlowError("selective route cannot disable assigned reviewers")
+            if profile.strict and stage in profile.gates and not any(
+                roster[name].role == "reviewer" for name in assignment["support"]
+            ):
+                raise FlowError(f"strict selective gate {stage!r} needs an explicit reviewer")
+        if profile.stage_contracts:
+            from speckit_flow import contracts
+
+            contracts.validate_profile(profile, feature_dir.parent.parent / ".specify")
+        path = feature_dir / SELECTIVE_ROUTE_FILE
+        if path.exists() or (feature_dir / audit.AUDIT_FILE).exists():
+            raise FlowError("selective route or audit already exists; inspect before initializing")
+        content = json.dumps(
+            {"profile": profile.to_dict(), "rationale": rationale.strip()}, sort_keys=True, indent=2
+        ) + "\n"
+        atomic_write(path, content)
+        return init_from_route(
+            feature_dir, Route(profile, {}), actor, route_binding=_route_digest(content.encode())
+        )
+    if profile.execution == "hybrid":
+        if not confirm_route:
+            raise FlowError("hybrid route must be explicitly confirmed before initialization")
+        from speckit_flow import agents
+
+        roster = agents.load_roster(roster_file or agents.DEFAULT_ROSTER_FILE)
+        if not reviewer or not reviewer.strip():
+            raise ReviewSelectionError(
+                "missing_reviewer_selection",
+                "reviewer selection is missing.",
+                "Select an eligible independent plan reviewer, then initialize the route.",
+            )
+        selected = roster.get(reviewer or "")
+        lead = agents.resolve_assignments(profile, roster)["plan"]["lead"]
+        if (
+            selected is None
+            or selected.role != "reviewer"
+            or selected.can_edit
+            or "plan" not in selected.supports
+            or selected.id == lead
+        ):
+            raise ReviewSelectionError(
+                "invalid_reviewer_selection",
+                "reviewer selection is invalid or ineligible.",
+                "Choose an eligible independent plan reviewer; do not substitute one silently.",
+            )
+        if not rationale.strip() or len(rationale.strip()) > 150:
+            raise FlowError("hybrid reviewer rationale must be 1-150 characters")
+        audit.check_redaction(rationale)
+        path = feature_dir / HYBRID_ROUTE_FILE
+        if path.exists() or (feature_dir / audit.AUDIT_FILE).exists():
+            raise FlowError("hybrid route or audit already exists; inspect before initializing")
+        payload = {
+            "profile": profile.to_dict(),
+            "reviewer": selected.id,
+            "rationale": rationale.strip(),
+        }
+        content = json.dumps(payload, sort_keys=True, indent=2) + "\n"
+        binding = _route_digest(content.encode("utf-8"))
+        atomic_write(path, content)
+        return init_from_route(feature_dir, Route(profile, {}), actor, route_binding=binding)
+    if reviewer is not None or confirm_route or rationale:
+        raise FlowError("reviewer selection is only supported for the hybrid plan profile")
     return init_from_route(feature_dir, Route(profile, {}), actor)
+
+
+def _route_digest(data: bytes) -> str:
+    digest = hashlib.sha256(data).hexdigest()
+    return "-".join(digest[i : i + 8] for i in range(0, len(digest), 8))
+
+
+def load_hybrid_route(feature_dir: Path) -> dict[str, Any]:
+    path = feature_dir / HYBRID_ROUTE_FILE
+    try:
+        content = path.read_bytes()
+        payload = json.loads(content)
+    except (OSError, ValueError) as exc:
+        raise FlowError(f"hybrid route is unreadable: {exc}") from exc
+    snapshot = audit.snapshot(feature_dir)
+    if snapshot.problem or not snapshot.event_count:
+        raise FlowError("hybrid route audit is missing or invalid")
+    binding = f"route={_route_digest(content)}"
+    events = audit.read_events(feature_dir)
+    if not any(
+        event.type == "profile_selected"
+        and f"profile={HYBRID_PROFILE}" in event.detail
+        and binding in event.detail.split()
+        for event in events
+    ):
+        raise FlowError("confirmed hybrid route changed or has no matching audit evidence")
+    if (
+        not isinstance(payload, dict)
+        or set(payload) != {"profile", "reviewer", "rationale"}
+        or not isinstance(payload["profile"], dict)
+        or not isinstance(payload["reviewer"], str)
+        or not isinstance(payload["rationale"], str)
+        or not payload["rationale"].strip()
+    ):
+        raise FlowError("confirmed hybrid route is malformed")
+    return payload
 
 
 def _lookup(profile_id: str, profiles_dir: Path | None) -> Profile:
@@ -144,25 +278,75 @@ def load_route(feature_dir: Path) -> Route:
 
 def profile_for(feature_dir: Path, profile_id: str, profiles_dir: Path | None) -> Profile:
     """Resolve a profile id; a composed route lives in the feature folder."""
+    selective_path = feature_dir / SELECTIVE_ROUTE_FILE
+    if profile_id == "selective" or selective_path.exists():
+        try:
+            if selective_path.is_symlink() or (
+                getattr(selective_path.lstat(), "st_file_attributes", 0) & 0x400
+            ):
+                raise FlowError("selective route must not be a link or reparse point")
+            if selective_path.stat().st_size > 256 * 1024:
+                raise FlowError("selective route exceeds 256 KiB")
+            content = selective_path.read_bytes()
+            payload = json.loads(content)
+        except (OSError, ValueError) as exc:
+            raise FlowError(f"selective route is unreadable: {exc}") from exc
+        if (
+            not isinstance(payload, dict) or set(payload) != {"profile", "rationale"}
+            or not isinstance(payload["profile"], dict)
+            or not isinstance(payload["rationale"], str) or not payload["rationale"].strip()
+        ):
+            raise FlowError("confirmed selective route is malformed")
+        snapshot = audit.snapshot(feature_dir)
+        if snapshot.problem or not snapshot.event_count:
+            raise FlowError("selective route audit is missing or invalid")
+        binding = f"route={_route_digest(content)}"
+        if not any(
+            event.type == "profile_selected"
+            and f"profile={profile_id}" in event.detail.split()
+            and binding in event.detail.split()
+            for event in audit.read_events(feature_dir)
+        ):
+            raise FlowError("selective route changed or has no matching confirmation evidence")
+        selected = Profile.from_dict(payload["profile"], profile_id)
+        if selected.execution != "selective":
+            raise FlowError("confirmed selective route has invalid execution")
+        return selected
+    if profile_id == HYBRID_PROFILE:
+        return Profile.from_dict(load_hybrid_route(feature_dir)["profile"], HYBRID_PROFILE)
     if profile_id == f"custom-{feature_dir.name}" and (feature_dir / ROUTE_FILE).exists():
         return load_route(feature_dir).profile
-    return _lookup(profile_id, profiles_dir)
+    profile = _lookup(profile_id, profiles_dir)
+    if profile.execution == "selective":
+        raise FlowError("confirmed selective route is missing")
+    return profile
 
 
-def init_from_route(feature_dir: Path, route: Route, actor: str) -> FeatureState:
+def init_from_route(
+    feature_dir: Path, route: Route, actor: str, *, route_binding: str = ""
+) -> FeatureState:
     """Initialize state from an already validated and saved route."""
     if not feature_dir.is_dir():
         raise FlowError(f"feature directory not found: {feature_dir}")
     if (feature_dir / STATE_FILE).exists():
         raise FlowError("already initialized; use 'switch' to change the profile")
     profile = route.profile
+    if profile.execution == "hybrid" and not route_binding:
+        raise FlowError("hybrid initialization requires a confirmed reviewer selection")
+    if profile.execution == "selective" and not route_binding:
+        raise FlowError("selective initialization requires a confirmed worker route")
     if profile.stage_contracts:
         from speckit_flow import contracts
 
         contracts.validate_profile(profile, feature_dir.parent.parent / ".specify")
     state = _build_state(feature_dir, profile)
     audit.append_event(
-        feature_dir, "profile_selected", None, actor, f"profile={profile.id} depth={profile.depth}"
+        feature_dir,
+        "profile_selected",
+        None,
+        actor,
+        f"profile={profile.id} depth={profile.depth}"
+        + (f" route={route_binding}" if route_binding else ""),
     )
     for stage in STAGES:
         record = state.stages.get(stage)
@@ -283,6 +467,12 @@ def done_stage(
     state = load_state(feature_dir)
     if state.stages.get(stage, StageRecord()).status != "in_progress":
         raise _reject(feature_dir, stage, actor, f"stage {stage!r} is not in progress")
+    from speckit_flow import calls
+
+    if profiles_dir is None:
+        calls.check_completion(feature_dir, stage)
+    else:
+        calls.check_completion(feature_dir, stage, profiles_dir)
     profile = profile_for(feature_dir, state.profile, profiles_dir)
     gated = stage in profile.gates
     audit.append_event(
@@ -316,23 +506,50 @@ def decide_gate(
         raise _reject(feature_dir, stage, actor, f"no pending gate for stage {stage!r}")
     detail = reason or ("approved" if approve else "rejected")
     review_note = ""
+    selected_blocks: list[str] = []
     try:
         profile = profile_for(feature_dir, state.profile, profiles_dir)
     except FlowError as exc:
         raise _reject(feature_dir, stage, actor, f"profile cannot be loaded: {exc}") from exc
     strict = profile.strict
+    if approve and profile.execution == "hybrid" and stage == "plan":
+        try:
+            reviews.require_hybrid_review(feature_dir)
+        except FlowError as exc:
+            raise _reject(feature_dir, stage, actor, str(exc)) from exc
+    if approve and profile.execution == "selective":
+        from speckit_flow import calls
+
+        try:
+            selected_blocks = calls.check_selective_reviews(
+                feature_dir, stage, profile, reject_blocks=not bool(override_reason)
+            )
+        except FlowError as exc:
+            raise _reject(feature_dir, stage, actor, str(exc)) from exc
     if approve and profile.test_strategy == "required" and stage in TEST_GATED:
-        matrix = trace.build_matrix(feature_dir)
-        if not matrix.ok(True):
-            gaps = ", ".join(matrix.uncovered + matrix.untested)
+        try:
+            matrix = trace.build_matrix(feature_dir)
+        except FlowError as exc:
             raise _reject(
-                feature_dir, stage, actor, f"test strategy 'required': no test task for {gaps}"
+                feature_dir, stage, actor, f"invalid requirement trace: {exc}"
+            ) from exc
+        if not matrix.ok(True):
+            gaps = ", ".join(matrix.uncovered + matrix.untested + matrix.unknown_refs)
+            raise _reject(
+                feature_dir, stage, actor,
+                f"test strategy 'required': uncovered, untested or unknown references: {gaps}",
             )
     if approve and stage == "implement":
-        unchecked = units_mod.unchecked_units(feature_dir)
+        try:
+            unchecked = units_mod.unchecked_units(feature_dir)
+        except FlowError as exc:
+            raise _reject(
+                feature_dir, stage, actor, f"invalid unit checkpoint evidence: {exc}"
+            ) from exc
         if unchecked:
             raise _reject(
-                feature_dir, stage, actor, f"units not checkpointed: {', '.join(unchecked)}"
+                feature_dir, stage, actor,
+                f"units not checkpointed or stale: {', '.join(unchecked)}",
             )
     if approve and strict and questions.open_questions(feature_dir):
         raise _reject(feature_dir, stage, actor, "strict guard policy: open questions remain")
@@ -377,6 +594,13 @@ def decide_gate(
                     actor,
                     f"review={fresh.id} reason={override_reason}"[:500],
                 )
+        if selected_blocks and override_reason and (
+            fresh is None or fresh.id not in selected_blocks
+        ):
+            audit.append_event(
+                feature_dir, "gate_overridden", stage, actor,
+                f"reviews={','.join(selected_blocks)} reason={override_reason}"[:500],
+            )
     audit.append_event(
         feature_dir,
         "gate_approved" if approve else "gate_rejected",
@@ -405,6 +629,15 @@ def switch_profile(
     if state.pending_gate or any(r.status == "in_progress" for r in state.stages.values()):
         raise _reject(feature_dir, None, actor, "profile can only change at a stage boundary")
     profile = _lookup(profile_id, profiles_dir)
+    if profile.execution == "selective" or (feature_dir / SELECTIVE_ROUTE_FILE).exists():
+        raise _reject(
+            feature_dir, None, actor,
+            "selective routes cannot be switched; explicitly initialize a new confirmed feature",
+        )
+    if profile.execution == "hybrid" or state.profile == HYBRID_PROFILE:
+        raise _reject(
+            feature_dir, None, actor, "hybrid routes cannot be switched in this increment"
+        )
     audit.append_event(
         feature_dir,
         "profile_changed",
@@ -447,7 +680,11 @@ def rebuild_state(
     if not feature_dir.is_dir():
         raise FlowError(f"feature directory not found: {feature_dir}")
     chosen = profile_id or last_profile_from_audit(feature_dir) or "feature"
+    if chosen == HYBRID_PROFILE:
+        raise FlowError("hybrid state cannot be rebuilt from artifacts without review evidence")
     profile = profile_for(feature_dir, chosen, profiles_dir)
+    if profile.execution == "selective":
+        raise FlowError("selective state cannot be rebuilt from artifacts without worker evidence")
     state = _build_state(feature_dir, profile)
     for stage, artifact in _ARTIFACTS.items():
         if stage in profile.stages and (feature_dir / artifact).exists():

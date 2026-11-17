@@ -1,0 +1,42 @@
+{
+  "id": "plan-1",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:workflow",
+  "verdict": "block",
+  "created_at": "2026-11-17T07:06:01+00:00",
+  "files": {
+    "spec.md": "765b070398c881e7ffeb05d709935848fe66967898f9fbd24f07cf37ba5717ed",
+    "plan.md": "b0c56dc36ac9fcd81228c9fb3a688d321b1ad2b900ac740abdd7c06078e3b047",
+    "research.md": "ef2eb586765ac2f00b7f797e4fdb5d33e88e7ec58c90a56e7052a87a5c95a5a8",
+    "data-model.md": "81721fd6c64f832e48d0747e78688b291353226efb36f28645ff9ec899b44c3b",
+    "contracts/assurance-cli.md": "8b7b4de3edbd1fd585f4797f62865c0805dcee724b2c8f6bb50b868104c073f2",
+    "quickstart.md": "d33cf3d37642d4dc67232a8171d4b4937aada784fee64814a1f83c1af26b86be"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "plan.md",
+      "section": "Design, item 7; Freshness, compatibility and limitations",
+      "note": "Feature 041 is itself on the human-confirmed selective route, but its implementation may encounter the existing missing-runtime-proof stop. The proposed acceptance command does not exist until this feature is implemented, while FR-001 says plan/spec approval is not acceptance. No bootstrap path is defined; implementation is therefore either blocked or depends on an implicit exception contrary to FR-001."
+    },
+    {
+      "severity": "major",
+      "file": "contracts/assurance-cli.md",
+      "section": "Human acceptance",
+      "note": "The contract relies on a human-shaped actor value and `--confirm-ordinary-work`, but defines no way to establish that the caller is a human or that `--actor human:<operator>` is trustworthy. Extending the command-detection guard does not authenticate the CLI caller. An agent or other process able to invoke the operation could record a human-labeled acceptance, undermining FR-001 and audit attribution."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "Design, items 2 and 7; Freshness, compatibility and limitations",
+      "note": "Host and session are CLI-supplied labels, but no source or validation mechanism for current host/session metadata is specified. Equality against caller-provided values cannot establish that the acceptance matches the actual current context, so the promised context-change invalidation is unverified. Keep this explicitly operator-attested and stop when current context cannot be established; do not imply the labels validate it."
+    },
+    {
+      "severity": "warning",
+      "file": "data-model.md",
+      "section": "Acceptance event",
+      "note": "The event stores a scope digest and rationale, but not the disclosed missing evidence, actual observations, or residual-risk snapshot required by FR-002 and the Assurance acceptance entity. A later audit may be unable to determine what limitation and risk the human accepted."
+    }
+  ]
+}

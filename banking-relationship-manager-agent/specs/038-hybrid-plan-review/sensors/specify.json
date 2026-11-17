@@ -1,0 +1,12 @@
+{
+  "results": {
+    "consistency": {
+      "status": "pass",
+      "ts": "2026-11-14T11:52:34+00:00",
+      "reason": "artifacts consistent",
+      "fingerprints": {
+        "spec.md": "a7272f203b509366957a49808537b8f1992d8f29cb8c3199ce10ca997dca2679"
+      }
+    }
+  }
+}
