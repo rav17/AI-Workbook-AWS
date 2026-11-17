@@ -1,0 +1,41 @@
+{
+  "feature": "034-diagram-scope-guidance",
+  "profile": "refactor",
+  "depth": "minimal",
+  "current_stage": null,
+  "pending_gate": null,
+  "revision": 16,
+  "updated_at": "2026-11-13T20:56:44+00:00",
+  "stages": {
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-12T18:31:33+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile refactor",
+      "updated_at": "2026-11-12T17:07:31+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-13T19:00:11+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-13T19:10:51+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile refactor",
+      "updated_at": "2026-11-12T17:07:31+00:00"
+    },
+    "implement": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-13T20:56:44+00:00"
+    }
+  }
+}

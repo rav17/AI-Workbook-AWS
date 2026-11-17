@@ -1,0 +1,33 @@
+{
+  "id": "plan-2",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T02:25:54+00:00",
+  "files": {
+    "plan.md": "0add58e5e0fecad1857c68d65612c78c4c3d740095c4f493002f4c77868ea655",
+    "questions.md": "a23deec2527704196b74341bdba28a0e2bc30709fdd6bff44bb82833d33a83f8",
+    "spec.md": "f0f4f07111b36f87408eb88ea67b5f20bdce2668f60e852c5ac18cd27fc87841",
+    "research.md": "1a163bab1db467a6319c79218cea310d266b171d301b158db49ae608e70aeee5",
+    "data-model.md": "1bc7b712ba0d3ded41913b5e6b7b9901affd8e1ddd66e50505e6222dd7fabca8",
+    "quickstart.md": "a08581de7e18ef2edc13eb52ab20afae33c21c806a54b6c99156b5164dcee0b7",
+    "synthetic-policy.md": "effcaaa811c072e11c3ded05d06648f01f0246fd6c1476fac943d523f7a34734",
+    "synthetic-fixtures.json": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+    "contracts/investigation-and-approval.md": "31c0eecec2bb8074e884985d15ca564149f10dee095ee10226fac6f062ad7ad6"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "questions.md",
+      "section": "Q5",
+      "note": "Q5 remains unanswered. Internal proposal, decision, confirmation-binding, and audit persistence is therefore unapproved; keep the SQLite workflow conditional and blocked pending a human answer. Q1/Q3 do not resolve this separate FR-014 boundary; if the answer is no, require human-led re-scoping."
+    },
+    {
+      "severity": "warning",
+      "file": "plan.md",
+      "section": "9. Constitution Check ? II Deterministic safety",
+      "note": "The PASS notes say rules are in code and TrustedContext is rechecked at adapters/writer, but the plan also says no receivables code exists and describes these as proposed. Qualify this as design-level compliance, not verified implementation or enforcement."
+    }
+  ]
+}

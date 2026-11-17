@@ -1,0 +1,36 @@
+{
+  "id": "plan-3",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "pass",
+  "created_at": "2026-11-16T19:53:51+00:00",
+  "files": {
+    "plan.md": "1d9551176c771bd50e81b16c1a17ed4b5f6dd8281aa74c72a08914be25f855f3",
+    "research.md": "4eb5e3841221e7dcbce849c7371b9984f32678c29dbaeeda18bce31f54129156",
+    "data-model.md": "4b47da77bd3371b56550db97cafe36ff1c21776adb3202258b79b71d33e4228b",
+    "quickstart.md": "4313610162d379094c7a45dddbc1da5d1e461ea9f04795d5337bd2ce363c0d37",
+    "contracts/speckit-package-cli.md": "fbbd2fc3f57e7f846740e36c992879eea48001265bedddc5a29daf8894019d36",
+    "contracts/snapshot-inventory.schema.json": "ca31d946baa0bff7a619b249fb7a4131128ab6ba41518f78dd2b187210b140f0"
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "file": "contracts/snapshot-inventory.schema.json",
+      "section": "files.items.source_path",
+      "note": "source_path is declared only as type string with minLength 1 while data-model.md 2.1 says it follows the same path validation rules as path; cosmetic since the schema self-declares as advisory with procedural _relative_path validation authoritative, but applying the same pattern would close it."
+    },
+    {
+      "severity": "info",
+      "file": "quickstart.md",
+      "section": "F canary",
+      "note": "The planted canary constant is the AWS-docs example access key ID but is labeled aws_secret_access_key; detection still fires (AWSKeyDetector matches the key-ID pattern, empirically confirmed), so the positive control is sound - the label is merely a mislabel."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Design S2 step 6 / research.md D5",
+      "note": "The coverage assertion counts submitted argv paths, not scanner-confirmed scanned files (the baseline output does not enumerate scanned files). The plan states this honestly and compensates with the planted-secret positive control; recorded so implementers do not mistake the count check for scanner-side proof."
+    }
+  ]
+}

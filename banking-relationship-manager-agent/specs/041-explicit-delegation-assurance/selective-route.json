@@ -1,0 +1,43 @@
+{
+  "profile": {
+    "assignments": {
+      "implement": {
+        "lead": "developer",
+        "support": []
+      },
+      "plan": {
+        "lead": "architect",
+        "support": [
+          "architecture-reviewer"
+        ]
+      },
+      "specify": {
+        "lead": "product",
+        "support": []
+      },
+      "tasks": {
+        "lead": "delivery",
+        "support": []
+      }
+    },
+    "ceremony": {
+      "learning": false,
+      "reviews": true
+    },
+    "depth": "standard",
+    "description": "Opt-in inline stage work with explicitly confirmed specialist input and independent plan review.",
+    "execution": "selective",
+    "gates": [
+      "specify",
+      "plan"
+    ],
+    "id": "selective",
+    "stages": [
+      "specify",
+      "plan",
+      "tasks",
+      "implement"
+    ]
+  },
+  "rationale": "Inline stages with independent plan review; explicit opt-in assurance policy, strict hybrid checks retained"
+}

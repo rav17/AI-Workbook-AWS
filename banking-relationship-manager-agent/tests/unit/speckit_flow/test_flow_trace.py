@@ -56,3 +56,72 @@ def test_cli_exit_codes(tmp_path: Path) -> None:
 def test_feature_013_is_traceable() -> None:
     root = Path(__file__).resolve().parents[3] / "specs" / "013-sensors-traceability-doctor"
     assert trace.build_matrix(root).ok(require_tests=False)
+
+
+def test_task_progress_is_bounded_and_excludes_fenced_examples(tmp_path: Path) -> None:
+    text = (
+        "```markdown\n- [ ] T999 FR-099 example\n```\n"
+        "~~~~markdown\n- [ ] T998 FR-099 another example\n~~~~\n"
+        "- [X] T001 FR-001 done\n"
+        "- [x] T002 FR-002 done\n"
+    )
+    text += "\n".join(f"- [ ] T{i:03d} FR-003 {'detail ' * 60}" for i in range(3, 503))
+    make(tmp_path, text)
+    progress = trace.task_progress(tmp_path)
+    assert progress["total"] == 502
+    assert progress["completed"] == 2
+    assert progress["pending"] == 500
+    assert progress["omitted_pending"] == 495
+    preview = progress["pending_preview"]
+    assert isinstance(preview, list)
+    assert len(preview) == 5
+    assert preview[0]["id"] == "T003"
+    assert preview[0]["line"] == 9
+    assert all(len(item["description"]) == 160 and item["truncated"] for item in preview)
+    assert trace.build_matrix(tmp_path).unknown_refs == []
+
+
+def test_task_progress_distinguishes_missing_empty_and_duplicate_tasks(tmp_path: Path) -> None:
+    assert trace.task_progress(tmp_path) == {"status": "missing"}
+    path = tmp_path / "tasks.md"
+    path.write_text("# Tasks\n", encoding="utf-8")
+    assert trace.task_progress(tmp_path)["status"] == "empty"
+    path.write_text("- [ ] T001 one\n- [x] T001 repeated\n", encoding="utf-8")
+    with pytest.raises(FlowError, match="duplicate task"):
+        trace.task_progress(tmp_path)
+    path.write_bytes(b"\xff")
+    with pytest.raises(FlowError, match="cannot read tasks.md"):
+        trace.task_progress(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("spec", "tasks", "message"),
+    [
+        ("# No requirements\n", "- [ ] T001 test\n", "no requirement"),
+        ("FR-001\n", "# No tasks\n", "no task"),
+        ("FR-001\n", "- [ ] T001 test FR-001\n- [x] T001 duplicate\n", "duplicate task"),
+    ],
+)
+def test_invalid_trace_inputs_fail_explicitly(
+    tmp_path: Path, spec: str, tasks: str, message: str,
+) -> None:
+    (tmp_path / "spec.md").write_text(spec, encoding="utf-8")
+    (tmp_path / "tasks.md").write_text(tasks, encoding="utf-8")
+    with pytest.raises(FlowError, match=message):
+        trace.build_matrix(tmp_path)
+
+
+def test_unknown_references_fail_even_when_all_requirements_are_tested(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str],
+) -> None:
+    make(tmp_path, "- [ ] T001 test FR-001 FR-002 FR-003 FR-999\n")
+    matrix = trace.build_matrix(tmp_path)
+    assert not matrix.ok()
+    assert not matrix.ok(True)
+    assert main(["trace", "--feature-dir", str(tmp_path)]) == 1
+    assert "T001:FR-999" in capsys.readouterr().out
+
+
+def test_setup_tasks_without_references_remain_advisory(tmp_path: Path) -> None:
+    make(tmp_path, "- [ ] T001 test FR-001 FR-002 FR-003\n- [ ] T002 setup\n")
+    assert trace.build_matrix(tmp_path).ok(True)

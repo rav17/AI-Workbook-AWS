@@ -10,11 +10,18 @@ metadata:
 
 ## Lifecycle Handoff
 
+For an assigned worker, inspect the active invocation brief, not marker examples
+in this file. A missing, conflicting or mismatched stage marker is a failed
+handoff: stop and report it to the conductor; do not invoke workflow or conductor.
+An unassigned direct stage command may hand off once as described below.
+
 Unless this is the assigned lead executing a conductor brief containing
-`SPECKIT_DELEGATED_STAGE=implement`, invoke `speckit-workflow` with the original
+`SPECKIT_DELEGATED_STAGE=implement`, or the workflow host executing an eligible
+inline brief containing `SPECKIT_INLINE_STAGE=implement`, invoke `speckit-workflow` with the original
 request and requested stage `implement`, then return without executing this body.
-Only the matching delegated lead follows the body below. Use the supplied
-feature directory; the conductor owns stage transitions and human gates.
+Only the matching delegated lead or inline host follows the body below. Use the
+supplied feature directory; the workflow host owns inline stage transitions and
+the conductor owns delegated transitions. Only humans decide gates.
 
 ## User Input
 
@@ -107,49 +114,31 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **IF EXISTS**: Read .specify/memory/constitution.md for governance constraints
    - **IF EXISTS**: Read quickstart.md for integration scenarios
 
+   Reuse the plan's **Project practices** summary rather than rediscovering
+   tooling. Before first use, after editing a convention source, or on resume,
+   run `python -m speckit_flow codebase practices --json` for each affected root
+   (use `--project-dir <package-root>` for nested packages) and compare the
+   root/fingerprint with the summary. Refresh stale/missing summaries from
+   relevant source sections in `plan.md`; report conflicts and any change to
+   approved verification scope through existing approval rules. An unchanged
+   fingerprint avoids rereading practices, never required tests or sensors.
+   Follow the practices safety guidance in `docs/speckit-profiles.md`.
+
 4. **Project Setup Verification**:
-   - **REQUIRED**: Create/verify ignore files based on actual project setup:
+   - For existing projects, check only setup affected by the tasks and changes.
+     Do not initialize unrelated tooling or alter ignore files merely because
+     a technology appears in the plan. For new projects or newly introduced
+     tooling, create/verify the relevant files based on actual setup:
 
-   **Detection & Creation Logic**:
-   - Check if the following command succeeds to determine if the repository is a git repo (create/verify .gitignore if so):
-
-     ```sh
-     git rev-parse --git-dir 2>/dev/null
-     ```
-
-   - Check if Dockerfile* exists or Docker in plan.md → create/verify .dockerignore
-   - Check if .eslintrc* exists → create/verify .eslintignore
-   - Check if eslint.config.* exists → ensure the config's `ignores` entries cover required patterns
-   - Check if .prettierrc* exists → create/verify .prettierignore
-   - Check if .npmrc or package.json exists → create/verify .npmignore (if publishing)
-   - Check if terraform files (*.tf) exist → create/verify .terraformignore
-   - Check if .helmignore needed (helm charts present) → create/verify .helmignore
-
-   **If ignore file already exists**: Verify it contains essential patterns, append missing critical patterns only
-   **If ignore file missing**: Create with full pattern set for detected technology
-
-   **Common Patterns by Technology** (from plan.md tech stack):
-   - **Node.js/JavaScript/TypeScript**: `node_modules/`, `dist/`, `build/`, `*.log`, `.env*`
-   - **Python**: `__pycache__/`, `*.pyc`, `.venv/`, `venv/`, `dist/`, `*.egg-info/`
-   - **Java**: `target/`, `*.class`, `*.jar`, `.gradle/`, `build/`
-   - **C#/.NET**: `bin/`, `obj/`, `*.user`, `*.suo`, `packages/`
-   - **Go**: `*.exe`, `*.test`, `vendor/`, `*.out`
-   - **Ruby**: `.bundle/`, `log/`, `tmp/`, `*.gem`, `vendor/bundle/`
-   - **PHP**: `vendor/`, `*.log`, `*.cache`, `*.env`
-   - **Rust**: `target/`, `debug/`, `release/`, `*.rs.bk`, `*.rlib`, `*.prof*`, `.idea/`, `*.log`, `.env*`
-   - **Kotlin**: `build/`, `out/`, `.gradle/`, `.idea/`, `*.class`, `*.jar`, `*.iml`, `*.log`, `.env*`
-   - **C++**: `build/`, `bin/`, `obj/`, `out/`, `*.o`, `*.so`, `*.a`, `*.exe`, `*.dll`, `.idea/`, `*.log`, `.env*`
-   - **C**: `build/`, `bin/`, `obj/`, `out/`, `*.o`, `*.a`, `*.so`, `*.exe`, `*.dll`, `autom4te.cache/`, `config.status`, `config.log`, `.idea/`, `*.log`, `.env*`
-   - **Swift**: `.build/`, `DerivedData/`, `*.swiftpm/`, `Packages/`
-   - **R**: `.Rproj.user/`, `.Rhistory`, `.RData`, `.Ruserdata`, `*.Rproj`, `packrat/`, `renv/`
-   - **Universal**: `.DS_Store`, `Thumbs.db`, `*.tmp`, `*.swp`, `.vscode/`, `.idea/`
-
-   **Tool-Specific Patterns**:
-   - **Docker**: `node_modules/`, `.git/`, `Dockerfile*`, `.dockerignore`, `*.log*`, `.env*`, `coverage/`
-   - **ESLint**: `node_modules/`, `dist/`, `build/`, `coverage/`, `*.min.js`
-   - **Prettier**: `node_modules/`, `dist/`, `build/`, `coverage/`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
-   - **Terraform**: `.terraform/`, `*.tfstate*`, `*.tfvars`, `.terraform.lock.hcl`
-   - **Kubernetes/k8s**: `*.secret.yaml`, `secrets/`, `.kube/`, `kubeconfig*`, `*.key`, `*.crt`
+   - Inspect the receiving project's manifests, existing configuration and
+     ignore conventions. Use only its actual stack, not a generic language
+     checklist.
+   - For newly introduced tooling, exclude its generated outputs, local caches
+     and secrets from the relevant VCS/build/package context. Use the tool's
+     supported ignore mechanism (for example modern ESLint config `ignores`).
+   - Preserve tracked source, lockfiles, shared editor settings and existing
+     exceptions. Append only missing patterns justified by this change; do not
+     create or rewrite unrelated ignore files.
 
 5. Parse tasks.md structure and extract:
    - **Task phases**: Setup, Tests, Core, Integration, Polish
@@ -163,6 +152,16 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
    - **File-based coordination**: Tasks affecting the same files must run sequentially
    - **Validation checkpoints**: Verify each phase completion before proceeding
+   - **Bounded concurrency**: Parallelize independent reads and checks when safe;
+     do not create a subagent per task. Shared-file edits and dependent tasks
+     stay sequential, and explicitly selected `quick` work stays inline.
+   - **Focused feedback**: Run acceptance/regression checks for the current
+     coherent change first. Combine related test selectors in one runner.
+     Broaden validation when shared interfaces, repository policy or failures
+     require it; do not repeat an unchanged full suite after every task.
+     Run final affected checks after the last relevant edit. A prior pass is
+     not evidence for subsequently changed code. Approved construction-unit
+     commands and required sensors still run exactly as configured.
 
 7. Implementation execution rules:
    - **Setup first**: Initialize project structure, dependencies, configuration
@@ -172,7 +171,8 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **Polish and validation**: Unit tests, performance optimization, documentation
 
 8. Progress tracking and error handling:
-   - Report progress after each completed task
+   - Persist task completion as work finishes; batch chat progress at coherent
+     milestones instead of emitting a message for every task
    - Halt execution if any non-parallel task fails
    - For parallel tasks [P], continue with successful tasks, report failed ones
    - Provide clear error messages with context for debugging
@@ -184,6 +184,9 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Check that implemented features match the original specification
    - Validate that tests pass and coverage meets requirements
    - Confirm the implementation follows the technical plan
+   - Report the actual commands and results, including failures, skips and
+     checks not run. Distinguish acceptance, regression and manual evidence;
+     do not claim correctness from checked tasks or generated tests alone.
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit-tasks` first to regenerate the task list.
 

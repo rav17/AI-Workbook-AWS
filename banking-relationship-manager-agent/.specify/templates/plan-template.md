@@ -8,15 +8,11 @@
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+[Primary requirement, proposed change and technical approach; cite existing evidence.]
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+<!-- Replace examples with actual project details; mark material unknowns explicitly. -->
 
 **Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
 
@@ -46,62 +42,18 @@
 
 ### Documentation (this feature)
 
-```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit-plan command output)
-├── research.md          # Phase 0 output (/speckit-plan command)
-├── data-model.md        # Phase 1 output (/speckit-plan command)
-├── quickstart.md        # Phase 1 output (/speckit-plan command)
-├── contracts/           # Phase 1 output (/speckit-plan command)
-└── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
-```
+Core artifacts: `spec.md`, this `plan.md`, then `tasks.md` from `/speckit-tasks`.
+
+For the confirmed `quick` profile, keep decisions, affected interfaces/data,
+risks and exact acceptance/regression commands here. Add `research.md`,
+`data-model.md`, `quickstart.md` or `contracts/` only when the change or project
+policy needs them. Other profiles retain their stage/policy-required artifacts.
+List only actual documents and explain any required artifact still missing.
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
-
-```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
-```
-
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+[List actual affected source/test paths and reusable components. For brownfield
+work describe the delta, compatibility and unchanged behavior, not a generic
+architecture tree. Include command working directories and expected outcomes.]
 
 ## Complexity Tracking
 
@@ -109,5 +61,4 @@ directories captured above]
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| [Actual violation, if any] | [Current need] | [Why simpler choices fail] |

@@ -1,0 +1,22 @@
+{
+  "id": "specify-2",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-09T21:57:47+00:00",
+  "files": {
+    "spec.md": "a0d2cbcaea07d043d48ecf2884dd370d3a2528419a6bf912ca750ddaff35b203",
+    "checklists/requirements.md": "ccd39d3e3956fb857987698ba2b295012a18d6e9fc360cf7a54e0e07ff4cb64f",
+    "ideation.md": "0a40ff85384a27fdcccb22af8ec7c9db1b53ceb89d155b016e90bc2dfc1d9e1f",
+    "questions.md": "3f77239f2f9e8abd1393bff415711d437daaab0d58dc4aeba1305ffc044ffc1f"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "FR-014; User Story 3, Acceptance Scenario 5",
+      "note": "FR-014 allows the sole write to create or update a mock case-task, while User Story 3 specifies displaying and confirming a task before its creation. Clarify whether updates are in scope and, if so, which existing task may be updated and what exact update is shown and confirmed; otherwise narrow FR-014 to create-only."
+    }
+  ]
+}

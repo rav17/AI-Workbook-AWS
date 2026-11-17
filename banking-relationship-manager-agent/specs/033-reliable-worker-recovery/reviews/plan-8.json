@@ -1,0 +1,24 @@
+{
+  "id": "plan-8",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T22:18:50+00:00",
+  "files": {
+    "plan.md": "c76e9303ef2dd699fa58eae9d9c2b22372b75566542a27fdf1472333c5c6148a",
+    "research.md": "c786acc4253f390f214af02bf012ff5ceb153637157f9de9da158f20fb4a20b1",
+    "data-model.md": "5572861ff7f860b8c013e6fda019f774bf5db85f8f5b664d8a9819aa724e756c",
+    "contracts/recovery-adapter.md": "136c63e1d7909830d18594081e31f3931e97cb785bb08f9b3123e816c5f7042a",
+    "quickstart.md": "1aabd46aa784640a48769a2309df85b00b023e7674066528ab6bc7168f637a6f",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "contracts/recovery-adapter.md",
+      "section": "Adapter requirements \u2014 Timing (proposal)",
+      "note": "The 10s/2s limits are correctly proposals, not SLOs, and non-cooperative calls are not promised to return. However, the isolation/cancellation mechanism remains open. Before implementing FR-003, specify an enforceable return path and cleanup/overlap behavior for a blocked adapter; labeling it unavailable alone cannot return control or satisfy the configured deadline."
+    }
+  ]
+}

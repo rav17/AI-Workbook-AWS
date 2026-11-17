@@ -1,0 +1,33 @@
+{
+  "id": "implement-1",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T12:52:56+00:00",
+  "files": {
+    "aria/agents/aria/receivables/metrics.py": "e8764912dc6336b01b5d5fbf17a8da74df6a420eeff6fe0dc56dfd17f59ebcf5",
+    "aria/agents/aria/receivables/trusted_context.py": "070d9e6642e1598547726bb3707acdaa8ec03783826cbc2a8e6b3a553fab93d4",
+    "aria/agents/aria/receivables/agent.py": "e523a9d3f8c738c88ba9446457c8a1a41c0629eb4b3c1db3a7ab7bbe4091c9f9"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "aria/agents/aria/receivables/metrics.py",
+      "section": "74-90,141-146",
+      "note": "Missing proposals and invalid traces map to ESCALATE and can inflate correct required escalations; errors must remain incorrect."
+    },
+    {
+      "severity": "warning",
+      "file": "aria/agents/aria/receivables/trusted_context.py",
+      "section": "42-50",
+      "note": "Directly constructed contexts bypass authority provenance; enforce provenance at service/store boundaries."
+    },
+    {
+      "severity": "warning",
+      "file": "aria/agents/aria/receivables/agent.py",
+      "section": "143",
+      "note": "Builder shares deadline/iteration budget across tool calls; allocate per invocation."
+    }
+  ]
+}

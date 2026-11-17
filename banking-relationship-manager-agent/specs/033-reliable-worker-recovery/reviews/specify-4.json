@@ -1,0 +1,26 @@
+{
+  "id": "specify-4",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product-lead",
+  "verdict": "concerns",
+  "created_at": "2026-11-12T18:30:48+00:00",
+  "files": {
+    "specs/034-diagram-scope-guidance/spec.md": "a6943c6db427c9a75ac5a99c4924c9849f52a9d04699f44227d8c2723facd452",
+    "specs/034-diagram-scope-guidance/checklists/requirements.md": "1fb75b25c836bcb3fdea71b485d5d5884403e31d212789bca73c19048b0aff6e"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "specs/034-diagram-scope-guidance/checklists/requirements.md",
+      "section": "Notes",
+      "note": "The note says current independent-review evidence is recorded above, but the same checklist states that specify-3 is stale because this checklist edit changed its hash and says a fresh independent review is required. The checklist's evidence-status summary is therefore internally inconsistent; describe the prior review as historical/stale, not current."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/034-diagram-scope-guidance/spec.md",
+      "section": "FR-010; SC-005",
+      "note": "The shared-diagram boundary is not fully aligned: FR-010 prohibits edits/changes to existing diagrams but does not prohibit adding a new shared diagram, while SC-005 appears to prohibit additions yet says only 'pre-existing' files are added/deleted/modified (an existing file cannot be added). State the intended change boundary consistently and define the inventory/baseline point used to verify byte-for-byte preservation."
+    }
+  ]
+}

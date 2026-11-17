@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
-from speckit_flow import contracts
+from speckit_flow import contracts, sensors, state
 from speckit_flow.models import FlowError, Profile
 
 
@@ -231,3 +232,57 @@ def test_fingerprints_change_when_required_output_changes(tmp_path: Path) -> Non
     output.write_text("# Second\n", encoding="utf-8")
     after = contracts.fingerprints(feature_dir, "specify", specify_dir)
     assert before != after
+
+
+def test_opted_in_contract_inputs_block_missing_and_stale_gate_evidence(tmp_path: Path) -> None:
+    specify_dir = tmp_path / ".specify"
+    declaration = _contract()
+    declaration["inputs"] = [{
+        "id": "source", "description": "Source evidence", "path": "inputs/source.md",
+    }]
+    _write_plugin(specify_dir, [declaration])
+    profile = replace(_profile(gates=("specify",)), contract_inputs=True)
+    profiles = specify_dir / "profiles"
+    profiles.mkdir()
+    (profiles / f"{profile.id}.json").write_text(json.dumps(profile.to_dict()), encoding="utf-8")
+    feature = tmp_path / "specs" / "001-inputs"
+    feature.mkdir(parents=True)
+    state.init_state(feature, profile.id, "human:test", profiles)
+    state.start_stage(feature, "specify", "human:test", profiles)
+    (feature / "spec.md").write_text("# Specification\n", encoding="utf-8")
+    config = specify_dir / "sensors" / "sensors.json"
+    result = sensors.run_stage(feature, "specify", "agent:workflow", config)
+    assert result[0]["status"] == "fail"
+    assert "input inputs/source.md missing" in result[0]["reason"]
+    (feature / "inputs").mkdir()
+    source = feature / "inputs" / "source.md"
+    source.write_text("Synthetic input v1", encoding="utf-8")
+    assert sensors.run_stage(feature, "specify", "agent:workflow", config)[0]["status"] == "pass"
+    state.done_stage(feature, "specify", "human:test", profiles)
+    source.write_text("Synthetic input v2", encoding="utf-8")
+    with pytest.raises(FlowError, match="stale"):
+        state.decide_gate(
+            feature, "specify", True, "human:test", sensors_file=config, profiles_dir=profiles
+        )
+    sensors.run_stage(feature, "specify", "agent:workflow", config)
+    state.decide_gate(
+        feature, "specify", True, "human:test", sensors_file=config, profiles_dir=profiles
+    )
+
+
+def test_path_bound_input_checks_do_not_change_legacy_output_scope(tmp_path: Path) -> None:
+    specify_dir = tmp_path / ".specify"
+    declaration = _contract()
+    declaration["inputs"] = [{"id": "source", "description": "Input", "path": "source.md"}]
+    _write_plugin(specify_dir, [declaration])
+    feature = tmp_path / "specs" / "001-inputs"
+    feature.mkdir(parents=True)
+    (feature / "spec.md").write_text("Synthetic output", encoding="utf-8")
+    assert contracts.check_outputs(feature, "specify", specify_dir)[0]
+    assert not contracts.check_inputs(feature, "specify", specify_dir)[0]
+    before = contracts.fingerprints(feature, "specify", specify_dir)
+    source = feature / "source.md"
+    source.write_bytes(b"x" * (contracts.MAX_OUTPUT_BYTES + 1))
+    assert not contracts.check_inputs(feature, "specify", specify_dir)[0]
+    assert before == contracts.fingerprints(feature, "specify", specify_dir)
+    assert before != contracts.fingerprints(feature, "specify", specify_dir, include_inputs=True)

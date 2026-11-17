@@ -1,0 +1,31 @@
+{
+  "id": "plan-2",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-12T18:55:18+00:00",
+  "files": {
+    ".github/skills/speckit-plan/SKILL.md": "aae1f671c32a6c7de45e127356da541f3f9ae5b1bebd8df6159c05689a9cfb8d",
+    ".specify/templates/plan-template.md": "7e637502d41eccf0ca672496636365691fdca62ef37b27ec07fcb412dbfa90d4",
+    "specs/034-diagram-scope-guidance/spec.md": "a6943c6db427c9a75ac5a99c4924c9849f52a9d04699f44227d8c2723facd452",
+    "specs/034-diagram-scope-guidance/plan.md": "ace67b99d7f94a1fff70ba64413a7c023a8fc44693eaa0c5ab45fd94398d8683",
+    "specs/034-diagram-scope-guidance/research.md": "8a04c8c1d4a29df2e03533eeeb98bc25e252aa9c075c538d3339a1e8f993e33b",
+    "specs/034-diagram-scope-guidance/data-model.md": "6ab84a75f498de026818418b39d2edd0e8c0570fdfc83f36194698d98c95a58f",
+    "specs/034-diagram-scope-guidance/quickstart.md": "68776d4a0a6d911a8c31196e81ad3003a0391771620ecbd2c6aa0faa1e1f74f1"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "specs/034-diagram-scope-guidance/data-model.md",
+      "section": "Baseline review record",
+      "note": "The model requires recording a missing-baseline gap and requesting owner revalidation, but does not record the FR-006-required owner determination of whether a shared baseline is relevant and what follow-up is appropriate. The quickstart's review checklist likewise omits that disposition."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/034-diagram-scope-guidance/plan.md",
+      "section": "Input Metadata and Evidence",
+      "note": "The plan treats the spec as approved based on user confirmation and a lifecycle record, while the reviewed spec says Status: Draft. Those approval sources are not among the permitted review artifacts, so the planning-input authority cannot be independently verified here."
+    }
+  ]
+}

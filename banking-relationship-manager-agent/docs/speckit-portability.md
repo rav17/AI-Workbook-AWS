@@ -58,6 +58,47 @@ are not exported; the target starts with an empty project-rules file. Directory
 entries in the bundle enumerate exact files, so unrelated agents, skills, hooks,
 profiles or plugins added to the source repository are not automatically copied.
 
+The opt-in `hybrid-plan` profile is included as a project-owned seed. Its engine
+path remains blocked until a receiving host can supply verifiable reviewer
+invocation inputs; installing the profile does not assert host capability or
+approve a review. See the [hybrid plan profile notes](./speckit-profiles.md#profiles).
+
+The `selective` profile is also an opt-in seed: inline stage work with explicitly
+confirmed named workers, not a change to existing defaults. The bundle includes
+engine next-action directives, fail-closed recovery inspection and opt-in
+contract-input freshness. Receiving projects confirm their own workers and
+policies; installation neither proves host capabilities nor enables a recovery
+adapter or ownership transfer. See
+[selective execution](./speckit-profiles.md#opt-in-selective-execution-and-engine-directives)
+and [recovery inspection](./speckit-profiles.md#fail-closed-recovery-inspection).
+
+The simplified navigation/readiness report, consent-before-source-read adapter,
+LF preflight and exact-result recording command use the existing engine files.
+The portable recovery protocol and opt-in process watchdog require only the
+Python standard library. Installation carries no approved source, capability
+record, host identity/exclusion adapter or ownership-transfer permission.
+Human-terminal source decisions, actual-host acceptance and receiving-project
+policy remain mandatory; old routes and stored evidence are not migrated.
+The opt-in recovery review package uses those same exported engine modules.
+It projects inspection metadata into explicit decision scope, evidence, unknowns
+and allowed/excluded actions. It exports no raw commands, prompts, unit titles
+or host worker identifiers and carries no decision or recovery permission.
+Synthetic scenario checks do not certify actual-host fencing or assistive
+technology accessibility in a receiving project.
+Checkpoint inventory, safe reason codes, recorded audit-outcome correlation and
+snapshot comparison are also included in the existing modules. They preserve
+default inspection output and do not migrate old checkpoints or import source
+approvals. Snapshot hashes bind declared inputs and route metadata at read
+boundaries, not an atomic execution lease or host identity.
+Recovery packages also carry a dependency-ordered advisory revalidation plan.
+It reuses the receiving project's unit graph and policies, preserves current
+independent units, and executes no commands or checkpoint mutations. Installation
+adds no recovery executor, ownership grant, gate approval or side-effect replay.
+The canonical entry links advanced host and recovery procedures to the existing
+profile reference; all linked documentation is included in the bundle. Ordinary
+use starts with its everyday walkthrough. Operation-local ledger/graph reuse
+does not cache approvals or weaken receiving-project evidence checks.
+
 The optional `codebase-analysis` pack is included with its scanner and
 `speckit-codebase` skill. In a receiving project, explicitly enable the pack to
 use the architect-led `brownfield` route. Tooling-only projects automatically
@@ -109,17 +150,20 @@ python -m speckit_flow plugins validate
 ```
 
 For work requests, use `/speckit-workflow <request>` in Copilot. It recommends
-a profile (full-lifecycle for a new feature, bugfix for a bug/hotfix), asks when
-intent is unclear, and confirms the route before initialization. Explicitly
-resumed work keeps its existing profile. Direct core stage skills use the same
-conductor handoff; the engine's standard workflow is now a profile-aware host
+delegated `feature` for ordinary features, `bugfix` for ordinary fixes, and risk-appropriate profiles
+for consequential work. It asks when intent or risk is
+unclear and confirms the route before initialization. `quick` remains an
+explicit opt-in inline alternative. Explicitly resumed work
+keeps its existing profile. Direct core stage skills use the corresponding
+inline or conductor handoff; the engine's standard workflow is a profile-aware host
 session rather than a fixed four-stage route. Both the shared entry skill and
 neutral always-on routing instructions are included. Existing target
 `copilot-instructions.md` is not overwritten.
 
 `workflow recommend` and `workflow dispatch` are deterministic CLI advice and
-preflight, not model calls. The receiving host must support the conductor and
-nested subagents; otherwise the skill stops explicitly. Host sessions ending
+preflight, not model calls. Delegated routes require the conductor and nested
+subagents; otherwise the skill stops explicitly. The `quick` route runs inline.
+Host sessions ending
 at a human gate are not completed features. Old static engine cursors are not
 silently migrated. See [routing and resume](./speckit-profiles.md#profile-aware-workflow-entry-feature-032).
 

@@ -1,0 +1,33 @@
+{
+  "id": "implement-4",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T20:49:22+00:00",
+  "files": {
+    "spec.md": "a6943c6db427c9a75ac5a99c4924c9849f52a9d04699f44227d8c2723facd452",
+    "plan.md": "d8bcdef032b925c1b5ce80890d9262c92488cee0fbba515831c9ca8ae6a442c0",
+    "tasks.md": "6b1fea7828f4d6d42471df0011e08ecdd4a90a1ce35e002b22aa12148d892245",
+    "implementation-evidence.md": "a3ece92f90d6c2a82b3c49fbee3eaac3bec59696bddb6654e85be19c15f0ac6e",
+    ".github/skills/speckit-diagrams/SKILL.md": "7f2ed63c8eaec090c5b7ef8a508ca58ca4161e7aa70b31afbef1857c843d4179",
+    ".github/skills/speckit-diagrams/assets/index-template.md": "a1d982588343ce17ccf9a339c533854327319724451812f512c45c63dc93889d",
+    ".github/skills/speckit-diagrams/assets/shared-change-proposal-template.md": "50f70a59b4e2d838419853039e3339c55c146421123d68f4c0f1b506b679f079",
+    "speckit_flow/reviews.py": "414be3ff9c8131e802e5db96ae3c5bec87aa209c027f5d25fdb36e42c9d5af0d",
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "tasks.md",
+      "section": "Status note ? pointer interval",
+      "note": "Current ignored .specify/feature.json points to specs/033-reliable-worker-recovery; implementation-evidence records no pre-resume fingerprint. The earlier preservation interval remains unverified. Do not reconstruct a baseline or infer continuous preservation or an unauthorized change from endpoint equality."
+    },
+    {
+      "severity": "warning",
+      "file": "implementation-evidence.md",
+      "section": "Errors, remaining work and authority",
+      "note": "The evidence says required stage sensors remain pending. This review independently measured the diff and 14 diagram hashes, but did not run tests/sensors under the bounded review scope; historical focused test, lint, and type-check results are not fresh configured sensor outputs. Do not report implement completion until the required sensor outcomes are available."
+    }
+  ]
+}

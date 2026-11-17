@@ -17,6 +17,7 @@ from aws_cdk import (
 )
 from constructs import Construct
 
+from ..constructs.devops_agent_findings import DevOpsAgentFindings
 from ..context import CdkContext
 from .compute_stack import ComputeStack
 from .data_stack import DataStack
@@ -83,6 +84,22 @@ class ObservabilityStack(cdk.Stack):
 
         # --- AWS Budgets (all environments) ---
         self._create_budget()
+
+        # --- DevOps Agent findings -> operator email (opt-in; Phase 2) ---
+        self.devops_agent_findings = None
+        if context.devops_agent_findings_enabled:
+            if data_stack is None:
+                raise ValueError(
+                    "devopsAgentFindingsEnabled requires the DataStack (table)"
+                )
+            self.devops_agent_findings = DevOpsAgentFindings(
+                self,
+                "DevOpsAgentFindings",
+                context=context,
+                table=data_stack.table,
+                # Alarms follow the existing convention: staging/prod only.
+                alarm_topic=None if is_dev else self.alarm_topic,
+            )
 
         # --- WAF WebACL for API Gateway (staging/prod only) ---
         if not is_dev:

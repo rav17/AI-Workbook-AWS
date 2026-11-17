@@ -1,0 +1,56 @@
+{
+  "feature": "004-receivables-exception-resolution",
+  "profile": "full-lifecycle",
+  "depth": "standard",
+  "current_stage": "deploy",
+  "pending_gate": null,
+  "revision": 19,
+  "updated_at": "2026-11-10T19:40:13+00:00",
+  "stages": {
+    "ideation": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T21:42:26+00:00"
+    },
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T21:51:30+00:00"
+    },
+    "clarify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-09T22:50:13+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-10T02:40:26+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-10T02:52:05+00:00"
+    },
+    "analyze": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-10T03:21:06+00:00"
+    },
+    "implement": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-10T19:37:20+00:00"
+    },
+    "deploy": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-09T21:33:09+00:00"
+    },
+    "operate": {
+      "status": "pending",
+      "reason": null,
+      "updated_at": "2026-11-09T21:33:09+00:00"
+    }
+  }
+}

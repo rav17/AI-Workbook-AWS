@@ -29,6 +29,10 @@ def main() -> None:
         "vpcCidr": app.node.try_get_context("vpcCidr") or "",
         "monthlyBudgetUsd": app.node.try_get_context("monthlyBudgetUsd") or "",
         "devopsAgentEnabled": str(app.node.try_get_context("devopsAgentEnabled") or "false"),
+        "devopsAgentForwardOn": str(app.node.try_get_context("devopsAgentForwardOn") or ""),
+        "devopsAgentFindingsEnabled": str(
+            app.node.try_get_context("devopsAgentFindingsEnabled") or "false"
+        ),
     }
     context = validate_cdk_context(raw_context)
 

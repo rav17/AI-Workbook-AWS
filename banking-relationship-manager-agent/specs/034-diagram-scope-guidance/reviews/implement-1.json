@@ -1,0 +1,19 @@
+{
+  "id": "implement-1",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "block",
+  "created_at": "2026-11-13T19:26:51+00:00",
+  "files": {
+    "tasks.md": "7cb17c44276e1c3a1207201d2fd0fc5a1682a3656e8be2bc4c77624268f3b37e"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "tasks.md",
+      "section": "T001 and T012; Final checkpoint",
+      "note": "T001 is checked but still says it was not run; T012 is checked without recorded path/count/SHA-256 comparison evidence. The available feature artifacts do not substantiate the claimed 14-diagram byte-for-byte preservation. Provide verifiable before/after preservation evidence before reporting implementation complete."
+    }
+  ]
+}

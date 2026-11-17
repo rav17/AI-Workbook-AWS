@@ -1,0 +1,41 @@
+{
+  "id": "analyze-1",
+  "stage": "analyze",
+  "reviewer": "spec",
+  "author": "agent:quality",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T03:10:52+00:00",
+  "files": {
+    "spec.md": "1f2cf63aa21bde64f5e02600552eb1f897aa1b85f9155a40afd59cc73d1bcb6c",
+    "checklists/requirements.md": "b96d503c9d11b1a0ef1f85b2c568692c72c71990698c3e03206a14c8ee137c70",
+    "analysis.md": "a777fd68a60f079ca3d23c0c1f1f07367f964bf1f5ed479608389c15ef80cec4",
+    "tasks.md": "de81bfb76fe16544abfd70960d0c397d760424787fb176f07187e411fbeb67de",
+    "approval-provenance.md": "58c3e2fb99be10830ee2f19e3eef98d600a3e86bfdd90461645e965edc3feac0",
+    "plan.md": "3637a2f0f0049a0b7bb9f973352dc181763733c33e4174fd3ac80ab8f51169ae",
+    "synthetic-policy.md": "effcaaa811c072e11c3ded05d06648f01f0246fd6c1476fac943d523f7a34734",
+    "synthetic-fixtures.json": "fa4349323cf23f6ba3d29c0c2b4e1cfa7f0e1144fd0b00ad1c80d768b76dad64",
+    "data-model.md": "23c71717abcf35ca41d780979efad22bdeda3191dbed0cd5c7cbee9c8f4fdcfe",
+    "contracts/investigation-and-approval.md": "ea60e9e0535cfffaebc00221945df0c8081b9167c2fb316fec7847b8aa751a2d",
+    "quickstart.md": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "checklists/requirements.md",
+      "section": "Outstanding Prerequisites",
+      "note": "The checklist and spec assumptions still say policy values, fixture contents, and evaluation labels are unapproved/to be authored, while approval-provenance records human approval of the linked synthetic policy, 57-case catalogue, and commands. Reconcile the current gate status without extending it beyond synthetic scope or implying measured results."
+    },
+    {
+      "severity": "warning",
+      "file": "synthetic-policy.md",
+      "section": "\u00a75 Freshness and expiry",
+      "note": "The policy requires a policy digest matching a fixture-declared digest, but synthetic-fixtures.json declares no such digest. Also, SC-005/T010 require per-citation snapshot/version and record digests while EvidenceItem/SourceSnapshot define only an aggregate snapshot digest. Specify deterministic record canonicalization and the per-citation representation before claiming SC-005 is executable."
+    },
+    {
+      "severity": "warning",
+      "file": "tasks.md",
+      "section": "T001, T003, T005, T024; Task-to-test traceability",
+      "note": "The analysis correctly records missing explicit assertions for package imports, model validation/enums/immutability, read-port absence of write methods, and README scope/content review. Keep these acceptance gaps visible; 28/28 nominal requirement coverage does not demonstrate those assertions or implementation readiness."
+    }
+  ]
+}

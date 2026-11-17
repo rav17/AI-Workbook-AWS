@@ -1,0 +1,41 @@
+{
+  "feature": "039-standalone-speckit-flow-package",
+  "profile": "feature",
+  "depth": "standard",
+  "current_stage": "implement",
+  "pending_gate": null,
+  "revision": 16,
+  "updated_at": "2026-11-17T07:48:59+00:00",
+  "stages": {
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-16T18:34:19+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-16T17:35:16+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-16T19:55:24+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-16T20:15:50+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile feature",
+      "updated_at": "2026-11-16T17:35:16+00:00"
+    },
+    "implement": {
+      "status": "in_progress",
+      "reason": null,
+      "updated_at": "2026-11-17T07:48:59+00:00"
+    }
+  }
+}

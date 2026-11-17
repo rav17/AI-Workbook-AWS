@@ -1,0 +1,41 @@
+{
+  "feature": "040-copilot-compatibility-diagnostics",
+  "profile": "quick",
+  "depth": "minimal",
+  "current_stage": null,
+  "pending_gate": null,
+  "revision": 10,
+  "updated_at": "2026-11-17T06:45:46+00:00",
+  "stages": {
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-17T06:31:52+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile quick",
+      "updated_at": "2026-11-17T06:31:16+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-17T06:33:17+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-17T06:33:59+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile quick",
+      "updated_at": "2026-11-17T06:31:16+00:00"
+    },
+    "implement": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-17T06:45:46+00:00"
+    }
+  }
+}

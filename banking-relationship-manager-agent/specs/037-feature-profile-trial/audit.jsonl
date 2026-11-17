@@ -1,0 +1,3 @@
+{"seq":1,"ts":"2026-11-14T00:27:13+00:00","type":"profile_selected","stage":null,"actor":"human:RavindraYadav","detail":"profile=feature depth=standard","prev_hash":""}
+{"seq":2,"ts":"2026-11-14T00:27:13+00:00","type":"stage_skipped","stage":"clarify","actor":"human:RavindraYadav","detail":"not in profile feature","prev_hash":"d898ab6c6d48f49f2d30a4d48183f44c6ca6d78cce7f2eb7f237b024fd7b119b"}
+{"seq":3,"ts":"2026-11-14T00:27:13+00:00","type":"stage_skipped","stage":"analyze","actor":"human:RavindraYadav","detail":"not in profile feature","prev_hash":"bbef16988d0e2c7c46111d4e898cee831d8f0bdb66e7fe4f2c92801c11544725"}

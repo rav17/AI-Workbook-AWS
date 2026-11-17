@@ -1,0 +1,24 @@
+{
+  "results": {
+    "consistency": {
+      "status": "pass",
+      "ts": "2026-11-14T00:14:25+00:00",
+      "reason": "artifacts consistent",
+      "fingerprints": {
+        "spec.md": "8e5ac40e2a9473308032ee9ba3be14081ee05bc5a36938c50f9d116568bc6cc0",
+        "plan.md": "57e3ce4b531dbca40e6eaa00f21cf519f2ecaf609208551cf6de9def31613c1c",
+        "tasks.md": "559dac06eab1f91b3542e6008f975acd11c8ebd2368b32bbef76f01073d54ed6"
+      }
+    },
+    "no-open-questions": {
+      "status": "pass",
+      "ts": "2026-11-14T00:14:25+00:00",
+      "reason": "no open questions",
+      "fingerprints": {
+        "spec.md": "8e5ac40e2a9473308032ee9ba3be14081ee05bc5a36938c50f9d116568bc6cc0",
+        "plan.md": "57e3ce4b531dbca40e6eaa00f21cf519f2ecaf609208551cf6de9def31613c1c",
+        "tasks.md": "559dac06eab1f91b3542e6008f975acd11c8ebd2368b32bbef76f01073d54ed6"
+      }
+    }
+  }
+}

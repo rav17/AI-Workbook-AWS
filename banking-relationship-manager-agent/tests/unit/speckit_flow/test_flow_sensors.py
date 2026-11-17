@@ -100,6 +100,21 @@ def test_stale_result_refused(feature: tuple[Path, Path]) -> None:
     assert approve(feature_dir, cfg) == 1
 
 
+def test_readiness_and_gate_share_sensor_freshness_without_running_checks(
+    feature: tuple[Path, Path],
+) -> None:
+    feature_dir, cfg = feature
+    before = (feature_dir / "audit.jsonl").read_bytes()
+    assert sensors.evidence_status(feature_dir, "specify", cfg)[0]["status"] == "not_run"
+    assert (feature_dir / "audit.jsonl").read_bytes() == before
+    assert run(feature_dir, cfg) == 0
+    assert sensors.evidence_status(feature_dir, "specify", cfg)[0]["status"] == "pass"
+    assert sensors.gate_problems(feature_dir, "specify", cfg)[0] == []
+    (feature_dir / "spec.md").write_text("# Changed specification\n")
+    assert sensors.evidence_status(feature_dir, "specify", cfg)[0]["status"] == "stale"
+    assert "stale" in sensors.gate_problems(feature_dir, "specify", cfg)[0][0]
+
+
 def test_failing_sensor_refused(feature: tuple[Path, Path]) -> None:
     feature_dir, cfg = feature
     (feature_dir / "spec.md").write_text("NEEDS CLARIFICATION", encoding="utf-8")
@@ -143,6 +158,16 @@ def test_decide_gate_rejects_missing_command(feature: tuple[Path, Path], tmp_pat
 
 def test_default_config_valid() -> None:
     assert {s.id for s in sensors.load_sensors()} >= {"consistency", "traceability"}
+
+
+def test_traceability_sensor_rejects_unknown_references_with_diagnostic(tmp_path: Path) -> None:
+    (tmp_path / "spec.md").write_text("FR-001\n", encoding="utf-8")
+    (tmp_path / "tasks.md").write_text(
+        "- [ ] T001 test FR-001 FR-999\n", encoding="utf-8"
+    )
+    passed, reason = sensors._traceability(tmp_path, {})
+    assert not passed
+    assert "T001:FR-999" in reason
 
 
 def test_stage_wildcard_matches_project_owned_stage(tmp_path: Path) -> None:

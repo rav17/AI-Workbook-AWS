@@ -1,0 +1,39 @@
+{
+  "id": "implement-2",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "block",
+  "created_at": "2026-11-10T12:53:15+00:00",
+  "files": {
+    "quickstart.md": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431",
+    "aria/agents/aria/receivables/metrics.py": "e8764912dc6336b01b5d5fbf17a8da74df6a420eeff6fe0dc56dfd17f59ebcf5",
+    "architecture/diagrams/context.drawio": "f825f5af41ad78830775bb299ba7762eea1f4d0c1f083a6bd9ad992487bd7925"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "quickstart.md",
+      "section": "3",
+      "note": "Approved provenance conflicts with stale unapproved narrative; reconcile through non-hash-bound status addendum."
+    },
+    {
+      "severity": "major",
+      "file": "aria/agents/aria/receivables/metrics.py",
+      "section": "129-138",
+      "note": "SC005 completeness checks availability only, not distinct citation types and exact variance recomputation."
+    },
+    {
+      "severity": "major",
+      "file": "aria/agents/aria/receivables/metrics.py",
+      "section": "214-230",
+      "note": "SC006/007 supplied boolean coverage lacks per-surface calls and E/W audit correspondence."
+    },
+    {
+      "severity": "major",
+      "file": "architecture/diagrams/context.drawio",
+      "section": "2",
+      "note": "Default demo direct engine path conflicts with specialist context flow; register citations unreadable."
+    }
+  ]
+}

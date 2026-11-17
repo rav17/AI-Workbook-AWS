@@ -1,0 +1,40 @@
+{
+  "id": "implement-4",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "block",
+  "created_at": "2026-11-10T18:32:25+00:00",
+  "files": {
+    "aria/agents/aria/receivables/engine.py": "78ac7bf6c4171f6ed0986e2b39ad47a4c157feaa31bf5a2a1bc64b69ae790418",
+    "quickstart.md": "110652d9d77360132726c2f2ce55d08c632623d530c257b031384ee9918a6431",
+    "plan.md": "3637a2f0f0049a0b7bb9f973352dc181763733c33e4174fd3ac80ab8f51169ae",
+    "tests/unit/test_receivables_store.py": "49cb8c1bd51c3153e3974ded6461c144fe10700ae578ebb2f83de21792429372"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "aria/agents/aria/receivables/engine.py",
+      "section": "219-249",
+      "note": "Fixture policy_variant directly appends expected reason codes instead of validating actual variant policy records."
+    },
+    {
+      "severity": "major",
+      "file": "quickstart.md",
+      "section": "3",
+      "note": "Stale unapproved prose conflicts with provenance; preserve approved bytes and assess explicit implementation addendum."
+    },
+    {
+      "severity": "major",
+      "file": "plan.md",
+      "section": "80",
+      "note": "Historical diagram deferral conflicts with implemented task/register views; preserve hash-bound bytes and assess explicit addendum."
+    },
+    {
+      "severity": "major",
+      "file": "tests/unit/test_receivables_store.py",
+      "section": "test_w11_audit_failure_rolls_back_without_success_or_task",
+      "note": "Failure occurs during source recheck before store transaction; no proof of rollback after task/state writes and transactional audit failure."
+    }
+  ]
+}

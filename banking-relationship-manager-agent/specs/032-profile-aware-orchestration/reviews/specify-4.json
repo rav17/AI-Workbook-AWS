@@ -1,0 +1,20 @@
+{
+  "id": "specify-4",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:quality",
+  "verdict": "concerns",
+  "created_at": "2026-11-10T03:20:30+00:00",
+  "files": {
+    "spec.md": "2c0fd94040071ce7d92707de35ab802417eff463bf496d053fd486e4997f912a",
+    "checklists/requirements.md": "e3291e8c8d35c964f4429d17917568f906384da62ff5e576ac5ef7dd350008f2"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "Assumptions",
+      "note": "This still states no synthetic policy contents are approved and fixtures remain unapproved/unreviewed. The separate approval-provenance record documents human approval of the linked synthetic policy and fixture artifacts while preserving draft labels. Reconcile this status so implementation recognizes the recorded synthetic-only approval without implying production authority or measured results."
+    }
+  ]
+}

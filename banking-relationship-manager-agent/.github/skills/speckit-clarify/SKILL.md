@@ -10,11 +10,18 @@ metadata:
 
 ## Lifecycle Handoff
 
+For an assigned worker, inspect the active invocation brief, not marker examples
+in this file. A missing, conflicting or mismatched stage marker is a failed
+handoff: stop and report it to the conductor; do not invoke workflow or conductor.
+An unassigned direct stage command may hand off once as described below.
+
 Unless this is the assigned lead executing a conductor brief containing
-`SPECKIT_DELEGATED_STAGE=clarify`, invoke `speckit-workflow` with the original
+`SPECKIT_DELEGATED_STAGE=clarify`, or the workflow host executing an eligible
+inline brief containing `SPECKIT_INLINE_STAGE=clarify`, invoke `speckit-workflow` with the original
 request and requested stage `clarify`, then return without executing this body.
-Only the matching delegated lead follows the body below. Use the supplied
-feature directory; the conductor owns stage transitions and human gates.
+Only the matching delegated lead or inline host follows the body below. Use the
+supplied feature directory; the workflow host owns inline stage transitions and
+the conductor owns delegated transitions. Only humans decide gates.
 
 ## User Input
 
@@ -75,6 +82,13 @@ Every clarifying question is also recorded in `<FEATURE_DIR>/questions.md` throu
 - **discussion**: the user asked to talk it through freely. Discuss without the one-question-at-a-time format, record each open point with `questions add`, and capture agreed outcomes in the spec's Clarifications section.
 
 Rules for all modes:
+- Before generating questions, consult relevant current project documents and
+  approved decisions, using stage-filtered knowledge listings for navigation.
+  Follow document-grounded clarification in `docs/speckit-profiles.md`: cite
+  path/section evidence for existing answers, propose inferred material answers
+  for confirmation within the chosen mode and existing five-question budget,
+  and ask only about remaining gaps/conflicts. Do not reopen settled decisions
+  without changed or conflicting evidence, or silently close recorded questions.
 - Agents MUST NOT run `questions answer`; the guard hook blocks it and only a human decision closes a question. After integrating a user's answer into the spec, tell the user the exact `questions answer <id> "<text>"` command (or that they can edit `questions.md`) to close it.
 - Use `questions list --open [--role <role>]` to show who still owes an answer, and `questions check` to confirm none remain before reporting completion.
 - If the flow CLI is unavailable, continue in guided mode without recording and say so.

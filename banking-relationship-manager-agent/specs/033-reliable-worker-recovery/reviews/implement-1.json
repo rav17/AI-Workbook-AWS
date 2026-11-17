@@ -1,0 +1,24 @@
+{
+  "id": "implement-1",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "human:unverified",
+  "verdict": "block",
+  "created_at": "2026-11-13T19:23:56+00:00",
+  "files": {
+    "specs/034-diagram-scope-guidance/tasks.md": "7cb17c44276e1c3a1207201d2fd0fc5a1682a3656e8be2bc4c77624268f3b37e",
+    "specs/034-diagram-scope-guidance/spec.md": "a6943c6db427c9a75ac5a99c4924c9849f52a9d04699f44227d8c2723facd452",
+    "specs/034-diagram-scope-guidance/plan.md": "d8bcdef032b925c1b5ce80890d9262c92488cee0fbba515831c9ca8ae6a442c0",
+    ".github/skills/speckit-diagrams/SKILL.md": "7f2ed63c8eaec090c5b7ef8a508ca58ca4161e7aa70b31afbef1857c843d4179",
+    ".github/skills/speckit-diagrams/assets/index-template.md": "a1d982588343ce17ccf9a339c533854327319724451812f512c45c63dc93889d",
+    ".github/skills/speckit-diagrams/assets/shared-change-proposal-template.md": "50f70a59b4e2d838419853039e3339c55c146421123d68f4c0f1b506b679f079"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "specs/034-diagram-scope-guidance/tasks.md",
+      "section": "T001 and T012; Final checkpoint",
+      "note": "T001 is checked but states it was a future task not run during task generation; T012 is checked without the before/after path/count/hash output it requires. The available artifacts therefore cannot substantiate SC-005 byte-for-byte preservation or the required T012 comparison. Supply verifiable baseline and post-edit path/count/SHA-256 evidence before reporting implementation complete."
+    }
+  ]
+}

@@ -24,28 +24,28 @@ When a request requires the Spec Kit workflow, this is GitHub Copilot's activati
 
 ## Feature Development Process
 
-For every code-change request, use `/speckit-workflow` before editing code.
-Classify the request with `python -m speckit_flow workflow recommend "<request>" --json`.
-Recommend `full-lifecycle` for a new feature, `bugfix` for a bug/hotfix,
-`security-patch` for a security fix, or the appropriate refactor/infra/POC profile.
-If intent is unclear or mixed, ask the user what kind of work it is. An explicit
-profile takes precedence but still requires confirmation. Present stages/gates
-and ask before initializing; never silently select the legacy default.
+Use `/speckit-workflow` for code changes. The canonical entry, confirmation,
+execution, review and resume procedure is
+`.github/skills/speckit-workflow/SKILL.md`; do not duplicate or reinterpret it.
+Preserve initialized routes and use `workflow next --json` for navigation.
+An assigned worker executes only its matching stage body, never re-enters entry.
+Only confirmed named workers supply independent lifecycle evidence; unavailable
+capabilities stop work, not trigger generic substitutes or repeated handoffs.
+Standalone read-only reviews do not initialize a lifecycle.
+Human gates, source consent and verification approvals remain actual human
+decisions; actor labels or a full-lifecycle request never authorize them.
 
-For explicitly resumed work, preserve the initialized feature/profile. Ask
-whether to create new work or resume if the scope is uncertain. Profile changes
-require explicit confirmation at a stage boundary.
+## Approval Review Packages
 
-Use the shared entry skill and `workflow dispatch` preflight to invoke the
-`speckit-conductor` custom agent, which delegates to assigned leads/supports and
-independent reviewers. Do not silently run stage work in the parent and call it
-delegation. If host subagents are unavailable, report the limitation and stop.
-Direct stage skills use the same handoff; only a matching delegated lead follows
-their bodies, using the conductor's stage marker and feature directory.
-
-Execute only the confirmed route in order, preserving specification, planning
-and task artifacts where routed, sensors and human gates. Never approve gates,
-verification commands or learned rules without the actual human decision.
-Full-lifecycle is not permission to deploy or change live resources.
+Before every approval request, present a readable review package in chat, not
+only links inside an approval form or a subagent completion message. Include
+the decision and scope, work/change summary, direct artifact links, actual
+verification/review/sensor results, unresolved findings and limitations, and
+exactly what approval authorizes next and excludes. Follow the stage-specific
+requirements in `.github/skills/speckit-workflow/SKILL.md`, section 4.
+Show the plan before plan approval and the task breakdown before implementation,
+even when tasks has no separate gate. Missing or stale evidence must be disclosed
+and resolved where required; an empty sensor result is not validation evidence.
+Ask only after presenting the package and record only the actual human decision.
 
 This repository uses Spec Kit with shared templates and specifications stored in `.specify/` and `specs/`. Copilot skills are installed under `.github/skills/`. The generated artifacts are the source of truth for resuming, reviewing, and handing off work.

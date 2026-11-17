@@ -1,0 +1,30 @@
+{
+  "id": "plan-5",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T21:56:33+00:00",
+  "files": {
+    "plan.md": "05b78985757735b58963605e62533d15be0c4b41a7d735ce6c28a19f5e42279b",
+    "research.md": "bd8cbbf58ff94ed877429a833ccd1422af68af1bb7f29b1be8cdf8ad3858ab08",
+    "data-model.md": "8c9ef210942ff6c1ff6eb5ad27c5419414151d0d9456264ed0c8ea8c82986d83",
+    "contracts/recovery-adapter.md": "19cb102eb3dbf453cdb81232fc831b9e532f3d958fd72ae6aab93b12bc7dbe49",
+    "quickstart.md": "cdb91136c1cc383bfe1694cf7fd5f967c14f6910149f065111664b97671f1b78",
+    "spec.md": "32af4bcbcd7a71ca27a8b9b0deda090cd649057076e98aaf28a8b36f55c3d36a"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "data-model.md",
+      "section": "Proposed SQLite schema, transactions and crash consistency",
+      "note": "The DB path is called feature-local/per-feature, but `.specify/recovery/recovery.sqlite3` resolves at the project root and is shared across features; `task_id` is the primary key. Clarify an actually feature-scoped DB path or explicitly define central-store isolation, collision-free keys, and backup/restore boundaries."
+    },
+    {
+      "severity": "warning",
+      "file": "quickstart.md",
+      "section": "Portable bootstrap / unrelated receiving-project selector",
+      "note": "The selected optional-pack test asserts six plugins disabled but checks only four absent profile names (`nfr-hardening`, `brownfield`, `release-ready`, `skeleton-first`). The blanket statement that optional profile names are absent exceeds those assertions; name the four or add separately authorized assertions. The cited test selectors themselves exist."
+    }
+  ]
+}

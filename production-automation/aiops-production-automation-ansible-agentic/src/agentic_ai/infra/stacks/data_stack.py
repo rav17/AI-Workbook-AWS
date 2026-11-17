@@ -97,6 +97,11 @@ class DataStack(cdk.Stack):
             time_to_live_attribute="expiry_timestamp",
             point_in_time_recovery=is_prod,
             encryption=dynamodb.TableEncryption.AWS_MANAGED,
+            # dev: delete with the stack so `destroy` then `deploy` works (a retained
+            # table with this fixed name blocks the next create). staging/prod keep data.
+            removal_policy=(
+                cdk.RemovalPolicy.DESTROY if env_name == "dev" else cdk.RemovalPolicy.RETAIN
+            ),
         )
 
         # --- Global Secondary Indexes ---

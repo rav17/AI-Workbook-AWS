@@ -40,7 +40,10 @@ def test_all_shipped_profiles_valid() -> None:
         "infra",
         "security-patch",
         "poc",
+        "quick",
         "full-lifecycle",
+        "hybrid-plan",
+        "selective",
     }
 
 
@@ -48,6 +51,45 @@ def test_enterprise_gates_every_stage() -> None:
     p = get_profile("enterprise")
     assert p.depth == "comprehensive"
     assert set(p.gates) == set(p.stages)
+
+
+def test_inline_profile_validation_and_round_trip() -> None:
+    quick = get_profile("quick")
+    assert quick.execution == "inline"
+    assert Profile.from_dict(quick.to_dict()) == quick
+    with pytest.raises(FlowError, match="requires non-strict"):
+        Profile.from_dict(_base(execution="inline"))
+    with pytest.raises(FlowError, match="requires non-strict"):
+        Profile.from_dict(
+            _base(execution="inline", depth="comprehensive", ceremony={"reviews": False})
+        )
+    with pytest.raises(FlowError, match="execution must"):
+        Profile.from_dict(_base(execution="unexpected"))
+
+
+def test_hybrid_profile_is_opt_in_and_constrained_to_plan_route() -> None:
+    hybrid = get_profile("hybrid-plan")
+    assert hybrid.execution == "hybrid"
+    assert hybrid.ceremony_on("reviews")
+    assert hybrid.gates == ("specify", "plan")
+    with pytest.raises(FlowError, match="invalid hybrid"):
+        Profile.from_dict(
+            hybrid.to_dict()
+            | {
+                "assignments": {
+                    **hybrid.assignments,
+                    "plan": {"lead": "quality", "support": []},
+                }
+            }
+        )
+
+
+def test_legacy_profiles_keep_their_execution_and_gates() -> None:
+    profiles = load_profiles()
+    assert profiles["feature"].execution == "delegated"
+    assert profiles["feature"].gates == ("specify", "plan")
+    assert profiles["quick"].execution == "inline"
+    assert profiles["quick"].gates == ("tasks",)
 
 
 @pytest.mark.parametrize(

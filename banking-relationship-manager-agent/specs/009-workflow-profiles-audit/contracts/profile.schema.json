@@ -14,6 +14,31 @@
       "items": { "enum": ["ideation", "specify", "clarify", "plan", "tasks", "analyze", "implement", "deploy", "operate"] }
     },
     "depth": { "enum": ["minimal", "standard", "comprehensive"] },
+    "execution": { "enum": ["inline", "delegated", "hybrid", "selective"] },
+    "stage_contracts": { "type": "boolean" },
+    "contract_inputs": { "type": "boolean" },
+    "test_strategy": { "enum": ["standard", "required"] },
+    "guard_policy": { "enum": ["", "standard", "strict"] },
+    "ceremony": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "learning": { "type": "boolean" },
+        "reviews": { "type": "boolean" }
+      }
+    },
+    "assignments": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["lead"],
+        "properties": {
+          "lead": { "type": "string" },
+          "support": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
     "gates": {
       "type": "array",
       "uniqueItems": true,

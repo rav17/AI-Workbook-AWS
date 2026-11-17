@@ -13,6 +13,7 @@
     {"id": "operations", "role": "domain", "tier": "templated", "file": ".github/agents/speckit-operations.agent.md", "leads": ["operate"], "supports": [], "can_edit": true},
     {"id": "product-lead", "role": "reviewer", "tier": "balanced", "file": ".github/agents/speckit-product-lead.agent.md", "leads": [], "supports": ["specify", "analyze"], "can_edit": false},
     {"id": "architecture-reviewer", "role": "reviewer", "tier": "balanced", "file": ".github/agents/speckit-architecture-reviewer.agent.md", "leads": [], "supports": ["plan", "analyze", "implement"], "can_edit": false},
+    {"id": "hybrid-plan-reviewer", "role": "reviewer", "tier": "balanced", "file": ".github/agents/speckit-hybrid-plan-reviewer.agent.md", "leads": [], "supports": ["plan"], "can_edit": false},
     {"id": "composer", "role": "composer", "tier": "balanced", "file": ".github/agents/speckit-composer.agent.md", "leads": [], "supports": [], "can_edit": false},
     {"id": "conductor", "role": "conductor", "tier": "balanced", "file": ".github/agents/speckit-conductor.agent.md", "leads": [], "supports": [], "can_edit": false}
   ]

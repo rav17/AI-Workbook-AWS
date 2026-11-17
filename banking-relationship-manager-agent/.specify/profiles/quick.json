@@ -1,0 +1,15 @@
+{
+  "id": "quick",
+  "description": "Well-understood, lower-risk work: concise specification, plan and tasks with one gate before implementation.",
+  "stages": ["specify", "plan", "tasks", "implement"],
+  "depth": "minimal",
+  "gates": ["tasks"],
+  "execution": "inline",
+  "ceremony": {"learning": false, "reviews": false},
+  "assignments": {
+    "specify": {"lead": "product", "support": []},
+    "plan": {"lead": "architect", "support": []},
+    "tasks": {"lead": "delivery", "support": []},
+    "implement": {"lead": "developer", "support": []}
+  }
+}

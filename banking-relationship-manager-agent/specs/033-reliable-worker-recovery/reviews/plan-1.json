@@ -1,0 +1,26 @@
+{
+  "id": "plan-1",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:speckit-architect",
+  "verdict": "concerns",
+  "created_at": "2026-11-13T18:53:31+00:00",
+  "files": {
+    ".github/skills/speckit-plan/SKILL.md": "aae1f671c32a6c7de45e127356da541f3f9ae5b1bebd8df6159c05689a9cfb8d",
+    ".specify/templates/plan-template.md": "7e637502d41eccf0ca672496636365691fdca62ef37b27ec07fcb412dbfa90d4",
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e",
+    "specs/034-diagram-scope-guidance/spec.md": "a6943c6db427c9a75ac5a99c4924c9849f52a9d04699f44227d8c2723facd452",
+    "specs/034-diagram-scope-guidance/plan.md": "b6e3e99825dd8a48bd04d0abdbc48eca4b85f38856b78bc5614e5196ded245ff",
+    "specs/034-diagram-scope-guidance/research.md": "213bf1fd7a5df0df22b6ff40b1fad314dfd369b51308e3052cd0b1b87c55c299",
+    "specs/034-diagram-scope-guidance/data-model.md": "33df5c2d7bd2761fc650d34ef04e4d7046b33547927675af8d5901ff43f7ab7f",
+    "specs/034-diagram-scope-guidance/quickstart.md": "a939cff6cf037ff833d7f9b03c8e1edaac4160ee86d84cfa907f6eb1346f4866"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "specs/034-diagram-scope-guidance/plan.md",
+      "section": "Project Structure; Decisions and Rationale 1?3",
+      "note": "The plan commits the register-template fields for FR-005, but leaves alignment of related guidance optional. It does not assign a required implementation surface for FR-006 baseline-review evidence and FR-007 owner outcomes/conditional-approval sequencing. Commit a concrete guidance artifact/field set and traceable acceptance checks so these requirements are not left to later discretion."
+    }
+  ]
+}

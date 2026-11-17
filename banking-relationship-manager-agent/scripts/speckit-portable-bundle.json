@@ -1,10 +1,10 @@
 {
-  "bundle_version": "1.0.0",
+  "bundle_version": "1.1.0",
   "files": [
     {"source": "speckit_flow", "destination": "speckit_flow", "category": "engine", "include": [
-      "__init__.py", "__main__.py", "agents.py", "audit.py", "cli.py", "codebase.py", "compose.py",
-      "contracts.py", "custom.py", "diagrams.py", "doctor.py", "knowledge.py", "models.py", "orchestration.py", "plugins.py", "profiles.py",
-      "questions.py", "readiness.py", "reviews.py", "rules.py", "sensors.py", "session.py", "stagedefs.py",
+      "__init__.py", "__main__.py", "agents.py", "assurance.py", "audit.py", "calls.py", "cli.py", "codebase.py", "compose.py",
+      "contracts.py", "custom.py", "diagrams.py", "doctor.py", "host.py", "knowledge.py", "models.py", "orchestration.py", "plugins.py", "profiles.py",
+      "questions.py", "readiness.py", "recovery.py", "reviews.py", "rules.py", "sensors.py", "session.py", "stagedefs.py",
       "state.py", "trace.py", "units.py"
     ]},
     {"source": ".github/skills", "destination": ".github/skills", "category": "skills", "include": [
@@ -16,7 +16,7 @@
       "speckit-diagrams/SKILL.md", "speckit-diagrams/assets/index-template.md"
     ]},
     {"source": ".github/agents", "destination": ".github/agents", "category": "agents", "include": [
-      "speckit-architect.agent.md", "speckit-architecture-reviewer.agent.md",
+      "speckit-architect.agent.md", "speckit-architecture-reviewer.agent.md", "speckit-hybrid-plan-reviewer.agent.md",
       "speckit-aws-platform.agent.md", "speckit-compliance-reviewer.agent.md",
       "speckit-compliance.agent.md", "speckit-composer.agent.md", "speckit-conductor.agent.md",
       "speckit-delivery.agent.md", "speckit-design.agent.md", "speckit-developer.agent.md",
@@ -29,7 +29,7 @@
     {"source": ".specify/templates/portable/roster.json", "destination": ".specify/agents/roster.json", "category": "configuration", "seed": true},
     {"source": ".specify/.gitignore", "destination": ".specify/.gitignore", "category": "configuration"},
     {"source": ".specify/profiles", "destination": ".specify/profiles", "category": "configuration", "seed": true,
-     "include": ["bugfix.json", "enterprise.json", "express.json", "feature.json", "full-lifecycle.json", "infra.json", "poc.json", "refactor.json", "security-patch.json"]},
+     "include": ["bugfix.json", "enterprise.json", "express.json", "feature.json", "full-lifecycle.json", "hybrid-plan.json", "infra.json", "poc.json", "quick.json", "refactor.json", "selective.json", "security-patch.json"]},
     {"source": ".specify/templates/portable/rules.json", "destination": ".specify/rules/rules.json", "category": "configuration", "seed": true},
     {"source": ".specify/stages/stages.json", "destination": ".specify/stages/stages.json", "category": "configuration", "seed": true},
     {"source": ".specify/plugins", "destination": ".specify/plugins", "category": "plugins", "seed": true, "include": [

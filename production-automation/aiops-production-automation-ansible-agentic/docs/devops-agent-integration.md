@@ -7,8 +7,8 @@ approval gate.
 
 | Phase | Scope | Status |
 |---|---|---|
-| 1 | Forward selected incidents to a DevOps Agent generic webhook (HMAC) | **Implemented** |
-| 2 | Consume DevOps Agent mitigation plans via EventBridge → approval → SSM | Planned (future) |
+| 1 | Forward selected incidents to a DevOps Agent generic webhook (HMAC) | **Implemented, verified end to end in dev (2026-11-10)** |
+| 2 | Email DevOps Agent's findings to the operator (EventBridge, Lambda, SES) | **Implemented behind a flag; tested, and run live in a scratch stack (2026-11-17)** |
 | 3 | Custom MCP server, agent skills, release readiness review | Planned (future) |
 
 References: [Invoking DevOps Agent through Webhook](https://docs.aws.amazon.com/devopsagent/latest/userguide/configuring-integrations-and-knowledge-invoking-devops-agent-through-webhook.html),
@@ -26,15 +26,39 @@ References: [Invoking DevOps Agent through Webhook](https://docs.aws.amazon.com/
 | `unmatched` | No playbook matched the alert | `src/app.py` `_process_and_notify` |
 | `critical` | Critical alert with a new approval request (after duplicate suppression) | `src/app.py` `_process_and_notify` |
 | `failed` | An approved remediation failed or raised an error | `src/app.py` `_execute_approved_remediation` |
+| `resolved` (opt-in) | The alert recovered; sent against the original incident ids forwarded by the same task | `src/app.py` `_process_and_notify` |
 
 Rule-matched, non-critical alerts are **not** forwarded; the fast rule path is unchanged.
+
+`resolved` is not in the default triggers. The 2026-11-16 spike (below) found no visible effect: the
+webhook accepted the update, but the task's status, version and `updatedAt` did not change and no new
+task appeared (it may have been de-duplicated, because it reuses the incident id). Leave it off. It only
+works for incidents forwarded by the same ECS task, so with several tasks some updates are skipped.
+
+### Context sent with each incident (Phase 1b)
+
+All context is in `description` (the only free-text field the agent reads):
+
+- Redacted alert labels (sensitive-looking keys such as `*key*`, `*token*`, `*password*`, `*secret*`
+  are dropped, not masked; at most 12 labels, 120 characters each) and the `runbook_url` annotation
+  (https/http only).
+- For `failed`: the playbook that just failed, stated as context ("Already tried and FAILED").
+  The spike showed the agent uses this.
+- All alert-derived text is stripped of control characters and truncated, so a value cannot start a
+  new line in the description.
+- **No playbook list and no output-format instruction.** An earlier version asked the agent to end its
+  summary with `AIOPS_PLAYBOOK: <path>`. The spike showed the agent ignores such instructions (0 of 3);
+  its summary follows a fixed template. Playbook selection will be done by our own code (Phase 2b).
+
+Also fixed: every alert in an Alertmanager batch used the first alert's incident id. Each alert now
+keeps its own id, so the de-duplication no longer skips batched alerts.
 
 ### Safety and cost controls (`src/devops_agent.py`)
 
 - **Off unless configured:** requires `DEVOPS_AGENT_ENABLED=true` **and** a non-empty https webhook URL and secret.
 - **Never blocks the pipeline:** runs in a worker thread with a 5s timeout and 2 retries (1s, 2s backoff). Auth and format errors (4xx except 429) are not retried. All failures are logged with `incident_id` and never raised.
 - **Cost guard:** DevOps Agent bills per active agent-second. There is a per-task cap of `DEVOPS_AGENT_MAX_PER_HOUR` (default 20) and per-incident de-duplication. The cap is per ECS task, so the fleet-wide maximum is cap × task count. Set an AWS Budget filtered on *AWS DevOps Agent* as well.
-- **Minimal data:** only the alert name, severity, host, service, environment, region, summary and our incident reference are sent. DevOps Agent ignores the `data` field, so all context goes into `description`.
+- **Minimal data:** only the alert name, severity, host, service, environment, region, summary, redacted labels, the runbook URL, what was already tried, and our incident reference are sent. DevOps Agent ignores the `data` field, so all context goes into `description`.
 - **Traceability:** `incidentId` is `aiops-<our incident_id>-<trigger>`. Search for it in the Agent Space.
 
 ### Configuration
@@ -42,25 +66,88 @@ Rule-matched, non-critical alerts are **not** forwarded; the fast rule path is u
 | Setting | Where | Default |
 |---|---|---|
 | `devopsAgentEnabled` | CDK context (`--context devopsAgentEnabled=true`) | `false` |
-| `DEVOPS_AGENT_FORWARD_ON` | Task env (`compute_stack.py`) | `unmatched,failed,critical` |
+| `devopsAgentForwardOn` | CDK context (`--context devopsAgentForwardOn=unmatched,failed,critical,resolved`); validated at synth | `unmatched,failed,critical` |
+| `DEVOPS_AGENT_FORWARD_ON` | Task env, set from the context above (`compute_stack.py`) | `unmatched,failed,critical` |
+| `DEVOPS_AGENT_ENABLED`, `DEVOPS_AGENT_FORWARD_ON` | **GitHub repository variables** read by `cd.yml` (Compute, Observability and rollback steps) | `false`, `unmatched,failed,critical` |
 | `DEVOPS_AGENT_MAX_PER_HOUR` | Task env (`compute_stack.py`) | `20` |
+| `devopsAgentFindingsEnabled` | CDK context; GitHub repository variable `DEVOPS_AGENT_FINDINGS_ENABLED` (read by the Observability steps of `cd.yml`) | `false` |
 | URL, HMAC secret, web app URL | Secrets Manager `/aiops/{env}/devops-agent-webhook` (JSON keys `url`, `secret`, `web_app_url`) | Empty placeholders |
 
 CDK creates the secret with **empty `url`/`web_app_url` and a random placeholder
 `secret`**, so ECS tasks always start. Forwarding stays inactive until real values are stored.
 
-### Setup steps
+### One-command provisioning
 
-1. **Create an Agent Space** in a supported Region (us-east-1 works for this project) and associate the AWS account.
-2. **Create a generic webhook:** Agent Space → *Capabilities* → *Agent Space Webhook* → *Add webhook* → **HMAC**. Copy the URL and secret. The secret is shown only once.
-3. **Store them in Secrets Manager.** Keep the JSON keys exactly as shown; a missing key stops ECS tasks from starting.
+`scripts/aiops_env.py` creates and removes the whole environment, including everything below:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\aiops_env.py up     --env dev   # stacks + DevOps Agent + health check
+.\.venv\Scripts\python.exe scripts\aiops_env.py down   --env dev   # Agent Space, roles, stacks, leftovers
+.\.venv\Scripts\python.exe scripts\aiops_env.py status --env dev   # read-only
+```
+
+The Agent Space ID changes every time `up` recreates it. Run `status` for the current value.
+
+### Dev setup as of 2026-11-10 (recreated by `aiops_env.py up`, us-east-1)
+
+> **Stale as of 2026-11-16:** none of these exist any more. There is no `aiops-dev` Agent Space,
+> role, secret or `Aiops-dev-*` stack in the account. Run `aiops_env.py up --env dev` to recreate them
+> (new ids). The table is kept as a record of the shape of the setup.
+
+| Resource | Value |
+|---|---|
+| Agent Space | `aiops-dev` (`1db03cac-f242-41fc-b2f0-9de5bdb960ab`), elevated actions **off** |
+| Agent Space role | `aiops-dev-DevOpsAgentRole-AgentSpace`: AWS managed `AIDevOpsAgentAccessPolicy` + inline Resource Explorer service-linked-role permission |
+| Operator app role | `aiops-dev-DevOpsAgentRole-WebappAdmin`: AWS managed `AIDevOpsOperatorAppAccessPolicy` |
+| Account association | `533267042240` as `monitor` |
+| Operator web app | https://1db03cac-f242-41fc-b2f0-9de5bdb960ab.aidevops.global.app.aws |
+| Generic webhook | HMAC `event_channel` association, stored in `/aiops/dev/devops-agent-webhook` |
+
+Both roles trust only `aidevops.amazonaws.com`, conditioned on `aws:SourceAccount`
+and `aws:SourceArn = arn:aws:aidevops:us-east-1:533267042240:agentspace/*`.
+
+### Setup steps (CLI)
+
+Requires AWS CLI **2.39 or newer** (2.34 has no `devops-agent` commands). The steps follow the
+[AWS DevOps Agent CLI onboarding guide](https://docs.aws.amazon.com/devopsagent/latest/userguide/getting-started-with-aws-devops-agent-cli-onboarding-guide.html).
+
+1. **IAM roles:** create the two roles above with the trust policy from the onboarding guide, and attach the managed policies.
+2. **Agent Space:**
+
+   ```powershell
+   aws devops-agent create-agent-space --name aiops-dev --tags project=aiops-self-healing,environment=dev --region us-east-1 --profile mfa
+   ```
+
+3. **Associate the account** (configuration JSON in a file, to avoid shell-quoting problems):
+
+   ```json
+   {"aws":{"assumableRoleArn":"arn:aws:iam::533267042240:role/aiops-dev-DevOpsAgentRole-AgentSpace","accountId":"533267042240","accountType":"monitor"}}
+   ```
+
+   ```powershell
+   aws devops-agent associate-service --agent-space-id <id> --service-id aws --configuration file://assoc.json --region us-east-1 --profile mfa
+   aws devops-agent enable-operator-app --agent-space-id <id> --auth-flow iam --operator-app-role-arn arn:aws:iam::533267042240:role/aiops-dev-DevOpsAgentRole-WebappAdmin --region us-east-1 --profile mfa
+   ```
+
+4. **Create the generic webhook.** A generic webhook is an `eventChannel` association, and HMAC is the default:
+
+   ```powershell
+   aws devops-agent associate-service --agent-space-id <id> --service-id event_channel --configuration file://eventchannel.json --region us-east-1 --profile mfa
+   # eventchannel.json: {"eventChannel":{}}
+   ```
+
+   The response contains `webhook.webhookUrl` and `webhook.webhookSecret`. **The secret is returned only once.** Write it straight to Secrets Manager (step 5) without printing it. `aws devops-agent list-webhooks` returns the URL but never the secret.
+
+   *Console alternative:* Agent Space → *Capabilities* → *Agent Space Webhook* → *Add webhook* → **HMAC**.
+
+5. **Store them in Secrets Manager.** Keep the JSON keys exactly as shown; a missing key stops ECS tasks from starting.
 
    ```powershell
    $value = @{ url = "<webhook-url>"; secret = "<hmac-secret>"; web_app_url = "<optional web app url>" } | ConvertTo-Json -Compress
    aws secretsmanager put-secret-value --secret-id /aiops/dev/devops-agent-webhook --secret-string $value --profile mfa --region us-east-1
    ```
 
-4. **Enable and deploy** (or just restart the tasks if the flag is already on). ECS reads secrets at task start:
+6. **Enable and deploy** (or just restart the tasks if the flag is already on). ECS reads secrets at task start:
 
    ```powershell
    npx aws-cdk@2 deploy Aiops-dev-Compute --context environment=dev --context devopsAgentEnabled=true --profile mfa
@@ -70,30 +157,171 @@ CDK creates the secret with **empty `url`/`web_app_url` and a random placeholder
 
    Every `cdk deploy` must pass `--context devopsAgentEnabled=true`, otherwise forwarding is switched off again.
 
-5. **Verify.** The startup log should show `DevOps Agent forwarding: active=True`. Then send an alert with no matching playbook (for example `python demo/break_target.py --mode network --trigger-alert`). Expect `Incident forwarded to AWS DevOps Agent (trigger=unmatched, http=200)` in `/aiops/dev/ecs`, and a new investigation in the Agent Space.
-6. **Rotating the secret:** rotate it in the Agent Space, update the Secrets Manager value (step 3), then force a new ECS deployment.
+7. **Verify.** The startup log should show `DevOps Agent forwarding: active=True`. Then send an alert with no matching playbook (for example `python demo/break_target.py --mode network`). Expect `Incident forwarded to AWS DevOps Agent (trigger=unmatched, http=200)` in `/aiops/dev/ecs`, and a new investigation:
+
+   ```powershell
+   aws devops-agent list-backlog-tasks --agent-space-id <id> --region us-east-1 --profile mfa
+   ```
+
+   The task's `reference.referenceId` is `aiops-<incident_id>-unmatched`. Read the findings with `list-journal-records --execution-id <executionId>`, or in the operator web app.
+8. **Rotating the secret:** rotate it in the Agent Space console, update the Secrets Manager value (step 5), then force a new ECS deployment.
+
+### Verified end-to-end run (dev, 2026-11-10)
+
+| UTC | Event |
+|---|---|
+| 08:49:37 | `demo/break_target.py --mode network` ran on `i-0bde43c900bac00c7` and fired `NetworkFloodDetected` |
+| 08:49:44 | Pipeline: no playbook match |
+| 08:49:45 | `Incident forwarded to AWS DevOps Agent (trigger=unmatched, http=200)` |
+| 08:49:45 | DevOps Agent `INVESTIGATION` task created, priority CRITICAL, reference `aiops-4acb31c9-…-unmatched` |
+| 08:49:48 | Advisory email sent |
+| 08:53:38 | Investigation `COMPLETED` (about 4 minutes) |
+
+DevOps Agent identified the triggering SSM command as a deliberate, self-terminating demo and
+recommended no rollback. It also flagged two real gaps, both still to be confirmed:
+
+- The flood targeted only link-local endpoints (IMDS, VPC DNS), which CloudWatch network metrics likely don't count, so the network alarm may not measure what the alert claims.
+- The instance's `Name` tag (`aiops-target-dev`) doesn't match the alarm naming, which could break Name-based matching.
+
+### Cost notes
+
+- Billed per active agent-second (about $0.0083/s). This account is pay-as-you-go, with no trial.
+- A new Agent Space runs billed `SYSTEM_LEARNING` tasks while it maps the account.
+- Check usage with `aws devops-agent get-account-usage --region us-east-1`.
+- To remove everything: `aws devops-agent delete-agent-space --agent-space-id <id>`, then delete the two IAM roles and set `/aiops/dev/devops-agent-webhook` back to an empty `url`. Deleting the space can't be undone.
 
 ---
 
-## Phase 2 — Consume mitigation plans (planned, future)
+## CD pipeline and the flag
 
-Goal: turn DevOps Agent mitigation plans into proposed actions that go through
-our existing safety path, without bypassing it.
+Before this change `cd.yml` never passed `devopsAgentEnabled`, so **every CD deploy switched forwarding
+off again**. The Observability job matters too: `cdk deploy ...-Observability` also deploys its dependency
+`...-Compute`, so it must carry the same context. All of these now pass the flag: Compute diff and
+deploy, Observability diff and deploy, and the rollback deploy.
 
-Planned design:
+To keep forwarding on after CD deploys, set these in GitHub (Settings, Secrets and variables, Variables;
+use an environment-scoped variable per environment):
 
-1. An EventBridge rule on source `aws.aidevops`, detail-type *Mitigation Completed*, triggers a Lambda.
-2. The Lambda fetches the mitigation summary and plan from the DevOps Agent API and puts it on SQS.
-3. The pipeline converts the plan into a `RemediationPlan`, then runs **PlanValidator** (denylist), creates a **human approval** request (with duplicate suppression), and executes via SSM only after Confirm.
-4. Code or IaC changes are routed to a pull request (Kiro CLI headless, as in the AWS sample) instead of being executed.
+| Variable | Value |
+|---|---|
+| `DEVOPS_AGENT_ENABLED` | `true` |
+| `DEVOPS_AGENT_FORWARD_ON` (optional) | `unmatched,failed,critical` (leave `resolved` off; see the spike results) |
 
-Open questions before building:
+If the variables are unset, CD deploys with forwarding **off**, which is the previous behaviour.
+`scripts/deploy.py` has its own deploy path and is not changed here.
 
-- Confirm the exact API operation and response schema for fetching mitigation plans (taken from an AWS blog, not yet from the API reference).
-- Map free-text mitigation steps to allow-listed actions; never run raw shell from a plan.
-- Decide whether to manage the Agent Space and webhook as IaC (`AWS::DevOpsAgent::*` resources). The webhook secret is not returned by CloudFormation and must be rotated after deploy.
+## Spike results (2026-11-16)
 
-**Prerequisite:** fix guardrail engine initialisation first (see *Known issue* below). Phase 2 depends on PlanValidator actually running.
+Run against a temporary Agent Space (`aiops-spike`, since deleted) with three incidents sent through the real
+`DevOpsAgentForwarder`. The test hosts were fake instance ids, so the agent found no telemetry and never
+reached a root cause. Treat the quality of its findings as untested.
+
+| Question | Result |
+|---|---|
+| Investigation time and cost | 74 to 105 seconds each, roughly $0.60 to $0.90 (estimate at about $0.0083/s) |
+| Summary format | `investigation_summary_md` is a markdown **string** (Symptoms, Findings, Other Gaps), 800 to 2,800 characters, one record per execution |
+| Structured form | An `investigation_summary` record holds **JSON as a string** (symptoms, findings with `finding_type`, gaps). Other record types seen: `finding`, `symptom`, `observation`, `investigation_gap`, `utilization`, `message`, `ui_investigation_summary` |
+| Mitigation | No `mitigation_summary_md` and no mitigation or recommendation record in any run |
+| Mapping to our incident | `task.reference.referenceId` equals the `aiops-<incident_id>-<trigger>` we sent, in all runs. `task.executionId` is present |
+| Context used | Yes. The agent used the host, service, and the failed playbook with its `rc=2` |
+| `AIOPS_PLAYBOOK` marker | **Not followed (0 of 3)**; the allow-list was never acknowledged. The payload no longer sends either |
+| `resolved` update | Accepted by the webhook, no visible effect (status, version, `updatedAt` unchanged, no new task) |
+| Scope | The agent investigates the whole associated account. It cited an unrelated alarm and another project's secret |
+
+How to repeat the reads (replace the ids; do not print webhook secrets):
+
+```powershell
+aws devops-agent list-backlog-tasks --agent-space-id <space> --sort-field CREATED_AT --order DESC --region us-east-1 --profile mfa
+aws devops-agent get-backlog-task --agent-space-id <space> --task-id <taskId> --region us-east-1 --profile mfa
+aws devops-agent list-journal-records --agent-space-id <space> --execution-id <executionId> `
+  --record-type investigation_summary_md --region us-east-1 --profile mfa
+```
+
+On Windows, decode the CLI output as UTF-8: the summaries contain non-ASCII characters.
+
+## Phase 2 — Bring findings back (implemented, behind a flag)
+
+Goal: show the operator what DevOps Agent found, in the email they already read, and keep an audit
+record. It changes nothing on any host and does not touch the alert pipeline or the running app.
+
+```
+DevOps Agent finishes -> EventBridge (default bus, source aws.aidevops) -> Lambda
+    1. GetBacklogTask(task_id)        -> reference "aiops-<incident>-<trigger>"
+    2. ListJournalRecords(...)         -> investigation_summary_md, matched by summary_record_id
+    3. DynamoDB record "devops-finding#<event id>"  (idempotency + metadata audit, no summary text)
+    4. SES email to OPERATOR_EMAIL
+```
+
+**Enable it** (off by default; also needs `pip` and network at synth/deploy, see bundling below):
+
+```powershell
+npx aws-cdk@2 deploy Aiops-dev-Observability --context environment=dev --context devopsAgentFindingsEnabled=true --profile mfa
+```
+
+In CD, set the repository variable `DEVOPS_AGENT_FINDINGS_ENABLED=true`. To remove it, set the flag back to
+`false` and redeploy: the Lambda, rule, DLQ and alarms are deleted and nothing else changes.
+
+**What is built**
+
+| Part | Where |
+|---|---|
+| Lambda (Python 3.12, 60s, 256 MB) | `src/agentic_ai/lambdas/devops_agent_findings/handler.py` |
+| CDK construct, created by `ObservabilityStack` when the flag is on | `src/agentic_ai/infra/constructs/devops_agent_findings.py` |
+| Events handled | `Investigation Completed`, `Failed`, `Timed Out`, `Linked` (rule and handler both check the list) |
+| Failed invocations | Lambda retries, then an SQS DLQ (`aiops-devops-findings-dlq-<env>`, 14 days) |
+| Alarms (staging/prod only, to the existing alarm topic) | DLQ not empty; Lambda errors |
+| Log retention | 30 / 90 / 365 days for dev / staging / prod |
+
+**Behaviour**
+
+- Only our incidents: a task whose reference is not `aiops-<id>-<trigger>` (for example a manual
+  investigation in the web app) is ignored.
+- Other projects' Agent Spaces: IAM allows the two read calls only on Agent Spaces tagged
+  `project=aiops-self-healing` and `environment=<env>` (the tags `aiops_env.py` applies). Events from other
+  spaces get an access-denied and are ignored quietly. If you create the space by hand, add those tags.
+- Idempotent: EventBridge is at-least-once. A conditional write marks the event `processing`, the email is
+  sent, then it is marked `sent`. A retry after a failed send resends; a retry after success skips.
+- No summary: the agent sometimes finishes without a summary and writes an `investigation_result` record
+  instead (seen live: it could not find the host in the alert). Then the email carries that explanation under
+  "Explanation". If there is neither, the email says so and points to the web app. Both lookups retry 3 times
+  because a record can lag the event.
+- `Linked`: a short email naming the investigation it was grouped under. `Failed` and `Timed Out`: a short notice.
+- Untrusted text: the summary and title come from alert content. They are HTML-escaped, newlines are removed
+  from the subject, the summary is cut at 6,000 characters, nothing is rendered as a link, and logs record
+  lengths, never the text.
+- IAM: `aidevops:GetBacklogTask` and `ListJournalRecords` (tag-scoped), `ses:SendEmail` on `identity/*`,
+  and `dynamodb:PutItem/GetItem/UpdateItem` on the one table. No wildcard resources.
+
+**Bundling.** The project pins boto3 1.35.36, which has no `devops-agent` client, so the Lambda bundles its own
+`boto3==1.44.3` (`requirements.txt` in the Lambda folder). CDK installs it with the local `pip` at synth time and
+falls back to Docker if that fails. Measured: about 27 MB unzipped, and the handler imports and finds the
+`list_journal_records` paginator with that exact bundle. CI synthesizes with the flag on so a bundling failure
+shows up before deploy. Tests skip bundling (`aws:cdk:bundling-stacks`).
+
+**Verified live (2026-11-17, scratch stack and a temporary Agent Space, both deleted afterwards).** Four
+incidents went through the real forwarder, EventBridge and the Lambda:
+
+| Result | Detail |
+|---|---|
+| Tag-scoped IAM | Works. The Lambda read tasks and journal records of our space; no access-denied |
+| Delivery | All four events produced an email and a `sent` audit record. DLQ 0, Lambda errors 0 |
+| Event types seen | `Completed` with a summary (2), `Completed` with no summary (1), `Linked` (1) |
+| `Linked` | Two incidents on the same host and alert within seconds: the second became `LINKED` and got the short notice |
+| Timing | 0.45 to 2.2 s per invocation, 89 MB of 256 MB; the investigation itself took 1.5 to 3 minutes |
+| No-summary case | Found live: the agent wrote `investigation_result` instead of a summary. The fallback to it was added, and verified by replaying that real event into the deployed Lambda (`has_result: true`) |
+
+Still not verified: the content of the emails as rendered by a mail client (SES accepted them), behaviour of
+`Failed` and `Timed Out` events (none occurred; they are unit tested), delivery through the real ECS
+pipeline, and the usefulness of the findings on a real workload (the test hosts did not exist, so the agent
+reported that it could not find them).
+
+## Phase 2b — Pick a playbook from the findings (deferred)
+
+DevOps Agent does not name a playbook (see the spike), so selection stays in our code: a selector chooses
+from the playbooks in `config/playbook_mapping.yml` using the agent's findings, and the result goes through
+the existing human approval, guardrails and Ansible. Never run raw shell from a summary, and treat the summary
+text as untrusted. Do not start this until `concurrency_guard` and `health_checker` are implemented, and
+until Phase 2 shows how good the findings are on a real workload.
 
 ## Phase 3 — Deeper integration (planned, future)
 
@@ -105,10 +333,20 @@ Open questions before building:
 
 ---
 
-## Known issue (blocks Phase 2)
+## Guardrails status (prerequisite for Phase 2)
 
-At startup, `src/app.py` fails to initialise the guardrail engine:
-`ConcurrencyGuard.__init__() missing 2 required positional arguments: 'lock_store' and 'service_registry'`.
-The error is caught as "non-fatal", so **no guardrail checks run** (self-protection,
-maintenance windows, circuit breaker, blast radius, approval gate, PlanValidator).
-Confirmed in the deployed dev logs.
+**Fixed 2026-11-10.** The guardrail engine previously failed at startup
+(`ConcurrencyGuard.__init__() missing 2 required positional arguments`). The error was logged as
+"non-fatal", so **no guardrail checks ran**.
+
+It now starts with 6 checks: self_protection, maintenance_window, circuit_breaker,
+blast_radius_classifier, approval_gate and plan_validator. If initialisation fails, the service
+**refuses to start**. Verified in the deployed dev logs.
+
+Still not active, because their dependencies have no implementation yet:
+
+- `concurrency_guard`: needs a guardrails LockStore. The `concurrency.LockStore` PK/SK schema doesn't match `AiopsIncidentMemory`.
+- `health_checker`: needs a ServiceRegistry.
+
+A warning is logged at startup. Both should be implemented before Phase 2 lets DevOps Agent plans
+drive execution.

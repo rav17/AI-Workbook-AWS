@@ -1,0 +1,33 @@
+{
+  "id": "specify-2",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product-lead",
+  "verdict": "concerns",
+  "created_at": "2026-11-14T08:33:05+00:00",
+  "files": {
+    ".github/skills/speckit-specify/SKILL.md": "040710337bfd5050b6929664f062dc3ec6ae9aa63cebcc7a1b08a7cfae23c22e",
+    "specs/038-hybrid-plan-review/spec.md": "14d3412b45dfa0f9c268c50efd3438ad02b024cf184d5378fc952d39af5befb2",
+    "specs/038-hybrid-plan-review/checklists/requirements.md": "e9a30025ba10bd8784d684417a258b9f8448832af4ea7338a3160b1a245b7ec5"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "FR-003; SC-006 (A-07) ? reviewer independence/evidence boundary",
+      "note": "The spec requires proving the reviewer did not rely on author notes/verdict, but defines no observable evidence for this. Different identity and invocation do not show what review material was provided. Define a verifiable review-input boundary and acceptance evidence (without asserting unverifiable internal reasoning); otherwise A-07 and the fail-closed condition are not independently testable."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "User Story 1; FR-002?FR-003; Edge Cases ? selected reviewer",
+      "note": "The reviewer is described as selected, but the spec does not say who selects it or from what applicable set. State the in-scope selection source/owner and observable behavior when no valid selection is supplied, so both success and failure can be tested without adding adaptive routing."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "FR-006; Success Criteria SC-004 (A-12) ? accessible status",
+      "note": "?Understandable? and ?usable? do not define a reproducible pass condition for keyboard or screen-reader use. Define technology-agnostic checks for whether each listed state and its relevant information are perceivable and operable without color, with an explicit pass/fail outcome. As written, SC-004 is not reproducibly measurable."
+    }
+  ]
+}

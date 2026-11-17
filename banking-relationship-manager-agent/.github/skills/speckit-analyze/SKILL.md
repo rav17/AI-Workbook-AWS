@@ -10,11 +10,18 @@ metadata:
 
 ## Lifecycle Handoff
 
+For an assigned worker, inspect the active invocation brief, not marker examples
+in this file. A missing, conflicting or mismatched stage marker is a failed
+handoff: stop and report it to the conductor; do not invoke workflow or conductor.
+An unassigned direct stage command may hand off once as described below.
+
 Unless this is the assigned lead executing a conductor brief containing
-`SPECKIT_DELEGATED_STAGE=analyze`, invoke `speckit-workflow` with the original
+`SPECKIT_DELEGATED_STAGE=analyze`, or the workflow host executing an eligible
+inline brief containing `SPECKIT_INLINE_STAGE=analyze`, invoke `speckit-workflow` with the original
 request and requested stage `analyze`, then return without executing this body.
-Only the matching delegated lead follows the body below. Use the supplied
-feature directory; the conductor owns stage transitions and human gates.
+Only the matching delegated lead or inline host follows the body below. Use the
+supplied feature directory; the workflow host owns inline stage transitions and
+the conductor owns delegated transitions. Only humans decide gates.
 
 ## User Input
 

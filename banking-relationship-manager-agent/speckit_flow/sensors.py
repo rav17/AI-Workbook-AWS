@@ -43,6 +43,9 @@ _STAGE_ARTIFACTS = {
     "implement": ("spec.md", "plan.md", "tasks.md"),
 }
 
+def stage_artifacts(stage: str) -> tuple[str, ...]:
+    return _STAGE_ARTIFACTS.get(stage, ())
+
 
 @dataclass
 class Sensor:
@@ -241,15 +244,28 @@ def _fingerprints(
     if sensor is not None and sensor.builtin == "stage-contract" and stage is not None:
         result.update(
             contracts_mod.fingerprints(
-                feature_dir, stage, feature_dir.parent.parent / ".specify"
+                feature_dir, stage, feature_dir.parent.parent / ".specify",
+                include_inputs=_contract_inputs(feature_dir),
             )
         )
     return result
 
 
+def _contract_inputs(feature_dir: Path) -> bool:
+    from speckit_flow import state
+    from speckit_flow.profiles import DEFAULT_PROFILES_DIR
+
+    if not (feature_dir / state.STATE_FILE).exists():
+        return False
+    current = state.load_state(feature_dir)
+    local = feature_dir.parent.parent / ".specify" / "profiles"
+    profiles_dir = local if (local / f"{current.profile}.json").exists() else DEFAULT_PROFILES_DIR
+    return state.profile_for(feature_dir, current.profile, profiles_dir).contract_inputs
+
+
 def _consistency(feature_dir: Path, stage: str) -> tuple[bool, str]:
     problems: list[str] = []
-    for name in _STAGE_ARTIFACTS.get(stage, ()):
+    for name in stage_artifacts(stage):
         path = feature_dir / name
         if not path.is_file():
             problems.append(f"{name} missing")
@@ -268,7 +284,10 @@ def _traceability(feature_dir: Path, options: dict[str, Any]) -> tuple[bool, str
     if matrix.ok(require_tests):
         return True, "all requirements covered"
     gaps = matrix.uncovered + (matrix.untested if require_tests else [])
-    return False, "uncovered: " + ", ".join(gaps)
+    problems = ["uncovered or untested: " + ", ".join(gaps)] if gaps else []
+    if matrix.unknown_refs:
+        problems.append("unknown references: " + ", ".join(matrix.unknown_refs))
+    return False, "; ".join(problems)
 
 
 def _command(sensor: Sensor, root: Path) -> tuple[bool, str]:
@@ -308,6 +327,12 @@ def run_sensor(sensor: Sensor, feature_dir: Path, stage: str) -> tuple[bool, str
                 "current skeleton checkpoint; human journey review still required"
             )
         if sensor.builtin == "stage-contract":
+            if _contract_inputs(feature_dir):
+                passed, reason = contracts_mod.check_inputs(
+                    feature_dir, stage, feature_dir.parent.parent / ".specify"
+                )
+                if not passed:
+                    return passed, reason
             return contracts_mod.check_outputs(
                 feature_dir, stage, feature_dir.parent.parent / ".specify"
             )
@@ -362,29 +387,48 @@ def run_stage(
     return outcomes
 
 
+def evidence_status(
+    feature_dir: Path, stage: str, path: Path = DEFAULT_SENSORS_FILE,
+    *, required_only: bool = False,
+) -> list[dict[str, Any]]:
+    """Inspect sensor freshness without executing checks; also used by gates."""
+    profile, has_contracts = _feature_profile(feature_dir)
+    selected = [
+        s
+        for s in for_stage(load_sensors(path), stage, profile, has_contracts)
+        if not required_only or s.required
+    ]
+    results = _load_results(feature_dir, stage)
+    report: list[dict[str, Any]] = []
+    for sensor in selected:
+        status, reason = "pass", "passing evidence is current"
+        try:
+            current = _fingerprints(feature_dir, sensor, stage)
+        except FlowError as exc:
+            status, reason = "invalid", str(exc)
+        else:
+            entry = results.get(sensor.id)
+            if not isinstance(entry, dict):
+                status, reason = "not_run", "has not been run"
+            elif entry.get("status") != "pass":
+                status, reason = "fail", f"failed: {entry.get('reason', '')}"
+            elif entry.get("fingerprints") != current:
+                status, reason = "stale", "result is stale; re-run it"
+        report.append(
+            {"id": sensor.id, "required": sensor.required, "status": status, "reason": reason}
+        )
+    return report
+
+
 def gate_problems(
     feature_dir: Path, stage: str, path: Path = DEFAULT_SENSORS_FILE
 ) -> tuple[list[str], list[str]]:
     """Return (problems, relied-on sensor ids) for approving the stage's gate."""
-    profile, has_contracts = _feature_profile(feature_dir)
-    required = [
-        s
-        for s in for_stage(load_sensors(path), stage, profile, has_contracts)
-        if s.required
+    report = evidence_status(feature_dir, stage, path, required_only=True)
+    problems = [
+        f"required sensor {entry['id']!r}"
+        + (": " if entry["status"] == "invalid" else " ")
+        + entry["reason"]
+        for entry in report if entry["status"] != "pass"
     ]
-    results = _load_results(feature_dir, stage)
-    problems: list[str] = []
-    for sensor in required:
-        try:
-            current = _fingerprints(feature_dir, sensor, stage)
-        except FlowError as exc:
-            problems.append(f"required sensor {sensor.id!r}: {exc}")
-            continue
-        entry = results.get(sensor.id)
-        if not isinstance(entry, dict):
-            problems.append(f"required sensor {sensor.id!r} has not been run")
-        elif entry.get("status") != "pass":
-            problems.append(f"required sensor {sensor.id!r} failed: {entry.get('reason', '')}")
-        elif entry.get("fingerprints") != current:
-            problems.append(f"required sensor {sensor.id!r} result is stale; re-run it")
-    return problems, [s.id for s in required]
+    return problems, [entry["id"] for entry in report]

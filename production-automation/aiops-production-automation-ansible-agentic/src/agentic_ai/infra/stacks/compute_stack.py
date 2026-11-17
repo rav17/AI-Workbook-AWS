@@ -472,7 +472,11 @@ class ComputeStack(cdk.Stack):
                 exclude_punctuation=True,
                 password_length=64,
             ),
-            removal_policy=cdk.RemovalPolicy.RETAIN,
+            # dev: delete with the stack (a retained secret with this fixed name blocks the
+            # next create). staging/prod: retain so outstanding approval links stay valid.
+            removal_policy=(
+                cdk.RemovalPolicy.DESTROY if env_name == "dev" else cdk.RemovalPolicy.RETAIN
+            ),
         )
 
         # Create the api-gateway-key secret BEFORE the container definition so the
@@ -527,7 +531,7 @@ class ComputeStack(cdk.Stack):
                 "REQUIRE_HUMAN_APPROVAL": "true",
                 # AWS DevOps Agent Phase 1 (investigation only; never executes fixes)
                 "DEVOPS_AGENT_ENABLED": "true" if context.devops_agent_enabled else "false",
-                "DEVOPS_AGENT_FORWARD_ON": "unmatched,failed,critical",
+                "DEVOPS_AGENT_FORWARD_ON": context.devops_agent_forward_on,
                 "DEVOPS_AGENT_MAX_PER_HOUR": "20",  # cost guard: billed per agent-second
             },
             secrets={

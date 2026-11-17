@@ -1,0 +1,25 @@
+{
+  "id": "plan-4",
+  "stage": "plan",
+  "reviewer": "plan",
+  "author": "agent:architect",
+  "verdict": "pass",
+  "created_at": "2026-11-16T19:53:52+00:00",
+  "files": {
+    "plan.md": "1d9551176c771bd50e81b16c1a17ed4b5f6dd8281aa74c72a08914be25f855f3"
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Design S2 step 6 (content screen) / S6 planted-secret control",
+      "note": "The coverage assertion counts paths the packager submits, not paths detect-secrets confirms it scanned, and the plan does not specify how findings are detected (detect-secrets scan exits 0 even with findings; the emitted baseline JSON must be parsed). The planted-secret positive control makes a vacuous or misparsed gate fail, so deferral is acceptable - but tasks should explicitly pin the output-parsing contract (parse results from the baseline JSON, not rely on exit code)."
+    },
+    {
+      "severity": "info",
+      "file": "plan.md",
+      "section": "Design S1 step 5 / Risks",
+      "note": "The capture timestamp makes SNAPSHOT.json nondeterministic across reruns of the same tree; harmless given the stated contract (each assembly is a distinct named snapshot), but worth a one-line statement in the README/contract that identical trees yield different inventory bytes, so inventory-digest comparison is per-snapshot, not per-tree. No plan change required."
+    }
+  ]
+}

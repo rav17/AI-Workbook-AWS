@@ -1,0 +1,41 @@
+{
+  "feature": "038-hybrid-plan-review",
+  "profile": "quick",
+  "depth": "minimal",
+  "current_stage": "implement",
+  "pending_gate": null,
+  "revision": 14,
+  "updated_at": "2026-11-14T12:25:45+00:00",
+  "stages": {
+    "specify": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T11:53:47+00:00"
+    },
+    "clarify": {
+      "status": "skipped",
+      "reason": "not in profile quick",
+      "updated_at": "2026-11-14T12:03:57+00:00"
+    },
+    "plan": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T12:12:52+00:00"
+    },
+    "tasks": {
+      "status": "done",
+      "reason": null,
+      "updated_at": "2026-11-14T12:18:18+00:00"
+    },
+    "analyze": {
+      "status": "skipped",
+      "reason": "not in profile quick",
+      "updated_at": "2026-11-14T12:04:00+00:00"
+    },
+    "implement": {
+      "status": "in_progress",
+      "reason": null,
+      "updated_at": "2026-11-14T12:25:45+00:00"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "verdict": "concerns",
+  "reviewer": "spec",
+  "author": "agent:product-lead",
+  "files": [
+    ".github/skills/speckit-specify/SKILL.md",
+    "specs/038-hybrid-plan-review/spec.md",
+    "specs/038-hybrid-plan-review/checklists/requirements.md"
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "FR-003; SC-006 (A-07) ? reviewer independence/evidence boundary",
+      "note": "The spec requires proving the reviewer did not rely on author notes/verdict, but defines no observable evidence for this. Different identity and invocation do not show what review material was provided. Define a verifiable review-input boundary and acceptance evidence (without asserting unverifiable internal reasoning); otherwise A-07 and the fail-closed condition are not independently testable."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "User Story 1; FR-002?FR-003; Edge Cases ? selected reviewer",
+      "note": "The reviewer is described as selected, but the spec does not say who selects it or from what applicable set. State the in-scope selection source/owner and observable behavior when no valid selection is supplied, so both success and failure can be tested without adding adaptive routing."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/spec.md",
+      "section": "FR-006; Success Criteria SC-004 (A-12) ? accessible status",
+      "note": "?Understandable? and ?usable? do not define a reproducible pass condition for keyboard or screen-reader use. Define technology-agnostic checks for whether each listed state and its relevant information are perceivable and operable without color, with an explicit pass/fail outcome. As written, SC-004 is not reproducibly measurable."
+    },
+    {
+      "severity": "major",
+      "file": "specs/038-hybrid-plan-review/checklists/requirements.md",
+      "section": "Requirement Completeness; Feature Readiness; Notes",
+      "note": "The checklist marks requirements testable, success criteria measurable, and all criteria passed, but FR-003/SC-006 lack observable evidence for the independence boundary and SC-004 lacks a reproducible accessibility pass condition. Reassess these items and update the pass claims after addressing the spec gaps."
+    }
+  ]
+}

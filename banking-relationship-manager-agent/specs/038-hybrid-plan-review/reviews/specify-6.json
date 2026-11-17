@@ -1,0 +1,32 @@
+{
+  "id": "specify-6",
+  "stage": "specify",
+  "reviewer": "spec",
+  "author": "agent:product",
+  "verdict": "concerns",
+  "created_at": "2026-11-14T08:52:11+00:00",
+  "files": {
+    "spec.md": "6952f8625da2e8e1a94937348eb11e3136cf1bd312f546274f1632fa64f2c6e2",
+    "checklists/requirements.md": "b5e51a51084a39fe99aa30f823415315919c76c659b65ed8ee74bd621410daf7"
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "FR-006; Success Criteria A-12/SC-004; FR-002/FR-003; A-15/A-16",
+      "note": "Required failures for missing/invalid reviewer selection and unverified input-boundary evidence (FR-002/FR-003, A-15/A-16) are not among the five accessible status states in FR-006/A-12/SC-004. Specify their displayed state mapping or add per-state text, keyboard, and screen-reader checks."
+    },
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "FR-008, FR-011; Success Criteria A-01-A-16; checklists/requirements.md - Feature Readiness",
+      "note": "The checklist says all functional requirements have clear acceptance criteria, but no named case verifies FR-008's prohibition on money movement, record changes, deployment, or live actions, or FR-011's no-new-retention/access-policy boundary. Add explicit conformance cases or narrow the checklist claim."
+    },
+    {
+      "severity": "warning",
+      "file": "spec.md",
+      "section": "User Story 1, Acceptance Scenario 2; FR-006",
+      "note": "Freshness is required for each finding and listed as applicable status information, but its meaning and observable pass condition are undefined (for example, whether it means the covered plan revision or age/time). Define the expected value/check so freshness is testable."
+    }
+  ]
+}

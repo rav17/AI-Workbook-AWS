@@ -1,0 +1,40 @@
+{
+  "id": "implement-3",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "block",
+  "created_at": "2026-11-10T18:32:24+00:00",
+  "files": {
+    "aria/agents/aria/receivables/rules.py": "fb5c34dda490dcf836de6713863f59574b545ad1ff76e943a851c0343cf71b5c",
+    "demo/receivables_exception/service.py": "eedf9d929973b79fd53e312364b183fe827ce59578c08e7b11079a42e1d7cd88",
+    "aria/agents/aria/receivables/engine.py": "78ac7bf6c4171f6ed0986e2b39ad47a4c157feaa31bf5a2a1bc64b69ae790418",
+    "demo/receivables_exception/store.py": "c960514c6e400349649cc4fbe27e109b843cc2f2da6820eed962ab5d3fef2448"
+  },
+  "findings": [
+    {
+      "severity": "blocker",
+      "file": "aria/agents/aria/receivables/rules.py",
+      "section": "prior_allocation_status",
+      "note": "Other payment posted allocations are treated clear, contradicting approved pending/posted rule. Correct and replace contrary test."
+    },
+    {
+      "severity": "major",
+      "file": "demo/receivables_exception/service.py",
+      "section": "ReceivablesWorkflowService.confirm",
+      "note": "Checks binding expiry but not proposal expiry; task can be created after proposal TTL."
+    },
+    {
+      "severity": "major",
+      "file": "aria/agents/aria/receivables/engine.py",
+      "section": "_FixtureClock",
+      "note": "Frozen default demo clock does not advance evidence age or expiry during real waiting."
+    },
+    {
+      "severity": "warning",
+      "file": "demo/receivables_exception/store.py",
+      "section": "_new_decision / record_decision",
+      "note": "Freeform analyst rationale persisted verbatim; synthetic-only boundary is not content enforcement."
+    }
+  ]
+}
