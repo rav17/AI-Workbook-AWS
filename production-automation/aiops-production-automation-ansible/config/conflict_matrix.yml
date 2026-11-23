@@ -1,0 +1,13 @@
+conflict_groups:
+  - name: service-restart
+    playbooks:
+      - playbooks/restart_service.yml
+      - playbooks/rolling_restart.yml
+  - name: disk-operations
+    playbooks:
+      - playbooks/clear_disk.yml
+      - playbooks/resize_volume.yml
+  - name: network-changes
+    playbooks:
+      - playbooks/reconfigure_network.yml
+      - playbooks/failover_network.yml

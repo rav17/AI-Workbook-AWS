@@ -1,4 +1,6 @@
-FROM python:3.11-slim AS base
+# Official Docker Hub python image, pulled through the ECR Public mirror. CodeBuild's
+# shared IPs hit Docker Hub's anonymous pull limit (HTTP 429) and fail the build.
+FROM public.ecr.aws/docker/library/python:3.11-slim AS base
 
 # TARGETPLATFORM is automatically set by BuildKit/BuildX.
 # No need to declare it explicitly.

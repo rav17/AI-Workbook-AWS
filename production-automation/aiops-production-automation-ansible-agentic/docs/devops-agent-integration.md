@@ -71,6 +71,8 @@ keeps its own id, so the de-duplication no longer skips batched alerts.
 | `DEVOPS_AGENT_ENABLED`, `DEVOPS_AGENT_FORWARD_ON` | **GitHub repository variables** read by `cd.yml` (Compute, Observability and rollback steps) | `false`, `unmatched,failed,critical` |
 | `DEVOPS_AGENT_MAX_PER_HOUR` | Task env (`compute_stack.py`) | `20` |
 | `devopsAgentFindingsEnabled` | CDK context; GitHub repository variable `DEVOPS_AGENT_FINDINGS_ENABLED` (read by the Observability steps of `cd.yml`) | `false` |
+| `devopsAgentAdvisoryEnabled` | CDK context (`--context devopsAgentAdvisoryEnabled=true`) or `aiops_env.py up --advisory`; not wired into `cd.yml` yet. Needs the two flags above. See Phase 2b | `false` |
+| `DEVOPS_AGENT_ADVISORY_MODE` | Task env, set from the context above (`compute_stack.py`) | `false` |
 | URL, HMAC secret, web app URL | Secrets Manager `/aiops/{env}/devops-agent-webhook` (JSON keys `url`, `secret`, `web_app_url`) | Empty placeholders |
 
 CDK creates the secret with **empty `url`/`web_app_url` and a random placeholder
@@ -310,18 +312,69 @@ incidents went through the real forwarder, EventBridge and the Lambda:
 | Timing | 0.45 to 2.2 s per invocation, 89 MB of 256 MB; the investigation itself took 1.5 to 3 minutes |
 | No-summary case | Found live: the agent wrote `investigation_result` instead of a summary. The fallback to it was added, and verified by replaying that real event into the deployed Lambda (`has_result: true`) |
 
+**Verified through the real ECS pipeline (2026-11-18, dev).** `demo/trigger_p1_incident.py` fired a critical alert; the investigation completed in about 5.5 minutes with a 5,684-character summary and the Lambda sent the RCA email one second later (audit record `sent`, DLQ 0). The agent used real telemetry and CloudTrail. Two Simulation-stack alarms were linked to the same investigation and produced short `Linked` notices. The findings Lambda's log group has a generated name; find it with `aws logs describe-log-groups --log-group-name-prefix Aiops-dev-Observability-DevOpsAgentFindings`.
+
 Still not verified: the content of the emails as rendered by a mail client (SES accepted them), behaviour of
-`Failed` and `Timed Out` events (none occurred; they are unit tested), delivery through the real ECS
-pipeline, and the usefulness of the findings on a real workload (the test hosts did not exist, so the agent
+`Failed` and `Timed Out` events (none occurred; they are unit tested), and the usefulness of the findings on a real workload (the test hosts did not exist, so the agent
 reported that it could not find them).
 
-## Phase 2b — Pick a playbook from the findings (deferred)
+## Phase 2b — Advisory mode: DevOps Agent investigates, Bedrock picks the playbook (advisory only)
 
-DevOps Agent does not name a playbook (see the spike), so selection stays in our code: a selector chooses
-from the playbooks in `config/playbook_mapping.yml` using the agent's findings, and the result goes through
-the existing human approval, guardrails and Ansible. Never run raw shell from a summary, and treat the summary
-text as untrusted. Do not start this until `concurrency_guard` and `health_checker` are implemented, and
-until Phase 2 shows how good the findings are on a real workload.
+DevOps Agent does not name a playbook (see the spike), so the choice is made by Amazon Bedrock from the
+playbook catalogue, and **nothing is executed**. Executing a chosen playbook (through the existing human
+approval, guardrails and Ansible) stays deferred until `concurrency_guard` and `health_checker` are
+implemented.
+
+**Opt-in.** `devopsAgentAdvisoryEnabled=true` (requires `devopsAgentEnabled` and `devopsAgentFindingsEnabled`;
+validated at synth). With `python scripts/aiops_env.py up --advisory`. Default off, which keeps the previous
+behaviour (the ECS task calls Bedrock itself).
+
+### Flow for an alert that matches no playbook
+
+1. The ECS task forwards the alert to DevOps Agent (`unmatched`) and **does not call Bedrock**
+   (`DEVOPS_AGENT_ADVISORY_MODE=true`). If forwarding did not happen (off, hourly cap, error), it falls back
+   to the old Bedrock advisory email, so the operator always gets advice.
+2. DevOps Agent investigates. EventBridge invokes the findings Lambda on `Investigation Completed`.
+3. The Lambda reads the investigation summary, then looks for a mitigation plan (`mitigation_summary_md`
+   journal record on any execution of the task). If there is none it requests one with
+   `UpdateBacklogTask(taskStatus=PENDING_START)` and polls every 15 s, up to `MITIGATION_WAIT_SECONDS`
+   (default 480) and never past the Lambda time left minus a 200 s reserve.
+4. The Lambda asks Bedrock (Converse API; model chain Sonnet 4.5, Nova Pro, Haiku 4.5, Nova Lite; 30 s
+   timeout, retries after 1 s and 2 s; optional guardrail from `BEDROCK_GUARDRAIL_ID/VERSION`) which playbook
+   in the catalogue fixes the root cause.
+5. One email: recommended fix (playbook, why, steps, how to verify, risks), the full investigation and root
+   cause, and the DevOps Agent mitigation plan.
+
+Failure handling: every step degrades to the next best email. Mitigation request denied or timed out, or
+Bedrock down: the email still carries whatever was gathered and says what is missing. An investigation that
+fails or times out still gets a recommendation from the alert data alone.
+
+### Safety
+
+- The playbook must be one of the paths in the catalogue (`advisory_context.json`, generated at synth from
+  `playbooks/*.yml` and `config/playbook_mapping.yml`). A made-up path is discarded.
+- Suggested steps matching `config/denied_commands.yml` are dropped and the email says how many.
+- Summary and plan text are untrusted: prompt section tags inside them are removed, input is bounded, and
+  everything is HTML-escaped in the email. Logs carry ids and statuses, never the texts.
+- One advisory per DevOps Agent task (DynamoDB lease), so a task that DevOps Agent re-runs after the
+  mitigation request cannot loop.
+
+### Permissions and cost (new when the flag is on)
+
+- Findings Lambda: `aidevops:ListExecutions` and `aidevops:UpdateBacklogTask` on tagged Agent Spaces (this
+  is a write: it asks the agent to produce a plan), and `bedrock:InvokeModel` with the same scope as the
+  task role. Timeout rises from 60 s to 900 s.
+- DevOps Agent bills per active agent-second, so the mitigation step adds to the investigation cost.
+- Bedrock cost is one Converse call per incident (a few tenths of a cent on Sonnet).
+
+### Not verified against a live Agent Space
+
+The mitigation request (`PENDING_START` on a completed investigation) follows an AWS sample; the AWS docs
+also describe mitigation proposals appearing inline in the investigation. The code handles both (it uses a
+plan that already exists, and otherwise requests one). Before relying on it, deploy with
+`python scripts/aiops_env.py up --env dev --advisory`, run `demo/trigger_p1_incident.py`, and check the
+`aiops-devops-findings-dev` log for `mitigation_status` (`found`, `generated`, `no_plan`, `timed_out`,
+`request_failed`, `failed`).
 
 ## Phase 3 — Deeper integration (planned, future)
 

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-01T00:00:00.000Z" agent="IBM AT Guide" version="21.0.0">
+  <diagram name="ECS Logical Operational Model" id="ecs_lom">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="ECS — Logical Operational Model (Exercise 04 &amp; 05)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1F2328;" vertex="1" parent="1">
+          <mxGeometry x="100" y="10" width="1200" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- ========= LOCATION: Respondent Home/Mobile ========= -->
+        <mxCell id="ll_resp" value="LL_Respondent (Internet / Mobile Network) — 9.5M households" style="swimlane;fontStyle=1;startSize=28;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="65" width="360" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Respondent actor -->
+        <mxCell id="a_resp_h" value="" style="shape=mxgraph.basic.person;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="ll_resp">
+          <mxGeometry x="30" y="50" width="40" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="a_resp_h_lbl" value="A_Respondent&lt;br/&gt;&lt;i&gt;(Desktop)&lt;/i&gt;" style="text;html=1;align=center;fontSize=10;" vertex="1" parent="ll_resp">
+          <mxGeometry x="14" y="108" width="72" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Browser_Client node -->
+        <mxCell id="ln_browser" value="LN_Browser_Client&lt;br/&gt;&lt;b&gt;U_form_browser&lt;/b&gt; [U]&lt;br/&gt;&lt;b&gt;U_logon_page&lt;/b&gt; [U]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_resp">
+          <mxGeometry x="160" y="50" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ========= LOCATION: Cloud Primary ========= -->
+        <mxCell id="ll_cloud" value="LL_Cloud_Primary (IBM Cloud — Bolumbia Region)  [1..n auto-scaled]" style="swimlane;fontStyle=1;startSize=28;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="420" y="65" width="700" height="500" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Web_Tier -->
+        <mxCell id="ln_web" value="LN_Web_Tier (2–20 pods)&lt;br/&gt;&lt;b&gt;E_dialog_control&lt;/b&gt; [E]&lt;br/&gt;&lt;i&gt;React + Node.js&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="40" y="50" width="200" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- LN_App_Tier -->
+        <mxCell id="ln_app" value="LN_App_Tier (4–40 pods)&lt;br/&gt;&lt;b&gt;E_auth_service&lt;/b&gt; [E]&lt;br/&gt;&lt;b&gt;E_form_engine&lt;/b&gt; [E]&lt;br/&gt;&lt;b&gt;E_submission_svc&lt;/b&gt; [E]&lt;br/&gt;&lt;b&gt;E_notification_svc&lt;/b&gt; [E]&lt;br/&gt;&lt;i&gt;Node.js microservices&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="280" y="50" width="200" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Session_Cache -->
+        <mxCell id="ln_redis" value="LN_Session_Cache (HA pair)&lt;br/&gt;&lt;b&gt;D_session_data&lt;/b&gt; [D]&lt;br/&gt;&lt;i&gt;IBM Databases for Redis&lt;/i&gt;&lt;br/&gt;&lt;i&gt;[Encrypted, Non-replicated]&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="520" y="50" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Database -->
+        <mxCell id="ln_db" value="LN_Database (HA primary+standby)&lt;br/&gt;&lt;b&gt;D_credential_store&lt;/b&gt; [D, Master]&lt;br/&gt;&lt;b&gt;D_partial_response&lt;/b&gt; [D, Master]&lt;br/&gt;&lt;b&gt;D_submitted_forms&lt;/b&gt; [D, Master]&lt;br/&gt;&lt;i&gt;IBM Databases for PostgreSQL&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="40" y="200" width="210" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- LN_APIGateway -->
+        <mxCell id="ln_apigw" value="LN_API_Gateway&lt;br/&gt;&lt;b&gt;E_api_gateway&lt;/b&gt; [E]&lt;br/&gt;&lt;i&gt;IBM API Connect&lt;/i&gt;&lt;br/&gt;[Integration point]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="290" y="220" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- LN_Monitoring -->
+        <mxCell id="ln_mon" value="LN_Monitoring&lt;br/&gt;&lt;b&gt;E_reporting_svc&lt;/b&gt; [E]&lt;br/&gt;&lt;i&gt;IBM Cloud Monitoring&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="510" y="210" width="170" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- DU Legend in cloud -->
+        <mxCell id="du_legend" value="DU Types:  [U] Presentation  |  [E] Execution  |  [D] Data  |  [I] Installation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=2;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="40" y="380" width="620" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Installation DUs note -->
+        <mxCell id="inst_note" value="Installation DUs (I_*): Deployed via CI/CD pipeline at build time, not shown on LOM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=2;" vertex="1" parent="ll_cloud">
+          <mxGeometry x="40" y="425" width="620" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ========= LOCATION: Cloud DR ========= -->
+        <mxCell id="ll_dr" value="LL_Cloud_DR (Secondary Region — DR)" style="swimlane;fontStyle=1;startSize=28;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="600" width="340" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ln_db_dr" value="LN_Database_DR&lt;br/&gt;&lt;b&gt;d_submitted_forms&lt;/b&gt; [d, copy]&lt;br/&gt;&lt;b&gt;d_credential_store&lt;/b&gt; [d, copy]&lt;br/&gt;&lt;i&gt;PostgreSQL Replica, RPO ≤ 1h&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;verticalAlign=top;" vertex="1" parent="ll_dr">
+          <mxGeometry x="40" y="40" width="250" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ========= LOCATION: DoS Datacenter ========= -->
+        <mxCell id="ll_dos" value="LL_DoS_Datacenter (Existing Systems)" style="swimlane;fontStyle=1;startSize=28;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="65" width="220" height="250" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_dos_proc" value="&lt;&lt;system&gt;&gt;&lt;br/&gt;&lt;b&gt;A_DoS_Processing&lt;/b&gt;&lt;br/&gt;Census database" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="ll_dos">
+          <mxGeometry x="20" y="50" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sms_gw" value="&lt;&lt;system&gt;&gt;&lt;br/&gt;&lt;b&gt;A_SMS_Gateway&lt;/b&gt;&lt;br/&gt;Collector notifications" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="ll_dos">
+          <mxGeometry x="20" y="160" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========= CONNECTIONS ========= -->
+        <!-- Respondent Browser → Web Tier -->
+        <mxCell id="con1" value="External high-speed&lt;br/&gt;(HTTPS / TLS 1.3)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;strokeWidth=2;" edge="1" source="ln_browser" target="ln_web" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Web Tier → App Tier -->
+        <mxCell id="con2" value="Internal&lt;br/&gt;high-speed" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ln_web" target="ln_app" parent="ll_cloud">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Tier → Redis -->
+        <mxCell id="con3" value="Session&lt;br/&gt;lookup" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ln_app" target="ln_redis" parent="ll_cloud">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Tier → DB -->
+        <mxCell id="con4" value="SQL" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ln_app" target="ln_db" parent="ll_cloud">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Tier → API GW -->
+        <mxCell id="con5" value="API calls" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ln_app" target="ln_apigw" parent="ll_cloud">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DB → DB DR (replication) -->
+        <mxCell id="con6" value="Async replication&lt;br/&gt;(RPO ≤ 1h)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;strokeColor=#b85450;dashed=1;" edge="1" source="ln_db" target="ln_db_dr" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API GW → DoS Backend -->
+        <mxCell id="con7" value="REST API&lt;br/&gt;(batch transfer)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ln_apigw" target="a_dos_proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API GW → SMS GW -->
+        <mxCell id="con8" value="SMPP/REST" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ln_apigw" target="a_sms_gw" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Capital D = master, lower-case d = copy legend -->
+        <mxCell id="copy_legend" value="Notation: D = Master copy of data  |  d = Copy of data  |  Dashed border = out-of-scope / DR location" style="text;html=1;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="20" y="800" width="1360" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

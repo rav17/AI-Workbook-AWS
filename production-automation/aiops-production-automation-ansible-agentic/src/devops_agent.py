@@ -97,6 +97,10 @@ _PRIORITY_MAP = {
 }
 
 
+# ForwardResult.reason when the same incident and trigger were already sent by this task.
+REASON_ALREADY_FORWARDED = "already forwarded"
+
+
 @dataclass
 class ForwardResult:
     """Outcome of a forward attempt (never an exception)."""
@@ -118,6 +122,9 @@ class DevOpsAgentConfig:
     environment: str
     aws_region: str
     web_app_url: str
+    # Phase 2b: for no-playbook alerts the findings Lambda (DevOps Agent + Bedrock) sends the
+    # advisory email, so this task must not call Bedrock when forwarding succeeded.
+    advisory_mode: bool = False
 
     @classmethod
     def from_env(cls) -> "DevOpsAgentConfig":
@@ -153,6 +160,10 @@ class DevOpsAgentConfig:
                 "AWS_REGION", os.environ.get("AWS_DEFAULT_REGION", "")
             ),
             web_app_url=os.environ.get("DEVOPS_AGENT_WEB_APP_URL", "").strip(),
+            advisory_mode=(
+                os.environ.get("DEVOPS_AGENT_ADVISORY_MODE", "false").strip().lower()
+                == "true"
+            ),
         )
 
 
@@ -267,6 +278,25 @@ class DevOpsAgentForwarder:
     def web_app_url(self) -> str:
         """Optional DevOps Agent web app URL to include in our emails."""
         return self._config.web_app_url
+
+    @property
+    def advisory_mode(self) -> bool:
+        """Whether DevOps Agent (not this task) produces the advisory for unmatched alerts."""
+        return self._config.advisory_mode
+
+    def defers_advisory(self, result: "ForwardResult") -> bool:
+        """True when the findings Lambda will send the advisory, so this task must not.
+
+        That holds only in advisory mode and only when an investigation exists for this
+        incident: it was just sent, or an earlier alert already forwarded it. Any other
+        outcome (disabled, capped, failed) returns False so the caller falls back to its
+        own Bedrock advisory and the operator is never left without advice.
+        """
+        if not self._config.advisory_mode:
+            return False
+        return result.status == "sent" or (
+            result.status == "skipped" and result.reason == REASON_ALREADY_FORWARDED
+        )
 
     def should_forward(self, trigger: str) -> bool:
         """Whether this trigger type is enabled."""
@@ -383,7 +413,7 @@ class DevOpsAgentForwarder:
         """Claim a de-duplication + rate-limit slot. Returns a skip result, or None if reserved."""
         with self._lock:
             if dedup_key in self._seen:
-                return ForwardResult("skipped", "already forwarded")
+                return ForwardResult("skipped", REASON_ALREADY_FORWARDED)
             if not self._within_rate_limit():
                 logger.warning(
                     "DevOps Agent hourly cap reached (%d) — not forwarding",

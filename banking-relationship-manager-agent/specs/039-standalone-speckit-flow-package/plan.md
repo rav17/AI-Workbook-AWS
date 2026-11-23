@@ -177,12 +177,13 @@ state, and all existing tests.
    **Honest limitation**: the inventory cannot self-hash; its own SHA-256 is written to
    the completion marker and printed for out-of-band recording.
 7. **Pre-assembly inspection** (FR-002 "two-sided"): subcommand `inventory` prints the
-   exact inventory JSON to stdout without writing anything, so the human can inspect
-   what the approved working tree contains before authorizing assembly. The human
-   snapshot approval is the gate that authorizes capturing uncommitted content;
-   automated controls verify the boundary but do not substitute for that approval, and
-   the per-file digest inventory is the audit trail of exactly which uncommitted bytes
-   were approved.
+   exact inventory JSON to stdout without writing anything (or saves those same bytes
+   with `--output`). The human reviews the file and approves its SHA-256 digest.
+   Assembly requires that exact file and digest, validates its schema, and compares
+   the current capture—including metadata, paths, digests and lengths—against it before
+   any destination write. The approved inventory bytes are embedded unchanged in the
+   package and bound by the completion marker; assembly does not generate replacement
+   metadata. This is the approval gate for uncommitted content.
 
 Expected scale at manifest 1.1.0: 147 manifest-selected files + 2 entry points +
 2 package-only docs = 151 inventoried files; the authoritative count is computed at
@@ -190,7 +191,8 @@ capture, never hard-coded.
 
 ### 2. Assembly procedure (FR-001, FR-005, FR-007 analogue)
 
-Subcommand `assemble --dest <path> --label <l> --captured-by <ref> [--dry-run]`,
+Subcommand
+`assemble --dest <path> --inventory <reviewed-file> --inventory-sha256 <approved-digest> [--dry-run]`,
 strictly ordered:
 
 1. **Destination preflight (before any write)**: resolve destination; refuse if it
@@ -204,20 +206,20 @@ strictly ordered:
    aliases — stated limitation, not complete alias detection. Create the destination
    directory only after all refusal checks pass (an existing *empty* directory is
    acceptable).
-2. **Capture** (section 1) entirely in memory. All destination paths route through the
+2. **Review binding and capture**: read the required inventory file, verify its
+   SHA-256 equals the required approved digest, reject invalid inventory schema, then
+   capture the current closure entirely in memory. Compare the complete current
+   inventory with the reviewed bytes (including metadata, paths, digests and lengths);
+   any mismatch refuses before destination writes. All destination paths route through the
    `_resolve_within` equivalent (per-component symlink rejection + containment check).
    Because bytes are read once and both hashed and written from memory, a source file
    changing mid-run cannot desynchronize digest and copy; an unreadable/missing
    allow-listed file aborts before any destination write with a per-file `ERROR` line.
-3. **Dry run** stops here, printing planned `CREATE <path>` lines and the computed
-   identifier; zero filesystem writes.
+3. **Dry run** stops here, printing planned `CREATE <path>` lines and the reviewed
+   snapshot identifier; zero filesystem writes.
 4. **Copy**: per-file atomic writes (`_atomic_write`: temp file in final directory,
    fsync, `os.replace`). No whole-run rollback exists or is claimed.
-5. **Write `SNAPSHOT.json`** (atomic) — written **before** the content screen so the
-   rendered metadata bytes are inside the screened set (the free-text `label`,
-   `captured_by` and `source_reference` values are embedded here). Those free-text
-   fields are additionally validated at argument parsing as defense-in-depth:
-   printable characters only, no control characters, bounded length (≤ 200 chars).
+5. **Write `SNAPSHOT.json`** atomically using the exact reviewed inventory bytes.
 6. **Content screen (blocking)**: run detect-secrets via subprocess **with
    `cwd=<destination>`** as `detect-secrets scan --all-files --force-use-all-plugins
    <relative paths…>`, passing the **explicit file list**: every inventoried path plus

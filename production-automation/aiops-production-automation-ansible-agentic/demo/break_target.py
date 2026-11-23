@@ -14,6 +14,7 @@ Usage:
 """
 
 import argparse
+import ipaddress
 import json
 import os
 import sys
@@ -40,6 +41,24 @@ def get_target_instance_id(region: str, env_name: str) -> str:
     except Exception as e:
         print(f"  ERROR: Could not find Simulation stack: {e}")
         sys.exit(1)
+    return ""
+
+
+def get_secondary_instance_id(region: str, env_name: str) -> str:
+    """Get the secondary target instance ID, or "" if the stack has none.
+
+    Stacks deployed before the secondary instance was added do not export
+    ``SecondaryTargetInstanceId``; callers should fall back to a single host.
+    """
+    cf = boto3.client("cloudformation", region_name=region)
+    try:
+        resp = cf.describe_stacks(StackName=f"Aiops-{env_name}-Simulation")
+    except Exception as e:
+        print(f"  ERROR: Could not find Simulation stack: {e}")
+        sys.exit(1)
+    for output in resp["Stacks"][0].get("Outputs", []):
+        if output["OutputKey"] == "SecondaryTargetInstanceId":
+            return output["OutputValue"]
     return ""
 
 
@@ -266,7 +285,19 @@ def _stress_memory(instance_id: str, region: str, duration: int):
 
     commands = [
         "which stress-ng > /dev/null 2>&1 || dnf install -y stress-ng > /dev/null 2>&1",
-        f"nohup stress-ng --vm 2 --vm-bytes 80% --vm-keep --timeout {duration}s > /dev/null 2>&1 &",
+        # Size the allocation from MemAvailable so usage lands at ~88%, above the 80%
+        # alarm threshold. A percentage (--vm-bytes 80%) is split across workers and only
+        # reached ~36% on a t3.micro. 12% of RAM stays free so the SSM agent keeps working.
+        "AVAIL_KB=$(awk '/MemAvailable/ {print $2}' /proc/meminfo); "
+        "TOTAL_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo); "
+        "BYTES_KB=$(( AVAIL_KB - TOTAL_KB * 12 / 100 )); "
+        "[ \"$BYTES_KB\" -gt 0 ] || BYTES_KB=$(( AVAIL_KB / 2 )); "
+        "echo \"Allocating ${BYTES_KB} kB of ${TOTAL_KB} kB\"; "
+        # --vm-hang 0: touch the memory once, then sleep holding it. Without it the
+        # worker rewrites memory in a loop at ~94% of a core, which trips the CPU alarm.
+        f"nohup stress-ng --vm 1 --vm-bytes ${{BYTES_KB}}k --vm-keep --vm-hang 0 "
+        f"--timeout {int(duration)}s "
+        "> /dev/null 2>&1 &",
         "sleep 2",
         "ps aux | grep 'stress-ng' | grep -v grep | head -1 && echo 'Memory stress started' || echo 'FAILED to start stress'",
         "free -m | head -3",
@@ -295,35 +326,113 @@ def _stress_memory(instance_id: str, region: str, duration: int):
         print(f"  (Waiting for command: {e})")
 
 
-def _flood_network(instance_id: str, region: str, duration: int):
-    """Send SSM command to generate high external network traffic."""
+def _run_flood_script(
+    instance_id: str, region: str, script: str, duration: int, comment: str
+) -> None:
+    """Run a shell flood script detached on the instance and print the SSM status.
+
+    The script runs under ``nohup`` in the background, so the SSM command returns
+    immediately while the flood continues for ``duration`` seconds.
+    """
     ssm = boto3.client("ssm", region_name=region)
-
-    # Generate real external traffic by rapid-fire curl requests to AWS metadata + DNS queries
-    cmd = (
-        f"which dig > /dev/null 2>&1 || dnf install -y bind-utils > /dev/null 2>&1; "
-        f"for i in $(seq 1 {duration}); do "
-        f"curl -s http://169.254.169.254/latest/meta-data/instance-id > /dev/null & "
-        f"curl -s http://169.254.169.254/latest/meta-data/ami-id > /dev/null & "
-        f"dig +short amazon.com @169.254.169.253 > /dev/null & "
-        f"dig +short aws.amazon.com @169.254.169.253 > /dev/null & "
-        f"sleep 0.05; done; echo 'Network flood complete'"
-    )
-
-    print(f"  Sending network flood command to {instance_id}...")
+    detached = f"nohup sh -c '{script}' > /dev/null 2>&1 &"
     response = ssm.send_command(
         InstanceIds=[instance_id],
         DocumentName="AWS-RunShellScript",
-        Parameters={"commands": [cmd]},
-        Comment=f"AIOps demo: network flood for {duration}s",
-        TimeoutSeconds=duration + 60,
+        Parameters={"commands": [detached, "echo 'Network flood started'"]},
+        Comment=comment,
+        TimeoutSeconds=60,
     )
     command_id = response["Command"]["CommandId"]
     print(f"  Command sent: {command_id}")
-    print(f"  Flood running in background for ~{duration}s...")
+    print(f"  Flood running in background for {duration}s...")
     time.sleep(5)
     result = ssm.get_command_invocation(CommandId=command_id, InstanceId=instance_id)
     print(f"  Status: {result['Status']}")
+
+
+def _flood_network(instance_id: str, region: str, duration: int):
+    """Generate local network chatter on one instance for ``duration`` seconds.
+
+    Sends rapid requests to the metadata service and VPC DNS resolver. These are
+    link-local endpoints, so CloudWatch network metrics may not count them. Use
+    ``flood_network_from_peer`` for traffic that arrives from another host.
+    """
+    duration = int(duration)
+    script = (
+        "which dig > /dev/null 2>&1 || dnf install -y bind-utils > /dev/null 2>&1; "
+        f"end=$(( $(date +%s) + {duration} )); "
+        "while [ $(date +%s) -lt $end ]; do "
+        "curl -s -m 2 http://169.254.169.254/latest/meta-data/instance-id > /dev/null & "
+        "curl -s -m 2 http://169.254.169.254/latest/meta-data/ami-id > /dev/null & "
+        "dig +short +time=2 +tries=1 amazon.com @169.254.169.253 > /dev/null & "
+        "dig +short +time=2 +tries=1 aws.amazon.com @169.254.169.253 > /dev/null & "
+        "sleep 0.05; done"
+    )
+    print(f"  Sending local network flood command to {instance_id}...")
+    _run_flood_script(
+        instance_id, region, script, duration, f"AIOps demo: network flood for {duration}s"
+    )
+
+
+def get_primary_private_ip(region: str, env_name: str) -> str:
+    """Get the primary target's private IP from the Simulation stack outputs."""
+    cf = boto3.client("cloudformation", region_name=region)
+    try:
+        resp = cf.describe_stacks(StackName=f"Aiops-{env_name}-Simulation")
+    except Exception as e:
+        print(f"  ERROR: Could not find Simulation stack: {e}")
+        sys.exit(1)
+    for output in resp["Stacks"][0].get("Outputs", []):
+        if output["OutputKey"] == "TargetPrivateIp":
+            return output["OutputValue"]
+    return ""
+
+
+def get_secondary_private_ip(region: str, env_name: str) -> str:
+    """Get the secondary target's private IP from the Simulation stack, or "" if absent."""
+    cf = boto3.client("cloudformation", region_name=region)
+    try:
+        resp = cf.describe_stacks(StackName=f"Aiops-{env_name}-Simulation")
+    except Exception as e:
+        print(f"  ERROR: Could not find Simulation stack: {e}")
+        sys.exit(1)
+    for output in resp["Stacks"][0].get("Outputs", []):
+        if output["OutputKey"] == "SecondaryTargetPrivateIp":
+            return output["OutputValue"]
+    return ""
+
+
+def flood_network_from_peer(
+    source_instance_id: str, target_ip: str, region: str, duration: int, port: int = 8080
+) -> None:
+    """Flood ``target_ip:port`` with HTTP requests sent from another instance.
+
+    The target receives real inbound packets, which count toward its
+    ``NetworkPacketsIn`` metric. Port 8080 is open to the VPC CIDR in the target
+    security group. Each request has a 2s timeout; 8 run in parallel per round.
+
+    Raises:
+        ValueError: If ``target_ip`` is not a valid IPv4 address.
+    """
+    ip = str(ipaddress.IPv4Address(target_ip))  # validates before shell interpolation
+    duration = int(duration)
+    port = int(port)
+    script = (
+        f"end=$(( $(date +%s) + {duration} )); "
+        "while [ $(date +%s) -lt $end ]; do "
+        "for j in 1 2 3 4 5 6 7 8; do "
+        f"curl -s -m 2 -o /dev/null http://{ip}:{port}/ & "
+        "done; wait; done"
+    )
+    print(f"  Flooding {ip}:{port} from {source_instance_id}...")
+    _run_flood_script(
+        source_instance_id,
+        region,
+        script,
+        duration,
+        f"AIOps demo: network flood to {ip} for {duration}s",
+    )
 
 
 if __name__ == "__main__":

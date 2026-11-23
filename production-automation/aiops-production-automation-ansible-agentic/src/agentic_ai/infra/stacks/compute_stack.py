@@ -533,6 +533,11 @@ class ComputeStack(cdk.Stack):
                 "DEVOPS_AGENT_ENABLED": "true" if context.devops_agent_enabled else "false",
                 "DEVOPS_AGENT_FORWARD_ON": context.devops_agent_forward_on,
                 "DEVOPS_AGENT_MAX_PER_HOUR": "20",  # cost guard: billed per agent-second
+                # Phase 2b: no-playbook alerts are advised by the findings Lambda (DevOps
+                # Agent investigation + Bedrock), so the task does not call Bedrock for them.
+                "DEVOPS_AGENT_ADVISORY_MODE": (
+                    "true" if context.devops_agent_advisory_enabled else "false"
+                ),
             },
             secrets={
                 "API_GATEWAY_KEY": ecs.Secret.from_secrets_manager(

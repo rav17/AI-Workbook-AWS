@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-01T00:00:00.000Z" agent="IBM AT Guide" version="21.0.0">
+  <diagram name="UC_01 Logon Sequence" id="ecs_seq_logon">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="ECS — Sequence Diagram: UC_01 Logon (Exercise 03)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#1F2328;" vertex="1" parent="1">
+          <mxGeometry x="60" y="10" width="1050" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LIFELINE HEADERS ===== -->
+        <mxCell id="lh_resp" value="&lt;b&gt;Respondent&lt;/b&gt;&lt;br/&gt;&lt;i&gt;(Browser)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lh_dlg" value="&lt;b&gt;DialogControl&lt;/b&gt;&lt;br/&gt;&lt;i&gt;(Web Tier)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="260" y="60" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lh_auth" value="&lt;b&gt;AuthService&lt;/b&gt;&lt;br/&gt;&lt;i&gt;(App Tier)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="460" y="60" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lh_dal" value="&lt;b&gt;DataAccessLayer&lt;/b&gt;&lt;br/&gt;&lt;i&gt;(PostgreSQL)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="660" y="60" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lh_sess" value="&lt;b&gt;SessionStore&lt;/b&gt;&lt;br/&gt;&lt;i&gt;(Redis)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="860" y="60" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LIFELINES ===== -->
+        <mxCell id="ll_resp" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry x="125" y="110" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="125" y="110" />
+              <mxPoint x="125" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_dlg" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry x="325" y="110" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="325" y="110" />
+              <mxPoint x="325" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_auth" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1">
+          <mxGeometry x="525" y="110" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="525" y="110" />
+              <mxPoint x="525" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_dal" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry x="725" y="110" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="725" y="110" />
+              <mxPoint x="725" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_sess" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry x="925" y="110" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="925" y="110" />
+              <mxPoint x="925" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ===== MESSAGES ===== -->
+        <!-- 1. Respondent → DialogControl -->
+        <mxCell id="m1" value="1. requestLogonPage()" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry x="125" y="150" relative="1" as="geometry">
+            <mxPoint x="125" y="150" as="sourcePoint" />
+            <mxPoint x="325" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 2. DialogControl → Respondent (return) -->
+        <mxCell id="m2" value="2. displayLogonPage()" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#6c8ebf;dashed=1;" edge="1" parent="1">
+          <mxGeometry x="325" y="190" relative="1" as="geometry">
+            <mxPoint x="325" y="190" as="sourcePoint" />
+            <mxPoint x="125" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 3. Respondent → DialogControl (submit credentials) -->
+        <mxCell id="m3" value="3. submitCredentials(cfn, ecn)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry x="125" y="250" relative="1" as="geometry">
+            <mxPoint x="125" y="250" as="sourcePoint" />
+            <mxPoint x="325" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 4. DialogControl → AuthService -->
+        <mxCell id="m4" value="4. authenticate(cfn, ecn)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#82b366;" edge="1" parent="1">
+          <mxGeometry x="325" y="310" relative="1" as="geometry">
+            <mxPoint x="325" y="310" as="sourcePoint" />
+            <mxPoint x="525" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 5. AuthService → DAL -->
+        <mxCell id="m5" value="5. lookupCredentials(cfn, ecn)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry x="525" y="370" relative="1" as="geometry">
+            <mxPoint x="525" y="370" as="sourcePoint" />
+            <mxPoint x="725" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 6. DAL → AuthService (return) -->
+        <mxCell id="m6" value="6. credentialRecord (match confirmed)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#d6b656;dashed=1;" edge="1" parent="1">
+          <mxGeometry x="725" y="410" relative="1" as="geometry">
+            <mxPoint x="725" y="410" as="sourcePoint" />
+            <mxPoint x="525" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 7. AuthService → SessionStore -->
+        <mxCell id="m7" value="7. createSession(userId)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry x="525" y="470" relative="1" as="geometry">
+            <mxPoint x="525" y="470" as="sourcePoint" />
+            <mxPoint x="925" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 8. SessionStore → AuthService (return) -->
+        <mxCell id="m8" value="8. sessionToken (JWT)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#d6b656;dashed=1;" edge="1" parent="1">
+          <mxGeometry x="925" y="510" relative="1" as="geometry">
+            <mxPoint x="925" y="510" as="sourcePoint" />
+            <mxPoint x="525" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 9. AuthService → DialogControl (return token) -->
+        <mxCell id="m9" value="9. sessionToken returned" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#82b366;dashed=1;" edge="1" parent="1">
+          <mxGeometry x="525" y="570" relative="1" as="geometry">
+            <mxPoint x="525" y="570" as="sourcePoint" />
+            <mxPoint x="325" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 10. DialogControl → Respondent (redirect) -->
+        <mxCell id="m10" value="10. redirect to InitialSection (token in cookie)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;endFill=0;strokeColor=#6c8ebf;dashed=1;" edge="1" parent="1">
+          <mxGeometry x="325" y="630" relative="1" as="geometry">
+            <mxPoint x="325" y="630" as="sourcePoint" />
+            <mxPoint x="125" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Alt box: invalid credentials -->
+        <mxCell id="alt_box" value="[alt] Invalid credentials" style="swimlane;startSize=20;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="660" width="760" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="alt_msg" value="AuthService → DialogControl: AuthenticationException&lt;br/&gt;DialogControl → Respondent: displayError('Invalid CFN/ECN — try again')" style="text;html=1;fontSize=10;align=left;verticalAlign=middle;spacingLeft=10;" vertex="1" parent="alt_box">
+          <mxGeometry x="10" y="25" width="740" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- USE CASE ref -->
+        <mxCell id="uc_ref" value="Use Case: UC_01 Logon | Pre-condition: CFN and ECN are valid | Post-condition: Respondent is authenticated with JWT token in HttpOnly cookie" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="60" y="758" width="1000" height="35" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

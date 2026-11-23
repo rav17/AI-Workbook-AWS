@@ -37,8 +37,9 @@ _USER_DATA = """\
 #!/bin/bash
 set -e
 
-# Install dependencies
-dnf install -y stress-ng python3 curl
+# Install dependencies. Do not install "curl": AL2023 ships curl-minimal (which provides
+# the curl command) and the full package conflicts with it, failing the whole script.
+dnf install -y stress-ng python3
 
 # Install node_exporter
 cd /tmp
@@ -110,6 +111,7 @@ _ALERT_LAMBDA_CODE = """\
 import json
 import urllib.request
 import os
+from datetime import datetime, timezone
 import boto3
 
 
@@ -122,8 +124,9 @@ def handler(event, context):
     # Determine alert parameters — allow override via direct invoke payload
     alert_name = default_alert
     severity = "critical"
-    service_name = "web-frontend"
+    service_name = os.environ.get("SERVICE_NAME", "web-frontend")
     summary = f"{default_alert} detected on {instance_id} (CloudWatch alarm)"
+    status = "firing"
 
     if isinstance(event, dict):
         # Direct invoke with custom payload (for testing AI mode)
@@ -133,12 +136,26 @@ def handler(event, context):
             service_name = event.get("service_name", "unknown-service")
             summary = event.get("summary", f"{alert_name} on {instance_id}")
             instance_id = event.get("instance", instance_id)
+            if event.get("status") in ("firing", "resolved"):
+                status = event["status"]
         # SNS trigger from CloudWatch Alarm
         elif "Records" in event:
             for rec in event.get("Records", []):
                 msg = json.loads(rec.get("Sns", {}).get("Message", "{}"))
-                if msg.get("NewStateValue") == "ALARM":
+                # Report the instance the alarm watches (its InstanceId dimension)
+                for dim in msg.get("Trigger", {}).get("Dimensions", []):
+                    if dim.get("name") == "InstanceId" and dim.get("value"):
+                        instance_id = dim["value"]
+                state = msg.get("NewStateValue")
+                if state == "ALARM":
                     summary = msg.get("NewStateReason", summary)
+                elif state == "OK":
+                    # Alarm cleared: tell the pipeline the alert resolved
+                    status = "resolved"
+                    summary = msg.get("NewStateReason", summary)
+                else:
+                    print(f"Ignoring alarm state {state}")
+                    return {"skipped": f"alarm state {state}"}
 
     # Get webhook URL from SSM
     try:
@@ -151,13 +168,17 @@ def handler(event, context):
         return {"error": str(e)}
 
     # Build and send Alertmanager webhook payload
+    ends_at = "0001-01-01T00:00:00Z"
+    if status == "resolved":
+        ends_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
     payload = json.dumps({
         "version": "4",
         "groupKey": f"cw-{alert_name}",
-        "status": "firing",
+        "status": status,
         "receiver": "aiops",
         "alerts": [{
-            "status": "firing",
+            "status": status,
             "labels": {
                 "alertname": alert_name,
                 "severity": severity,
@@ -169,7 +190,7 @@ def handler(event, context):
                 "summary": summary,
             },
             "startsAt": "2026-08-01T00:00:00Z",
-            "endsAt": "0001-01-01T00:00:00Z",
+            "endsAt": ends_at,
             "fingerprint": f"cw-{alert_name}-{instance_id}",
         }],
     }).encode()
@@ -239,6 +260,10 @@ class SimulationStack(cdk.Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name(
                     "AmazonSSMManagedInstanceCore"
                 ),
+                # Lets the CloudWatch agent publish memory metrics (CWAgent namespace)
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    "CloudWatchAgentServerPolicy"
+                ),
             ],
         )
 
@@ -267,6 +292,36 @@ class SimulationStack(cdk.Stack):
         cdk.Tags.of(self.instance).add("managed-by", "aiops")
         cdk.Tags.of(self.instance).add("service_name", "web-frontend")
         cdk.Tags.of(self.instance).add("Name", f"aiops-target-{env_name}")
+
+        # -----------------------------------------------------------
+        # Secondary EC2 instance (multi-host P1 demo)
+        # The network host for demo/trigger_p1_incident.py: it receives the HTTP flood
+        # and carries the network alarm, while the primary carries the memory and CPU
+        # alarms. One fault per host keeps each incident's evidence on its own host.
+        # -----------------------------------------------------------
+        self.secondary_instance = ec2.Instance(
+            self,
+            "SecondaryTargetInstance",
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.T3, ec2.InstanceSize.MICRO
+            ),
+            machine_image=ec2.AmazonLinuxImage(
+                generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2023,
+            ),
+            vpc=network_stack.vpc,
+            vpc_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS,
+            ),
+            security_group=self.target_sg,
+            role=self.instance_role,
+            user_data=ec2.UserData.custom(_USER_DATA),
+        )
+        # managed-by=aiops is required by the ssm:resourceTag condition on SendCommand
+        cdk.Tags.of(self.secondary_instance).add("managed-by", "aiops")
+        cdk.Tags.of(self.secondary_instance).add("service_name", "checkout-api")
+        cdk.Tags.of(self.secondary_instance).add(
+            "Name", f"aiops-target-secondary-{env_name}"
+        )
 
         # -----------------------------------------------------------
         # SSM Document: "Break" — triggers high CPU for testing
@@ -382,8 +437,10 @@ class SimulationStack(cdk.Stack):
             treat_missing_data=cw.TreatMissingData.NOT_BREACHING,
         )
         cpu_alarm.add_alarm_action(cw_actions.SnsAction(alarm_topic))
+        # OK transition sends a "resolved" alert so the pipeline can record it
+        cpu_alarm.add_ok_action(cw_actions.SnsAction(alarm_topic))
 
-        # CloudWatch Alarm: Network packets in > 1000/min → sends NetworkFloodDetected (NO playbook = AI mode)
+        # CloudWatch Alarm (secondary host): Network packets in > 1000/min → sends NetworkFloodDetected (NO playbook = AI mode)
         network_alarm = cw.Alarm(
             self,
             "NetworkFloodAlarm",
@@ -391,7 +448,7 @@ class SimulationStack(cdk.Stack):
             metric=cw.Metric(
                 metric_name="NetworkPacketsIn",
                 namespace="AWS/EC2",
-                dimensions_map={"InstanceId": self.instance.instance_id},
+                dimensions_map={"InstanceId": self.secondary_instance.instance_id},
                 period=Duration.minutes(1),
                 statistic="Sum",
             ),
@@ -413,7 +470,8 @@ class SimulationStack(cdk.Stack):
             code=_lambda.Code.from_inline(_ALERT_LAMBDA_CODE),
             environment={
                 "ENVIRONMENT": env_name,
-                "INSTANCE_ID": self.instance.instance_id,
+                "INSTANCE_ID": self.secondary_instance.instance_id,
+                "SERVICE_NAME": "checkout-api",
                 "ALERT_NAME": "NetworkFloodDetected",
             },
         )
@@ -428,6 +486,95 @@ class SimulationStack(cdk.Stack):
         network_topic = sns.Topic(self, "NetworkAlarmTopic", topic_name=f"aiops-network-alarm-{env_name}")
         network_topic.add_subscription(sns_subs.LambdaSubscription(network_alert_lambda))
         network_alarm.add_alarm_action(cw_actions.SnsAction(network_topic))
+        network_alarm.add_ok_action(cw_actions.SnsAction(network_topic))
+
+        # -----------------------------------------------------------
+        # Memory metric: CloudWatch agent (EC2 has no built-in memory metric)
+        # An SSM association installs and configures the agent on every instance
+        # tagged managed-by=aiops. User data would only run at first boot, so an
+        # association also covers instances that are already deployed. It re-applies
+        # every 30 minutes, and the install and config steps are idempotent.
+        # -----------------------------------------------------------
+        cw_agent_config = (
+            '{"agent":{"metrics_collection_interval":60},'
+            '"metrics":{"namespace":"CWAgent",'
+            '"append_dimensions":{"InstanceId":"${aws:InstanceId}"},'
+            '"metrics_collected":{"mem":{"measurement":["mem_used_percent","mem_available_percent"],'
+            '"metrics_collection_interval":60}}}}'
+        )
+        ssm.CfnAssociation(
+            self,
+            "CloudWatchAgentAssociation",
+            association_name=f"aiops-cloudwatch-agent-{env_name}",
+            name="AWS-RunShellScript",
+            targets=[
+                ssm.CfnAssociation.TargetProperty(
+                    key="tag:managed-by", values=["aiops"]
+                )
+            ],
+            schedule_expression="rate(30 minutes)",
+            parameters={
+                "commands": [
+                    "rpm -q amazon-cloudwatch-agent > /dev/null 2>&1 "
+                    "|| dnf install -y amazon-cloudwatch-agent",
+                    "mkdir -p /opt/aws/amazon-cloudwatch-agent/etc",
+                    f"cat > /opt/aws/amazon-cloudwatch-agent/etc/aiops-mem.json <<'EOF'\n"
+                    f"{cw_agent_config}\nEOF",
+                    "/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl "
+                    "-a fetch-config -m ec2 -s "
+                    "-c file:/opt/aws/amazon-cloudwatch-agent/etc/aiops-mem.json",
+                ]
+            },
+        )
+
+        # CloudWatch Alarm: available memory < 20% for 1 minute → sends HighMemoryUsage
+        # (playbook: memory-pressure → fix_high_memory.yml). mem_available_percent is
+        # used instead of mem_used_percent because "used" excludes page cache the kernel
+        # cannot reclaim: on a t3.micro the host had 13% available while "used" read 70%.
+        memory_alarm = cw.Alarm(
+            self,
+            "HighMemoryAlarm",
+            alarm_name=f"aiops-target-memory-{env_name}",
+            metric=cw.Metric(
+                metric_name="mem_available_percent",
+                namespace="CWAgent",
+                dimensions_map={"InstanceId": self.instance.instance_id},
+                period=Duration.minutes(1),
+                statistic="Average",
+            ),
+            threshold=20,
+            evaluation_periods=1,
+            datapoints_to_alarm=1,
+            comparison_operator=cw.ComparisonOperator.LESS_THAN_THRESHOLD,
+            treat_missing_data=cw.TreatMissingData.NOT_BREACHING,
+        )
+
+        memory_alert_lambda = _lambda.Function(
+            self,
+            "MemoryAlertLambda",
+            function_name=f"aiops-memory-alert-{env_name}",
+            runtime=_lambda.Runtime.PYTHON_3_12,
+            handler="index.handler",
+            timeout=Duration.seconds(60),  # Standards: Lambda timeout >= 60s
+            code=_lambda.Code.from_inline(_ALERT_LAMBDA_CODE),
+            environment={
+                "ENVIRONMENT": env_name,
+                "INSTANCE_ID": self.instance.instance_id,
+                "ALERT_NAME": "HighMemoryUsage",
+            },
+        )
+        memory_alert_lambda.add_to_role_policy(
+            iam.PolicyStatement(
+                actions=["ssm:GetParameter"],
+                resources=[f"arn:aws:ssm:{context.aws_region}:{context.aws_account}:parameter/aiops/{env_name}/*"],
+            )
+        )
+        memory_topic = sns.Topic(
+            self, "MemoryAlarmTopic", topic_name=f"aiops-memory-alarm-{env_name}"
+        )
+        memory_topic.add_subscription(sns_subs.LambdaSubscription(memory_alert_lambda))
+        memory_alarm.add_alarm_action(cw_actions.SnsAction(memory_topic))
+        memory_alarm.add_ok_action(cw_actions.SnsAction(memory_topic))
 
         # -----------------------------------------------------------
         # Outputs
@@ -437,6 +584,18 @@ class SimulationStack(cdk.Stack):
             "TargetInstanceId",
             value=self.instance.instance_id,
             export_name=f"AiopsTargetInstanceId-{env_name}",
+        )
+        CfnOutput(
+            self,
+            "SecondaryTargetInstanceId",
+            value=self.secondary_instance.instance_id,
+            export_name=f"AiopsSecondaryTargetInstanceId-{env_name}",
+        )
+        CfnOutput(
+            self,
+            "SecondaryTargetPrivateIp",
+            value=self.secondary_instance.instance_private_ip,
+            export_name=f"AiopsSecondaryTargetPrivateIp-{env_name}",
         )
         CfnOutput(
             self,

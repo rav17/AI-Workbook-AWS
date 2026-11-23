@@ -33,6 +33,9 @@ def main() -> None:
         "devopsAgentFindingsEnabled": str(
             app.node.try_get_context("devopsAgentFindingsEnabled") or "false"
         ),
+        "devopsAgentAdvisoryEnabled": str(
+            app.node.try_get_context("devopsAgentAdvisoryEnabled") or "false"
+        ),
     }
     context = validate_cdk_context(raw_context)
 

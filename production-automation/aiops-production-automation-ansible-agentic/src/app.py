@@ -11,10 +11,15 @@ Improvements integrated:
 - Graceful Shutdown: draining flag checked before accepting new work
 """
 
+import asyncio
+import dataclasses
 import logging
 import os
 import shutil
 import uuid
+from datetime import datetime, timezone
+from html import escape as _html_escape
+from typing import Optional
 
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
@@ -36,6 +41,7 @@ from src.escalation_fatigue import EscalationFatigueManager
 from src.error_codes import ApiErrorCode, error_response, success_response
 
 from src.models import (
+    Severity,
     AlertmanagerPayloadModel,
     AlertmanagerPayload,
     AlertmanagerAlert,
@@ -48,7 +54,15 @@ from src.executor import RemediationExecutor
 from src.notification import NotificationDispatcher
 from src.audit_logger import AuditLogger
 from src.metrics import MetricsCollector
-from src.approval_handler import ApprovalHandler
+from src.approval_handler import ApprovalHandler, get_signing_secret
+from src.agentic_ai.models.domain import IncidentRecord, RemediationPlan
+from src.agentic_ai.models.incident_store import OUTCOME_PENDING, IncidentMemoryStore
+from src.feedback_tokens import (
+    VERDICT_FAILURE,
+    VERDICT_SUCCESS,
+    create_feedback_token,
+    verify_feedback_token,
+)
 from src.devops_agent import DevOpsAgentForwarder
 
 logger = logging.getLogger(__name__)
@@ -132,6 +146,23 @@ audit_logger = AuditLogger(log_file_path=AUDIT_LOG_PATH)
 
 # --- Approval handler for human-in-the-loop (email-based) ---
 approval_handler = ApprovalHandler(base_url=_service_base_url.value)
+
+# --- Incident memory (DynamoDB): history for AI model routing, plus outcomes ---
+incident_store: Optional[IncidentMemoryStore] = None
+if DYNAMODB_TABLE_NAME:
+    try:
+        incident_store = IncidentMemoryStore(
+            table_name=DYNAMODB_TABLE_NAME,
+            region_name=os.environ.get("AWS_REGION")
+            or os.environ.get("AWS_DEFAULT_REGION"),
+        )
+        logger.info("Incident memory store initialized (table=%s)", DYNAMODB_TABLE_NAME)
+    except (BotoCoreError, ValueError) as e:
+        logger.warning(
+            "Incident memory store unavailable (non-fatal, AI history disabled): %s", e
+        )
+else:
+    logger.warning("DYNAMODB_TABLE_NAME not set - AI incident history is disabled")
 
 def _require_human_approval() -> bool:
     """Return whether rule-matched remediations must wait for human approval.
@@ -458,6 +489,19 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
     """
     from src.email_notifier import EmailNotifier
 
+    # Resolved alerts never go through the remediation pipeline: they only cancel
+    # pending work and record that the condition cleared.
+    resolved_alerts = [a for a in payload.alerts if a.status == "resolved"]
+    if resolved_alerts:
+        for resolved_alert in resolved_alerts:
+            await _handle_resolved_alert(resolved_alert)
+        payload = dataclasses.replace(
+            payload,
+            alerts=[a for a in payload.alerts if a.status != "resolved"],
+        )
+        if not payload.alerts:
+            return
+
     # Run the pipeline (normalize → enrich → match → execute)
     incident_ids = await orchestrator.process_alert_payload(payload)
 
@@ -475,26 +519,6 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
         else:
             incident_id = f"unknown-{uuid.uuid4().hex[:12]}"
         root_cause = annotations.get("summary", f"{alert_name} detected on {instance}")
-
-        # --- Resolved Alert Auto-Cancellation ---
-        if alert.status == "resolved":
-            decision = resolved_tracker.handle_resolved(alert_name, instance)
-            if decision.should_cancel:
-                logger.info(
-                    "Auto-cancelled: %s on %s resolved before execution",
-                    alert_name, instance,
-                )
-                metrics_collector.increment_storm_suppressed(alert_name, severity)
-            # Opt-in (DEVOPS_AGENT_FORWARD_ON includes "resolved"): tell DevOps
-            # Agent the alert recovered. No-op unless we forwarded it earlier.
-            await devops_forwarder.forward_resolved_async(
-                alert_name=alert_name,
-                host=instance,
-                severity=severity,
-                service_name=service_name,
-                summary=root_cause,
-            )
-            continue  # Don't process resolved alerts through email/AI path
 
         # --- Alert Inhibition Check ---
         inhibition = alert_inhibitor.evaluate(
@@ -604,6 +628,20 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
                 runbook_url=annotations.get("runbook_url", ""),
             )
 
+            # --- ADVISORY MODE: DevOps Agent investigates, the findings Lambda advises ---
+            # The Lambda reads the investigation and mitigation plan, asks Bedrock which
+            # playbook fits, and sends the one advisory email. Skip our own Bedrock call.
+            # If forwarding did not happen (off, capped, failed) fall through to the local
+            # AI advisory below so the operator always gets advice.
+            if devops_forwarder.defers_advisory(devops_result):
+                logger.info(
+                    "No playbook match for '%s': DevOps Agent investigation drives the "
+                    "advisory email (incident %s)",
+                    alert_name,
+                    incident_id,
+                )
+                continue
+
             # --- AI AGENT MODE: No playbook match, invoke AI for analysis ---
             if not use_ai:
                 logger.info(
@@ -630,6 +668,149 @@ async def _process_and_notify(payload: AlertmanagerPayload) -> None:
             )
 
 
+async def _handle_resolved_alert(alert: AlertmanagerAlert) -> None:
+    """Handle one "resolved" alert.
+
+    Cancels a pending action for the same alert and host, tells DevOps Agent (opt-in),
+    and marks the matching AI advisory incident in DynamoDB as resolved. The advisory
+    outcome is not touched: an alert clearing does not prove the advice worked.
+    """
+    alert_name = alert.labels.get("alertname", "Unknown")
+    severity = alert.labels.get("severity", "warning")
+    instance = alert.labels.get("instance", "unknown-host")
+    service_name = alert.labels.get("service_name", "unknown")
+    root_cause = alert.annotations.get("summary", f"{alert_name} detected on {instance}")
+
+    decision = resolved_tracker.handle_resolved(alert_name, instance)
+    if decision.should_cancel:
+        logger.info(
+            "Auto-cancelled: %s on %s resolved before execution",
+            alert_name, instance,
+        )
+        # The cancelled approval can no longer be used, so free its duplicate lock:
+        # otherwise a real recurrence within the approval expiry window is dropped.
+        if decision.incident_id:
+            await asyncio.to_thread(
+                approval_handler.release_dedup_for_incident, decision.incident_id
+            )
+        metrics_collector.increment_storm_suppressed(alert_name, severity)
+
+    # Opt-in (DEVOPS_AGENT_FORWARD_ON includes "resolved"): tell DevOps
+    # Agent the alert recovered. No-op unless we forwarded it earlier.
+    await devops_forwarder.forward_resolved_async(
+        alert_name=alert_name,
+        host=instance,
+        severity=severity,
+        service_name=service_name,
+        summary=root_cause,
+    )
+
+    if incident_store is not None:
+        try:
+            resolved_id = await asyncio.to_thread(
+                incident_store.record_resolution_for_alert, alert_name, instance
+            )
+        except Exception as e:  # background task boundary: never fail the webhook flow
+            logger.warning("Could not record resolution for %s on %s: %s", alert_name, instance, e)
+            return
+        if resolved_id:
+            logger.info(
+                "AI advisory incident %s marked resolved",
+                resolved_id,
+                extra={"incident_id": resolved_id},
+            )
+
+
+async def _record_advisory_incident(
+    *,
+    incident_id: str,
+    alert_name: str,
+    severity: str,
+    service_name: str,
+    instance: str,
+    plan: RemediationPlan,
+    model_id: Optional[str],
+) -> bool:
+    """Store the AI advisory as a pending incident so feedback and history can attach to it.
+
+    Returns:
+        True if the record was written, False if there is no store or the write failed.
+    """
+    if incident_store is None:
+        return False
+    fallback_reason = plan.fallback_reason
+    record = IncidentRecord(
+        incident_id=incident_id,
+        alert_name=alert_name,
+        severity=severity,
+        affected_service=service_name,
+        affected_resource=instance,
+        remediation_action=plan.selected_action or "advisory",
+        outcome=OUTCOME_PENDING,
+        execution_duration_seconds=0.0,
+        timestamp_completed=datetime.now(timezone.utc),
+        expiry_timestamp=0,
+        model_id=model_id,
+        confidence_score=plan.confidence_score,
+        reasoning_summary=plan.reasoning_explanation[:2048],
+        fallback_used=plan.fallback_used,
+        fallback_reason=fallback_reason.value if fallback_reason is not None else None,
+    )
+    try:
+        return await asyncio.to_thread(incident_store.record_incident, record)
+    except Exception as e:  # background task boundary
+        logger.warning(
+            "Could not store advisory incident %s: %s",
+            incident_id,
+            e,
+            extra={"incident_id": incident_id},
+        )
+        return False
+
+
+def _build_feedback_blocks(incident_id: str) -> tuple[str, str]:
+    """Build the "did this advice help?" section (HTML, text) for the advisory email."""
+    try:
+        secret = get_signing_secret()
+        base = _service_base_url.value.rstrip("/")
+        yes = f"{base}/feedback/{create_feedback_token(incident_id, VERDICT_SUCCESS, secret)}"
+        no = f"{base}/feedback/{create_feedback_token(incident_id, VERDICT_FAILURE, secret)}"
+    except ValueError as e:
+        logger.warning(
+            "Could not build feedback links for %s: %s",
+            incident_id,
+            e,
+            extra={"incident_id": incident_id},
+        )
+        return "", ""
+    button = (
+        "display: inline-block; padding: 10px 18px; border-radius: 4px; color: #fff;"
+        " text-decoration: none; font-weight: bold; margin-right: 8px; background: "
+    )
+    html_block = (
+        '<h3>Did this advice help?</h3><p style="font-size: 13px; color: #495057;">'
+        "Your answer is stored with the incident and improves model selection for similar "
+        "alerts. Each incident accepts one answer.</p>"
+        f'<p><a href="{_html_escape(yes, quote=True)}" style="{button}#28a745;">Yes, it helped</a>'
+        f'<a href="{_html_escape(no, quote=True)}" style="{button}#dc3545;">No, it did not</a></p>'
+    )
+    text_block = f"\nDID THIS ADVICE HELP?\n  Yes: {yes}\n  No:  {no}\n"
+    return html_block, text_block
+
+
+def _routing_severity(severity_label: str) -> str:
+    """Map an Alertmanager severity label to the P1-P5 value the model router uses.
+
+    Uses the pipeline's own mapping (critical->P1, warning->P2, info->P3). Labels that
+    are already P-values pass through; anything else defaults to P3, as in the
+    normalizer.
+    """
+    label = (severity_label or "").strip()
+    if label.upper() in {"P1", "P2", "P3", "P4", "P5"}:  # router's full P-range
+        return label.upper()
+    return Normalizer.SEVERITY_MAP.get(label.lower(), Severity.P3).value
+
+
 async def _send_ai_advisory_email(
     incident_id: str,
     alert_name: str,
@@ -647,11 +828,14 @@ async def _send_ai_advisory_email(
     # Invoke AI reasoning agent
     suggested_steps = ""
     ai_reasoning = ""
+    plan = None
+    agent = None
     try:
-        agent = AIReasoningAgent(config=AgentConfig())
+        agent = AIReasoningAgent(config=AgentConfig(), incident_store=incident_store)
+        # The router and confidence thresholds expect P1-P5, not the raw label.
         plan = await agent.reason(
             alert_name=alert_name,
-            severity=severity,
+            severity=_routing_severity(severity),
             service_name=service_name,
             target_resource=instance,
             labels=labels,
@@ -675,6 +859,19 @@ async def _send_ai_advisory_email(
             f"  3. Investigate alert: {alert_name}\n"
             f"  4. Apply appropriate fix based on findings"
         )
+
+    # Record the advisory as a pending incident and offer one-click feedback links.
+    feedback_html, feedback_text = "", ""
+    if plan is not None and await _record_advisory_incident(
+        incident_id=incident_id,
+        alert_name=alert_name,
+        severity=_routing_severity(severity),
+        service_name=service_name,
+        instance=instance,
+        plan=plan,
+        model_id=agent.last_model_id if agent is not None else None,
+    ):
+        feedback_html, feedback_text = _build_feedback_blocks(incident_id)
 
     # Note about the parallel AWS DevOps Agent investigation (Phase 1 integration)
     devops_html = ""
@@ -736,6 +933,7 @@ async def _send_ai_advisory_email(
     </p>
 </div>
 {devops_html}
+{feedback_html}
 
 <hr style="border: none; border-top: 1px solid #dee2e6; margin: 20px 0;">
 <p style="color: #6c757d; font-size: 12px;">
@@ -758,7 +956,7 @@ SUGGESTED STEPS:
 {suggested_steps}
 
 NOTE: No automated playbook available. Please execute manually.
-{devops_text}Incident: {incident_id}
+{devops_text}{feedback_text}Incident: {incident_id}
 """
 
     # Send via SES
@@ -959,6 +1157,121 @@ async def metrics() -> PlainTextResponse:
 # ===========================================================================
 
 
+def _feedback_page(
+    heading: str,
+    message: str,
+    *,
+    status_code: int = 200,
+    form_action: str = "",
+    button: str = "",
+) -> Response:
+    """Render a small HTML page for the feedback links (all dynamic text is escaped)."""
+    form = ""
+    if form_action:
+        form = (
+            f'<form method="POST" action="{_html_escape(form_action, quote=True)}">'
+            '<button type="submit" style="background: #0d6efd; color: white; padding: 14px 32px;'
+            " border: none; border-radius: 6px; font-size: 16px; font-weight: bold;"
+            f' cursor: pointer;">{_html_escape(button)}</button></form>'
+        )
+    body = (
+        '<html><body style="font-family: sans-serif; text-align: center; padding: 60px;">'
+        f"<h1>{_html_escape(heading)}</h1>"
+        f'<p style="color: #333; font-size: 18px;">{_html_escape(message)}</p>{form}'
+        "</body></html>"
+    )
+    return Response(
+        content=body,
+        media_type="text/html",
+        status_code=status_code,
+        headers={"Cache-Control": "no-store"},
+    )
+
+
+# ===========================================================================
+# Advisory feedback: "did this AI advice help?" (GET shows, POST records)
+# ===========================================================================
+
+
+@app.get("/feedback/{token}")
+async def feedback_confirmation(token: str) -> Response:
+    """Show a confirmation page for an advisory feedback link (no side effects).
+
+    Recording happens only on the POST below, so email link scanners that open the
+    link cannot record feedback by accident.
+    """
+    claims = verify_feedback_token(token, get_signing_secret())
+    if claims is None:
+        return _feedback_page(
+            "Link expired or invalid",
+            "This feedback link is no longer valid.",
+            status_code=410,
+        )
+    if incident_store is None:
+        return _feedback_page(
+            "Feedback unavailable", "The incident store is not configured.", status_code=503
+        )
+    record = await asyncio.to_thread(incident_store.get_incident, claims.incident_id)
+    if record is None:
+        return _feedback_page(
+            "Incident not found", "No record exists for this incident.", status_code=404
+        )
+    if record.outcome != OUTCOME_PENDING:
+        return _feedback_page(
+            "Feedback already recorded",
+            f"This incident was already marked: {record.outcome}.",
+        )
+    verdict_text = "helped" if claims.verdict == VERDICT_SUCCESS else "did not help"
+    return _feedback_page(
+        "Confirm your feedback",
+        f"Record that the AI advice for {record.alert_name} on "
+        f"{record.affected_resource} {verdict_text}?",
+        form_action=f"/feedback/{token}/confirm",
+        button="Confirm",
+    )
+
+
+@app.post("/feedback/{token}/confirm")
+async def feedback_confirm(token: str) -> Response:
+    """Record the operator's feedback as the incident outcome (first answer wins)."""
+    claims = verify_feedback_token(token, get_signing_secret())
+    if claims is None:
+        return _feedback_page(
+            "Link expired or invalid",
+            "This feedback link is no longer valid.",
+            status_code=410,
+        )
+    if incident_store is None:
+        return _feedback_page(
+            "Feedback unavailable", "The incident store is not configured.", status_code=503
+        )
+    recorded = await asyncio.to_thread(
+        incident_store.record_outcome,
+        claims.incident_id,
+        claims.verdict,
+        0.0,
+        None,
+        source="human_feedback",
+        only_if_pending=True,
+    )
+    if recorded:
+        logger.info(
+            "Advisory feedback recorded: %s",
+            claims.verdict,
+            extra={"incident_id": claims.incident_id},
+        )
+        return _feedback_page("Thank you", "Your feedback was recorded.")
+    record = await asyncio.to_thread(incident_store.get_incident, claims.incident_id)
+    if record is not None and record.outcome != OUTCOME_PENDING:
+        return _feedback_page(
+            "Feedback already recorded",
+            f"This incident was already marked: {record.outcome}.",
+        )
+    return _feedback_page(
+        "Could not record feedback", "Please try the link again in a moment.", status_code=503
+    )
+
+
 @app.get("/approve/{token}")
 async def approve_remediation(token: str, background_tasks: BackgroundTasks) -> Response:
     """Show confirmation page for remediation approval.
@@ -1144,12 +1457,16 @@ async def _execute_approved_remediation(approval) -> None:
             return
 
     # --- Execute the remediation ---
+    # Keep the resolved tracker in step, so a later "resolved" alert is reported as
+    # resolved after remediation instead of "resolved before execution".
+    resolved_tracker.mark_executing(approval.incident_id)
     try:
         result = await executor.execute(
             playbook_path=approval.playbook_path,
             target_host=approval.affected_host,
             extra_vars=approval.extra_vars,
         )
+        resolved_tracker.mark_completed(approval.incident_id)
         logger.info(
             "Approved remediation completed: incident=%s status=%s duration=%.1fs",
             approval.incident_id,
@@ -1191,6 +1508,7 @@ async def _execute_approved_remediation(approval) -> None:
             )
 
     except Exception as e:
+        resolved_tracker.mark_completed(approval.incident_id)
         logger.error(
             "Approved remediation failed: incident=%s error=%s",
             approval.incident_id,

@@ -9,12 +9,12 @@ Maintainer tool is stdlib-only except the subprocess call to `detect-secrets`
 ## 1. `inventory` — pre-assembly inspection (no writes)
 
 ```
-python scripts/speckit_package.py inventory --label <LABEL> --captured-by <REF> [--source-ref <TEXT>]
+python scripts/speckit_package.py inventory --label <LABEL> --captured-by <REF> [--source-ref <TEXT>] [--output "<NEW FILE OUTSIDE CHECKOUT>"]
 ```
 
 | Aspect | Contract |
 |---|---|
-| Behavior | Enumerates the capture closure (manifest allowlist + 2 packaging entry points + 2 package-docs), validates every path, computes per-file SHA-256 + byte length, prints the exact `SNAPSHOT.json` document to stdout. Zero filesystem writes anywhere. |
+| Behavior | Enumerates the capture closure (manifest allowlist + 2 packaging entry points + 2 package-docs), validates every path, computes per-file SHA-256 + byte length, prints the exact `SNAPSHOT.json` document to stdout. Zero filesystem writes anywhere, except the single `--output` file when given: exclusive create (never overwrites), refused inside the source repository, bytes identical to what stdout would carry. `--output` is the documented way to save the reviewed inventory because shell redirection can re-encode it. |
 | Purpose | FR-002 two-sided verification, side one: the human inspects the captured inventory and confirms it reflects the approved working tree before authorizing assembly. |
 | stderr extras | The inventory's own SHA-256 (for out-of-band recording) and the file count. |
 | Exit codes | 0 inventory printed; 2 manifest invalid, allow-listed file missing/unreadable, unsafe path, or bad arguments (message: `ERROR <detail>`). |
@@ -22,23 +22,25 @@ python scripts/speckit_package.py inventory --label <LABEL> --captured-by <REF> 
 ## 2. `assemble` — capture, copy, screen, verify, mark
 
 ```
-python scripts/speckit_package.py assemble --dest "<ABSOLUTE PATH>" --label <LABEL> --captured-by <REF> [--source-ref <TEXT>] [--dry-run]
+python scripts/speckit_package.py assemble --dest "<ABSOLUTE PATH>" --inventory "<REVIEWED SNAPSHOT.json>" --inventory-sha256 <APPROVED DIGEST> [--dry-run]
 ```
 
 | Argument | Contract |
 |---|---|
 | `--dest` | Required. Destination folder. Refused (exit 2, zero writes) if: it exists as anything other than a directory (regular file, symlink or other non-directory — an explicit refusal, not an incidental mkdir error); it exists and is non-empty (also the rerun guard over partial results); or its resolved path and the resolved source repo root are equal or ancestor/descendant in either direction. An existing **empty** directory is accepted; a missing one is created after all refusals pass. Known limitation (documented, not solved): `resolve()` does not canonicalize subst/mapped-drive/hardlink aliases. |
-| `--label` | Required snapshot label. Uniqueness across snapshots is a documented human convention (package README), not tool-enforced — no registry exists. Validated: printable, no control characters, ≤ 200 chars (same validation applies to `--captured-by` and `--source-ref`). |
-| `--captured-by` | Required capturing human / invocation reference. |
-| `--source-ref` | Optional override/fallback for the repository/branch/commit reference when `git` is unavailable (otherwise read-only `git rev-parse` is used). |
+| `--inventory` | Required. The inventory file the human reviewed (saved with `inventory --output`). Label, captured-by, captured-at, source reference and bundle version are taken from it; assemble no longer accepts `--label`, `--captured-by` or `--source-ref`. |
+| `--inventory-sha256` | Required. The digest the human approved. The file's SHA-256 must equal it, else exit 2 with zero writes. |
+| Snapshot label (from the reviewed inventory; set via `inventory --label`) | Required snapshot label. Uniqueness across snapshots is a documented human convention (package README), not tool-enforced — no registry exists. Validated: printable, no control characters, ≤ 200 chars (same validation applies to `--captured-by` and `--source-ref`). |
+| `inventory --captured-by` (recorded in the reviewed inventory) | Required capturing human / invocation reference. |
+| `inventory --source-ref` (recorded in the reviewed inventory) | Optional override/fallback for the repository/branch/commit reference when `git` is unavailable (otherwise read-only `git rev-parse` is used). |
 | `--dry-run` | Capture + preflight only; print `CREATE <path>` per planned file and the snapshot identifier; **zero filesystem writes**. |
 
 ### Ordered behavior (non-dry-run)
 
 1. Destination preflight refusals (above) — before any write.
-2. In-memory capture; any unreadable/missing closure file → `ERROR <path> (<reason>)`, exit 2, zero destination writes.
+2. Read `--inventory`, require its SHA-256 to equal `--inventory-sha256`, and validate the complete inventory schema (required fields/types and no unknown properties). Then capture the current closure in memory and compare its exact serialized inventory—including metadata, paths, digests and lengths—with the reviewed bytes. Invalid inventory, unreadable/missing closure file or drift → exit 2, zero destination writes. An existing empty destination remains empty on refusal.
 3. Per-file atomic copies (temp file + fsync + `os.replace`); source repository is never written to; captured bytes are copied verbatim (no plugin.json rewrite — that remains a consumer-install-time transform by the packaged installer).
-4. Write `SNAPSHOT.json` (UTF-8 no BOM, LF, sorted, trailing newline) — **before** the screen, so the rendered free-text metadata (label, captured-by, source reference) is inside the screened set.
+4. Write `SNAPSHOT.json` atomically using the exact reviewed inventory bytes (UTF-8 no BOM, LF, sorted, trailing newline) — **before** the screen, so reviewed metadata is inside the screened set.
 5. Blocking content screen: subprocess **with `cwd=<dest>`**: `detect-secrets scan --all-files --force-use-all-plugins <relative paths…>` over the **explicit file list** — every inventoried path plus `SNAPSHOT.json`. A bare directory argument is forbidden: empirically (detect-secrets 1.5.0/Windows) it enumerates via `git ls-files` and silently scans zero files in a non-git destination. **Coverage assertion**: the submitted-path count MUST be ≥ inventory file count + 1, else the gate fails. Findings, missing scanner, or coverage shortfall → exit 1, label withheld, destination left as-is. The completion marker is the only delivered file outside the screen (machine-generated hex digest + fixed filename, no free text — stated residual).
 6. Two-directional post-write verification against the inventory (every listed file present with matching digest+length; no unlisted files besides `SNAPSHOT.json` itself at this instant).
 7. Write completion marker `SNAPSHOT.json.sha256` **last**; print the inventory digest and `assemble complete: snapshot <LABEL>`.

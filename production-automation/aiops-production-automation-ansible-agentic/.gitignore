@@ -38,3 +38,6 @@ Thumbs.db
 
 # Runtime data (effectiveness scores, etc.)
 data/
+
+# Generated at CDK synth by constructs/advisory_context.py (playbook catalog for the findings Lambda)
+src/agentic_ai/lambdas/devops_agent_findings/advisory_context.json

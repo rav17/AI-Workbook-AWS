@@ -1,0 +1,54 @@
+{
+  "id": "implement-3",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-17T12:48:46+00:00",
+  "files": {
+    "specs/039-standalone-speckit-flow-package/spec.md": "887c0357a2a290317b008ccd87ade676bf2a5b5526ea80d9d4c13693ae12fd8d",
+    "specs/039-standalone-speckit-flow-package/plan.md": "e57490748dad03461c2ae5acb93883c355d7e64ca0383133704dd07f545f6d3f",
+    "specs/039-standalone-speckit-flow-package/tasks.md": "0346713d78dbc0a7495905ccb9f9773a5266c9e62c2b9d5e88e08779de9ffb90",
+    "specs/039-standalone-speckit-flow-package/data-model.md": "861db2fcf4e18036760c2c59f5b43c725d718ce900be50c8c5a81dc9bcccd992",
+    "specs/039-standalone-speckit-flow-package/research.md": "4eb5e3841221e7dcbce849c7371b9984f32678c29dbaeeda18bce31f54129156",
+    "specs/039-standalone-speckit-flow-package/quickstart.md": "0cc69291752ebe44a11e364954a31c66188b7249b1452e16ea0374416e167c65",
+    "specs/039-standalone-speckit-flow-package/contracts/speckit-package-cli.md": "4455f24e79c15b9972a4001d89d2813f950629dee0ad37fb4b0fbe1100f53135",
+    "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json": "ca31d946baa0bff7a619b249fb7a4131128ab6ba41518f78dd2b187210b140f0",
+    "specs/039-standalone-speckit-flow-package/questions.md": "aa2289d34b6a40e1648f59d3f2f6f6e7faebc71ca27404bd78a3a2801e1ebc54",
+    "scripts/speckit_package.py": "0049ed3c82749ecef2896f9aeada67ae196727d9b86ee431462cea22c50857c4",
+    "scripts/portable-package/verify_snapshot.py": "3da1a15ad7e063fdf12977c0238aa8e78bc1191967aa14bd10fb4aa9a07b2882",
+    "tests/unit/test_speckit_package.py": "0cf5276d4fc6a060e527112b9ae1a64a6dac1e17bf69783e7c7feb361a1c607c"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "scripts/portable-package/verify_snapshot.py",
+      "section": "_load_inventory / main",
+      "note": "The verifier reads package/SNAPSHOT.json before rejecting a symlink or junction at that path. A crafted package can therefore make verification read outside the package (even though the later walk reports drift). Reject link/reparse-point inventory files before read_bytes and cover this case in a receiving-side test."
+    },
+    {
+      "severity": "warning",
+      "file": "scripts/portable-package/verify_snapshot.py",
+      "section": "_load_inventory: snapshot.captured_at",
+      "note": "TIMESTAMP_RE checks only shape, so impossible dates or offsets (for example month 99 or +99:99) pass receiving-side schema validation. Parse and validate the timestamp as an actual ISO-8601 datetime with offset, and add malformed-value cases; otherwise an invalid inventory can be reported intact when its marker is recomputed."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json",
+      "section": "properties.files.items.properties.source_path",
+      "note": "The contract says source_path is present only for package-doc entries whose package and authoring paths differ, but the schema and receiver enforce only its path syntax/origin. They accept a missing source_path for a differing package-doc path or a redundant equal path. Encode/enforce the relationship or narrow the stated contract."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/tasks.md",
+      "section": "Manual acceptance and traceability tasks T029-T030, T033-T034, T036, T039-T042, T044",
+      "note": "These manual acceptance and closure tasks remain unchecked. Fixture tests do not establish the real destination assembly/refusal cases, receiving-side checkout isolation, consumer install/update walkthroughs, human docs review, boundary sweep, standalone scan, or traceability closure. Keep them open until their own evidence is recorded."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/plan.md",
+      "section": "Technical Context: Constraints",
+      "note": "The plan describes zero cloud footprint as confirmed. Per the stated evidence boundary, this is human-accepted scope, not verified isolation; the code and fixture tests provide no isolation proof. Retain the distinction in status/reporting and do not claim verified isolation."
+    }
+  ]
+}

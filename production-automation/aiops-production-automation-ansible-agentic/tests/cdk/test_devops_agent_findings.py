@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 import aws_cdk as cdk
 import pytest
 from aws_cdk.assertions import Match, Template
@@ -15,7 +17,9 @@ from src.agentic_ai.infra.stacks.observability_stack import ObservabilityStack
 pytestmark = pytest.mark.cdk
 
 
-def _observability_template(env_name: str = "dev", enabled: bool = True) -> Template:
+def _observability_template(
+    env_name: str = "dev", enabled: bool = True, advisory: bool = False
+) -> Template:
     """Synthesize ObservabilityStack (bundling skipped: tests need no network or Docker)."""
     context = CdkContext(
         environment=env_name,
@@ -25,7 +29,9 @@ def _observability_template(env_name: str = "dev", enabled: bool = True) -> Temp
         cost_center="platform-engineering",
         cost_center_email="platform@example.com",
         image_tag=f"abc1234-{env_name}",
+        devops_agent_enabled=advisory,
         devops_agent_findings_enabled=enabled,
+        devops_agent_advisory_enabled=advisory,
     )
     env = cdk.Environment(account=context.aws_account, region=context.aws_region)
     app = cdk.App(context={"aws:cdk:bundling-stacks": []})
@@ -269,6 +275,104 @@ class TestAlarms:
                 "AlarmActions": Match.any_value(),
             },
         )
+
+
+class TestAdvisoryMode:
+    """devopsAgentAdvisoryEnabled adds the mitigation request and the Bedrock call."""
+
+    def test_off_keeps_the_function_small_and_read_only(self) -> None:
+        template = _observability_template()
+        props = _function(template)
+        assert props["Timeout"] == 60
+        assert "ADVISORY_MODE" not in props["Environment"]["Variables"]
+        actions = {a for s in _statements(template) for a in _actions(s)}
+        assert not {"bedrock:InvokeModel", "aidevops:UpdateBacklogTask"} & actions
+
+    def test_function_gets_the_longest_timeout_and_the_settings(self) -> None:
+        props = _function(_observability_template(advisory=True))
+        assert props["Timeout"] == 900
+        env = props["Environment"]["Variables"]
+        assert env["ADVISORY_MODE"] == "true"
+        assert env["BEDROCK_MODEL_ID"] == "amazon.nova-pro-v1:0"
+        assert set(env) == {
+            "TABLE_NAME",
+            "SES_FROM_ADDRESS",
+            "OPERATOR_EMAIL",
+            "ENVIRONMENT",
+            "ADVISORY_MODE",
+            "BEDROCK_MODEL_ID",
+        }
+
+    def test_mitigation_request_is_tag_scoped_like_the_read_access(self) -> None:
+        statements = _statements(_observability_template(advisory=True))
+        write = next(
+            s for s in statements if "aidevops:UpdateBacklogTask" in _actions(s)
+        )
+        assert sorted(_actions(write)) == [
+            "aidevops:ListExecutions",
+            "aidevops:UpdateBacklogTask",
+        ]
+        assert (
+            write["Resource"] == "arn:aws:aidevops:us-east-1:123456789012:agentspace/*"
+        )
+        assert write["Condition"] == {
+            "StringEquals": {
+                "aws:ResourceTag/project": "aiops-self-healing",
+                "aws:ResourceTag/environment": "dev",
+            }
+        }
+
+    def test_bedrock_matches_the_task_role_scope(self) -> None:
+        statements = _statements(_observability_template(advisory=True))
+        bedrock = next(s for s in statements if "bedrock:InvokeModel" in _actions(s))
+        assert _actions(bedrock) == ["bedrock:InvokeModel"]
+        assert bedrock["Resource"] == [
+            "arn:aws:bedrock:us-east-1::foundation-model/*",
+            "arn:aws:bedrock:us-east-2::foundation-model/*",
+            "arn:aws:bedrock:us-west-2::foundation-model/*",
+            "arn:aws:bedrock:us-east-1:123456789012:inference-profile/us.*",
+        ]
+
+    def test_no_account_wide_resources_and_only_expected_services(self) -> None:
+        allowed = (
+            "aidevops:",
+            "ses:",
+            "dynamodb:",
+            "sqs:",
+            "xray:",
+            "logs:",
+            "bedrock:",
+        )
+        for statement in _statements(_observability_template(advisory=True)):
+            assert statement.get("Resource") != "*", statement
+            for action in _actions(statement):
+                assert action.startswith(allowed), action
+
+    def test_the_rule_still_matches_only_investigation_events(self) -> None:
+        # Advisory mode polls for the mitigation plan, so it needs no Mitigation* events.
+        rule = next(
+            iter(
+                _observability_template(advisory=True)
+                .find_resources("AWS::Events::Rule")
+                .values()
+            )
+        )["Properties"]
+        assert all(
+            t.startswith("Investigation") for t in rule["EventPattern"]["detail-type"]
+        )
+
+    def test_the_playbook_catalog_is_generated_next_to_the_handler(self) -> None:
+        from pathlib import Path
+
+        _observability_template(advisory=True)
+        generated = (
+            Path(__file__).resolve().parents[2]
+            / "src/agentic_ai/lambdas/devops_agent_findings/advisory_context.json"
+        )
+        data = json.loads(generated.read_text(encoding="utf-8"))
+        paths = {p["path"] for p in data["playbooks"]}
+        assert "playbooks/fix_high_memory.yml" in paths
+        assert data["denied_patterns"]
 
 
 def _actions(statement: dict) -> list[str]:

@@ -1,23 +1,23 @@
 # Graph Report - banking-relationship-manager-agent  (2026-11-17)
 
 ## Corpus Check
-- 776 files · ~431,634 words
+- 783 files · ~435,677 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 35 file(s) not represented in the graph (top: .drawio 18, .jsonl 12, (none) 2)
 
 ## Summary
-- 5839 nodes · 12696 edges · 416 communities (320 shown, 96 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 957 edges (avg confidence: 0.94)
+- 5877 nodes · 12802 edges · 428 communities (330 shown, 98 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 967 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e577c1c2`
+- Built from commit: `95fb832a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - StatementTransaction
-- start_stage
+- speckit_flow
 - IdempotencyStore
 - ReceivablesInvestigationEngine
 - test_flow_reviews.py
@@ -31,29 +31,29 @@
 - Implementation Plan: Copilot Compatibility Diagnostics
 - properties
 - Tasks
-- read_events
-- test_flow_contracts.py
+- test_flow_assurance.py
+- speckit_flow/contracts.py
 - Tasks: Profile-Aware Workflow Orchestration
 - test_flow_units.py
 - Implementation Plan: Reliable Worker Recovery
-- append_event
-- test_flow_state.py
-- test_flow_compose.py
+- audit.py
+- _resolve_within
+- Decisions
 - Implementation Plan: Hybrid Plan Review
 - SessionManager
-- AgentCoreMemoryDataPlaneClient
+- test_agentcore_adapters.py
 - Requirements
 - Implementation Plan: Dispute Resolution Subagent
-- _sha256
-- reserve
-- AgentCoreRuntimeAdapter
 - FlowError
+- test_receivables_metrics.py
+- AgentCoreRuntimeAdapter
+- doctor.py
 - Implementation Plan: Production Readiness Remediation
 - Implementation Plan: KYC/AML Verification Subagent
 - Implementation Plan: Reviewers, Learned Rules, Team Knowledge and Extended Stages
 - Implementation Plan: Structured Stage Contracts
 - test_speckit_bootstrap.py
-- aria/agentcore_entrypoint.py
+- verify_snapshot.py
 - FrameworkRunner
 - test_workflow_risk.py
 - test_flow_policy_questions.py
@@ -67,17 +67,17 @@
 - Specification Quality Checklist: Compliance Plugin Pack
 - Implementation Plan: Portable Spec Kit Setup
 - .claude/skills/speckit-analyze/SKILL.md
-- test_runtime_builds_only_allowlisted_gateway_tools_and_closes_client
+- speckit_flow/state.py
 - test_flow_workflow.py
 - test_flow_trace.py
 - Feature Specification: Memory Context Contract Normalization
 - invoke_gateway_tool
 - Implementation Plan: AI-DLC Agent Roster
-- Protocol
+- dataclasses
 - speckit_guard.py
-- pytest
-- run_stage
-- 025-compliance-plugin-pack/tasks.md
+- speckit_flow/models.py
+- sensors.py
+- gate_problems
 - Specification Quality Checklist: AWS Service Icons in Architecture Diagram
 - properties
 - Implementation Plan: Walking Skeleton
@@ -95,16 +95,16 @@
 - Records
 - User Scenarios & Testing *(mandatory)*
 - test_strands_runtime.py
-- SourceResult
-- load_roster
-- load_profiles
-- Decisions
+- _assemble
+- agents.py
+- cdk/app.py
+- Tasks: Standalone Spec Kit Flow Package
 - User Scenarios & Testing
-- Implementation Plan: Operational Readiness
+- Specification Quality Checklist: Operational Readiness
 - test_flow_sensors.py
 - gateway.py
 - Tasks: Production Readiness Remediation
-- discover
+- plugins.py
 - test_flow_compliance_pack.py
 - Data Model: Aria AI Relationship Manager
 - Quickstart: Workflow Automation
@@ -119,36 +119,36 @@
 - Diagram
 - Data Model: Gateway-Backed Statement Explainer
 - test_receivables_store.py
-- 3. Source evidence ([SRC], read-only; paths relative to repo root `banking-relationship-manager-agent`)
+- os
 - User Scenarios & Testing
 - Research: Receivables Exception Resolution Specialist
 - Feature Specification: Virtual Account Receivables Exception Resolution
-- test_agentcore_entrypoint.py
+- aria/agentcore_entrypoint.py
 - reject
 - .execute
-- Quickstart: Use Spec Kit in Another Project
+- Spec Kit Flow portable package
 - Specification Quality Checklist: Aria AI Relationship Manager
-- aria/agent.py
+- re
 - Recovery Core and Host Adapter Contract (Proposed)
 - Plan Gate Review Package: Reliable Worker Recovery
 - Quickstart: Future Recovery Contract Validation
-- verify_snapshot.py
+- build_artifacts.py
 - Data Model: KYC/AML Verification
-- speckit-profiles.md
-- Profile
+- test_flow_plugins.py
+- json
 - Feature Specification: [FEATURE NAME]
-- load_sensors
-- Implementation Plan: Account Statement Explainer Subagent
+- test_flow_section_sensor.py
+- User Scenarios & Testing
 - index.md
-- Data Model: Receivables Exception Resolution (synthetic MVP)
+- load_profiles
 - Tasks: Virtual Account Receivables Exception Resolution
-- Implementation Plan: Layered Rules and Customization Overlay
+- 2. `assemble` — capture, copy, screen, verify, mark
 - properties
 - Decisions
 - Feature Specification: Two-Level Diagram Scope Guidance
-- test_agentcore_adapters.py
-- evaluate_maturity_event
-- FrozenDict
+- MemoryEntry
+- .__init__
+- _import_scripts_module
 - cli.py
 - .github/skills/speckit-plan/SKILL.md
 - .github/skills/speckit-specify/SKILL.md
@@ -160,7 +160,7 @@
 - Tasks: Workflow Profiles and Audit Trail
 - Data Model
 - Specification Quality Checklist: Two-Level Diagram Scope Guidance
-- cdk/app.py
+- pathlib
 - 041-explicit-delegation-assurance/plan.md
 - .claude/skills/speckit-plan/SKILL.md
 - .claude/skills/speckit-specify/SKILL.md
@@ -172,10 +172,10 @@
 - Specification Analysis Report — Receivables Exception Resolution
 - Tasks: Dispute Resolution Subagent
 - Tasks: KYC/AML Verification Subagent
-- done_stage
-- Research: Structured Stage Contracts
+- test_flow_calls.py
+- receivables/agent.py
 - Tasks: Spec Kit Workflow Automation
-- Spec Kit Flow portable package
+- test_api_and_events.py
 - WorkflowDependencyGraph
 - fastapi
 - fastapi_responses
@@ -194,13 +194,13 @@
 - .github/skills/speckit-clarify/SKILL.md
 - Implementation Plan: [FEATURE]
 - Feature Specification: Explicit Delegation Assurance
-- test_flow_doctor.py
+- AgentCoreGatewayAdapter
 - Shared Framework Decisions
-- decide_gate
+- read_events
 - Data Model
 - Research: Workflow Profiles and Audit Trail
 - Implementation Plan: Explicit Delegation Assurance
-- User Scenarios & Testing
+- InvestigationStopped
 - Tasks: Existing-Codebase Analysis
 - Tasks: Operational Readiness
 - Tasks: Walking Skeleton
@@ -210,19 +210,19 @@
 - properties
 - Entities
 - Tasks: Reviewers, Learned Rules, Team Knowledge and Extended Stages
-- Feature Specification: Stages as Data
+- ScriptedModel
 - .claude/skills/speckit-checklist/SKILL.md
 - .github/skills/speckit-checklist/SKILL.md
 - Spec Kit Architecture Diagrams
 - .github/skills/speckit-implement/SKILL.md
 - Operational Runbook
 - test_foundation.py
-- synthetic_harness_context
+- test_receivables_subagent.py
 - Walking-Skeleton Journey
 - Quickstart: Aria AI Relationship Manager
 - Production Best Practices
-- AWS CDK v2 Decisions
-- bounded_status
+- Research: Aria AI Relationship Manager
+- RecoveryAdapter
 - Ideation Brief: Virtual Account Receivables Exception Resolution
 - Tasks: Memory Context Contract Normalization
 - ceremony
@@ -231,13 +231,13 @@
 - $ref
 - TrustedContext
 - Plan: lean workflow validation
-- AgentCoreGatewayAdapter
+- test_security.py
 - .claude/skills/speckit-clarify/SKILL.md
 - .claude/skills/speckit-implement/SKILL.md
-- Quickstart: Receivables Exception Resolution (synthetic MVP)
-- Proposed Synthetic Policy v1 (DRAFT, SYNTHETIC ONLY)
+- build_receivables_exception_tool
+- knowledge_tool.py
 - sequence
-- resolve_runtime_identity
+- _run_screen
 - Release Record
 - [PROJECT NAME] Development Guidelines
 - Ideation Brief: [IDEA]
@@ -255,7 +255,7 @@
 - Quickstart: Structured Stage Contracts
 - Research: Profile-Aware Workflow Orchestration
 - source_reference
-- Data Model: Memory Context Contract Normalization
+- Data Model
 - .claude/skills/speckit-constitution/SKILL.md
 - GitHub Copilot Project Instructions
 - .github/skills/speckit-constitution/SKILL.md
@@ -272,16 +272,16 @@
 - Research: AWS Service Icons in Architecture Diagram
 - profile.schema.json
 - additionalProperties
-- Data Model: AI-DLC Agent Roster
+- Agent
 - Feature Specification: Test Strategy and Guard Policy
-- feature_dir
+- Clarifying Questions
 - Bootstrap CLI Contract
-- Research: Aria AI Relationship Manager
+- LogicalDemoClock
 - Research
 - Research
 - Quickstart: Review and Verify Diagram-Scope Guidance
 - Specification: checkpoint freshness and ready-unit reporting
-- _atomic_write
+- Implementation Plan: Standalone Spec Kit Flow Package
 - snapshot-inventory.schema.json
 - Claude Code Project Instructions
 - .claude/skills/speckit-taskstoissues/SKILL.md
@@ -290,10 +290,10 @@
 - speckit-profile/SKILL.md
 - speckit-review/SKILL.md
 - .github/skills/speckit-taskstoissues/SKILL.md
-- Tasks: AI-DLC Agent Roster
+- Implementation Plan: Account Statement Explainer Subagent
 - AI-DLC extras pack
 - [CHECKLIST TYPE] Checklist: [FEATURE NAME]
-- Proposed CLI Contract
+- test_flow_cli_015_017.py
 - Quickstart: KYC/AML Verification Subagent
 - properties
 - Quickstart: Memory Context Contract Normalization
@@ -310,8 +310,9 @@
 - Specification: lean workflow validation
 - Specification: feature profile trial
 - properties
-- test_context_is_bounded_read_only_and_reports_gate
-- Validation Guide: Explicit Delegation Assurance
+- test_rest_handler_accepts_verified_tenant_and_subject_claims
+- test_mmdsv2_custom_resource.py
+- .ceremony_on
 - Commands
 - Data Model: Dispute Resolution
 - speckit-compose/SKILL.md
@@ -325,8 +326,8 @@
 - Quickstart
 - Quickstart
 - output
-- Research: Standalone Spec Kit Flow Package
-- test_statement_subagent.py
+- Tasks: AI-DLC Agent Roster
+- normalize_strands_event
 - Shared Architecture View Change Proposal
 - NFR design: [FEATURE]
 - description
@@ -390,21 +391,32 @@
 - 038-hybrid-plan-review/state.md
 - 039-standalone-speckit-flow-package/state.md
 - aria-ai-relationship-manager
-- 2. `assemble` — capture, copy, screen, verify, mark
+- test_flow_layers_custom.py
+- 025-compliance-plugin-pack/tasks.md
+- Deployment
 - Data Model: Standalone Spec Kit Flow Package
 - Quickstart: Standalone Spec Kit Flow Package — validation guide
-- Implementation Plan: Memory Context Contract Normalization
+- test_runtime_parent_adds_child_statement_tool_only_when_enabled
+- Data Model: Portable Spec Kit Setup
 - items
-- pathlib
+- test_flow_extra_agents.py
 - 041-explicit-delegation-assurance/state.md
+- ports.py
 - 040-copilot-compatibility-diagnostics/state.md
-- test_api_and_events.py
+- Specification Quality Checklist: Account Statement Explainer Subagent
+- rest_handler.py
+- Implementation Plan: Memory Context Contract Normalization
+- test_framework_smoke_agent.py
 - captured_by
 - label
+- readiness.py
+- test_statement_child_reads_only_through_gateway_with_hidden_verified_identity
 - path
 - test_flow_clarify_skill.py
+- Research: Memory Context Contract Normalization
 - bundle_version
 - sha256
+- .__init__
 
 ## God Nodes (most connected - your core abstractions)
 1. `FlowError` - 386 edges
@@ -419,8 +431,6 @@
 10. `AriaAgent` - 59 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `R3. Runtime integration [SRC][PROP]` --references--> `_build_strands_agent()`  [INFERRED]
-  specs/004-receivables-exception-resolution/research.md → aria/agents/aria/agentcore_entrypoint.py
 - `EvidenceItem` --references--> `freshness()`  [INFERRED]
   specs/004-receivables-exception-resolution/data-model.md → aria/agents/aria/receivables/freshness.py
 - `VerificationObservation` --references--> `freshness()`  [INFERRED]
@@ -429,56 +439,58 @@
   specs/038-hybrid-plan-review/checklists/requirements.md → aria/agents/aria/receivables/freshness.py
 - `Functional Requirements` --references--> `freshness()`  [INFERRED]
   specs/038-hybrid-plan-review/spec.md → aria/agents/aria/receivables/freshness.py
+- `2. Approval provenance (actual vs proposed)` --references--> `TrustedContext`  [INFERRED]
+  specs/004-receivables-exception-resolution/plan.md → aria/agents/aria/receivables/models.py
 
 ## Import Cycles
 - 3-file cycle: `speckit_flow/contracts.py -> speckit_flow/sensors.py -> speckit_flow/state.py -> speckit_flow/contracts.py`
 - 4-file cycle: `speckit_flow/contracts.py -> speckit_flow/sensors.py -> speckit_flow/state.py -> speckit_flow/profiles.py -> speckit_flow/contracts.py`
 
-## Communities (416 total, 96 thin omitted)
+## Communities (428 total, 98 thin omitted)
 
 ### Community 0 - "StatementTransaction"
-Cohesion: 0.05
-Nodes (70): _authorized_rows(), build_statement_explainer_tool(), categorise_spend(), detect_anomalies(), explain_transaction(), get_transactions(), list_authorized_statements(), summarise_period() (+62 more)
+Cohesion: 0.06
+Nodes (68): _authorized_rows(), build_statement_explainer_tool(), categorise_spend(), detect_anomalies(), explain_transaction(), get_transactions(), list_authorized_statements(), summarise_period() (+60 more)
 
-### Community 1 - "start_stage"
-Cohesion: 0.11
-Nodes (39): is_parked(), now_iso(), A feature is parked when its latest park/resume event is a park., _run_intents(), FeatureState, _active_name(), Intent, list_intents() (+31 more)
+### Community 1 - "speckit_flow"
+Cohesion: 0.12
+Nodes (23): speckit_flow, load_route_file(), parse_route(), Any, Path, Validate a proposed route with the same rules as shipped profiles., Write route.json, initialize state from it and audit the composition., save_route() (+15 more)
 
 ### Community 2 - "IdempotencyStore"
 Cohesion: 0.08
-Nodes (16): IdempotencyStore, Any, Exception, StateStore, importlib, os, test_idempotency_store_from_environment_uses_configured_dynamodb_table(), test_idempotency_store_persists_claims_across_instances_and_releases_for_retry() (+8 more)
+Nodes (16): IdempotencyStore, Any, Exception, StateStore, importlib, test_idempotency_store_from_environment_uses_configured_dynamodb_table(), test_idempotency_store_persists_claims_across_instances_and_releases_for_retry(), test_idempotency_store_reclaims_expired_in_progress_claim() (+8 more)
 
 ### Community 3 - "ReceivablesInvestigationEngine"
-Cohesion: 0.08
-Nodes (62): ReceivablesInvestigationEngine, audit_event_counts(), catalogue_metrics(), Retain source identity in retrieval counts, rather than a single surface flag., Independent Decimal recomputation from immutable input, not engine…, Score fixed E-path denominators; trace errors are not business escalations., _trace_valid(), _variance_valid() (+54 more)
+Cohesion: 0.10
+Nodes (46): ReceivablesInvestigationEngine, Availability, EvidenceType, SourceRecord, SourceResult, _approval_bindings(), ApprovedCatalogue, build_snapshot_manifest() (+38 more)
 
 ### Community 4 - "test_flow_reviews.py"
-Cohesion: 0.07
-Nodes (88): authorize_source(), bind_request(), _check_capability(), _check_source_header(), complete_review(), configure(), _consent(), _digest() (+80 more)
+Cohesion: 0.12
+Nodes (61): Finding, Review, build_review(), fingerprint(), _hybrid_invocation(), is_stale(), latest_review(), list_reviews() (+53 more)
 
 ### Community 5 - "engine.py"
-Cohesion: 0.12
-Nodes (36): Decimal, freshness(), policy_is_effective(), proposal_is_current(), datetime, record_set_unchanged(), CandidateAllocation, Freshness (+28 more)
+Cohesion: 0.13
+Nodes (34): Decimal, freshness(), policy_is_effective(), proposal_is_current(), datetime, record_set_unchanged(), AllocationCheckStatus, CandidateAllocation (+26 more)
 
 ### Community 6 - "init_state"
-Cohesion: 0.13
-Nodes (38): dispatch(), Validate eligibility and return a brief; only the host can invoke agents., init_state(), feature(), CaptureFixture, MonkeyPatch, parametrize, Path (+30 more)
+Cohesion: 0.09
+Nodes (65): dispatch(), Validate eligibility and return a brief; only the host can invoke agents., decide_gate(), done_stage(), init_state(), start_stage(), Plan: Construction Units and Verification Command (019), test_pending_implementation_uses_the_same_existing_feature_route() (+57 more)
 
 ### Community 7 - "speckit_package.py"
-Cohesion: 0.08
-Nodes (36): contextlib, _assemble_into_destination(), _assert_coverage(), _build_parser(), _cmd_assemble(), _destination_reservation(), _free_text(), _git_output() (+28 more)
+Cohesion: 0.09
+Nodes (35): contextlib, _build_parser(), CaptureError, _cmd_assemble(), _cmd_inventory(), _destination_reservation(), _free_text(), _git_output() (+27 more)
 
 ### Community 8 - "test_flow_codebase.py"
-Cohesion: 0.09
-Nodes (44): Inventory, _is_link(), _is_test(), practices(), Any, Path, List paths without opening file contents; never traverse symlinks or junctions., Fingerprint bounded convention sources; never execute or emit their contents. (+36 more)
+Cohesion: 0.11
+Nodes (41): Inventory, _is_link(), _is_test(), practices(), Any, Path, Bounded, path-only inventory for optional existing-codebase analysis., List paths without opening file contents; never traverse symlinks or junctions. (+33 more)
 
 ### Community 9 - "test_flow_session.py"
-Cohesion: 0.10
-Nodes (50): concurrent_futures, Advisory revalidation plan, Complete checkpoint inventory and evidence comparison, Recovery review packages and synthetic scenarios, decision_package(), decision_package_text(), Any, One local observation, without waiting on models, probes or worker cancellation. (+42 more)
+Cohesion: 0.09
+Nodes (57): concurrent_futures, Connection, Advisory revalidation plan, math, multiprocessing, multiprocessing_connection, bounded_status(), decision_package() (+49 more)
 
 ### Community 10 - "AriaAgent"
-Cohesion: 0.06
-Nodes (38): AriaAgent, Any, check_kyc_status(), flag_aml_activity(), KYCStatusProvider, Any, Protocol, Callable contract for an authoritative KYC status source. (+30 more)
+Cohesion: 0.07
+Nodes (27): AriaAgent, Any, test_parent_blocks_unsafe_statement_question_before_handoff(), test_parent_bounds_follow_up_context_before_handoff(), test_parent_delegates_statement_question_with_active_statement_scope(), statement_tool(), test_parent_does_not_delegate_unrelated_question(), test_parent_does_not_invent_statement_reference() (+19 more)
 
 ### Community 11 - "Data Models"
 Cohesion: 0.04
@@ -494,39 +506,39 @@ Nodes (45): additionalProperties, pattern, type, minLength, type, format, type, 
 
 ### Community 14 - "Tasks"
 Cohesion: 0.06
-Nodes (42): FollowUpAction, InteractionSummary, BaseModel, datetime, field_validator, MaturityEvent, OutflowEvent, ReinvestmentOption (+34 more)
+Nodes (39): FollowUpAction, InteractionSummary, BaseModel, datetime, field_validator, MaturityEvent, OutflowEvent, ReinvestmentOption (+31 more)
 
-### Community 15 - "read_events"
-Cohesion: 0.19
-Nodes (27): accept(), _events(), _latest(), Any, Path, status(), read_events(), accept() (+19 more)
+### Community 15 - "test_flow_assurance.py"
+Cohesion: 0.16
+Nodes (31): accept(), _eligible(), _events(), _identifier(), _latest(), _payload(), Any, Path (+23 more)
 
-### Community 16 - "test_flow_contracts.py"
-Cohesion: 0.21
-Nodes (29): artifact_path(), check_inputs(), check_outputs(), fingerprints(), load_contracts(), Path, Load enabled plugin contracts and apply project-owned stage overrides., Require complete contracts and checkable gated outputs for opted-in profiles. (+21 more)
+### Community 16 - "speckit_flow/contracts.py"
+Cohesion: 0.14
+Nodes (40): artifact_path(), check_inputs(), check_outputs(), ContractInput, ContractOutput, fingerprints(), load_contracts(), _nonempty() (+32 more)
 
 ### Community 17 - "Tasks: Profile-Aware Workflow Orchestration"
 Cohesion: 0.05
 Nodes (37): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Profile-Aware Workflow Orchestration, Constitution Check, Design, Implementation Plan: Profile-Aware Workflow Orchestration (+29 more)
 
 ### Community 18 - "test_flow_units.py"
-Cohesion: 0.16
-Nodes (34): unchecked_units(), _approve(), _checkpoint_all(), _feature(), Any, CaptureFixture, MonkeyPatch, parametrize (+26 more)
+Cohesion: 0.15
+Nodes (38): list_units(), unchecked_units(), _approve(), _checkpoint_all(), _feature(), Any, CaptureFixture, MonkeyPatch (+30 more)
 
 ### Community 19 - "Implementation Plan: Reliable Worker Recovery"
 Cohesion: 0.05
 Nodes (37): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Reliable Worker Recovery, Bootstrap and lifecycle boundary, Choices, Risks, Acceptance, Complexity Tracking (+29 more)
 
-### Community 20 - "append_event"
+### Community 20 - "audit.py"
 Cohesion: 0.15
-Nodes (25): append_event(), AuditSnapshot, _last_line(), line_hash(), Path, Return a description of the first broken line, or None when the chain is intact., Inspect one stream, retaining integrity, parked state and latest stage…, Append one event; the file is only ever opened in append mode. (+17 more)
+Nodes (26): append_event(), AuditSnapshot, _last_line(), line_hash(), now_iso(), Path, Return a description of the first broken line, or None when the chain is intact., Inspect one stream, retaining integrity, parked state and latest stage… (+18 more)
 
-### Community 21 - "test_flow_state.py"
-Cohesion: 0.21
-Nodes (18): fdir(), MonkeyPatch, Path, test_audit_failure_leaves_state_unchanged(), boom(), test_corrupt_state_reported(), test_done_requires_in_progress(), test_features_are_isolated() (+10 more)
-
-### Community 22 - "test_flow_compose.py"
+### Community 21 - "_resolve_within"
 Cohesion: 0.18
-Nodes (21): load_route_file(), parse_route(), Any, Path, Validate a proposed route with the same rules as shipped profiles., Write route.json, initialize state from it and audit the composition., save_route(), Route (+13 more)
+Nodes (22): _atomic_write(), _resolve_within(), _sha256(), _assemble_into_destination(), _capture_closure(), _add(), CaptureEntry, _inject_fault() (+14 more)
+
+### Community 22 - "Decisions"
+Cohesion: 0.11
+Nodes (17): API and Runtime identity, Artifact and release pipeline, Compatibility, Decisions, Deployed API Runtime routing, Deployment workflow trust and configuration, Gateway Lambda event, Gateway tool safety (+9 more)
 
 ### Community 23 - "Implementation Plan: Hybrid Plan Review"
 Cohesion: 0.06
@@ -536,9 +548,9 @@ Nodes (31): Content Quality, Feature Readiness, Notes, Requirement Completeness,
 Cohesion: 0.10
 Nodes (21): _build_session_id(), Any, Exception, Persist a full session snapshot. Returns the saved session on success, or…, SessionManager, Session, test_session_manager_rejects_duplicate_write_lock(), test_session_manager_reuses_conversation_session() (+13 more)
 
-### Community 25 - "AgentCoreMemoryDataPlaneClient"
-Cohesion: 0.10
-Nodes (8): AgentCoreMemoryDataPlaneClient, Tenant-bound boto3 client for documented AgentCore Memory data-plane APIs., test_agentcore_memory_data_plane_deletes_all_actor_records_across_pages(), test_agentcore_memory_data_plane_requires_record_id_for_delete(), test_agentcore_memory_data_plane_scopes_retrieval_to_authenticated_tenant(), test_agentcore_memory_data_plane_writes_tenant_variable_and_rejects_other_tenant(), test_agentcore_memory_user_erasure_fails_incomplete_for_out_of_scope_record(), test_agentcore_memory_user_erasure_propagates_delete_failure()
+### Community 25 - "test_agentcore_adapters.py"
+Cohesion: 0.06
+Nodes (19): AgentCoreMemoryDataPlaneClient, Tenant-bound boto3 client for documented AgentCore Memory data-plane APIs., gateway_mcp_url(), io, FakeGatewayTransport, FakeMemoryClient, SemanticGatewayTransport, test_agentcore_memory_data_plane_deletes_all_actor_records_across_pages() (+11 more)
 
 ### Community 26 - "Requirements"
 Cohesion: 0.06
@@ -548,21 +560,21 @@ Nodes (32): Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Accep
 Cohesion: 0.06
 Nodes (29): Aria Integration and Scope, Decision Safety and Governance, Notes, Requirements and Evaluation, Specification Quality Checklist: Dispute Resolution Subagent, Complexity Tracking, Constitution Check, Design Decisions (+21 more)
 
-### Community 28 - "_sha256"
-Cohesion: 0.23
-Nodes (14): _sha256(), _capture_closure(), _add(), CaptureEntry, CaptureError, _cmd_inventory(), _inventory_bytes(), Exception (+6 more)
+### Community 28 - "FlowError"
+Cohesion: 0.12
+Nodes (41): authorize_source(), bind_request(), _check_capability(), _check_source_header(), complete_review(), configure(), _consent(), _digest() (+33 more)
 
-### Community 29 - "reserve"
-Cohesion: 0.27
-Nodes (21): Call, check_completion(), check_selective_reviews(), _conductor(), _current(), _events(), finish(), _hybrid_caller() (+13 more)
+### Community 29 - "test_receivables_metrics.py"
+Cohesion: 0.10
+Nodes (31): trusted(), catalogue_metrics(), Any, Independent Decimal recomputation from immutable input, not engine…, Score fixed E-path denominators; trace errors are not business escalations., _trace_valid(), _variance_valid(), _domain_hash() (+23 more)
 
 ### Community 30 - "AgentCoreRuntimeAdapter"
 Cohesion: 0.13
 Nodes (17): IdempotencyConflict, Any, RuntimeError, RuntimeSessionBusy, RuntimeSessionCoordinator, AgentCoreRuntimeAdapter, Maps an authenticated conversation to one recoverable Runtime session., RuntimeSession (+9 more)
 
-### Community 31 - "FlowError"
-Cohesion: 0.08
-Nodes (42): _identifier(), _payload(), ContractInput, ContractOutput, _nonempty(), _parse_contract(), _parse_inputs(), _parse_outputs() (+34 more)
+### Community 31 - "doctor.py"
+Cohesion: 0.11
+Nodes (24): Explicit ordinary-work assurance acceptance, Worker execution contract, Worker tool compatibility diagnostics, Check, _guarded(), Path, render(), run_doctor() (+16 more)
 
 ### Community 32 - "Implementation Plan: Production Readiness Remediation"
 Cohesion: 0.07
@@ -584,21 +596,21 @@ Nodes (26): Content Quality, Feature Readiness, Notes, Requirement Completeness,
 Cohesion: 0.17
 Nodes (33): D-A — Interruption-simulation mechanism for the marker-last ordering test (deferred plan-review finding 2), D-B — How tests target fixture trees (open design divergence), Decisions (recorded for human review before implementation), Phase 4: User Story 2 — Install into a different project safely (Priority: P1), Secret-literal handling convention (supports finding 5; applies to every task below), _flow(), _make_fixture_bundle(), CompletedProcess (+25 more)
 
-### Community 37 - "aria/agentcore_entrypoint.py"
-Cohesion: 0.30
-Nodes (8): _build_strands_agent(), invoke(), _ManagedStrandsInvocation, Any, _response_text(), run_runtime_invocation(), bedrock_agentcore_runtime, entrypoint
+### Community 37 - "verify_snapshot.py"
+Cohesion: 0.19
+Nodes (17): _contained_path(), InventoryError, _is_junction(), _load_inventory(), main(), _print_honesty(), Exception, Path (+9 more)
 
 ### Community 38 - "FrameworkRunner"
-Cohesion: 0.17
-Nodes (13): FrameworkConfig, load_framework_config(), Any, FrameworkRunner, Any, asyncio, test_framework_config_has_safe_defaults(), test_framework_config_loads_environment_overrides_and_rejects_invalid_limits() (+5 more)
+Cohesion: 0.15
+Nodes (15): FrameworkConfig, load_framework_config(), Any, ParsedTurn, FrameworkRunner, Any, asyncio, test_framework_config_has_safe_defaults() (+7 more)
 
 ### Community 39 - "test_workflow_risk.py"
-Cohesion: 0.17
-Nodes (19): answer_service_query(), extract_source_date(), format_citation(), _normalized_terms(), ProductAnswer, Any, query_product_info(), _score_match() (+11 more)
+Cohesion: 0.14
+Nodes (17): get_risk_questionnaire(), PatchOperation, Any, StatePatch, WorkflowState, Design Summary, Phase 3: User Story 1 - Personalized Client Profile (Priority: P1), AgentCore Gateway Lambda target (+9 more)
 
 ### Community 40 - "test_flow_policy_questions.py"
-Cohesion: 0.17
-Nodes (27): check_redaction(), add_question(), answer_question(), list_questions(), load_questions(), flush(), open_questions(), Any (+19 more)
+Cohesion: 0.19
+Nodes (25): check_redaction(), add_question(), answer_question(), list_questions(), load_questions(), flush(), open_questions(), Any (+17 more)
 
 ### Community 41 - "Implementation Plan: Workflow Profiles and Audit Trail"
 Cohesion: 0.07
@@ -618,7 +630,7 @@ Nodes (26): Acceptance and Regression Tests for User Story 1, Acceptance and Reg
 
 ### Community 45 - "checkpoint_unit"
 Cohesion: 0.26
-Nodes (24): checkpoint_unit(), skeleton_problems(), _fixture(), parametrize, Path, skipif, test_changed_source_test_or_report_requires_new_checkpoint(), test_changes_during_verification_fail_checkpoint() (+16 more)
+Nodes (25): checkpoint_unit(), checkpointed(), skeleton_problems(), _fixture(), parametrize, Path, skipif, test_changed_source_test_or_report_requires_new_checkpoint() (+17 more)
 
 ### Community 46 - "properties"
 Cohesion: 0.07
@@ -640,16 +652,16 @@ Nodes (24): Content Quality, Feature Readiness, Notes, Requirement Completeness,
 Cohesion: 0.08
 Nodes (25): 1. Initialize Analysis Context, 2. Load Artifacts (Progressive Disclosure), 3. Build Semantic Models, 4. Detection Passes (Token-Efficient Analysis), 5. Severity Assignment, 6. Produce Compact Analysis Report, 7. Provide Next Actions, 8. Offer Remediation (+17 more)
 
-### Community 51 - "test_runtime_builds_only_allowlisted_gateway_tools_and_closes_client"
-Cohesion: 0.20
-Nodes (4): build_system_prompt(), test_system_prompt_builds_nonempty_prompt(), test_runtime_builds_only_allowlisted_gateway_tools_and_closes_client(), build_runtime_agent()
+### Community 51 - "speckit_flow/state.py"
+Cohesion: 0.10
+Nodes (45): main(), Copilot sessionStart hook: print a one-line summary of the active feature.…, summary(), is_parked(), A feature is parked when its latest park/resume event is a park., FeatureState, StageRecord, _active_name() (+37 more)
 
 ### Community 52 - "test_flow_workflow.py"
 Cohesion: 0.16
 Nodes (21): begin_workflow(), Initialize the default route once, or verify existing state for a workflow run., _begin(), CaptureFixture, parametrize, Path, test_begin_does_not_initialize_when_audit_exists_without_state(), test_begin_does_not_reinitialize_existing_state() (+13 more)
 
 ### Community 53 - "test_flow_trace.py"
-Cohesion: 0.17
+Cohesion: 0.18
 Nodes (22): build_matrix(), Path, Return bounded checkbox progress, not dependency readiness or test evidence., _read(), render(), task_progress(), _tasks(), TraceMatrix (+14 more)
 
 ### Community 54 - "Feature Specification: Memory Context Contract Normalization"
@@ -664,25 +676,25 @@ Nodes (32): handler(), invoke_gateway_tool(), Any, _serialized_payload(), _state
 Cohesion: 0.08
 Nodes (23): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: AI-DLC Agent Roster, Complexity Tracking, Constitution Check, Implementation Plan: AI-DLC Agent Roster (+15 more)
 
-### Community 57 - "Protocol"
-Cohesion: 0.17
-Nodes (7): GatewayTransport, PayloadParser, PreInvocationGuard, PromptBuilder, Any, Protocol, ToolFilter
+### Community 57 - "dataclasses"
+Cohesion: 0.15
+Nodes (9): GatewayTransport, MemoryClient, PayloadParser, PreInvocationGuard, PromptBuilder, Any, Protocol, ToolFilter (+1 more)
 
 ### Community 58 - "speckit_guard.py"
 Cohesion: 0.36
 Nodes (8): evaluate(), _flatten(), main(), Any, preToolUse hook: block agent gate/rule decisions and lifecycle-file tampering.…, Return a denial reason, or None to allow., Build the hook response in both Copilot and Local harness formats. An allow is…, respond()
 
-### Community 59 - "pytest"
+### Community 59 - "speckit_flow/models.py"
+Cohesion: 0.20
+Nodes (21): _load_stage_table(), load_stage_defs(), _make(), Any, Exception, Path, Stage definitions loaded from data: core file plus an optional project overlay., Return ordered stage definitions; custom stages are optional and placed via… (+13 more)
+
+### Community 60 - "sensors.py"
+Cohesion: 0.23
+Nodes (23): _command(), _consistency(), _contract_inputs(), evidence_status(), _feature_profile(), _fingerprints(), for_stage(), _load_results() (+15 more)
+
+### Community 61 - "gate_problems"
 Cohesion: 0.12
-Nodes (35): pytest, stages_check(), _load_stage_table(), load_stage_defs(), _make(), Any, Exception, Path (+27 more)
-
-### Community 60 - "run_stage"
-Cohesion: 0.16
-Nodes (25): _command(), _consistency(), _contract_inputs(), evidence_status(), _fingerprints(), for_stage(), gate_problems(), _load_results() (+17 more)
-
-### Community 61 - "025-compliance-plugin-pack/tasks.md"
-Cohesion: 0.22
-Nodes (8): Dependencies, Implementation Strategy, Parallel Opportunities, Phase 1: Setup, Phase 3: User Story 1 - Enable the pack and get a compliance profile (P1), Phase 4: User Story 2 - A compliance check blocks gate approval (P2), Phase 5: User Story 3 - A compliance agent supports specify and plan (P3), Phase 6: Polish
+Nodes (15): gate_problems(), Return (problems, relied-on sensor ids) for approving the stage's gate., Phase 2: Foundational (blocks US2), Constitution Check, Design and Evidence, Implementation Plan: Operational Readiness, Structure and Validation, Summary (+7 more)
 
 ### Community 62 - "Specification Quality Checklist: AWS Service Icons in Architecture Diagram"
 Cohesion: 0.08
@@ -697,8 +709,8 @@ Cohesion: 0.08
 Nodes (22): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Walking Skeleton, Constitution Check, Files and Safety, Implementation Plan: Walking Skeleton (+14 more)
 
 ### Community 65 - "units.py"
-Cohesion: 0.26
-Nodes (26): add_unit(), approved_command(), _assess(), _checkpoint(), checkpointed(), _definition(), _digest(), _file_paths() (+18 more)
+Cohesion: 0.30
+Nodes (22): add_unit(), approve_verify(), approved_command(), _assess(), _checkpoint(), _definition(), _digest(), _file_paths() (+14 more)
 
 ### Community 66 - "Implementation Plan: Existing-Codebase Analysis"
 Cohesion: 0.08
@@ -717,16 +729,16 @@ Cohesion: 0.09
 Nodes (20): Authorized lint-fix exception (bounded implement resume), Commands and actual verification, Documentation review/check outcomes, Errors, remaining work and authority, Graphify backup, result and exact changed files, Implement-3 review-warning follow-up (open), Implementation Evidence: Two-Level Diagram Scope Guidance, Other verification and route applicability (+12 more)
 
 ### Community 70 - "speckit_bootstrap.py"
-Cohesion: 0.20
-Nodes (20): apply_bundle(), _build_parser(), BundleFile, _collect_bundle(), _default_feature_pointer(), InstallResult, main(), PlannedWrite (+12 more)
+Cohesion: 0.10
+Nodes (30): argparse, apply_bundle(), _build_parser(), BundleFile, _collect_bundle(), _default_feature_pointer(), InstallResult, main() (+22 more)
 
 ### Community 71 - "Correctness Properties"
-Cohesion: 0.11
-Nodes (18): Correctness Properties, Property 11: Follow-Up Reminder Creation, Property 12: Sensitive Credential Detection and Rejection, Property 13: Market Risk Disclosure Compliance, Property 14: KYC Gating for New Products, Property 16: Escalation for Sensitive/Complex Requests, Property 17: Adversarial Input Handling, Property 18: Rate Source Date Citation (+10 more)
+Cohesion: 0.08
+Nodes (26): check_kyc_status(), flag_aml_activity(), Any, Correctness Properties, Property 11: Follow-Up Reminder Creation, Property 12: Sensitive Credential Detection and Rejection, Property 13: Market Risk Disclosure Compliance, Property 14: KYC Gating for New Products (+18 more)
 
 ### Community 72 - "Tasks: Aria AI Relationship Manager"
-Cohesion: 0.06
-Nodes (31): get_risk_questionnaire(), Deployed components, Deployment, GitHub Actions deployment, Memory and observability policy, Required inputs, Synthesis, Dependencies and Execution Order (+23 more)
+Cohesion: 0.10
+Nodes (20): Dependencies and Execution Order, MVP Scope, Parallel Opportunities, Phase 10: User Story 12 - Prompt Injection Defense (Priority: P1), Phase 11: User Story 13 - Knowledge Base Accuracy (Priority: P1), Phase 12: User Story 14 - CRM and API Context (Priority: P1), Phase 13: User Story 2 - Wallet Profiling and Consolidation (Priority: P2), Phase 14: User Story 3 - Financial Product Recommendations (Priority: P2) (+12 more)
 
 ### Community 73 - "test_flow_guard.py"
 Cohesion: 0.12
@@ -737,60 +749,60 @@ Cohesion: 0.10
 Nodes (19): Acceptance results (2026-11-09), Dependencies & Execution Order, Implementation for User Story 1, Implementation for User Story 2, Implementation for User Story 3, Implementation Strategy, Parallel Opportunities, Phase 1: Setup (+11 more)
 
 ### Community 75 - "test_speckit_package.py"
-Cohesion: 0.06
-Nodes (72): boto3, handler(), test_mmdsv2_custom_resource_delete_is_noop(), test_mmdsv2_custom_resource_preserves_runtime_artifact_and_role(), inspect, ModuleType, Acceptance and Regression Tests for User Story 1 (write FIRST; all must FAIL before T020–T027), Cross-story note (+64 more)
+Cohesion: 0.18
+Nodes (25): Acceptance and Regression Tests for User Story 1 (write FIRST; all must FAIL before T020–T027), _env(), _inventory(), _packager(), Path, Tests for ``scripts/speckit_package.py`` and the packaged snapshot verifier.…, Reviewed inventories live outside tmp_path so tree-state checks are unaffected., Findings 1+5 positive control: a planted synthetic secret fails the gate. (+17 more)
 
 ### Community 76 - "Records"
 Cohesion: 0.10
 Nodes (19): AdapterInvocation / AdapterTaskGuard (PROPOSED), Admission and outcome mapping (proposal), CheckpointRecord / CheckpointEvidence, Data Model: Reliable Worker Recovery, HostCapabilitySnapshot, Human answers / stage status, Observability boundary (proposal, not satisfaction), Privacy and boundary rules (+11 more)
 
 ### Community 77 - "User Scenarios & Testing *(mandatory)*"
-Cohesion: 0.11
-Nodes (17): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Standalone Spec Kit Flow Package, Edge Cases, Feature Specification: Standalone Spec Kit Flow Package, Functional Requirements (+9 more)
+Cohesion: 0.10
+Nodes (18): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Standalone Spec Kit Flow Package, Assumptions, Edge Cases, Feature Specification: Standalone Spec Kit Flow Package (+10 more)
 
 ### Community 78 - "test_strands_runtime.py"
-Cohesion: 0.21
+Cohesion: 0.23
 Nodes (11): build_strands_agent(), cancel_strands_agent(), Path, Build a Strands Agent without invoking the model during construction., Request cancellation through the installed Strands Agent API., strands, strands_agent_conversation_manager, strands_session (+3 more)
 
-### Community 79 - "SourceResult"
-Cohesion: 0.11
-Nodes (11): _FixtureClock, LogicalDemoClock, datetime, Synthetic time anchored to the fixture clock and advanced by monotonic elapsed…, _SystemClock, SourceResult, AuditSink, Clock (+3 more)
+### Community 79 - "_assemble"
+Cohesion: 0.17
+Nodes (27): Deferred plan-review findings → task traceability, _assemble(), _make_package_fixture(), CompletedProcess, A matching digest does not make an incomplete or out-of-schema review valid., Run ``inventory --output`` and return (result, reviewed file, approved digest)., Assemble from a reviewed inventory; by default one is captured just before., Malformed destinations and expanded destination collisions fail closed. (+19 more)
 
-### Community 80 - "load_roster"
-Cohesion: 0.11
-Nodes (32): Agent, _build(), check_actor(), _check_agent_file(), _extra_sources(), load_roster(), parse_frontmatter(), Any (+24 more)
+### Community 80 - "agents.py"
+Cohesion: 0.20
+Nodes (16): _build(), _check_agent_file(), _extra_sources(), load_roster(), parse_frontmatter(), Any, Path, Extra agents the conductor cannot dispatch because its 'agents' list omits them. (+8 more)
 
-### Community 81 - "load_profiles"
-Cohesion: 0.07
-Nodes (38): custom_dir(), describe(), Any, Path, List overlay items and whether each adds to or overrides a core item., Load the merged configuration; any invalid overlay raises FlowError., validate(), _directive() (+30 more)
+### Community 81 - "cdk/app.py"
+Cohesion: 0.15
+Nodes (18): ApplicationStack, Stack, GatewayStack, Any, Construct, Stack, Any, Construct (+10 more)
 
-### Community 82 - "Decisions"
+### Community 82 - "Tasks: Standalone Spec Kit Flow Package"
 Cohesion: 0.11
-Nodes (18): API and Runtime identity, Artifact and release pipeline, Compatibility, Decisions, Deployed API Runtime routing, Deployment workflow trust and configuration, Gateway Lambda event, Gateway tool safety (+10 more)
+Nodes (18): Cross-story note, Dependencies & Execution Order, Dependency graph (condensed), Format: `[ID] [P?] [Story] Description`, Implementation Strategy, Manual acceptance for User Story 1 (implementation phase; requires final README T037 for the deliverable run), Parallel example (US1 test authoring), Parallel opportunities (+10 more)
 
 ### Community 83 - "User Scenarios & Testing"
 Cohesion: 0.11
 Nodes (17): Constitution Check, Implementation Plan: Intents and Session Control, Structure, Summary, Technical Context, Assumptions, Edge Cases, Feature Specification: Intents and Session Control (+9 more)
 
-### Community 84 - "Implementation Plan: Operational Readiness"
-Cohesion: 0.08
-Nodes (21): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Operational Readiness, Constitution Check, Implementation Plan: Operational Readiness, Structure and Validation (+13 more)
+### Community 84 - "Specification Quality Checklist: Operational Readiness"
+Cohesion: 0.11
+Nodes (16): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Operational Readiness, Assumptions, Edge Cases, Feature Specification: Operational Readiness (+8 more)
 
 ### Community 85 - "test_flow_sensors.py"
-Cohesion: 0.27
-Nodes (18): approve(), _contract_feature(), feature(), Path, run(), test_command_sensors(), test_contract_sensor_blocks_missing_and_stale_gate_evidence(), test_contract_sensor_does_not_change_profiles_that_opt_out() (+10 more)
+Cohesion: 0.25
+Nodes (19): approve(), _contract_feature(), feature(), Path, run(), test_command_sensors(), test_contract_sensor_blocks_missing_and_stale_gate_evidence(), test_contract_sensor_does_not_change_profiles_that_opt_out() (+11 more)
 
 ### Community 86 - "gateway.py"
-Cohesion: 0.13
-Nodes (13): AgentCoreGatewaySigV4Auth, create_gateway_mcp_client(), filter_allowed_gateway_tools(), gateway_mcp_url(), GatewayClient, Any, httpx, Request (+5 more)
+Cohesion: 0.15
+Nodes (11): AgentCoreGatewaySigV4Auth, create_gateway_mcp_client(), filter_allowed_gateway_tools(), GatewayClient, Any, httpx, Request, Response (+3 more)
 
 ### Community 87 - "Tasks: Production Readiness Remediation"
-Cohesion: 0.13
-Nodes (14): Dependencies and Execution Order, Implementation Strategy, Parallel Opportunities, Phase 10: T025 Follow-up - Operational Alarms and Log Data Protection, Phase 11: Synchronous API Timeout Budget, Phase 12: Repository CI Formatting Scope, Phase 1: Setup, Phase 2: Foundational Tests (+6 more)
+Cohesion: 0.06
+Nodes (28): KYCStatusProvider, Protocol, Callable contract for an authoritative KYC status source., Dependencies and Execution Order, Implementation Strategy, Parallel Opportunities, Phase 10: T025 Follow-up - Operational Alarms and Log Data Protection, Phase 11: Synchronous API Timeout Budget (+20 more)
 
-### Community 88 - "discover"
+### Community 88 - "plugins.py"
 Cohesion: 0.17
-Nodes (14): custom_check(), profiles_check(), sensors_check(), discover(), _manifest(), Plugin, PluginError, plugins_root() (+6 more)
+Nodes (15): custom_check(), profiles_check(), sensors_check(), discover(), _manifest(), Plugin, PluginError, plugins_root() (+7 more)
 
 ### Community 89 - "test_flow_compliance_pack.py"
 Cohesion: 0.29
@@ -829,8 +841,8 @@ Cohesion: 0.12
 Nodes (15): Dependencies and parallel opportunities, Implementation for User Story 1, Implementation for User Story 2, Implementation for User Story 3, Implementation Strategy, Phase 1: Setup, Phase 2: Foundational, Phase 3: User Story 1 - Work from a clear stage agreement (Priority: P1) 🎯 MVP (+7 more)
 
 ### Community 98 - "test_flow_readiness.py"
-Cohesion: 0.21
-Nodes (27): check(), fingerprints(), Path, _read(), parametrize, Path, _record(), _records() (+19 more)
+Cohesion: 0.25
+Nodes (24): check(), parametrize, Path, _record(), _records(), _sensor_file(), test_changes_during_validation_do_not_create_passing_result(), changing_check() (+16 more)
 
 ### Community 99 - "WorkflowValidator"
 Cohesion: 0.24
@@ -841,52 +853,52 @@ Cohesion: 0.20
 Nodes (16): aop(), component_model(), deployment_units(), Diagram, end_state_architecture(), legend(), location_model(), lom() (+8 more)
 
 ### Community 101 - "Data Model: Gateway-Backed Statement Explainer"
-Cohesion: 0.22
-Nodes (8): Data Model: Gateway-Backed Statement Explainer, StatementAnalysisRequest, StatementAuditRecord, StatementEntitlement, StatementExplainerSession, StatementRecord, StatementToolResult, StatementTransaction
+Cohesion: 0.20
+Nodes (9): AgentActivityEvent, Data Model: Gateway-Backed Statement Explainer, StatementAnalysisRequest, StatementAuditRecord, StatementEntitlement, StatementExplainerSession, StatementRecord, StatementToolResult (+1 more)
 
 ### Community 102 - "test_receivables_store.py"
-Cohesion: 0.12
-Nodes (44): Any, Compare actual source returns to audited type, references AND availability.…, retrieval_correspondence(), workflow_metrics(), RuntimeError, Local SQLite transaction did not commit successfully., StoreError, approved() (+36 more)
+Cohesion: 0.10
+Nodes (51): audit_event_counts(), Retain source identity in retrieval counts, rather than a single surface flag., Compare actual source returns to audited type, references AND availability.…, retrieval_correspondence(), workflow_metrics(), DecisionKind, create_wsgi_app(), app() (+43 more)
 
-### Community 103 - "3. Source evidence ([SRC], read-only; paths relative to repo root `banking-relationship-manager-agent`)"
-Cohesion: 0.22
-Nodes (5): Strict guard policy; comprehensive depth implies it unless set explicitly., 3. Source evidence ([SRC], read-only; paths relative to repo root `banking-relationship-manager-agent`), Data Model: Test Strategy and Guard Policy, Plan: Test Strategy and Guard Policy, Tasks: Test Strategy and Guard Policy
+### Community 103 - "os"
+Cohesion: 0.18
+Nodes (13): os, shutil, subprocess, sys, _enable(), isolated(), CompletedProcess, Path (+5 more)
 
 ### Community 104 - "User Scenarios & Testing"
 Cohesion: 0.13
 Nodes (15): User Scenarios & Testing, User Story 10 - Human RM Escalation (Priority: P1), User Story 11 - Actionable Conversation Style (Priority: P2), User Story 12 - Prompt Injection Defense (Priority: P1), User Story 13 - Knowledge Base Accuracy (Priority: P1), User Story 14 - CRM and API Context (Priority: P1), User Story 1 - Personalized Client Profile (Priority: P1), User Story 2 - Wallet Profiling and Consolidation (Priority: P2) (+7 more)
 
 ### Community 105 - "Research: Receivables Exception Resolution Specialist"
-Cohesion: 0.14
-Nodes (13): R10. Freshness and expiry [PROP], R11. AWS [SRC from AWS support, not independently verified], R12. Compliance and security inputs, R13. Aria stale items replaced, R1. Agent-as-tool API and handoff [SRC], R2. Prior art in this repo [SRC], R3. Runtime integration [SRC][PROP], R5. Model-free test seams [PROP] (+5 more)
+Cohesion: 0.07
+Nodes (21): resolve_runtime_identity(), Strict guard policy; comprehensive depth implies it unless set explicitly., 3. Source evidence ([SRC], read-only; paths relative to repo root `banking-relationship-manager-agent`), R10. Freshness and expiry [PROP], R11. AWS [SRC from AWS support, not independently verified], R12. Compliance and security inputs, R13. Aria stale items replaced, R1. Agent-as-tool API and handoff [SRC] (+13 more)
 
 ### Community 106 - "Feature Specification: Virtual Account Receivables Exception Resolution"
-Cohesion: 0.22
-Nodes (9): Assumptions, Clarifications, Feature Specification: Virtual Account Receivables Exception Resolution, Functional Requirements, Key Entities, Measurable Outcomes, Requirements, Session 2026-11-10 (+1 more)
+Cohesion: 0.13
+Nodes (15): Assumptions, Clarifications, Edge Cases, Feature Specification: Virtual Account Receivables Exception Resolution, Functional Requirements, Key Entities, Measurable Outcomes, Requirements (+7 more)
 
-### Community 107 - "test_agentcore_entrypoint.py"
-Cohesion: 0.19
-Nodes (10): main(), validate_runtime_payload(), test_agentcore_entrypoint_exposes_runtime_app_when_dependency_is_installed(), test_agentcore_entrypoint_preserves_local_main_contract(), test_runtime_invocation_blocks_prompt_injection_before_model_call(), agent_factory(), test_runtime_invocation_calls_agent_and_checks_output(), test_runtime_invocation_closes_managed_agent_after_success() (+2 more)
+### Community 107 - "aria/agentcore_entrypoint.py"
+Cohesion: 0.09
+Nodes (23): _build_strands_agent(), invoke(), main(), _ManagedStrandsInvocation, Any, _response_text(), run_runtime_invocation(), validate_runtime_payload() (+15 more)
 
 ### Community 108 - "reject"
-Cohesion: 0.22
-Nodes (8): reject(), C4. Analyst decision service (NOT model-callable), Aria parent-to-specialist handoff, Contract: Dispute Investigation and Human Review, Human decision, Safe activity and audit events, Specialist result, HumanDecision
+Cohesion: 0.14
+Nodes (12): reject(), C4. Analyst decision service (NOT model-callable), Aria parent-to-specialist handoff, Contract: Dispute Investigation and Human Review, Human decision, Safe activity and audit events, Specialist result, HumanDecision (+4 more)
 
 ### Community 109 - ".execute"
-Cohesion: 0.25
-Nodes (3): Cursor, Agent File Contract, Decision 4: Review-only enforced by tools, not prose
+Cohesion: 0.14
+Nodes (10): Cursor, Opt-in selective execution and engine directives, 1. Identify the work and confirm the route, 2. Establish the feature context, 3. Execute the confirmed route, 4. Human decisions and resume, Profile-Aware Lifecycle Entry, Agent File Contract (+2 more)
 
-### Community 110 - "Quickstart: Use Spec Kit in Another Project"
-Cohesion: 0.20
-Nodes (8): 4. Install, update and recovery, Configure the target project, Install, Prerequisites, Quickstart: Use Spec Kit in Another Project, Update, Validate, Phase 5: User Story 3 — Update without surrendering project ownership (Priority: P2)
+### Community 110 - "Spec Kit Flow portable package"
+Cohesion: 0.11
+Nodes (16): 1. What this package is (and is not), 2. Snapshot provenance and verification, 3. Prerequisites, 4. Install, update and recovery, 5. Rights and assurance boundary, 6. Repository preparation, Spec Kit Flow portable package, Configure the target project (+8 more)
 
 ### Community 111 - "Specification Quality Checklist: Aria AI Relationship Manager"
-Cohesion: 0.15
+Cohesion: 0.25
 Nodes (8): Content Quality, Feature Readiness, Infrastructure Readiness, Notes, Production AI Application Readiness, Requirement Completeness, Shared Agent Framework Readiness, Specification Quality Checklist: Aria AI Relationship Manager
 
-### Community 112 - "aria/agent.py"
-Cohesion: 0.11
-Nodes (20): GuardrailProcessor, GuardrailResult, Protect user input and output from sensitive credential leakage., Observability, Any, escalate_request(), Any, logging (+12 more)
+### Community 112 - "re"
+Cohesion: 0.12
+Nodes (19): GuardrailProcessor, GuardrailResult, Protect user input and output from sensitive credential leakage., Observability, Any, escalate_request(), Any, logging (+11 more)
 
 ### Community 113 - "Recovery Core and Host Adapter Contract (Proposed)"
 Cohesion: 0.14
@@ -900,49 +912,49 @@ Nodes (13): Actual stage evidence and open questions, Architecture and data/stat
 Cohesion: 0.14
 Nodes (13): Additional future source-design acceptance checks (unrun), Future scenario checks, Human answers / stage status, Observability boundary (proposal, not satisfaction), Plan-10 follow-up: unsupported Windows and generic model checks (unrun), Plan-11 future acceptance: deadline independent of reap (unrun), Portable bootstrap / unrelated receiving-project selector (rechecked existing source), Proposed future focused selectors (+5 more)
 
-### Community 116 - "verify_snapshot.py"
-Cohesion: 0.06
-Nodes (47): argparse, main(), Any, build_target(), main(), Path, _python_platform(), _run() (+39 more)
+### Community 116 - "build_artifacts.py"
+Cohesion: 0.24
+Nodes (13): build_target(), main(), Path, _python_platform(), _run(), _target_python(), _validate_bundle(), _validate_python() (+5 more)
 
 ### Community 117 - "Data Model: KYC/AML Verification"
 Cohesion: 0.17
 Nodes (11): StatePatch, DuplicateCheckResult / PriorAllocationResult, AMLAssessment, ComplianceAssessment, ComplianceAuditEvent, CompliancePolicy, Data Model: KYC/AML Verification, DocumentReference (+3 more)
 
-### Community 118 - "speckit-profiles.md"
-Cohesion: 0.22
-Nodes (5): 1. Identify the work and confirm the route, 2. Establish the feature context, 4. Human decisions and resume, Profile-Aware Lifecycle Entry, Existing-codebase analysis (opt-in)
+### Community 118 - "test_flow_plugins.py"
+Cohesion: 0.33
+Nodes (13): _plugin(), CaptureFixture, parametrize, Path, _sensor(), spec_dir(), test_disabled_plugin_is_ignored(), test_invalid_manifest_is_refused() (+5 more)
 
-### Community 119 - "Profile"
-Cohesion: 0.06
-Nodes (44): _eligible(), Report stored consent without pretending to validate the current host context., summary(), _parse_ceremony(), Profile, Any, Optional ceremony defaults to on; a profile can switch a named item off., get_profile() (+36 more)
+### Community 119 - "json"
+Cohesion: 0.09
+Nodes (44): json, pytest, Profile, get_profile(), load_profile_file(), Path, Advisory keyword match; returns (profile id, reason). Defaults to feature., suggest_profile() (+36 more)
 
 ### Community 120 - "Feature Specification: [FEATURE NAME]"
 Cohesion: 0.15
 Nodes (12): Assumptions, Edge Cases, Feature Specification: [FEATURE NAME], Functional Requirements, Key Entities *(include if feature involves data)*, Measurable Outcomes, Requirements *(mandatory)*, Success Criteria *(mandatory)* (+4 more)
 
-### Community 121 - "load_sensors"
-Cohesion: 0.42
-Nodes (12): load_sensors(), _feature(), parametrize, Path, _sensor_file(), _status(), test_invalid_sensor_options_rejected(), test_profile_scope_applies_to_listed_profile() (+4 more)
+### Community 121 - "test_flow_section_sensor.py"
+Cohesion: 0.53
+Nodes (10): _feature(), parametrize, Path, _sensor_file(), _status(), test_invalid_sensor_options_rejected(), test_profile_scope_applies_to_listed_profile(), test_profile_scope_limits_sensor() (+2 more)
 
-### Community 122 - "Implementation Plan: Account Statement Explainer Subagent"
-Cohesion: 0.06
-Nodes (29): Content Quality, Notes, Project Fit and Safety, Requirement Completeness, Specification Quality Checklist: Account Statement Explainer Subagent, Complexity Tracking, Constitution Check, Design Decisions (+21 more)
+### Community 122 - "User Scenarios & Testing"
+Cohesion: 0.15
+Nodes (13): Assumptions, Edge Cases, Feature Specification: Account Statement Explainer Subagent, Functional Requirements, Key Entities, Measurable Outcomes, Requirements, Success Criteria (+5 more)
 
 ### Community 123 - "index.md"
 Cohesion: 0.21
 Nodes (4): Approval Provenance — Receivables Exception Resolution, Limits, Linked artifact digests, Recorded decision
 
-### Community 124 - "Data Model: Receivables Exception Resolution (synthetic MVP)"
-Cohesion: 0.15
-Nodes (13): AnalystDecision, ApprovedPolicy (synthetic, versioned), CandidateAllocation, ConfirmationBinding, ConfirmationEvent, MockCaseTaskPayload and CaseTask, Data Model: Receivables Exception Resolution (synthetic MVP), DecisionState (per tenant/session/exception), EvidenceItem, Payment / VirtualAccount / Customer / Invoice (read-only fixtures) (+5 more)
+### Community 124 - "load_profiles"
+Cohesion: 0.06
+Nodes (35): Return read-only routing advice; the host obtains selection/confirmation., recommend(), load_profiles(), Load and validate every profile; the first invalid file raises FlowError., AnalystDecision, ApprovedPolicy (synthetic, versioned), CandidateAllocation, ConfirmationBinding, ConfirmationEvent, MockCaseTaskPayload and CaseTask (+27 more)
 
 ### Community 125 - "Tasks: Virtual Account Receivables Exception Resolution"
 Cohesion: 0.15
 Nodes (13): Dependencies and Checkpoints, Implementation Strategy, Independent-review recovery evidence (implement only), Parallel Opportunities, Phase 1: Setup, Phase 2: Foundational Context and Contracts, Phase 3: User Story 1 — Request a Bounded Exception Investigation (P1), Phase 4: User Story 2 — Review an Evidence-Backed Proposal or Escalation (P1) (+5 more)
 
-### Community 126 - "Implementation Plan: Layered Rules and Customization Overlay"
-Cohesion: 0.15
-Nodes (11): Constitution Check, Decisions, Design, Implementation Plan: Layered Rules and Customization Overlay, Technical Context, Feature Specification: Layered Rules and Customization Overlay, Out of Scope, Requirements (+3 more)
+### Community 126 - "2. `assemble` — capture, copy, screen, verify, mark"
+Cohesion: 0.22
+Nodes (8): 1. `inventory` — pre-assembly inspection (no writes), 2. `assemble` — capture, copy, screen, verify, mark, 3. Package verifier — `verify_snapshot.py` (delivered at package root; stdlib-only, offline), 4. Consumer-facing contract (unchanged, referenced not redefined), CLI Contract: `scripts/speckit_package.py` and package verifier, Exit codes, Ordered behavior (non-dry-run), Output lines (stable prefixes)
 
 ### Community 127 - "properties"
 Cohesion: 0.18
@@ -956,21 +968,21 @@ Nodes (12): D1. Required FR-005 and FR-006 register-template fields, D2. Require
 Cohesion: 0.15
 Nodes (13): Assumptions, Edge Cases, Feature Specification: Two-Level Diagram Scope Guidance, Functional Requirements, Key Entities, Measurable Outcomes, Repository Evidence, Requirements *(mandatory)* (+5 more)
 
-### Community 130 - "test_agentcore_adapters.py"
-Cohesion: 0.06
-Nodes (32): AgentCoreMemoryAdapter, Applies tenant and retrieval bounds around an AgentCore Memory client., ContextBuilder, Any, MemoryClient, MemoryRetriever, ParsedTurn, MemoryEntry (+24 more)
+### Community 130 - "MemoryEntry"
+Cohesion: 0.10
+Nodes (22): AgentCoreMemoryAdapter, Applies tenant and retrieval bounds around an AgentCore Memory client., ContextBuilder, Any, MemoryRetriever, MemoryEntry, MemoryStore, Data Model: Memory Context Contract Normalization (+14 more)
 
-### Community 131 - "evaluate_maturity_event"
-Cohesion: 0.22
-Nodes (13): _build_reinvestment_options(), evaluate_maturity_event(), evaluate_outflow_event(), hypothesis, given, test_balance_qualification_is_monotonic(), test_maturity_notification_boundary_is_exact(), test_outflow_alert_matches_threshold() (+5 more)
+### Community 131 - ".__init__"
+Cohesion: 0.19
+Nodes (16): _build_reinvestment_options(), check_upcoming_maturities(), detect_large_outflows(), evaluate_maturity_event(), evaluate_outflow_event(), Any, given, test_balance_qualification_is_monotonic() (+8 more)
 
-### Community 132 - "FrozenDict"
-Cohesion: 0.29
-Nodes (4): deep_freeze(), FrozenDict, Any, JSON-compatible immutable mapping for nested boundary collections.
+### Community 132 - "_import_scripts_module"
+Cohesion: 0.12
+Nodes (16): ModuleType, _import_scripts_module(), Finding 1: findings come from the emitted baseline JSON ``results``, never the…, Finding 3: submitted >= inventory + 1 (the +1 is SNAPSHOT.json)., An unreadable subtree reported by os.walk must not pass verification., The delivered verifier must fail when os.walk cannot inspect a subtree., The only allowed screen suppression: a finding inside SNAPSHOT.json whose…, Concurrent assembly contenders must not hold the destination reservation… (+8 more)
 
 ### Community 133 - "cli.py"
 Cohesion: 0.14
-Nodes (41): getpass, _actor(), _check_agent_actor(), _csv(), _emit(), _feature_dir(), _parse_route_arg(), Any (+33 more)
+Nodes (39): getpass, _actor(), _check_agent_actor(), _csv(), _emit(), _feature_dir(), _parse_route_arg(), Any (+31 more)
 
 ### Community 134 - ".github/skills/speckit-plan/SKILL.md"
 Cohesion: 0.17
@@ -993,8 +1005,8 @@ Cohesion: 0.17
 Nodes (11): Aria AI Relationship Manager Constitution, Core Principles, Development and Verification Gates, Governance, I. Structured State Is Authoritative, II. Deterministic Safety and Authorization, III. Patch, Validate, and Invalidate, IV. Bounded Context and Tool Use (+3 more)
 
 ### Community 139 - "main"
-Cohesion: 0.10
-Nodes (30): _build_parser(), main(), ArgumentParser, CaptureFixture, test_agents_cli(), Path, test_rules_propose_refused_when_learning_is_off(), Any (+22 more)
+Cohesion: 0.14
+Nodes (22): _build_parser(), main(), ArgumentParser, Path, test_contract_list_and_show(), test_contract_show_checks_active_profile_and_route(), _write_contracts(), CaptureFixture (+14 more)
 
 ### Community 140 - "Implementation Plan: Virtual Account Receivables Exception Resolution Specialist"
 Cohesion: 0.17
@@ -1012,13 +1024,13 @@ Nodes (9): CLI Contract (additions to 009), Audit additions, Data Model, Knowled
 Cohesion: 0.22
 Nodes (9): Content Quality - Product self-check, Feature Readiness - Product self-check, Notes, Product self-check for this revision (2026-11-12), Recorded independent-review evidence (historical), Recorded sensor evidence (historical and current), Requirement Completeness - Product self-check, Specification Quality Checklist: Two-Level Diagram Scope Guidance (+1 more)
 
-### Community 144 - "cdk/app.py"
-Cohesion: 0.08
-Nodes (52): Alarm, App, aws_cdk, build_app(), _context_bool(), _add_alarm(), add_api_alarms(), add_lambda_alarms() (+44 more)
+### Community 144 - "pathlib"
+Cohesion: 0.20
+Nodes (21): Alarm, aws_cdk, _add_alarm(), add_api_alarms(), add_lambda_alarms(), add_sensitive_findings_alarm(), _positive_context_number(), protected_log_group() (+13 more)
 
 ### Community 145 - "041-explicit-delegation-assurance/plan.md"
-Cohesion: 0.33
-Nodes (3): Acceptance event, Data Model: Explicit Delegation Assurance, Read-only status
+Cohesion: 0.15
+Nodes (11): Context-bound inspection, Existing workflow inspection, Human acceptance, Proposed CLI Contract, Acceptance event, Data Model: Explicit Delegation Assurance, Read-only status, Automated acceptance and regression (+3 more)
 
 ### Community 146 - ".claude/skills/speckit-plan/SKILL.md"
 Cohesion: 0.18
@@ -1041,8 +1053,8 @@ Cohesion: 0.18
 Nodes (10): Core Principles, Governance, [PRINCIPLE_1_NAME], [PRINCIPLE_2_NAME], [PRINCIPLE_3_NAME], [PRINCIPLE_4_NAME], [PRINCIPLE_5_NAME], [PROJECT_NAME] Constitution (+2 more)
 
 ### Community 152 - "Local synthetic receivables exception demo"
-Cohesion: 0.29
-Nodes (7): Accessibility, Analyst decision and explicit confirmation, Evaluation limits, Investigation, Local synthetic receivables exception demo, Scope and data boundary, Synthetic clock semantics
+Cohesion: 0.14
+Nodes (12): Accessibility, Analyst decision and explicit confirmation, Evaluation limits, Investigation, Local synthetic receivables exception demo, Scope and data boundary, Synthetic clock semantics, Model-free test seams (to build, not built) (+4 more)
 
 ### Community 153 - "Specification Analysis Report — Receivables Exception Resolution"
 Cohesion: 0.18
@@ -1056,21 +1068,21 @@ Nodes (10): Dependencies and Execution Order, Implementation Strategy, Parallel 
 Cohesion: 0.18
 Nodes (10): Dependencies and Execution Order, Implementation Strategy, Parallel Opportunities, Phase 1: Setup, Phase 2: Foundational Contracts and Safety, Phase 3: User Story 1 - Extract and Verify Identity Evidence (Priority: P1), Phase 4: User Story 2 - Assess Risk and Escalate (Priority: P1), Phase 5: User Story 3 - Integrate Through Aria Parent (Priority: P1) (+2 more)
 
-### Community 156 - "done_stage"
-Cohesion: 0.17
-Nodes (38): status(), done_stage(), Tasks: Stages as Data (018), feature(), finish(), lead(), CaptureFixture, Path (+30 more)
+### Community 156 - "test_flow_calls.py"
+Cohesion: 0.09
+Nodes (65): Call, check_completion(), check_selective_reviews(), _conductor(), _current(), _events(), finish(), _hybrid_caller() (+57 more)
 
-### Community 157 - "Research: Structured Stage Contracts"
-Cohesion: 0.29
-Nodes (6): Decision 1: Keep contracts opt-in and profile-scoped, Decision 2: Use required sensors for current gated-output evidence, Decision 3: Keep contract validation deterministic and bounded, Decision 4: Permit project-owned contracts for custom stages, Repository evidence, Research: Structured Stage Contracts
+### Community 157 - "receivables/agent.py"
+Cohesion: 0.18
+Nodes (11): collections_abc, strands_hooks, strands_models, strands_types_content, strands_types_streaming, strands_types_tools, Investigator, test_delayed_and_repeated_sdk_invocations_get_independent_budgets() (+3 more)
 
 ### Community 158 - "Tasks: Spec Kit Workflow Automation"
 Cohesion: 0.18
 Nodes (10): Dependencies, Implementation Strategy, Parallel examples, Phase 1: Setup, Phase 2: Foundational, Phase 3: User Story 1 - Automatically track the standard workflow (P1) 🎯 MVP, Phase 4: User Story 2 - Review gated work using recorded evidence (P2), Phase 5: User Story 3 - Resume and verify lifecycle progress (P3) (+2 more)
 
-### Community 159 - "Spec Kit Flow portable package"
-Cohesion: 0.29
-Nodes (6): 1. What this package is (and is not), 2. Snapshot provenance and verification, 3. Prerequisites, 5. Rights and assurance boundary, 6. Repository preparation, Spec Kit Flow portable package
+### Community 159 - "test_api_and_events.py"
+Cohesion: 0.23
+Nodes (10): handle_event(), normalize_event(), process_event(), Any, handler(), Any, test_event_handler_passes_normalized_event_to_processor(), test_event_handler_routes_maturity_and_outflow_events() (+2 more)
 
 ### Community 160 - "WorkflowDependencyGraph"
 Cohesion: 0.40
@@ -1085,8 +1097,8 @@ Cohesion: 0.20
 Nodes (9): Current Integration Points, Decisions, Deterministic analysis, DynamoDB read model, Parent-to-specialist handoff, Research: Production Statement Explainer, Risks and Open Boundaries, Safe operational trace (+1 more)
 
 ### Community 167 - "Bounded corrections"
-Cohesion: 0.20
-Nodes (10): Actual default-composed advancing WSGI journey - T021/T023, Atomic linked revision - T017/T019/T020, Bounded corrections, Bounded status output - T007/T008, Current measurements and scope limits, Exact W11 and separate retrieval fault - T017/T022/T023, Final exact approved checks, Interaction diagram - T030 (+2 more)
+Cohesion: 0.22
+Nodes (9): Actual default-composed advancing WSGI journey - T021/T023, Atomic linked revision - T017/T019/T020, Bounded corrections, Current measurements and scope limits, Exact W11 and separate retrieval fault - T017/T022/T023, Final exact approved checks, Interaction diagram - T030, Preserved approval bindings (+1 more)
 
 ### Community 168 - "Decisions"
 Cohesion: 0.20
@@ -1113,8 +1125,8 @@ Cohesion: 0.20
 Nodes (9): Actual implementation and validation results, Change surfaces, Design and compatibility, Plan: freshness-aware construction units, Project practices, Risks, Separate delegated trial, Separate delegated worker trial: failed harness execution (+1 more)
 
 ### Community 174 - "speckit_flow/rules.py"
-Cohesion: 0.09
-Nodes (42): list_knowledge(), _parse(), Path, Return titles and paths only; document bodies are never loaded into context., Finding, KnowledgeDoc, Rule, _applies() (+34 more)
+Cohesion: 0.06
+Nodes (52): list_knowledge(), _parse(), Path, Return titles and paths only; document bodies are never loaded into context., KnowledgeDoc, Rule, _applies(), _core() (+44 more)
 
 ### Community 175 - ".github/skills/speckit-clarify/SKILL.md"
 Cohesion: 0.22
@@ -1128,17 +1140,17 @@ Nodes (8): Complexity Tracking, Constitution Check, Documentation (this feature)
 Cohesion: 0.17
 Nodes (12): Assumptions, Edge Cases, Feature Specification: Explicit Delegation Assurance, Functional Requirements, Key Entities, Measurable Outcomes, Requirements *(mandatory)*, Success Criteria *(mandatory)* (+4 more)
 
-### Community 178 - "test_flow_doctor.py"
-Cohesion: 0.62
-Nodes (6): checks(), Path, test_audit_chain_tamper_detected(), test_broken_pieces_fail(), test_healthy_repo(), test_unknown_phase_rule_file_fails()
+### Community 178 - "AgentCoreGatewayAdapter"
+Cohesion: 0.23
+Nodes (6): AgentCoreGatewayAdapter, AgentCoreRuntimeClient, Any, Invokes an IAM-authorized Runtime with a backend-verified principal., Separates Gateway discovery/tool visibility from authorization., test_runtime_client_invokes_scoped_runtime_with_verified_principal()
 
 ### Community 179 - "Shared Framework Decisions"
 Cohesion: 0.22
 Nodes (9): Decision: Centralize cross-agent lifecycle behavior, not domain behavior, Decision: Do not mandate background threads or synchronous invocation, Decision: Keep context and memory strategy provider-compatible, Decision: Load configuration lazily and cache immutable settings, Decision: Standardize agent manifests with framework tuning separated, Decision: Use shared hooks for observability and safety, Decision: Use typed extension contracts, Evidence (+1 more)
 
-### Community 180 - "decide_gate"
-Cohesion: 0.20
-Nodes (20): decide_gate(), Behavior, Data Model: Workflow Automation, Gate Decision, Workflow Preflight, Workflow Stage Transition, Plan: Construction Units and Verification Command (019), Path (+12 more)
+### Community 180 - "read_events"
+Cohesion: 0.46
+Nodes (12): read_events(), _at_gate(), Path, _review(), test_approval_records_review_id(), test_approval_without_review_allowed_at_standard_depth(), test_block_review_override_is_audited_and_human_only(), test_block_review_refuses_approval() (+4 more)
 
 ### Community 181 - "Data Model"
 Cohesion: 0.22
@@ -1152,9 +1164,9 @@ Nodes (8): D1: Profile model, D2: Profile format, D3: Initial profiles, D4: Stat
 Cohesion: 0.20
 Nodes (10): Acceptance mapping and known baseline, Bootstrap and decision trust model, Constitution Check, Design, Freshness, compatibility and limitations, Implementation Plan: Explicit Delegation Assurance, Project Practices and Verification Proposal, Project Structure (+2 more)
 
-### Community 184 - "User Scenarios & Testing"
-Cohesion: 0.33
-Nodes (6): Edge Cases, User Scenarios & Testing, User Story 1 - Request an Exception Investigation (Priority: P1), User Story 2 - Review an Evidence-Backed Proposal or Escalation (Priority: P1), User Story 3 - Decide Whether to Create a Synthetic Mock Case Task (Priority: P1), User Story 4 - Evaluate and Trace the Bounded MVP (Priority: P2)
+### Community 184 - "InvestigationStopped"
+Cohesion: 0.15
+Nodes (10): oversized(), Messages, StreamEvent, ToolChoice, ToolSpec, InvestigationStopped, RuntimeError, Cooperative investigation boundary was cancelled or expired. (+2 more)
 
 ### Community 185 - "Tasks: Existing-Codebase Analysis"
 Cohesion: 0.22
@@ -1192,9 +1204,9 @@ Nodes (8): Baseline review record, Data Model: Diagram Governance Concepts, Diag
 Cohesion: 0.18
 Nodes (10): Dependencies, Parallel examples, Phase 1: Setup, Phase 3: User Story 1 - Source-bound reviews gate approvals (P1) 🎯 MVP, Phase 4: User Story 2 - Learned rules and team knowledge (P2), Phase 5: User Story 3 - Composer for custom routes (P3), Phase 6: User Story 4 - Extended stages (P3), Phase 7: Polish (+2 more)
 
-### Community 194 - "Feature Specification: Stages as Data"
-Cohesion: 0.33
-Nodes (5): Feature Specification: Stages as Data, Out of scope, Problem, User Story 1 - Core stages come from a data file (P1), User Story 2 - Teams add optional stages without editing core (P2)
+### Community 194 - "ScriptedModel"
+Cohesion: 0.17
+Nodes (9): Any, Messages, Model, StreamEvent, ToolChoice, ToolSpec, Model-free SDK seam; any invocation is counted and yields no remote events., ScriptedModel (+1 more)
 
 ### Community 195 - ".claude/skills/speckit-checklist/SKILL.md"
 Cohesion: 0.25
@@ -1220,9 +1232,9 @@ Nodes (7): Alerts, Feedback, Health signals, Incidents, Operational Runbook, Own
 Cohesion: 0.24
 Nodes (9): get_settings(), Settings, ClientProfile, BaseModel, BaseSettings, pydantic_settings, test_client_profile_serializes(), test_config_loads_defaults() (+1 more)
 
-### Community 201 - "synthetic_harness_context"
-Cohesion: 0.04
-Nodes (69): _BudgetedModel, oversized(), build_receivables_exception_tool(), get_proposal_status(), investigate_exception(), reset(), trusted(), Any (+61 more)
+### Community 201 - "test_receivables_subagent.py"
+Cohesion: 0.10
+Nodes (13): should_route_receivables_request(), inspect, CapturingAgent, EmptyModel, Investigator, Any, Model, test_child_model_deadline_stops_next_call_before_scheduling() (+5 more)
 
 ### Community 202 - "Walking-Skeleton Journey"
 Cohesion: 0.25
@@ -1236,13 +1248,13 @@ Nodes (7): Commands, Local setup, Multi-turn correction checks, Prerequisites, P
 Cohesion: 0.25
 Nodes (8): AgentCore Gateway, AgentCore Memory, AgentCore Runtime, Amazon Bedrock and Guardrails, Production Best Practices, Python engineering baseline, Strands context management, Strands state and structured output
 
-### Community 205 - "AWS CDK v2 Decisions"
-Cohesion: 0.25
-Nodes (8): AWS CDK v2 Decisions, Decision: Enforce boundaries through the supported API, Decision: Make synthesis deterministic and deployment controlled, Decision: Prefer direct references inside one CDK app, Decision: Test infrastructure contracts, Decision: Treat auto-discovery as opt-in, Decision: Use constructs for reuse and stacks for deployment boundaries, Decision: Use explicit names selectively
+### Community 205 - "Research: Aria AI Relationship Manager"
+Cohesion: 0.13
+Nodes (15): AWS CDK v2 Decisions, Decision: Enforce boundaries through the supported API, Decision: Make synthesis deterministic and deployment controlled, Decision: Prefer direct references inside one CDK app, Decision: Separate typed domain models from provider tools, Decision: Start with mocked external-service tests, Decision: Test infrastructure contracts, Decision: Treat auto-discovery as opt-in (+7 more)
 
-### Community 206 - "bounded_status"
-Cohesion: 0.18
-Nodes (12): Connection, Fail-closed recovery inspection, bounded_status(), HostObservation, Path, Protocol, A host adapter's correlated observation, not an ownership-transfer capability., Trusted integration code, never a user-supplied proof or executable command. (+4 more)
+### Community 206 - "RecoveryAdapter"
+Cohesion: 0.14
+Nodes (13): Complete checkpoint inventory and evidence comparison, Document-grounded clarification and project practices, Fail-closed recovery inspection, Low-overhead implementation and resume, One navigation surface, Profile-aware workflow entry (feature 032), Recovery review packages and synthetic scenarios, HostObservation (+5 more)
 
 ### Community 207 - "Ideation Brief: Virtual Account Receivables Exception Resolution"
 Cohesion: 0.25
@@ -1269,16 +1281,16 @@ Cohesion: 0.25
 Nodes (8): items, type, items, $ref, items, type, contracts, outputs
 
 ### Community 213 - "TrustedContext"
-Cohesion: 0.09
-Nodes (35): AuditEvent, CaseTask, DecisionKind, InvestigationProposal, MockCaseTaskPayload, TrustedContext, ProposalStore, require_context() (+27 more)
+Cohesion: 0.10
+Nodes (32): AnalystDecision, AuditEvent, CaseTask, InvestigationProposal, MockCaseTaskPayload, TrustedContext, canonical_json_bytes(), ProposalStore (+24 more)
 
 ### Community 214 - "Plan: lean workflow validation"
 Cohesion: 0.25
 Nodes (7): Affected files, Approach, Plan: lean workflow validation, Project practices and validation, Research applied, Risks and exclusions, Verified outcome
 
-### Community 215 - "AgentCoreGatewayAdapter"
-Cohesion: 0.16
-Nodes (8): AgentCoreGatewayAdapter, AgentCoreRuntimeClient, Any, Invokes an IAM-authorized Runtime with a backend-verified principal., Separates Gateway discovery/tool visibility from authorization., SemanticGatewayTransport, test_gateway_adapter_semantic_discovery_applies_capability_and_backend_auth(), test_runtime_client_invokes_scoped_runtime_with_verified_principal()
+### Community 215 - "test_security.py"
+Cohesion: 0.25
+Nodes (13): App, build_app(), _context_bool(), MonkeyPatch, test_agentcore_stacks_synthesize_memory_gateway_and_runtime(), test_app_stack_synthesizes_api_and_event_handlers(), test_non_dev_app_requires_permissions_boundary(), test_operational_alarms_use_configured_thresholds_and_publish_to_sns() (+5 more)
 
 ### Community 216 - ".claude/skills/speckit-clarify/SKILL.md"
 Cohesion: 0.29
@@ -1288,21 +1300,21 @@ Nodes (6): Completion Report, Done When, Mandatory Post-Execution Hooks, Outline
 Cohesion: 0.29
 Nodes (6): Completion Report, Done When, Mandatory Post-Execution Hooks, Outline, Pre-Execution Checks, User Input
 
-### Community 218 - "Quickstart: Receivables Exception Resolution (synthetic MVP)"
-Cohesion: 0.29
-Nodes (5): Model-free test seams (to build, not built), Prerequisites, Proposed commands (future, exact), Quickstart: Receivables Exception Resolution (synthetic MVP), Walkthrough (once built and approved)
+### Community 218 - "build_receivables_exception_tool"
+Cohesion: 0.26
+Nodes (9): _BudgetedModel, build_receivables_exception_tool(), reset(), Any, Model, Build a model-facing child tool; identity, decisions, and writes stay in…, Count child model calls cooperatively; do not claim in-flight sync calls can be…, InvocationBudget (+1 more)
 
-### Community 219 - "Proposed Synthetic Policy v1 (DRAFT, SYNTHETIC ONLY)"
-Cohesion: 0.22
-Nodes (8): 1. Scope, 2. Deterministic definitions, 3. Disposition decision table (first match wins), 4. Reason codes, 5. Freshness and expiry (proposed values), 6. Evaluation conventions (proposed; owner agreement required before calculation), 7. Pre-approval behaviour, Proposed Synthetic Policy v1 (DRAFT, SYNTHETIC ONLY)
+### Community 219 - "knowledge_tool.py"
+Cohesion: 0.42
+Nodes (10): answer_service_query(), extract_source_date(), format_citation(), _normalized_terms(), ProductAnswer, Any, query_product_info(), _score_match() (+2 more)
 
 ### Community 220 - "sequence"
-Cohesion: 0.32
-Nodes (7): sequence(), sequences(), Audit trail, AgentActivityEvent, C7. Audit contract, AuditEvent (append-only; workflow state/task writes are audited transactionally), DisputeAuditEvent
+Cohesion: 0.38
+Nodes (6): sequence(), sequences(), Audit trail, C7. Audit contract, AuditEvent (append-only; workflow state/task writes are audited transactionally), DisputeAuditEvent
 
-### Community 221 - "resolve_runtime_identity"
-Cohesion: 0.40
-Nodes (3): resolve_runtime_identity(), R4. Identity and authority [SRC][PROP], test_runtime_identity_verifies_cognito_token_and_requires_tenant_claim()
+### Community 221 - "_run_screen"
+Cohesion: 0.22
+Nodes (8): _assert_coverage(), Finding 3: the screen must submit every inventoried path plus SNAPSHOT.json, so…, Build the detect-secrets argv (shell=False list; research D5). Paths starting…, Interpret a detect-secrets baseline document, failing closed on every parse…, Blocking content screen over the explicit file list, cwd=destination. Returns…, _run_screen(), _scan_argv(), _screen_verdict()
 
 ### Community 222 - "Release Record"
 Cohesion: 0.29
@@ -1325,7 +1337,7 @@ Cohesion: 0.20
 Nodes (10): Dependencies and execution, Phase 1: Setup, Phase 2: Foundation, Phase 3: User Story 1 - Explicit bounded acceptance (P1), Phase 4: User Story 2 - Preserve boundaries (P1), Phase 5: User Story 3 - Existing-feature compatibility (P2), Phase 6: Validation and handoff, Results recorded before configured implement sensors (+2 more)
 
 ### Community 227 - "Feature Specification: Aria AI Relationship Manager"
-Cohesion: 0.29
+Cohesion: 0.17
 Nodes (7): Assumptions, Edge Cases, Feature Specification: Aria AI Relationship Manager, Functional Requirements, Key Entities, Requirements, Success Criteria
 
 ### Community 228 - "Data Model: Production Readiness Remediation"
@@ -1345,20 +1357,20 @@ Cohesion: 0.29
 Nodes (7): properties, type, type, lead, support, items, type
 
 ### Community 232 - "Reuse the Spec Kit workflow in another project"
-Cohesion: 0.25
-Nodes (8): Configure and validate, Install, Prerequisites, Reuse the Spec Kit workflow in another project, Update, Validation evidence and boundaries, What's deliberately excluded, What's included
+Cohesion: 0.15
+Nodes (9): Configure and validate, Install, Prerequisites, Reuse the Spec Kit workflow in another project, Update, Validation evidence and boundaries, What's deliberately excluded, What's included (+1 more)
 
 ### Community 233 - "receivables/models.py"
-Cohesion: 0.12
-Nodes (29): AllocationCheckStatus, AllocationRecord, AnalystDecision, AuthoritySource, CheckStatus, ConfirmationBinding, CustomerData, DecisionState (+21 more)
+Cohesion: 0.09
+Nodes (34): AllocationRecord, AuthoritySource, CheckStatus, ConfirmationBinding, CustomerData, DecisionState, deep_freeze(), DuplicateCheckResult (+26 more)
 
 ### Community 234 - "User Scenarios & Testing"
 Cohesion: 0.29
 Nodes (6): Feature Specification: Questions File and Interaction Modes, Requirements, User Scenarios & Testing, User Story 1 - Role-labelled questions (Priority: P1), User Story 2 - Answer by chat or by editing the file (Priority: P1), User Story 3 - Gate on open questions (Priority: P2)
 
 ### Community 235 - "Research: Compliance Plugin Pack"
-Cohesion: 0.33
-Nodes (5): R1: How should the compliance check be expressed?, R3: Can the pack's agent be a plain extra agent?, R4: Conductor lists an extra agent while the pack is disabled, R5: Disabled by default, Research: Compliance Plugin Pack
+Cohesion: 0.29
+Nodes (6): R1: How should the compliance check be expressed?, R2: How can the sensor apply to the compliance profile only (FR-004)?, R3: Can the pack's agent be a plain extra agent?, R4: Conductor lists an extra agent while the pack is disabled, R5: Disabled by default, Research: Compliance Plugin Pack
 
 ### Community 236 - "Quickstart: Structured Stage Contracts"
 Cohesion: 0.29
@@ -1372,9 +1384,9 @@ Nodes (6): Evidence limits, Explicit subagent execution boundary, One host-drive
 Cohesion: 0.13
 Nodes (15): minLength, type, minLength, type, branch, commit, repository, source_reference (+7 more)
 
-### Community 239 - "Data Model: Memory Context Contract Normalization"
-Cohesion: 0.40
-Nodes (4): Data Model: Memory Context Contract Normalization, Deletion Behavior, MemoryEntry, Provider Memory Record
+### Community 239 - "Data Model"
+Cohesion: 0.33
+Nodes (4): Analysis artifact, Data Model, Inventory, Stage condition
 
 ### Community 240 - ".claude/skills/speckit-constitution/SKILL.md"
 Cohesion: 0.33
@@ -1413,8 +1425,8 @@ Cohesion: 0.33
 Nodes (6): Content Quality, Notes, Outstanding Prerequisites (Not Specification Defects), Requirement Completeness, Specification Artifact Readiness (Not Runtime or Business Readiness), Specification Quality Checklist: Virtual Account Receivables Exception Resolution
 
 ### Community 250 - "Contract: Receivables Investigation, Analyst Decision and Mock Case Task"
-Cohesion: 0.29
-Nodes (6): C1. Parent -> specialist tool (SDK-defined schema), C3. Investigation result (stored, authoritative; model text is not), C5. Confirmation and case-task writer (NOT model-callable), C6. Mock case-task payload (immutable), C8. Contract tests required (construction), Contract: Receivables Investigation, Analyst Decision and Mock Case Task
+Cohesion: 0.18
+Nodes (10): get_proposal_status(), investigate_exception(), C1. Parent -> specialist tool (SDK-defined schema), C2. Child closure tools (model-visible; read-only deterministic), C3. Investigation result (stored, authoritative; model text is not), C5. Confirmation and case-task writer (NOT model-callable), C6. Mock case-task payload (immutable), C8. Contract tests required (construction) (+2 more)
 
 ### Community 251 - "Implementation Addendum — SC-005 Provenance and Cooperative Bounds"
 Cohesion: 0.33
@@ -1436,25 +1448,25 @@ Nodes (5): additionalProperties, required, $schema, title, type
 Cohesion: 0.33
 Nodes (6): additionalProperties, required, type, additionalProperties, type, assignments
 
-### Community 256 - "Data Model: AI-DLC Agent Roster"
-Cohesion: 0.33
-Nodes (5): Agent actor, Agent (roster entry), Data Model: AI-DLC Agent Roster, Profile change, Stage assignment
+### Community 256 - "Agent"
+Cohesion: 0.22
+Nodes (12): Agent, check_actor(), resolve_assignments(), CaptureFixture, Path, roster(), test_agents_cli(), test_assignment_override_and_rejection() (+4 more)
 
 ### Community 257 - "Feature Specification: Test Strategy and Guard Policy"
 Cohesion: 0.33
 Nodes (5): Feature Specification: Test Strategy and Guard Policy, Requirements, User Scenarios & Testing, User Story 1 - Guard policy (Priority: P1), User Story 2 - Test strategy (Priority: P2)
 
-### Community 258 - "feature_dir"
-Cohesion: 0.15
-Nodes (13): Document-grounded clarification and project practices, Low-overhead implementation and resume, One navigation surface, Opt-in selective execution and engine directives, Profile-aware workflow entry (feature 032), Explicit ordinary-work assurance acceptance, Worker execution contract, Worker tool compatibility diagnostics (+5 more)
+### Community 258 - "Clarifying Questions"
+Cohesion: 0.50
+Nodes (3): Clarifying Questions, Q1 [role: architect], Q2 [role: product]
 
 ### Community 259 - "Bootstrap CLI Contract"
 Cohesion: 0.33
 Nodes (5): Bootstrap CLI Contract, Doctor, Install, Update, create()
 
-### Community 260 - "Research: Aria AI Relationship Manager"
-Cohesion: 0.29
-Nodes (7): Decision: Separate typed domain models from provider tools, Decision: Start with mocked external-service tests, Decision: Use Amazon Bedrock Guardrails for input and output controls, Decision: Use Bedrock Knowledge Bases for rate and policy retrieval, Decision: Use the Strands Agents SDK with Amazon Bedrock Claude, Decisions requiring confirmation, Research: Aria AI Relationship Manager
+### Community 260 - "LogicalDemoClock"
+Cohesion: 0.23
+Nodes (5): _FixtureClock, LogicalDemoClock, datetime, Synthetic time anchored to the fixture clock and advanced by monotonic elapsed…, _SystemClock
 
 ### Community 261 - "Research"
 Cohesion: 0.33
@@ -1472,9 +1484,9 @@ Nodes (6): Baseline preservation check (run before and after future documentatio
 Cohesion: 0.33
 Nodes (5): Acceptance, Exclusions, Requirements, Scope and user scenario, Specification: checkpoint freshness and ready-unit reporting
 
-### Community 265 - "_atomic_write"
-Cohesion: 0.12
-Nodes (18): _atomic_write(), 2. Assembly procedure (FR-001, FR-005, FR-007 analogue), 3. Inclusion boundary and prohibited artifacts (FR-004, SC-001), 4. Partial failure and drift reporting (FR-001 partial-failure contract, FR-002 drift identification; recovery documentation lives in README per FR-015), 5. Package-local documentation set (FR-011–FR-015), 6. Acceptance checks (compliance-recommended; all offline), Complexity Tracking, Constitution Check (+10 more)
+### Community 265 - "Implementation Plan: Standalone Spec Kit Flow Package"
+Cohesion: 0.15
+Nodes (12): 3. Inclusion boundary and prohibited artifacts (FR-004, SC-001), 4. Partial failure and drift reporting (FR-001 partial-failure contract, FR-002 drift identification; recovery documentation lives in README per FR-015), 5. Package-local documentation set (FR-011–FR-015), Complexity Tracking, Constitution Check, Design, Documentation (this feature), Implementation Plan: Standalone Spec Kit Flow Package (+4 more)
 
 ### Community 266 - "snapshot-inventory.schema.json"
 Cohesion: 0.17
@@ -1508,9 +1520,9 @@ Nodes (4): Procedure, Roles, Rules, User Input
 Cohesion: 0.40
 Nodes (4): Outline, Post-Execution Checks, Pre-Execution Checks, User Input
 
-### Community 274 - "Tasks: AI-DLC Agent Roster"
-Cohesion: 0.22
-Nodes (8): Dependencies, Phase 1: Setup, Phase 2: Foundational, Phase 3: User Story 1 - Roster (P1), Phase 4: User Story 2 - Stage assignments (P2), Phase 5: User Story 3 - Audit attribution and enforcement (P3), Phase 6: Polish, Tasks: AI-DLC Agent Roster
+### Community 274 - "Implementation Plan: Account Statement Explainer Subagent"
+Cohesion: 0.18
+Nodes (11): Complexity Tracking, Constitution Check, Design Decisions, Documentation, Implementation Plan: Account Statement Explainer Subagent, Project Structure, Risks and Open Decisions, Source and Tests (+3 more)
 
 ### Community 275 - "AI-DLC extras pack"
 Cohesion: 0.40
@@ -1520,9 +1532,9 @@ Nodes (4): Adapt, AI-DLC extras pack, Enable, Templates
 Cohesion: 0.40
 Nodes (4): [Category 1], [Category 2], [CHECKLIST TYPE] Checklist: [FEATURE NAME], Notes
 
-### Community 277 - "Proposed CLI Contract"
-Cohesion: 0.50
-Nodes (4): Context-bound inspection, Existing workflow inspection, Human acceptance, Proposed CLI Contract
+### Community 277 - "test_flow_cli_015_017.py"
+Cohesion: 0.27
+Nodes (10): Any, CaptureFixture, parametrize, Path, _shell(), test_custom_and_effective_rules_cli(), test_doctor_reports_custom_check(), test_guard_allows_agent_question_actions() (+2 more)
 
 ### Community 278 - "Quickstart: KYC/AML Verification Subagent"
 Cohesion: 0.40
@@ -1588,13 +1600,17 @@ Nodes (4): Requirements, Scope, Specification: feature profile trial, User scena
 Cohesion: 0.17
 Nodes (12): description, pattern, type, const, description, captured_at, digest_algorithm, snapshot (+4 more)
 
-### Community 294 - "test_context_is_bounded_read_only_and_reports_gate"
-Cohesion: 0.29
-Nodes (9): CaptureFixture, MonkeyPatch, parametrize, Path, test_context_fails_on_invalid_audit(), test_context_is_bounded_read_only_and_reports_gate(), test_context_reads_audit_once_without_caching_across_calls(), test_context_rejects_missing_profile() (+1 more)
+### Community 294 - "test_rest_handler_accepts_verified_tenant_and_subject_claims"
+Cohesion: 0.20
+Nodes (4): FakeRuntimeClient, test_runtime_adapter_reuses_and_recovers_runtime_session(), test_deployed_lambda_handler_routes_authenticated_request_to_runtime(), test_rest_handler_accepts_verified_tenant_and_subject_claims()
 
-### Community 295 - "Validation Guide: Explicit Delegation Assurance"
-Cohesion: 0.50
-Nodes (4): Automated acceptance and regression, Later use for feature 039 (separate human decision), Prerequisites, Validation Guide: Explicit Delegation Assurance
+### Community 295 - "test_mmdsv2_custom_resource.py"
+Cohesion: 0.31
+Nodes (5): boto3, handler(), test_mmdsv2_custom_resource_delete_is_noop(), test_mmdsv2_custom_resource_preserves_runtime_artifact_and_role(), types
+
+### Community 296 - ".ceremony_on"
+Cohesion: 0.22
+Nodes (4): Optional ceremony defaults to on; a profile can switch a named item off., Plan: Stages as Data (018), Plan: Ceremony Toggles (022), Tasks: Ceremony Toggles (022)
 
 ### Community 297 - "Commands"
 Cohesion: 0.50
@@ -1648,13 +1664,13 @@ Nodes (3): Approved validation, Quickstart, Verification results
 Cohesion: 0.50
 Nodes (4): output, additionalProperties, required, type
 
-### Community 310 - "Research: Standalone Spec Kit Flow Package"
-Cohesion: 0.18
-Nodes (11): _manifest_bytes(), 1. Snapshot capture (FR-002, FR-004), D10. Consumer contract: packaged, not modified, D11. Line endings and encoding of generated artifacts, D2. Byte-verbatim capture; no plugin.json transformation, D3. Digest and inventory serialization conventions, D4. Snapshot identifier and uncommitted-content authorization, D5. Content screening placement and invocation (+3 more)
+### Community 310 - "Tasks: AI-DLC Agent Roster"
+Cohesion: 0.22
+Nodes (8): Dependencies, Phase 1: Setup, Phase 2: Foundational, Phase 3: User Story 1 - Roster (P1), Phase 4: User Story 2 - Stage assignments (P2), Phase 5: User Story 3 - Audit attribution and enforcement (P3), Phase 6: Polish, Tasks: AI-DLC Agent Roster
 
-### Community 311 - "test_statement_subagent.py"
-Cohesion: 0.08
-Nodes (18): normalize_strands_event(), Map known Strands lifecycle envelopes; never forward arbitrary event data., _gateway_transaction(), test_parent_blocks_unsafe_statement_question_before_handoff(), test_parent_bounds_follow_up_context_before_handoff(), test_parent_delegates_statement_question_with_active_statement_scope(), statement_tool(), test_parent_does_not_delegate_unrelated_question() (+10 more)
+### Community 311 - "normalize_strands_event"
+Cohesion: 0.33
+Nodes (8): normalize_activity_event(), normalize_strands_event(), Any, Map known Strands lifecycle envelopes; never forward arbitrary event data., sanitize_summary(), test_strands_event_mapper_drops_private_text_and_raw_payloads(), test_strands_event_mapper_ignores_unrecognized_and_unallowlisted_tools(), test_strands_events_normalize_to_allowlisted_tool_lifecycle()
 
 ### Community 314 - "description"
 Cohesion: 0.67
@@ -1664,9 +1680,17 @@ Nodes (3): minLength, type, description
 Cohesion: 0.67
 Nodes (3): type, uniqueItems, gates
 
-### Community 404 - "2. `assemble` — capture, copy, screen, verify, mark"
+### Community 402 - "test_flow_layers_custom.py"
+Cohesion: 0.19
+Nodes (16): custom_dir(), describe(), Any, Path, List overlay items and whether each adds to or overrides a core item., Load the merged configuration; any invalid overlay raises FlowError., validate(), Path (+8 more)
+
+### Community 403 - "025-compliance-plugin-pack/tasks.md"
 Cohesion: 0.22
-Nodes (8): 1. `inventory` — pre-assembly inspection (no writes), 2. `assemble` — capture, copy, screen, verify, mark, 3. Package verifier — `verify_snapshot.py` (delivered at package root; stdlib-only, offline), 4. Consumer-facing contract (unchanged, referenced not redefined), CLI Contract: `scripts/speckit_package.py` and package verifier, Exit codes, Ordered behavior (non-dry-run), Output lines (stable prefixes)
+Nodes (8): Dependencies, Implementation Strategy, Parallel Opportunities, Phase 1: Setup, Phase 3: User Story 1 - Enable the pack and get a compliance profile (P1), Phase 4: User Story 2 - A compliance check blocks gate approval (P2), Phase 5: User Story 3 - A compliance agent supports specify and plan (P3), Phase 6: Polish
+
+### Community 404 - "Deployment"
+Cohesion: 0.29
+Nodes (6): Deployed components, Deployment, GitHub Actions deployment, Memory and observability policy, Required inputs, Synthesis
 
 ### Community 405 - "Data Model: Standalone Spec Kit Flow Package"
 Cohesion: 0.22
@@ -1676,21 +1700,37 @@ Nodes (8): 1. Snapshot identifier, 2.1 Inventory file entry, 2. Snapshot invento
 Cohesion: 0.22
 Nodes (8): A. Maintainer: capture, inspect, assemble (SC-001, Story 1), B. Receiving developer: verify the package alone (FR-002, acceptance check 3), C. Consumer install into a disposable non-banking target (SC-002, Story 2), D. Update safety (SC-004, Story 3), E. Documentation walkthrough (SC-005/SC-006, Story 4), F. Repository regression + acceptance sweeps (maintainer), Prerequisites, Quickstart: Standalone Spec Kit Flow Package — validation guide
 
-### Community 408 - "Implementation Plan: Memory Context Contract Normalization"
-Cohesion: 0.25
-Nodes (8): Complexity Tracking, Constitution Check, Documentation (this feature), Implementation Plan: Memory Context Contract Normalization, Project Structure, Source Code (repository root), Summary, Technical Context
+### Community 408 - "Data Model: Portable Spec Kit Setup"
+Cohesion: 0.33
+Nodes (5): Bundle Entry, Data Model: Portable Spec Kit Setup, Domain Pack, Installation Manifest, Target Project Configuration
 
 ### Community 409 - "items"
 Cohesion: 0.25
 Nodes (8): description, items, minItems, type, additionalProperties, required, type, files
 
-### Community 410 - "pathlib"
-Cohesion: 0.16
-Nodes (23): dataclasses, hashlib, json, math, multiprocessing, multiprocessing_connection, pathlib, re (+15 more)
+### Community 410 - "test_flow_extra_agents.py"
+Cohesion: 0.56
+Nodes (8): _agent(), parametrize, Path, _setup(), test_custom_agent_is_added_with_source(), test_extras_cannot_override_or_lead(), test_plugin_agent_is_added(), _write()
 
-### Community 415 - "test_api_and_events.py"
-Cohesion: 0.09
-Nodes (33): handler(), invoke_agent(), make_response(), parse_body(), Any, _build_runtime_coordinator(), handler(), _idempotency_key() (+25 more)
+### Community 412 - "ports.py"
+Cohesion: 0.32
+Nodes (4): AuditSink, Clock, datetime, Protocol
+
+### Community 414 - "Specification Quality Checklist: Account Statement Explainer Subagent"
+Cohesion: 0.25
+Nodes (5): Content Quality, Notes, Project Fit and Safety, Requirement Completeness, Specification Quality Checklist: Account Statement Explainer Subagent
+
+### Community 415 - "rest_handler.py"
+Cohesion: 0.21
+Nodes (19): handler(), invoke_agent(), make_response(), parse_body(), Any, _build_runtime_coordinator(), handler(), _idempotency_key() (+11 more)
+
+### Community 416 - "Implementation Plan: Memory Context Contract Normalization"
+Cohesion: 0.25
+Nodes (8): Complexity Tracking, Constitution Check, Documentation (this feature), Implementation Plan: Memory Context Contract Normalization, Project Structure, Source Code (repository root), Summary, Technical Context
+
+### Community 417 - "test_framework_smoke_agent.py"
+Cohesion: 0.38
+Nodes (4): main(), Any, test_smoke_agent_entrypoint_runs_and_returns_state(), yaml
 
 ### Community 418 - "captured_by"
 Cohesion: 0.33
@@ -1700,6 +1740,14 @@ Nodes (6): description, maxLength, minLength, pattern, type, captured_by
 Cohesion: 0.33
 Nodes (6): description, maxLength, minLength, pattern, type, label
 
+### Community 420 - "readiness.py"
+Cohesion: 0.43
+Nodes (6): fingerprints(), _problems(), Path, Structural operational-readiness evidence checks; never executes evidence., _read(), _visible()
+
+### Community 421 - "test_statement_child_reads_only_through_gateway_with_hidden_verified_identity"
+Cohesion: 0.33
+Nodes (3): _gateway_transaction(), test_statement_child_reads_only_through_gateway_with_hidden_verified_identity(), call_tool_sync()
+
 ### Community 422 - "path"
 Cohesion: 0.40
 Nodes (5): description, minLength, pattern, type, path
@@ -1707,6 +1755,10 @@ Nodes (5): description, minLength, pattern, type, path
 ### Community 423 - "test_flow_clarify_skill.py"
 Cohesion: 0.70
 Nodes (4): test_clarify_skill_documents_modes_and_commands(), test_clarify_skill_forbids_agent_answering(), test_clarify_skill_keeps_original_loop(), _text()
+
+### Community 424 - "Research: Memory Context Contract Normalization"
+Cohesion: 0.40
+Nodes (4): Decision: A configured remote backend must own deletion, Decision: Preserve policy and provider boundaries, Decision: Use a narrow structural retrieval protocol for context assembly, Research: Memory Context Contract Normalization
 
 ### Community 425 - "bundle_version"
 Cohesion: 0.50
@@ -1717,24 +1769,24 @@ Cohesion: 0.50
 Nodes (4): sha256, description, pattern, type
 
 ## Knowledge Gaps
-- **1928 isolated node(s):** `aria-ai-relationship-manager`, `$schema`, `title`, `type`, `additionalProperties` (+1923 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2668 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **1930 isolated node(s):** `aria-ai-relationship-manager`, `$schema`, `title`, `type`, `additionalProperties` (+1925 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2685 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **98 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `FlowError` connect `FlowError` to `start_stage`, `feature_dir`, `test_flow_reviews.py`, `cli.py`, `init_state`, `test_flow_codebase.py`, `test_flow_session.py`, `main`, `read_events`, `test_flow_contracts.py`, `test_flow_units.py`, `append_event`, `test_flow_state.py`, `test_flow_compose.py`, `Implementation Plan: Hybrid Plan Review`, `pathlib`, `done_stage`, `reserve`, `test_flow_policy_questions.py`, `checkpoint_unit`, `speckit_flow/rules.py`, `test_flow_workflow.py`, `decide_gate`, `test_flow_trace.py`, `pytest`, `run_stage`, `units.py`, `bounded_status`, `load_roster`, `load_profiles`, `test_flow_sensors.py`, `discover`, `test_flow_compliance_pack.py`, `test_flow_readiness.py`, `Profile`, `load_sensors`?**
+- **Why does `FlowError` connect `FlowError` to `Agent`, `speckit_flow`, `test_flow_reviews.py`, `cli.py`, `init_state`, `test_flow_codebase.py`, `test_flow_session.py`, `main`, `test_flow_assurance.py`, `speckit_flow/contracts.py`, `test_flow_layers_custom.py`, `test_flow_units.py`, `audit.py`, `Implementation Plan: Hybrid Plan Review`, `test_flow_extra_agents.py`, `test_flow_calls.py`, `doctor.py`, `readiness.py`, `test_flow_policy_questions.py`, `.ceremony_on`, `checkpoint_unit`, `speckit_flow/rules.py`, `speckit_flow/state.py`, `read_events`, `test_flow_workflow.py`, `test_flow_trace.py`, `speckit_flow/models.py`, `sensors.py`, `units.py`, `RecoveryAdapter`, `agents.py`, `test_flow_sensors.py`, `plugins.py`, `test_flow_compliance_pack.py`, `test_flow_readiness.py`, `test_flow_plugins.py`, `json`, `test_flow_section_sensor.py`, `load_profiles`?**
   _High betweenness centrality (0.063) - this node is a cross-community bridge._
-- **Why does `dispatch()` connect `init_state` to `start_stage`, `test_flow_reviews.py`, `cli.py`, `Proposals and alternatives for human plan-gate decision`, `read_events`, `load_roster`, `load_profiles`, `Implementation Plan: Reliable Worker Recovery`, `append_event`, `Profile`, `pathlib`, `done_stage`, `reserve`, `FlowError`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
-- **Why does `Finding` connect `speckit_flow/rules.py` to `test_flow_reviews.py`, `pathlib`, `Execution Steps`, `Execution Steps`, `FlowError`?**
+- **Why does `Spec Kit Workflow Profiles, State and Audit` connect `Spec Kit Workflow Profiles, State and Audit` to `Reuse the Spec Kit workflow in another project`, `Commands`, `sequence`, `RecoveryAdapter`?**
   _High betweenness centrality (0.033) - this node is a cross-community bridge._
+- **Why does `source()` connect `FlowError` to `Data Model: Portable Spec Kit Setup`, `test_speckit_package.py`, `Spec Kit Workflow Profiles, State and Audit`, `init_state`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Are the 181 inferred relationships involving `FlowError` (e.g. with `_check_agent_file()` and `undispatchable()`) actually correct?**
   _`FlowError` has 181 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `main()` (e.g. with `FlowError` and `Phase 1: Setup`) actually correct?**
   _`main()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `aria-ai-relationship-manager`, `$schema`, `title` to the rest of the system?**
-  _1928 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1930 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `StatementTransaction` be split into smaller, more focused modules?**
-  _Cohesion score 0.05493133583021224 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.057203956161454156 - nodes in this community are weakly interconnected._

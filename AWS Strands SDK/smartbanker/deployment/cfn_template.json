@@ -1,0 +1,413 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "SmartBanker Lambda tool functions for AgentCore Gateway",
+  "Resources": {
+    "ToolLambdaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "smartbanker-tool-lambda-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            },
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "Policies": [
+          {
+            "PolicyName": "DynamoDBAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:Query",
+                    "dynamodb:PutItem",
+                    "dynamodb:DeleteItem"
+                  ],
+                  "Resource": "arn:aws:dynamodb:us-east-1:533267042240:table/smartbanker_stm"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Fntransactionfetcher": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-transaction_fetcher",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/transaction_fetcher.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fnbalancechecker": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-balance_checker",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/balance_checker.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fninvestmentdataapi": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-investment_data_api",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/investment_data_api.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fnbudgetingcalculator": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-budgeting_calculator",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/budgeting_calculator.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fnservicerequestprocessor": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-service_request_processor",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/service_request_processor.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fnescalationtracker": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-escalation_tracker",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/escalation_tracker.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fndocumentguidance": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-document_guidance",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/document_guidance.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fnloanproductcatalog": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-loan_product_catalog",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/loan_product_catalog.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fntierpricingengine": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-tier_pricing_engine",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/tier_pricing_engine.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fnactivityanalyzer": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-activity_analyzer",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/activity_analyzer.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fntierbenefitmapper": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-tier_benefit_mapper",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/tier_benefit_mapper.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    },
+    "Fncompliancerulechecker": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": "smartbanker-compliance_rule_checker",
+        "Runtime": "python3.11",
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolLambdaRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": "smartbanker-lambda-deploy-533267042240",
+          "S3Key": "lambdas/compliance_rule_checker.zip"
+        },
+        "Timeout": 30,
+        "MemorySize": 256
+      }
+    }
+  },
+  "Outputs": {
+    "transactionfetcherArn": {
+      "Description": "ARN for transaction_fetcher Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fntransactionfetcher",
+          "Arn"
+        ]
+      }
+    },
+    "balancecheckerArn": {
+      "Description": "ARN for balance_checker Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fnbalancechecker",
+          "Arn"
+        ]
+      }
+    },
+    "investmentdataapiArn": {
+      "Description": "ARN for investment_data_api Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fninvestmentdataapi",
+          "Arn"
+        ]
+      }
+    },
+    "budgetingcalculatorArn": {
+      "Description": "ARN for budgeting_calculator Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fnbudgetingcalculator",
+          "Arn"
+        ]
+      }
+    },
+    "servicerequestprocessorArn": {
+      "Description": "ARN for service_request_processor Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fnservicerequestprocessor",
+          "Arn"
+        ]
+      }
+    },
+    "escalationtrackerArn": {
+      "Description": "ARN for escalation_tracker Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fnescalationtracker",
+          "Arn"
+        ]
+      }
+    },
+    "documentguidanceArn": {
+      "Description": "ARN for document_guidance Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fndocumentguidance",
+          "Arn"
+        ]
+      }
+    },
+    "loanproductcatalogArn": {
+      "Description": "ARN for loan_product_catalog Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fnloanproductcatalog",
+          "Arn"
+        ]
+      }
+    },
+    "tierpricingengineArn": {
+      "Description": "ARN for tier_pricing_engine Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fntierpricingengine",
+          "Arn"
+        ]
+      }
+    },
+    "activityanalyzerArn": {
+      "Description": "ARN for activity_analyzer Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fnactivityanalyzer",
+          "Arn"
+        ]
+      }
+    },
+    "tierbenefitmapperArn": {
+      "Description": "ARN for tier_benefit_mapper Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fntierbenefitmapper",
+          "Arn"
+        ]
+      }
+    },
+    "compliancerulecheckerArn": {
+      "Description": "ARN for compliance_rule_checker Lambda",
+      "Value": {
+        "Fn::GetAtt": [
+          "Fncompliancerulechecker",
+          "Arn"
+        ]
+      }
+    },
+    "LambdaRoleArn": {
+      "Description": "IAM Role ARN for Lambda tools",
+      "Value": {
+        "Fn::GetAtt": [
+          "ToolLambdaRole",
+          "Arn"
+        ]
+      }
+    }
+  }
+}

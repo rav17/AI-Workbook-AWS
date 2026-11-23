@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-01T00:00:00.000Z" agent="IBM AT Guide" version="21.0.0">
+  <diagram name="Topics Thread Diagram" id="topics_thread">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="IBM Architectural Thinking — How All Topics Connect (ECS Thread)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#1F2328;" vertex="1" parent="1">
+          <mxGeometry x="100" y="10" width="1200" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- ===== MODULE BOXES ===== -->
+
+        <!-- M01 -->
+        <mxCell id="m01" value="📘 Module 01&lt;br/&gt;&lt;b&gt;Architectural Thinking&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Iterative process&lt;br/&gt;• Inputs → Process → Outputs&lt;br/&gt;• Avoid golden hammer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="185" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- M02 -->
+        <mxCell id="m02" value="📗 Module 02&lt;br/&gt;&lt;b&gt;What is Architecture?&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Structure + Behavior&lt;br/&gt;• Functional vs Operational&lt;br/&gt;• EA / SA / BA domains" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00897b;strokeColor=#00695c;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="280" y="70" width="185" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- M03 + EX01 -->
+        <mxCell id="m03" value="📙 Module 03 + EX01&lt;br/&gt;&lt;b&gt;Requirements Aspect&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• FR / NFR / Constraints / Future&lt;br/&gt;• SMART requirements&lt;br/&gt;• System Context Diagram&lt;br/&gt;• Use Case Model&lt;br/&gt;• MoSCoW prioritization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e67c00;strokeColor=#bf6200;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="520" y="70" width="185" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- M04 -->
+        <mxCell id="m04" value="📕 Module 04&lt;br/&gt;&lt;b&gt;Decisions &amp; Principles&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• AD template (6 fields)&lt;br/&gt;• Policy &gt; Principle &gt; Guideline&lt;br/&gt;• Solution Optimization patterns&lt;br/&gt;• Fit-for-purpose decisions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d32f2f;strokeColor=#b71c1c;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="760" y="70" width="185" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- M05 + EX02 -->
+        <mxCell id="m05" value="📓 Module 05 + EX02&lt;br/&gt;&lt;b&gt;Architecture Overview&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Communication artefact&lt;br/&gt;• Functional + Operational views&lt;br/&gt;• Audience-tailored&lt;br/&gt;• Best practices + anti-patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a1b9a;strokeColor=#4a148c;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="70" width="185" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- M06 + EX03 -->
+        <mxCell id="m06" value="📒 Module 06 + EX03&lt;br/&gt;&lt;b&gt;Functional Aspect&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Component Model (static + dynamic)&lt;br/&gt;• Cohesion, Coupling, Isolation&lt;br/&gt;• 3 steps: Identify → Specify → Implement&lt;br/&gt;• Layering principles&lt;br/&gt;• Sequence diagrams" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=#263238;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="280" width="185" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- M07 + EX04+05 -->
+        <mxCell id="m07" value="📔 Module 07 + EX04+05&lt;br/&gt;&lt;b&gt;Operational Aspect&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Location → DU → LOM → POM&lt;br/&gt;• Nodes, Locations, Zones&lt;br/&gt;• Deployment Units (U/E/D/I)&lt;br/&gt;• Cloud deployment models&lt;br/&gt;• Transaction walkthroughs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565c0;strokeColor=#0d47a1;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="760" y="280" width="185" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- M08 -->
+        <mxCell id="m08" value="📃 Module 08&lt;br/&gt;&lt;b&gt;Validation &amp; Viability&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Viability Assessment&lt;br/&gt;• RTVM — requirements → tests&lt;br/&gt;• V-Model testing&lt;br/&gt;• RAID Log&lt;br/&gt;• Risk: remove/contain/accept" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4e342e;strokeColor=#3e2723;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="520" y="280" width="185" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- M09 + EX07 -->
+        <mxCell id="m09" value="📄 Module 09 + EX07&lt;br/&gt;&lt;b&gt;Agile for Architects&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Agile Manifesto, Scrum, SAFe&lt;br/&gt;• Intentional vs Emergent design&lt;br/&gt;• Initial Architecture (Sprint 0)&lt;br/&gt;• Microservices + DevOps&lt;br/&gt;• Architecture runway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2e7d32;strokeColor=#1b5e20;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="280" y="280" width="185" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- M10 -->
+        <mxCell id="m10" value="📌 Module 10&lt;br/&gt;&lt;b&gt;Summary &amp; Career&lt;/b&gt;&lt;br/&gt;─────────────────&lt;br/&gt;• Architect career path&lt;br/&gt;• L1 / L2 / L3 certification&lt;br/&gt;• Lifelong learning&lt;br/&gt;• Find a mentor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#558b2f;strokeColor=#33691e;fontColor=#ffffff;fontSize=11;align=left;spacingLeft=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="185" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ARROWS: Module flow ===== -->
+        <mxCell id="a1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m01" target="m02" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m02" target="m03" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m03" target="m04" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m04" target="m05" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m05" target="m06" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m06" target="m07" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m07" target="m08" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m08" target="m09" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a9" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;strokeWidth=2;endArrow=open;endFill=0;" edge="1" source="m09" target="m10" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ECS EXAMPLE ROW ===== -->
+        <mxCell id="ecs_hdr" value="ECS Example Thread — How each module applies to the Electronic Census System" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1F2328;strokeColor=#1F2328;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="510" width="1360" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ECS row boxes -->
+        <mxCell id="ecs1" value="Iterative thinking&lt;br/&gt;Avoid re-using&lt;br/&gt;last project's stack" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1ba1e2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs2" value="ECS scope: IT system&lt;br/&gt;Functional + Operational&lt;br/&gt;Solution Architecture" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#00897b;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs3" value="SCD, Use Case Model&lt;br/&gt;NFRs: HA/Perf/Sec&lt;br/&gt;9.5M households" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e67c00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs4" value="AD-001: Stateless&lt;br/&gt;web tier + Redis&lt;br/&gt;Cloud First principle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#d32f2f;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs5" value="AOD: Browser →&lt;br/&gt;ECS layers →&lt;br/&gt;DoS integration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="720" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs6" value="AuthService, FormEngine&lt;br/&gt;SubmissionService&lt;br/&gt;UC_01 Logon sequence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eceff1;strokeColor=#37474f;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs7" value="LOM: Locations+DUs&lt;br/&gt;POM: IKS+Redis+PG&lt;br/&gt;IBM Cloud Bolumbia" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs8" value="RTVM: NFRs→tests&lt;br/&gt;RAID: risks+deps&lt;br/&gt;Viability assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#efebe9;strokeColor=#4e342e;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="560" width="150" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2: Agile + Career -->
+        <mxCell id="ecs9" value="Sprint 0: Architecture-on-a-page&lt;br/&gt;Microservices style&lt;br/&gt;DevOps CI/CD pipeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs10" value="Architect as servant leader&lt;br/&gt;Architecture runway → enablers&lt;br/&gt;Intentional vs emergent design" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f8e9;strokeColor=#558b2f;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="650" width="250" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow connectors for ECS row -->
+        <mxCell id="ec_a1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs1" target="ecs2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_a2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs2" target="ecs3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_a3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs3" target="ecs4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_a4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs4" target="ecs5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_a5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs5" target="ecs6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_a6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs6" target="ecs7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_a7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#888888;strokeWidth=1;endArrow=open;endFill=0;" edge="1" source="ecs7" target="ecs8" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-arrows: Requirements ↔ Validation -->
+        <mxCell id="cross1" value="NFRs drive&lt;br/&gt;RTVM tests" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=9;strokeColor=#e67c00;dashed=1;endArrow=open;endFill=0;" edge="1" source="m03" target="m08" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="612" y="250" />
+              <mxPoint x="612" y="262" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Cross-arrow: Component Model → Operational Model -->
+        <mxCell id="cross2" value="Components&lt;br/&gt;deployed as DUs" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=9;strokeColor=#37474f;dashed=1;endArrow=open;endFill=0;" edge="1" source="m06" target="m07" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Footer note -->
+        <mxCell id="footer" value="Diagrams in this guide are draw.io files — open with app.diagrams.net or VS Code draw.io extension" style="text;html=1;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="750" width="1320" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

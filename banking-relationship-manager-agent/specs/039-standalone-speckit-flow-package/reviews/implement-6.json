@@ -1,0 +1,42 @@
+{
+  "id": "implement-6",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-17T08:35:57+00:00",
+  "files": {
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e",
+    "specs/039-standalone-speckit-flow-package/spec.md": "e9229754cf37d88b5886a24cfca2d131e7b8aecabecfa1368e959784a8017af5",
+    "specs/039-standalone-speckit-flow-package/plan.md": "1d9551176c771bd50e81b16c1a17ed4b5f6dd8281aa74c72a08914be25f855f3",
+    "specs/039-standalone-speckit-flow-package/tasks.md": "7dce8812fbb6c7e1337433b888dbc98d9724f27d45b1589ed5f6a3fa8c019ed6",
+    "specs/039-standalone-speckit-flow-package/quickstart.md": "5ff4c3941cf1fe36e22d5e498b2a7ec36287d831a346cf12bd2bc73990dd8d01",
+    "specs/039-standalone-speckit-flow-package/contracts/speckit-package-cli.md": "fbbd2fc3f57e7f846740e36c992879eea48001265bedddc5a29daf8894019d36",
+    "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json": "ca31d946baa0bff7a619b249fb7a4131128ab6ba41518f78dd2b187210b140f0",
+    "scripts/speckit_package.py": "db41585bb4e06ec4697ab7f542ae3e319641181772b7368fd45f96aaabc33ffc",
+    "scripts/portable-package/verify_snapshot.py": "364df872d9f7fe17bada76c24ec9d3ae8ae8aab5329d6dad36380ab42792c025",
+    "tests/unit/test_speckit_package.py": "39f3a782fc691ea4b2a8e3538a1a770a2f3e6db1d4765794e2ea03c96f4cce27",
+    "tests/unit/test_speckit_bootstrap.py": "ffd72ddf4572526723ee5d0b9229622b52b75c7643ba5d034a71e2c57679b9ff",
+    "scripts/check_secrets.py": "9111db14345866c34c930be50ecf25a7c3047fdf3cda048c332c46f143078b63"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "scripts/speckit_package.py",
+      "section": "inventory/assemble snapshot identity (FR-002; CLI contract section 1)",
+      "note": "inventory and assemble capture files independently; assemble neither receives nor compares the human-reviewed inventory. A source change can therefore be packaged under the reviewed label without approval, and regenerated timestamps prevent the preview digest matching. Bind assembly to reviewed inventory or revise approval contract and evidence path."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/tasks.md",
+      "section": "manual acceptance T029-T044",
+      "note": "Fixture tests do not establish real-source assembly/verification, boundary and secret scans, consumer install/update, human documentation review, or traceability. T029-T030, T033-T034, T036, T039-T042 and T044 remain unchecked; gather their specified evidence before asserting associated success criteria."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/spec.md",
+      "section": "header status",
+      "note": "The header says human approval is pending while feature state records specify done and the plan says the specify gate was human-approved. Align the status with the actual human gate record without implying approval through an unapproved edit."
+    }
+  ]
+}

@@ -21,19 +21,25 @@ PowerShell 5.1/7-compatible with quoted explicit paths. Contracts:
 ```powershell
 Set-Location -LiteralPath 'C:\Users\RavindraYadav\Documents\AI-Workbook-AWS\banking-relationship-manager-agent'
 
-# 1. Pre-assembly inspection (FR-002 side one): print inventory, zero writes.
-python scripts/speckit_package.py inventory --label "speckit-flow-portable-2026-11-17-01" --captured-by "<human approval reference>"
-# Expected: SNAPSHOT.json document on stdout; file count (151 at bundle 1.1.0) and
-# the inventory's own SHA-256 on stderr. Record that digest out of band.
-# The human reviews this inventory; their snapshot approval is what authorizes
-# capturing uncommitted working-tree content.
+# 1. Pre-assembly inspection (FR-002 side one): save the inventory for review.
+#    Use --output, not shell redirection: Windows PowerShell 5.1 ">" re-encodes
+#    output and the saved file would no longer match the printed digest.
+#    --output refuses an existing file and any path inside the checkout.
+python scripts/speckit_package.py inventory --label "speckit-flow-portable-2026-11-17-01" --captured-by "<human approval reference>" --output "C:\Users\RavindraYadav\Documents\speckit-flow-review\SNAPSHOT.reviewed.json"
+# Expected: file count (151 at bundle 1.1.0) and the inventory's own SHA-256 on
+# stderr. Record that digest out of band.
+# The human reviews this file; their approval of this file and digest is what
+# authorizes capturing uncommitted working-tree content.
 
-# 2. Dry-run assembly: planned CREATE lines only, zero writes.
-python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\speckit-flow-portable" --label "speckit-flow-portable-2026-11-17-01" --captured-by "<human approval reference>" --dry-run
+# 2. Dry-run assembly: planned CREATE lines only, zero writes. Label, captured-by
+#    and source reference come from the reviewed file. If any source file
+#    differs from the reviewed inventory, assembly prints DRIFT lines and exits 2.
+python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\speckit-flow-portable" --inventory "C:\Users\RavindraYadav\Documents\speckit-flow-review\SNAPSHOT.reviewed.json" --inventory-sha256 "<approved digest>" --dry-run
 
-# 3. Real assembly: copy -> SNAPSHOT.json -> detect-secrets screen (explicit file
-#    list, coverage-asserted) -> verify -> marker.
-python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\speckit-flow-portable" --label "speckit-flow-portable-2026-11-17-01" --captured-by "<human approval reference>"
+# 3. Real assembly: verify reviewed digest -> recapture and compare with review ->
+#    copy -> SNAPSHOT.json (byte-identical to the reviewed file) -> detect-secrets
+#    screen (explicit file list, coverage-asserted) -> verify -> marker.
+python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\speckit-flow-portable" --inventory "C:\Users\RavindraYadav\Documents\speckit-flow-review\SNAPSHOT.reviewed.json" --inventory-sha256 "<approved digest>"
 # Expected: exit 0; final lines include the inventory digest and
 # "assemble complete: snapshot speckit-flow-portable-2026-11-17-01".
 
@@ -45,10 +51,10 @@ git --no-pager status --short   # identical to pre-assembly output
 explanation and zero writes:
 
 ```powershell
-python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\speckit-flow-portable" --label x --captured-by y   # non-empty now -> refused
-python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\AI-Workbook-AWS\banking-relationship-manager-agent\sub" --label x --captured-by y   # overlaps source -> refused
+python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\speckit-flow-portable" --inventory "<reviewed file>" --inventory-sha256 "<approved digest>"   # non-empty now -> refused
+python scripts/speckit_package.py assemble --dest "C:\Users\RavindraYadav\Documents\AI-Workbook-AWS\banking-relationship-manager-agent\sub" --inventory "<reviewed file>" --inventory-sha256 "<approved digest>"   # overlaps source -> refused
 New-Item -ItemType File -Path "$env:TEMP\speckit-dest-as-file" -Force | Out-Null
-python scripts/speckit_package.py assemble --dest "$env:TEMP\speckit-dest-as-file" --label x --captured-by y   # destination exists as a file (same refusal for a symlink) -> refused
+python scripts/speckit_package.py assemble --dest "$env:TEMP\speckit-dest-as-file" --inventory "<reviewed file>" --inventory-sha256 "<approved digest>"   # destination exists as a file (same refusal for a symlink) -> refused
 ```
 
 **Failure/drift behavior**: interrupt or corrupt a copy in a scratch run; expect

@@ -6,6 +6,7 @@ and falls back to rule-based matching on failure.
 Requirements: 1.1, 1.4, 1.5, 1.6, 1.7, 9.2
 """
 
+import asyncio
 import json
 import logging
 import os
@@ -20,6 +21,7 @@ from botocore.exceptions import (
 )
 
 from src.agentic_ai.models.domain import IncidentRecord, RemediationPlan, RemediationStep
+from src.agentic_ai.models.incident_store import TERMINAL_OUTCOMES
 from src.agentic_ai.models.enums import FallbackReason
 
 logger = logging.getLogger(__name__)
@@ -120,6 +122,9 @@ class AIReasoningAgent:
     ) -> None:
         self._config = config or AgentConfig()
         self._incident_store = incident_store
+        # Model used by the most recent reason() call (after any escalation).
+        # Callers that record the incident read this; create one agent per request.
+        self.last_model_id: Optional[str] = None
         self._playbook_mapper = playbook_mapper
 
         if bedrock_client:
@@ -157,8 +162,10 @@ class AIReasoningAgent:
         Returns:
             RemediationPlan with steps and confidence score.
         """
-        # Retrieve history
-        history = self._get_history(alert_name, severity, service_name)
+        # Retrieve history (blocking boto3 call: keep it off the event loop)
+        history = await asyncio.to_thread(
+            self._get_history, alert_name, severity, service_name
+        )
 
         # --- Model Routing: classify complexity for cost optimization ---
         from src.agentic_ai.agents.model_router import ModelRouter, AlertComplexity
@@ -176,6 +183,7 @@ class AIReasoningAgent:
             correlation_group_size=1,  # Single alert; correlator handles groups
             all_past_failed=all_failed,
         )
+        self.last_model_id = routing_decision.model_id
         logger.info(
             "Model routing: alert=%s complexity=%s model=%s reason=%s",
             alert_name,
@@ -207,6 +215,7 @@ class AIReasoningAgent:
             ):
                 escalation_model = router.get_escalation_model(routing_decision.complexity)
                 if escalation_model:
+                    self.last_model_id = escalation_model
                     logger.info(
                         "Model escalation: confidence=%.2f < 0.5, escalating to %s",
                         plan.confidence_score,
@@ -244,16 +253,22 @@ class AIReasoningAgent:
     def _get_history(
         self, alert_name: str, severity: str, service_name: str
     ) -> list[IncidentRecord]:
-        """Retrieve historical incidents from the memory store."""
+        """Retrieve finished incidents for this alert from the memory store.
+
+        Only incidents with the same alert name count, and only those with a
+        terminal outcome (success, failure, timeout). Pending incidents carry no
+        information about whether a fix worked, so they must not feed the model
+        router: counting them as failures would force the most expensive model.
+        ``severity`` and ``service_name`` are accepted for compatibility only.
+        """
         if self._incident_store is None:
             return []
         try:
-            return self._incident_store.query_history(
+            records = self._incident_store.query_history(
                 alert_name=alert_name,
-                severity=severity,
-                service=service_name,
                 limit=MAX_HISTORICAL_INCIDENTS,
             )
+            return [r for r in records if r.outcome in TERMINAL_OUTCOMES]
         except Exception as e:
             logger.warning("Failed to retrieve history: %s", e)
             return []
@@ -358,6 +373,9 @@ Respond with a JSON object:
                     )
                     if model_id != self._config.model_id:
                         logger.info("Using fallback model: %s", model_id)
+                    # Record the model that actually answered (may differ from the
+                    # routed model when the fallback chain was used).
+                    self.last_model_id = model_id
                     return result
                 except asyncio.TimeoutError:
                     if attempt == MAX_RETRIES:

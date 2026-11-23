@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-01T00:00:00.000Z" agent="IBM AT Guide" version="21.0.0">
+  <diagram name="ECS System Context Diagram" id="ecs_system_context">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="ECS — System Context Diagram (Exercise 01)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1F2328;" vertex="1" parent="1">
+          <mxGeometry x="234" y="20" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Central System Box -->
+        <mxCell id="ecs" value="&lt;b&gt;ECS&lt;/b&gt;&lt;br/&gt;Electronic Census System&lt;br/&gt;&lt;i&gt;(Target System)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="434" y="320" width="300" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Human Actor: Respondent -->
+        <mxCell id="respondent_icon" value="" style="shape=mxgraph.basic.person;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="300" width="50" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="respondent_lbl" value="Respondent&lt;br/&gt;&lt;i&gt;(9.5M households)&lt;/i&gt;" style="text;html=1;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="375" width="110" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Human Actor: Census Collector -->
+        <mxCell id="collector_icon" value="" style="shape=mxgraph.basic.person;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="490" width="50" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="collector_lbl" value="Census Collector&lt;br/&gt;&lt;i&gt;(~27,000 collectors)&lt;/i&gt;" style="text;html=1;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="25" y="565" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Human Actor: Support Staff -->
+        <mxCell id="support_icon" value="" style="shape=mxgraph.basic.person;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="50" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="support_lbl" value="Support Staff&lt;br/&gt;&lt;i&gt;(Operations team)&lt;/i&gt;" style="text;html=1;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="235" width="110" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Human Actor: Developer/Tester -->
+        <mxCell id="dev_icon" value="" style="shape=mxgraph.basic.person;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="160" width="50" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dev_lbl" value="Developer / Tester&lt;br/&gt;&lt;i&gt;(App dev team)&lt;/i&gt;" style="text;html=1;align=center;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="990" y="235" width="110" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- System Actor: DoS ECS Processing -->
+        <mxCell id="dos_proc" value="&lt;b&gt;DoS Electronic Census&lt;br/&gt;Processing System&lt;/b&gt;&lt;br/&gt;(Existing DoS Backend)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="890" y="290" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- System Actor: SMS Gateway -->
+        <mxCell id="sms_gw" value="&lt;b&gt;SMS Gateway&lt;/b&gt;&lt;br/&gt;(Mobile phone network)&lt;br/&gt;Sends to Collectors" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="890" y="430" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- System Actor: DoS Census Help Desk -->
+        <mxCell id="helpdesk" value="&lt;b&gt;Census Help Desk&lt;/b&gt;&lt;br/&gt;(DoS operated)&lt;br/&gt;Handles queries" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="890" y="570" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Line of Automation -->
+        <mxCell id="loa" value="— — Line of Automation — —" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="160" y="725" width="848" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="loa_line" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry x="160" y="720" width="0" height="0" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="720" />
+              <mxPoint x="1008" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrows from Respondent to ECS -->
+        <mxCell id="e_resp_ecs" value="HTTPS&lt;br/&gt;CFN + ECN login&lt;br/&gt;Submit census form" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;align=center;" edge="1" source="respondent_icon" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from ECS to Collector (via SMS) -->
+        <mxCell id="e_ecs_sms" value="CFN + address&lt;br/&gt;(online submission&lt;br/&gt;confirmation)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;endArrow=open;" edge="1" source="ecs" target="sms_gw" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sms_coll" value="SMS notification" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="sms_gw" target="collector_icon" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="890" y="470" />
+              <mxPoint x="160" y="470" />
+              <mxPoint x="160" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrow from ECS to DoS Processing -->
+        <mxCell id="e_ecs_dos" value="Census returns + CFN&lt;br/&gt;(batch transfer)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ecs" target="dos_proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from ECS to Help Desk -->
+        <mxCell id="e_ecs_hd" value="Usage reports&lt;br/&gt;Application info" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="ecs" target="helpdesk" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from Developer to ECS -->
+        <mxCell id="e_dev_ecs" value="Deploy, update,&lt;br/&gt;configure" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="dev_icon" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow from Support to ECS -->
+        <mxCell id="e_sup_ecs" value="Monitor and&lt;br/&gt;operate" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="support_icon" target="ecs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="leg_title" value="Legend" style="text;html=1;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="120" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_human" value="" style="shape=mxgraph.basic.person;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="668" width="28" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_human_lbl" value="Human Actor" style="text;html=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="678" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_sys" value="" style="rounded=0;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="712" width="28" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_sys_lbl" value="System Actor" style="text;html=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="712" width="100" height="22" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,15 @@
+---
+- name: Restart affected service
+  hosts: all
+  become: true
+  tasks:
+    - name: Restart the service
+      ansible.builtin.systemd:
+        name: "{{ service_name | default('application') }}"
+        state: restarted
+      register: restart_result
+
+    - name: Wait for service to be healthy
+      ansible.builtin.wait_for:
+        port: "{{ service_port | default(8080) }}"
+        timeout: 30

@@ -30,6 +30,9 @@ class CdkContext:
     devops_agent_forward_on: str = DEFAULT_DEVOPS_AGENT_FORWARD_ON
     # Phase 2: email DevOps Agent's findings to the operator (EventBridge + Lambda)
     devops_agent_findings_enabled: bool = False
+    # Phase 2b (advisory only): for alerts with no playbook, DevOps Agent investigates first and the findings
+    # Lambda asks Bedrock for the recommended playbook, then sends one advisory email.
+    devops_agent_advisory_enabled: bool = False
 
 
 def validate_cdk_context(raw: dict) -> CdkContext:
@@ -69,6 +72,20 @@ def validate_cdk_context(raw: dict) -> CdkContext:
             f"devopsAgentFindingsEnabled must be 'true' or 'false', got '{findings_raw}'"
         )
 
+    advisory_raw = str(raw.get("devopsAgentAdvisoryEnabled", "false")).strip().lower()
+    if advisory_raw not in ("true", "false", ""):
+        errors.append(
+            f"devopsAgentAdvisoryEnabled must be 'true' or 'false', got '{advisory_raw}'"
+        )
+    elif advisory_raw == "true" and not (
+        devops_agent_raw == "true" and findings_raw == "true"
+    ):
+        # Without both, the pipeline would skip Bedrock and no email could be sent.
+        errors.append(
+            "devopsAgentAdvisoryEnabled requires devopsAgentEnabled=true and "
+            "devopsAgentFindingsEnabled=true"
+        )
+
     forward_on_raw = str(raw.get("devopsAgentForwardOn", "") or "").strip().lower()
     forward_on = DEFAULT_DEVOPS_AGENT_FORWARD_ON
     if forward_on_raw:
@@ -98,4 +115,5 @@ def validate_cdk_context(raw: dict) -> CdkContext:
         devops_agent_enabled=devops_agent_raw == "true",
         devops_agent_forward_on=forward_on,
         devops_agent_findings_enabled=findings_raw == "true",
+        devops_agent_advisory_enabled=advisory_raw == "true",
     )

@@ -87,6 +87,11 @@ def _get_signing_secret() -> str:
 _SIGNING_SECRET = _get_signing_secret()
 
 
+def get_signing_secret() -> str:
+    """Return the HMAC signing secret shared by approval and feedback links."""
+    return _SIGNING_SECRET
+
+
 # Backward-compatible alias for code that references PendingApproval
 PendingApproval = StoredApproval
 
@@ -286,6 +291,55 @@ class ApprovalHandler:
             "Approval consumed (memory): incident=%s", approval.incident_id
         )
         return approval
+
+    def release_dedup_for_incident(self, incident_id: str) -> bool:
+        """Release the duplicate-suppression lock held by an incident's pending approval.
+
+        Called when the approval is auto-cancelled because its alert resolved. Without
+        this, the lock stays until the approval would have expired, and a genuine
+        recurrence of the same alert in that window is suppressed (seen live
+        2026-11-21: incident e9c55f66 dropped 5 minutes after 39dee1c1 was cancelled).
+
+        The lock is released only if this approval still owns it, so a newer
+        approval's lock is never removed. Never raises.
+
+        Returns:
+            True if a lock was released (or a release was attempted on the store).
+        """
+        try:
+            approval = self.get_pending(incident_id)
+        except Exception as e:  # noqa: BLE001 - lookup failure must not break resolve handling
+            logger.warning(
+                "Could not look up approval to release its dedup lock: %s",
+                e,
+                extra={"incident_id": incident_id},
+            )
+            return False
+        if approval is None or not approval.dedup_key:
+            return False
+
+        if self._store is not None:
+            # Conditional delete on owner_token, so only this approval's lock is removed.
+            try:
+                self._store.release_dedup(approval.dedup_key, approval.token)
+            except Exception as e:  # noqa: BLE001 - lock still expires on its own
+                logger.warning(
+                    "Could not release dedup lock: %s",
+                    e,
+                    extra={"incident_id": incident_id},
+                )
+                return False
+        else:
+            owner = self._memory_dedup.get(approval.dedup_key, ("", 0.0))[0]
+            if owner != approval.token:
+                return False
+            del self._memory_dedup[approval.dedup_key]
+        logger.info(
+            "Released duplicate-approval lock for cancelled incident %s",
+            incident_id,
+            extra={"incident_id": incident_id},
+        )
+        return True
 
     def get_pending(self, incident_id: str) -> Optional[StoredApproval]:
         """Get pending approval by incident ID.

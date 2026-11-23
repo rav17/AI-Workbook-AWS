@@ -1,0 +1,37 @@
+{
+  "id": "implement-2",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-17T10:03:07+00:00",
+  "files": {
+    "scripts/speckit_package.py": "1fec5573905ae8eee9eb36a138e5f9c7156c3d3a00daede31f37697ea1cbc919",
+    "scripts/portable-package/verify_snapshot.py": "364df872d9f7fe17bada76c24ec9d3ae8ae8aab5329d6dad36380ab42792c025",
+    "specs/039-standalone-speckit-flow-package/tasks.md": "0346713d78dbc0a7495905ccb9f9773a5266c9e62c2b9d5e88e08779de9ffb90",
+    "specs/039-standalone-speckit-flow-package/data-model.md": "861db2fcf4e18036760c2c59f5b43c725d718ce900be50c8c5a81dc9bcccd992",
+    "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json": "ca31d946baa0bff7a619b249fb7a4131128ab6ba41518f78dd2b187210b140f0",
+    "specs/039-standalone-speckit-flow-package/contracts/speckit-package-cli.md": "4455f24e79c15b9972a4001d89d2813f950629dee0ad37fb4b0fbe1100f53135",
+    "tests/unit/test_speckit_package.py": "2185d9278fdc59caa9921f8b319dc96cdba8c3e0dc2574c4ec5e626eb85e25b7"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "scripts/speckit_package.py",
+      "section": "_cmd_assemble / _reviewed_drift",
+      "note": "_cmd_assemble discards the current manifest version returned by _capture_closure and _reviewed_drift serializes using only the reviewed snapshot metadata. A schema-valid, digest-approved inventory can therefore claim a bundle_version different from the captured manifest and still assemble successfully. Compare reviewed snapshot.bundle_version with the current manifest version before any destination write; add a mismatch test."
+    },
+    {
+      "severity": "warning",
+      "file": "scripts/portable-package/verify_snapshot.py",
+      "section": "_load_inventory",
+      "note": "The hand-rolled verifier accepts duplicate JSON object keys (json.loads keeps the last value) and does not enforce the contract's ascending files order. It can report an inventory as intact despite malformed/ambiguous or nonconforming inventory bytes when the marker matches. Reject duplicate keys and validate ordering; add verifier malformed-input cases."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/tasks.md",
+      "section": "Manual acceptance and traceability (T029-T044)",
+      "note": "Manual acceptance remains open: real-tree inventory/assembly and preservation (T029), checkout-independent verification (T030), packaged install and neutral-default checks (T033-T034), update matrix (T036), human docs review/walkthrough (T039-T040), boundary/scan positive-control sweeps (T041-T042), and traceability closure (T044). Fixture tests do not establish these results; keep them reported as unverified until completed."
+    }
+  ]
+}

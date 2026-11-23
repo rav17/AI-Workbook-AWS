@@ -490,13 +490,17 @@ def restart_and_check(run: Runner, env: str) -> None:
 def cmd_up(run: Runner, args: argparse.Namespace) -> int:
     """Provision everything for one environment."""
     env = args.env
+    if args.advisory and args.no_devops_agent:
+        raise StepError("--advisory needs DevOps Agent; remove --no-devops-agent")
     preflight(run, need_devops_cli=not args.no_devops_agent)
     ensure_bootstrap(run) if not args.dry_run else _say("\n[cdk bootstrap] (dry run: check only)")
     if args.dry_run:
         _say("\n[dry run] synthesizing all stacks; no AWS changes will be made")
         run.cdk("synth", "--all", "--quiet", "--context", f"environment={env}",
                 "--context", f"imageTag=latest-{env}",
-                "--context", f"devopsAgentEnabled={'false' if args.no_devops_agent else 'true'}")
+                "--context", f"devopsAgentEnabled={'false' if args.no_devops_agent else 'true'}",
+                "--context", f"devopsAgentFindingsEnabled={'false' if args.no_devops_agent else 'true'}",
+                "--context", f"devopsAgentAdvisoryEnabled={'true' if args.advisory else 'false'}")
         stacks = env_stacks(run, env)
         _say(f"    existing {env} stacks: {[s['StackName'] for s in stacks] or 'none'}")
         if not args.no_devops_agent:
@@ -510,7 +514,9 @@ def cmd_up(run: Runner, args: argparse.Namespace) -> int:
     _say(f"\n[cdk deploy --all] environment={env}")
     run.cdk("deploy", "--all", "--require-approval", "never",
             "--context", f"environment={env}", "--context", f"imageTag={tag}",
-            "--context", f"devopsAgentEnabled={'false' if args.no_devops_agent else 'true'}")
+            "--context", f"devopsAgentEnabled={'false' if args.no_devops_agent else 'true'}",
+                "--context", f"devopsAgentFindingsEnabled={'false' if args.no_devops_agent else 'true'}",
+                "--context", f"devopsAgentAdvisoryEnabled={'true' if args.advisory else 'false'}")
     if not args.no_devops_agent:
         setup_devops_agent(run, env)
     restart_and_check(run, env)
@@ -695,6 +701,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--skip-build", action="store_true", help="up: reuse aiops:latest-<env>")
     parser.add_argument("--no-devops-agent", action="store_true",
                         help="up: skip the AWS DevOps Agent setup")
+    parser.add_argument("--advisory", action="store_true",
+                        help="up: DevOps Agent + Bedrock advise on alerts with no playbook "
+                             "(one email with root cause, mitigation plan and playbook)")
     parser.add_argument("--dry-run", action="store_true",
                         help="up: preflight + synth only, no changes")
     parser.add_argument("--yes", "-y", action="store_true",

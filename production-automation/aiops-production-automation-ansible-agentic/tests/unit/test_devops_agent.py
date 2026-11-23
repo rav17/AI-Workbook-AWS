@@ -242,12 +242,13 @@ class TestAppWiring:
             group_labels={}, common_labels={}, common_annotations={}, external_url="",
         )
 
-    def _run(self, forward_result):
+    def _run(self, forward_result, defers=False):
         import src.app as app
         from src.devops_agent import ForwardResult
 
         forwarder = MagicMock()
         forwarder.forward_async = AsyncMock(return_value=ForwardResult(forward_result))
+        forwarder.defers_advisory.return_value = defers
         advisory = AsyncMock()
         with patch.object(app, "devops_forwarder", forwarder), \
              patch.object(app.orchestrator, "process_alert_payload",
@@ -273,6 +274,66 @@ class TestAppWiring:
         _, advisory = self._run("failed")
         advisory.assert_awaited_once()
         assert advisory.call_args.kwargs["devops_agent_forwarded"] is False
+
+    def test_advisory_mode_skips_our_bedrock_advisory_when_devops_agent_has_it(
+        self,
+    ) -> None:
+        forwarder, advisory = self._run("sent", defers=True)
+
+        forwarder.forward_async.assert_awaited_once()
+        advisory.assert_not_awaited()
+
+    def test_advisory_mode_falls_back_to_our_advisory_when_forwarding_did_not_happen(
+        self,
+    ) -> None:
+        _, advisory = self._run("failed", defers=False)
+        advisory.assert_awaited_once()
+
+
+class TestDefersAdvisory:
+    """DevOpsAgentForwarder.defers_advisory decides who sends the advisory email."""
+
+    @staticmethod
+    def _forwarder(advisory_mode: bool) -> DevOpsAgentForwarder:
+        return DevOpsAgentForwarder(
+            config=_config(advisory_mode=advisory_mode),
+            opener=MagicMock(return_value=_Response()),
+            sleep=MagicMock(),
+        )
+
+    @pytest.mark.parametrize(
+        ("status", "reason", "expected"),
+        [
+            ("sent", "", True),
+            ("skipped", "already forwarded", True),
+            ("skipped", "hourly cap reached", False),
+            ("skipped", "not enabled", False),
+            ("failed", "HTTP 500", False),
+        ],
+    )
+    def test_only_a_live_investigation_defers(self, status, reason, expected) -> None:
+        from src.devops_agent import ForwardResult
+
+        result = ForwardResult(status, reason)
+        assert self._forwarder(True).defers_advisory(result) is expected
+
+    def test_never_defers_when_advisory_mode_is_off(self) -> None:
+        from src.devops_agent import ForwardResult
+
+        assert self._forwarder(False).defers_advisory(ForwardResult("sent")) is False
+
+    def test_real_dedup_result_matches_the_constant(self) -> None:
+        forwarder = self._forwarder(True)
+        first = forwarder.forward(incident_id="inc-1", trigger="unmatched", **FIELDS)
+        second = forwarder.forward(incident_id="inc-1", trigger="unmatched", **FIELDS)
+        assert first.status == "sent" and forwarder.defers_advisory(first)
+        assert second.status == "skipped" and forwarder.defers_advisory(second)
+
+    def test_config_reads_the_env_flag(self, monkeypatch) -> None:
+        monkeypatch.setenv("DEVOPS_AGENT_ADVISORY_MODE", "true")
+        assert DevOpsAgentConfig.from_env().advisory_mode is True
+        monkeypatch.setenv("DEVOPS_AGENT_ADVISORY_MODE", "nope")
+        assert DevOpsAgentConfig.from_env().advisory_mode is False
 
 
 # ---------------------------------------------------------------------------
@@ -521,6 +582,7 @@ class TestAppIncidentIds:
 
         forwarder = MagicMock()
         forwarder.forward_async = AsyncMock(return_value=ForwardResult("sent"))
+        forwarder.defers_advisory.return_value = False
         forwarder.forward_resolved_async = AsyncMock(return_value=ForwardResult("skipped"))
         with patch.object(app, "devops_forwarder", forwarder), \
              patch.object(app.orchestrator, "process_alert_payload",

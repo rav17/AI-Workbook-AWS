@@ -28,6 +28,7 @@ import threading
 import warnings
 from pathlib import Path, PurePosixPath
 from types import ModuleType
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGER_SOURCE = ROOT / "scripts" / "speckit_package.py"
@@ -149,6 +150,33 @@ def _packager(fixture: Path) -> Path:
     return fixture / "scripts" / "speckit_package.py"
 
 
+def _review_dir(fixture: Path) -> Path:
+    """Reviewed inventories live outside tmp_path so tree-state checks are unaffected."""
+    review = fixture.parent.parent / f"{fixture.parent.name}-reviewed"
+    review.mkdir(exist_ok=True)
+    return review
+
+
+def _save_inventory(
+    fixture: Path, label: str = "fixture-snap"
+) -> tuple[subprocess.CompletedProcess[str], Path, str]:
+    """Run ``inventory --output`` and return (result, reviewed file, approved digest)."""
+    review = _review_dir(fixture)
+    output = review / f"inventory-{len(list(review.iterdir()))}.json"
+    result = _run(
+        _packager(fixture),
+        "inventory",
+        "--label",
+        label,
+        "--captured-by",
+        "pytest-harness",
+        "--output",
+        str(output),
+    )
+    digest = hashlib.sha256(output.read_bytes()).hexdigest() if output.exists() else ""
+    return result, output, digest
+
+
 def _assemble(
     fixture: Path,
     dest: Path | str,
@@ -156,16 +184,23 @@ def _assemble(
     label: str = "fixture-snap",
     env: dict[str, str] | None = None,
     cwd: Path | None = None,
+    reviewed: tuple[Path, str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
+    """Assemble from a reviewed inventory; by default one is captured just before."""
+    if reviewed is None:
+        inventory_result, inventory_path, digest = _save_inventory(fixture, label)
+        if inventory_result.returncode != 0:
+            return inventory_result
+        reviewed = (inventory_path, digest)
     return _run(
         _packager(fixture),
         "assemble",
         "--dest",
         str(dest),
-        "--label",
-        label,
-        "--captured-by",
-        "pytest-harness",
+        "--inventory",
+        str(reviewed[0]),
+        "--inventory-sha256",
+        reviewed[1],
         *extra,
         env=env,
         cwd=cwd,
@@ -606,19 +641,9 @@ def test_label_and_captured_by_validation(tmp_path: Path) -> None:
         assert not dest.exists()  # exit 2 before any write
 
     for flag in ("--captured-by", "--source-ref"):
-        result = _run(
-            _packager(fixture),
-            "assemble",
-            "--dest",
-            str(dest),
-            "--label",
-            "ok-label",
-            "--captured-by",
-            "pytest-harness",
-            flag,
-            "bad\x1fvalue",
-        )
+        result = _inventory(fixture, flag, "bad\x1fvalue")
         assert result.returncode == 2, (flag, result.stderr)
+        assert "must be printable" in result.stderr
         assert not dest.exists()
 
     boundary = "x" * 200  # exactly 200 printable chars accepted
@@ -659,6 +684,82 @@ def test_missing_closure_source_file_aborts_with_zero_writes(tmp_path: Path) -> 
     assert result.returncode == 2, result.stdout + result.stderr
     assert "payload/shared.txt" in result.stdout + result.stderr
     assert _tree_state(tmp_path) == before
+
+
+def test_manifest_destinations_are_validated_before_capture(tmp_path: Path) -> None:
+    """Malformed destinations and expanded destination collisions fail closed."""
+    fixture = _make_package_fixture(tmp_path)
+    manifest_path = fixture / "scripts" / "speckit-portable-bundle.json"
+    original = json.loads(manifest_path.read_text(encoding="utf-8"))
+    invalid_bundles = []
+
+    unsafe_destination = json.loads(json.dumps(original))
+    unsafe_destination["files"][0]["destination"] = "../outside"
+    invalid_bundles.append(unsafe_destination)
+
+    missing_destination = json.loads(json.dumps(original))
+    del missing_destination["files"][0]["destination"]
+    invalid_bundles.append(missing_destination)
+
+    expanded_collision = json.loads(json.dumps(original))
+    # The first directory entry expands to shared/shared.txt; this file entry
+    # targets its parent, which is an ancestor/descendant collision.
+    expanded_collision["files"][1]["destination"] = "shared"
+    invalid_bundles.append(expanded_collision)
+
+    reserved_destination = json.loads(json.dumps(original))
+    reserved_destination["files"][1]["destination"] = ".specify/feature.json"
+    invalid_bundles.append(reserved_destination)
+
+    dest = tmp_path / "never-created"
+    for bundle in invalid_bundles:
+        manifest_path.write_text(json.dumps(bundle), encoding="utf-8")
+        result = _assemble(fixture, dest)
+        output = result.stdout + result.stderr
+        assert result.returncode == 2, output
+        assert "speckit-portable-bundle.json" in output or "CONFLICT" in output
+        assert not dest.exists()
+
+
+def test_packager_destination_walk_error_fails_verification(tmp_path: Path) -> None:
+    """An unreadable subtree reported by os.walk must not pass verification."""
+    packager = _import_scripts_module("speckit_package", ROOT / "scripts")
+    dest = tmp_path / "package-dest"
+    dest.mkdir()
+    inventory = b"inventory\n"
+    (dest / "SNAPSHOT.json").write_bytes(inventory)
+
+    def failed_walk(_path: Path, *, followlinks: bool = False, onerror: object = None) -> object:
+        assert followlinks is False
+        if callable(onerror):
+            onerror(PermissionError("denied", str(dest / "private")))
+        return iter([(str(dest), [], ["SNAPSHOT.json"])])
+
+    with patch.object(packager.os, "walk", failed_walk):
+        drift = packager._verify_destination(dest, [], inventory)
+
+    assert any("directory walk failed" in item for item in drift), drift
+
+
+def test_standalone_verifier_walk_error_fails_closed(tmp_path: Path, capsys: object) -> None:
+    """The delivered verifier must fail when os.walk cannot inspect a subtree."""
+    fixture = _make_package_fixture(tmp_path)
+    dest = tmp_path / "package-dest"
+    assert _assemble(fixture, dest).returncode == 0
+    verifier = _import_scripts_module("verify_snapshot", ROOT / "scripts" / "portable-package")
+
+    def failed_walk(_path: Path, *, followlinks: bool = False, onerror: object = None) -> object:
+        assert followlinks is False
+        if callable(onerror):
+            onerror(PermissionError("denied", str(dest / "private")))
+        return iter([])
+
+    with patch.object(verifier.os, "walk", failed_walk):
+        result = verifier.main(["--package", str(dest)])
+
+    output = capsys.readouterr().out
+    assert result == 1, output
+    assert "directory walk failed" in output
 
 
 def test_screen_self_digest_suppression_scoped_to_inventory() -> None:
@@ -764,6 +865,53 @@ def test_verifier_rejects_malformed_inventory_shapes(tmp_path: Path) -> None:
         f"{hashlib.sha256(original).hexdigest()}  SNAPSHOT.json\n".encode("ascii")
     )
     assert _run(dest / "verify_snapshot.py").returncode == 0
+
+
+def test_verifier_rejects_duplicate_inventory_json_keys(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    dest = tmp_path / "package-dest"
+    assert _assemble(fixture, dest).returncode == 0
+
+    snapshot = dest / "SNAPSHOT.json"
+    original = snapshot.read_bytes()
+    duplicated = original.replace(
+        b'"schema_version": 1,',
+        b'"schema_version": 1,\n  "schema_version": 1,',
+        1,
+    )
+    assert duplicated != original
+    snapshot.write_bytes(duplicated)
+
+    verify = _run(dest / "verify_snapshot.py")
+
+    output = verify.stdout + verify.stderr
+    assert verify.returncode == 2, output
+    assert "ERROR" in output
+    assert "duplicate JSON object key: schema_version" in output
+    assert "Traceback" not in output
+
+
+def test_verifier_rejects_unsorted_inventory_files(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    dest = tmp_path / "package-dest"
+    assert _assemble(fixture, dest).returncode == 0
+
+    snapshot = dest / "SNAPSHOT.json"
+    document = json.loads(snapshot.read_text(encoding="utf-8"))
+    document["files"][0], document["files"][1] = document["files"][1], document["files"][0]
+    mutated = (json.dumps(document, indent=2) + "\n").encode("utf-8")
+    snapshot.write_bytes(mutated)
+    (dest / "SNAPSHOT.json.sha256").write_bytes(
+        f"{hashlib.sha256(mutated).hexdigest()}  SNAPSHOT.json\n".encode("ascii")
+    )
+
+    verify = _run(dest / "verify_snapshot.py")
+
+    output = verify.stdout + verify.stderr
+    assert verify.returncode == 2, output
+    assert "ERROR" in output
+    assert "files must be sorted by path" in output
+    assert "Traceback" not in output
 
 
 def test_assemble_destination_reservation_is_exclusive(tmp_path: Path) -> None:
@@ -894,3 +1042,163 @@ def test_package_readme_boundaries_links_and_timestamp_note(tmp_path: Path) -> N
     assert rights < repo_prep  # boundary before distribution-adjacent guidance
     assert "captured_at" in content
     assert "per-file, not per-inventory" in content  # finding 4 nondeterminism note
+
+
+# ---------------------------------------------------------------------------
+# Reviewed-inventory binding (implement-6 major finding; FR-002)
+# ---------------------------------------------------------------------------
+
+
+def test_assemble_copies_exactly_the_reviewed_inventory(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    result, reviewed, digest = _save_inventory(fixture)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert digest in result.stderr  # printed digest equals the saved file's digest
+    dest = tmp_path / "package-dest"
+
+    result = _assemble(fixture, dest, reviewed=(reviewed, digest))
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert (dest / "SNAPSHOT.json").read_bytes() == reviewed.read_bytes()
+    assert f"inventory sha256 {digest}" in result.stdout
+    assert digest in (dest / "SNAPSHOT.json.sha256").read_text(encoding="ascii")
+
+
+def test_assemble_refuses_source_changed_after_review(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    result, reviewed, digest = _save_inventory(fixture)
+    assert result.returncode == 0, result.stdout + result.stderr
+    (fixture / "payload" / "shared.txt").write_bytes(b"changed after review\n")
+    dest = tmp_path / "never-created"
+    before = _tree_state(tmp_path)
+
+    for extra in ((), ("--dry-run",)):
+        result = _assemble(fixture, dest, *extra, reviewed=(reviewed, digest))
+        output = result.stdout + result.stderr
+        assert result.returncode == 2, output
+        assert "DRIFT payload/shared.txt (changed since review)" in output
+        assert "assemble complete" not in output
+        assert not dest.exists()
+        assert _tree_state(tmp_path) == before
+
+
+def test_assemble_refuses_reviewed_bundle_version_mismatch_without_writes(
+    tmp_path: Path,
+) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    result, reviewed, _original_digest = _save_inventory(fixture)
+    assert result.returncode == 0, result.stdout + result.stderr
+
+    document = json.loads(reviewed.read_text(encoding="utf-8"))
+    document["snapshot"]["bundle_version"] = "fixture-2.0"
+    reviewed.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+    approved_digest = hashlib.sha256(reviewed.read_bytes()).hexdigest()
+    dest = tmp_path / "empty-destination"
+    dest.mkdir()
+    before = _tree_state(tmp_path)
+
+    result = _assemble(fixture, dest, reviewed=(reviewed, approved_digest))
+
+    output = result.stdout + result.stderr
+    assert result.returncode == 2, output
+    assert "DRIFT snapshot.bundle_version" in output
+    assert "does not match current bundle manifest" in output
+    assert list(dest.iterdir()) == []
+    assert _tree_state(tmp_path) == before
+
+
+def test_assemble_refuses_file_added_after_review(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    (fixture / "payload" / "extra.txt").write_bytes(b"later\n")
+    manifest_path = fixture / "scripts" / "speckit-portable-bundle.json"
+    bundle = json.loads(manifest_path.read_text(encoding="utf-8"))
+    result, reviewed, digest = _save_inventory(fixture)
+    assert result.returncode == 0, result.stdout + result.stderr
+    bundle["files"][0]["include"] = ["shared.txt", "extra.txt"]
+    manifest_path.write_text(json.dumps(bundle, indent=2) + "\n", encoding="utf-8")
+    dest = tmp_path / "never-created"
+
+    result = _assemble(fixture, dest, reviewed=(reviewed, digest))
+
+    output = result.stdout + result.stderr
+    assert result.returncode == 2, output
+    assert "(not in reviewed inventory)" in output
+    assert "scripts/speckit-portable-bundle.json (changed since review)" in output
+    assert not dest.exists()
+
+
+def test_assemble_refuses_wrong_or_malformed_approved_digest(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    result, reviewed, digest = _save_inventory(fixture)
+    assert result.returncode == 0, result.stdout + result.stderr
+    dest = tmp_path / "never-created"
+
+    for bad in ("0" * 64, "not-a-digest", digest[:-1]):
+        result = _assemble(fixture, dest, reviewed=(reviewed, bad))
+        assert result.returncode == 2, result.stdout + result.stderr
+        assert not dest.exists()
+
+    # editing the reviewed file after approval breaks the digest binding
+    edited = reviewed.read_bytes().replace(b"fixture-snap", b"fixture-snq")
+    reviewed.write_bytes(edited)
+    result = _assemble(fixture, dest, reviewed=(reviewed, digest))
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert "does not match approved digest" in result.stderr
+    assert not dest.exists()
+
+    missing = _assemble(fixture, dest, reviewed=(tmp_path / "absent.json", digest))
+    assert missing.returncode == 2
+    assert not dest.exists()
+
+
+def test_assemble_refuses_schema_invalid_reviewed_inventory_without_writes(tmp_path: Path) -> None:
+    """A matching digest does not make an incomplete or out-of-schema review valid."""
+    fixture = _make_package_fixture(tmp_path)
+    result, reviewed, _digest = _save_inventory(fixture)
+    assert result.returncode == 0, result.stdout + result.stderr
+    valid_document = json.loads(reviewed.read_text(encoding="utf-8"))
+
+    malformed_documents: list[dict[str, object]] = []
+    missing_timestamp = json.loads(json.dumps(valid_document))
+    del missing_timestamp["snapshot"]["captured_at"]
+    malformed_documents.append(missing_timestamp)
+
+    missing_reference_field = json.loads(json.dumps(valid_document))
+    del missing_reference_field["snapshot"]["source_reference"]["commit"]
+    malformed_documents.append(missing_reference_field)
+
+    extra_property = json.loads(json.dumps(valid_document))
+    extra_property["unexpected"] = True
+    malformed_documents.append(extra_property)
+
+    for index, document in enumerate(malformed_documents):
+        reviewed_path = tmp_path / f"malformed-reviewed-{index}.json"
+        reviewed_bytes = (json.dumps(document) + "\n").encode("utf-8")
+        reviewed_path.write_bytes(reviewed_bytes)
+        digest = hashlib.sha256(reviewed_bytes).hexdigest()
+        dest = tmp_path / f"empty-destination-{index}"
+        dest.mkdir()
+
+        result = _assemble(fixture, dest, reviewed=(reviewed_path, digest))
+
+        output = result.stdout + result.stderr
+        assert result.returncode == 2, output
+        assert "missing or invalid" in output or "unknown properties" in output, output
+        assert list(dest.iterdir()) == []
+
+
+def test_inventory_output_never_overwrites_or_writes_into_source(tmp_path: Path) -> None:
+    fixture = _make_package_fixture(tmp_path)
+    existing = tmp_path / "existing.json"
+    existing.write_bytes(b"keep\n")
+
+    result = _inventory(fixture, "--output", str(existing))
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert existing.read_bytes() == b"keep\n"
+
+    before = _tree_state(fixture)
+    inside = fixture / "inventory.json"
+    result = _inventory(fixture, "--output", str(inside))
+    assert result.returncode == 2, result.stdout + result.stderr
+    assert "outside the source repository" in result.stderr
+    assert _tree_state(fixture) == before
