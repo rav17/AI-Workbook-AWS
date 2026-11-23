@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-01T00:00:00.000Z" agent="IBM AT Guide" version="21.0.0">
+  <diagram name="Agile Initial Architecture" id="ecs_agile_init">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="ECS — Agile Initial Architecture / Architecture-on-a-Page (Exercise 07)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#1F2328;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1090" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- ===== SPRINT 0 TIMELINE ===== -->
+        <mxCell id="timeline" value="Sprint 0 / Project Initiation (Days 1–14)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="55" width="1090" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== KEY NFRs BOX ===== -->
+        <mxCell id="nfr_box" value="&lt;b&gt;Key NFRs Captured (Sprint 0)&lt;/b&gt;&lt;br/&gt;─────────────────────────────────────&lt;br/&gt;⚡ Performance: &lt;3s at 95th percentile, 1M concurrent users&lt;br/&gt;🔒 Security: CFN/ECN auth, TLS 1.3, AES-256 at rest&lt;br/&gt;✅ Availability: HA on Census Night (7pm–midnight)&lt;br/&gt;🔄 DR: RPO ≤ 1h, RTO ≤ 4h&lt;br/&gt;📋 Compliance: Electronic Transactions Act 2009&lt;br/&gt;🌏 Data sovereignty: IBM Cloud Bolumbia region only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="320" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ARCHITECTURE-ON-A-PAGE ===== -->
+        <mxCell id="aop" value="Architecture-on-a-Page" style="swimlane;fontStyle=1;startSize=25;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="400" y="95" width="730" height="500" as="geometry" />
+        </mxCell>
+
+        <!-- Users block -->
+        <mxCell id="aop_users" value="USERS&lt;br/&gt;━━━━━━━━━━&lt;br/&gt;• Respondents (9.5M)&lt;br/&gt;• Census Collectors (~27K)&lt;br/&gt;• DoS Admins&lt;br/&gt;• Support Staff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=top;" vertex="1" parent="aop">
+          <mxGeometry x="20" y="40" width="160" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Core components block -->
+        <mxCell id="aop_comps" value="KEY COMPONENTS&lt;br/&gt;━━━━━━━━━━&lt;br/&gt;• AuthService (IBM App ID)&lt;br/&gt;• FormEngine (custom)&lt;br/&gt;• SubmissionService&lt;br/&gt;• NotificationService&lt;br/&gt;• ReportingService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;verticalAlign=top;" vertex="1" parent="aop">
+          <mxGeometry x="220" y="40" width="185" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Infra block -->
+        <mxCell id="aop_infra" value="INFRASTRUCTURE&lt;br/&gt;━━━━━━━━━━&lt;br/&gt;• IBM Cloud Bolumbia Region&lt;br/&gt;• Kubernetes (IKS) auto-scale&lt;br/&gt;• PostgreSQL (HA)&lt;br/&gt;• Redis session cache&lt;br/&gt;• API Connect" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;" vertex="1" parent="aop">
+          <mxGeometry x="450" y="40" width="185" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Scope boundary annotation -->
+        <mxCell id="scope_ann" value="⬛ SCOPE BOUNDARY&lt;br/&gt;IN: Census form online (desktop + mobile)&lt;br/&gt;OUT: Analysis systems, non-private dwellings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=left;spacingLeft=8;" vertex="1" parent="aop">
+          <mxGeometry x="20" y="185" width="330" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Integration block -->
+        <mxCell id="aop_integ" value="KEY INTEGRATION POINTS&lt;br/&gt;━━━━━━━━━━&lt;br/&gt;• DoS Electronic Census Processing&lt;br/&gt;  (REST API, batch nightly)&lt;br/&gt;• SMS Gateway (Collector alerts)&lt;br/&gt;• IBM CIS (WAF + DDoS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;" vertex="1" parent="aop">
+          <mxGeometry x="380" y="185" width="310" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Initial Security Viewpoint box -->
+        <mxCell id="sec_view" value="INITIAL SECURITY VIEWPOINT — Authentication Flow&lt;br/&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━&lt;br/&gt;1. Respondent → HTTPS → IBM CIS (WAF / TLS 1.3 termination)&lt;br/&gt;2. CIS → Kubernetes Ingress → DialogControl&lt;br/&gt;3. DialogControl → IBM App ID.authenticate(cfn, ecn)&lt;br/&gt;4. App ID → PostgreSQL credential lookup&lt;br/&gt;5. App ID → JWT token issued (RS256, 1h expiry)&lt;br/&gt;6. JWT stored in HttpOnly / Secure cookie (browser)&lt;br/&gt;7. All subsequent API calls: JWT validated at App ID&lt;br/&gt;8. Data at rest: AES-256 (PostgreSQL TDE + Redis encrypted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="aop">
+          <mxGeometry x="20" y="285" width="690" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ARCHITECTURE RUNWAY ===== -->
+        <mxCell id="runway_title" value="Architecture Runway — Enablers" style="text;html=1;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="310" width="320" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="🔧 E1 (Sprint 1–2)&lt;br/&gt;IBM Cloud IKS setup&lt;br/&gt;+ CI/CD pipeline (GitHub→IKS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="🔐 E2 (Sprint 2–3)&lt;br/&gt;AuthService + IBM App ID&lt;br/&gt;CFN/ECN validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="205" y="340" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="📝 E3 (Sprint 3–4)&lt;br/&gt;FormEngine — basic&lt;br/&gt;section navigation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="📊 E4 (Sprint 6)&lt;br/&gt;Load testing framework&lt;br/&gt;+ performance baseline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="205" y="440" width="150" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ARCH STYLE BOX ===== -->
+        <mxCell id="style_box" value="&lt;b&gt;Architectural Style Chosen: Microservices&lt;/b&gt;&lt;br/&gt;─────────────────────────────────────&lt;br/&gt;• FormEngine, AuthService, SubmissionService → independent deploy&lt;br/&gt;• Each scales horizontally on Census Night demand&lt;br/&gt;• Decentralized team ownership per service&lt;br/&gt;• DevOps: GitHub → Jenkins → Docker → IKS&lt;br/&gt;• Blue-green deployments for zero-downtime releases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="550" width="320" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Intentional vs Emergent note -->
+        <mxCell id="int_emg" value="Intentional Architecture (Sprint 0) → constrains → Emergent Design (Sprints 1–N)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="715" width="1090" height="28" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

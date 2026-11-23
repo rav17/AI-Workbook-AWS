@@ -1,0 +1,17 @@
+# Alertmanager configuration for local development
+# Routes alerts to the self-healing webhook endpoint
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname', 'instance']
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+  receiver: self-healing-webhook
+
+receivers:
+  - name: self-healing-webhook
+    webhook_configs:
+      - url: http://self-healing:8080/webhook
+        send_resolved: true

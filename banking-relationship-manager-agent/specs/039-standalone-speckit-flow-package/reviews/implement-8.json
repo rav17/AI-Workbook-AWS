@@ -1,0 +1,50 @@
+{
+  "id": "implement-8",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-17T12:51:00+00:00",
+  "files": {
+    "specs/039-standalone-speckit-flow-package/spec.md": "887c0357a2a290317b008ccd87ade676bf2a5b5526ea80d9d4c13693ae12fd8d",
+    "specs/039-standalone-speckit-flow-package/plan.md": "e57490748dad03461c2ae5acb93883c355d7e64ca0383133704dd07f545f6d3f",
+    "specs/039-standalone-speckit-flow-package/tasks.md": "0346713d78dbc0a7495905ccb9f9773a5266c9e62c2b9d5e88e08779de9ffb90",
+    "specs/039-standalone-speckit-flow-package/data-model.md": "861db2fcf4e18036760c2c59f5b43c725d718ce900be50c8c5a81dc9bcccd992",
+    "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json": "ca31d946baa0bff7a619b249fb7a4131128ab6ba41518f78dd2b187210b140f0",
+    "scripts/speckit_package.py": "0049ed3c82749ecef2896f9aeada67ae196727d9b86ee431462cea22c50857c4",
+    "scripts/portable-package/verify_snapshot.py": "3da1a15ad7e063fdf12977c0238aa8e78bc1191967aa14bd10fb4aa9a07b2882",
+    "tests/unit/test_speckit_package.py": "0cf5276d4fc6a060e527112b9ae1a64a6dac1e17bf69783e7c7feb361a1c607c"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "scripts/portable-package/verify_snapshot.py",
+      "section": "_load_inventory inventory_path read",
+      "note": "The verifier reads SNAPSHOT.json before rejecting a symlink or junction, so it can access a linked path outside the package. Reject linked inventory paths before reading and add a focused test."
+    },
+    {
+      "severity": "warning",
+      "file": "scripts/portable-package/verify_snapshot.py",
+      "section": "_load_inventory snapshot.captured_at",
+      "note": "TIMESTAMP_RE accepts impossible calendar dates and offsets; it checks syntax but not an actual ISO-8601 datetime. Validate a real offset-aware datetime and test invalid values."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json",
+      "section": "files.items.properties.source_path",
+      "note": "The documented rule that source_path appears only for package-doc entries whose path differs from the package path is not enforced; equal paths may include it and differing paths may omit it. Enforce or narrow the contract."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/tasks.md",
+      "section": "T029-T044 manual acceptance and traceability",
+      "note": "Real-source assembly/preservation, package-only verification, consumer install/defaults/update, human docs review, boundary/scan sweeps and traceability remain unchecked. Fixture tests do not establish these outcomes; report them as unverified."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/plan.md",
+      "section": "Technical Context Constraints",
+      "note": "The zero cloud footprint statement describes scope, not runtime worker isolation. Preserve the distinction: neither this plan nor fixture tests prove tool isolation."
+    }
+  ]
+}

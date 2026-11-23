@@ -56,6 +56,8 @@ class ResolutionDecision:
     should_cancel: bool
     reason: str
     incident_state: Optional[IncidentState] = None
+    # The incident the decision applies to (set when one matched).
+    incident_id: Optional[str] = None
 
 
 class ResolvedAlertTracker:
@@ -174,6 +176,7 @@ class ResolvedAlertTracker:
                         f"execution started — cancelling pending action"
                     ),
                     incident_state=IncidentState.CANCELLED,
+                    incident_id=matching.incident_id,
                 )
 
             elif matching.state == IncidentState.EXECUTING:

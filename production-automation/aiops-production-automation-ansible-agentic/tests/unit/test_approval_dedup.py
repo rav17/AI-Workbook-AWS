@@ -133,3 +133,122 @@ class TestDynamoDedup:
         kwargs = table.delete_item.call_args.kwargs
         assert kwargs["Key"]["incident_id"] == f"APPROVAL_DEDUP#{approval.dedup_key}"
         assert kwargs["ExpressionAttributeValues"][":token"] == approval.token
+
+
+class TestReleaseOnAutoCancel:
+    """Regression (dev, 2026-11-21): 39dee1c1 was auto-cancelled at 10:53 when its alarm
+    cleared, but its dedup lock lived until 11:13, so the real recurrence e9c55f66 at
+    10:58 was dropped: no approval email and no DevOps Agent investigation."""
+
+    def test_cancel_frees_the_lock_for_a_recurrence(self, memory_handler) -> None:
+        assert _create(memory_handler, "inc-1") is not None
+        assert _create(memory_handler, "inc-dup") is None  # still a real duplicate
+
+        assert memory_handler.release_dedup_for_incident("inc-1") is True
+        assert _create(memory_handler, "inc-2") is not None
+
+    def test_never_frees_a_lock_owned_by_another_approval(self, memory_handler) -> None:
+        first = _create(memory_handler, "inc-1")
+        # inc-1's approval is used, then inc-2 takes the lock for a new occurrence.
+        memory_handler.validate_and_consume(first.token)
+        second = _create(memory_handler, "inc-2")
+        memory_handler._memory_store[first.token].consumed = False  # simulate stale lookup
+
+        assert memory_handler.release_dedup_for_incident("inc-1") is False
+        assert memory_handler._memory_dedup[second.dedup_key][0] == second.token
+        assert _create(memory_handler, "inc-3") is None
+
+    def test_suppressed_incident_has_nothing_to_release(self, memory_handler) -> None:
+        _create(memory_handler, "inc-1")
+        assert _create(memory_handler, "inc-dup") is None
+        assert memory_handler.release_dedup_for_incident("inc-dup") is False
+        assert _create(memory_handler, "inc-2") is None  # inc-1 still holds the lock
+
+    def test_unknown_incident_is_a_no_op(self, memory_handler) -> None:
+        assert memory_handler.release_dedup_for_incident("nope") is False
+
+    def _dynamo_handler(self, monkeypatch, table: MagicMock) -> ApprovalHandler:
+        return TestDynamoDedup()._handler_with_table(monkeypatch, table)
+
+    def test_dynamo_release_is_conditional_on_the_owner(self, monkeypatch) -> None:
+        table = MagicMock()
+        handler = self._dynamo_handler(monkeypatch, table)
+        approval = _create(handler, "inc-1")
+        handler._store.get_pending_by_incident = MagicMock(return_value=approval)
+
+        assert handler.release_dedup_for_incident("inc-1") is True
+
+        kwargs = table.delete_item.call_args.kwargs
+        assert kwargs["Key"]["incident_id"] == f"APPROVAL_DEDUP#{approval.dedup_key}"
+        assert kwargs["ConditionExpression"] == "#owner = :token"
+        assert kwargs["ExpressionAttributeValues"][":token"] == approval.token
+
+    def test_store_errors_never_raise(self, monkeypatch) -> None:
+        table = MagicMock()
+        handler = self._dynamo_handler(monkeypatch, table)
+        handler._store.get_pending_by_incident = MagicMock(side_effect=RuntimeError("down"))
+        assert handler.release_dedup_for_incident("inc-1") is False
+
+        approval = _create(handler, "inc-1")
+        handler._store.get_pending_by_incident = MagicMock(return_value=approval)
+        table.delete_item.side_effect = RuntimeError("network")
+        assert handler.release_dedup_for_incident("inc-1") is False
+
+
+class TestResolvedAlertWiring:
+    """_handle_resolved_alert releases the lock only when it cancels a pending incident."""
+
+    @staticmethod
+    def _alert():
+        from src.models import AlertmanagerAlert
+
+        return AlertmanagerAlert(
+            status="resolved",
+            labels={"alertname": "HighMemoryUsage", "instance": "i-0a3e", "severity": "critical"},
+            annotations={"summary": "memory low"},
+            starts_at="2026-11-21T10:43:00Z",
+            ends_at="2026-11-21T10:53:00Z",
+            generator_url="",
+            fingerprint="fp",
+        )
+
+    def _run(self, decision):
+        import asyncio
+        from unittest.mock import AsyncMock, patch
+
+        import src.app as app
+
+        handler = MagicMock()
+        with patch.object(app.resolved_tracker, "handle_resolved", return_value=decision), \
+             patch.object(app, "approval_handler", handler), \
+             patch.object(app.devops_forwarder, "forward_resolved_async", AsyncMock()), \
+             patch.object(app, "incident_store", None):
+            asyncio.run(app._handle_resolved_alert(self._alert()))
+        return handler
+
+    def test_cancel_releases_the_cancelled_incidents_lock(self) -> None:
+        from src.resolved_tracker import IncidentState, ResolutionDecision
+
+        handler = self._run(
+            ResolutionDecision(
+                should_cancel=True,
+                reason="x",
+                incident_state=IncidentState.CANCELLED,
+                incident_id="39dee1c1",
+            )
+        )
+        handler.release_dedup_for_incident.assert_called_once_with("39dee1c1")
+
+    def test_no_cancel_releases_nothing(self) -> None:
+        from src.resolved_tracker import ResolutionDecision
+
+        handler = self._run(ResolutionDecision(should_cancel=False, reason="none"))
+        handler.release_dedup_for_incident.assert_not_called()
+
+    def test_tracker_reports_the_cancelled_incident_id(self) -> None:
+        from src.resolved_tracker import ResolvedAlertTracker
+
+        tracker = ResolvedAlertTracker()
+        tracker.register_pending("39dee1c1", "HighMemoryUsage", "i-0a3e")
+        decision = tracker.handle_resolved("HighMemoryUsage", "i-0a3e")
+        assert decision.should_cancel and decision.incident_id == "39dee1c1"

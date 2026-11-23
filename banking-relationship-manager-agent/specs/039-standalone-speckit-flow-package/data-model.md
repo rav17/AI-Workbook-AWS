@@ -13,7 +13,7 @@ working-tree capture (which is content-based, not a Git commit).
 |---|---|---|
 | `label` | string | Required, non-empty human-readable name chosen by the capturing human (e.g. `speckit-flow-portable-2026-11-17-01`). Uniqueness across snapshots is a **human convention documented in the package README** — the tool keeps no registry and does not enforce it. Validated at parse time: printable, no control characters, ≤ 200 chars. Fidelity claims attach to this label only after assembly fully verifies (marker present + inventory match). |
 | `captured_at` | string | Required. ISO-8601 timestamp **with UTC offset** (e.g. `2026-11-17T10:04:00+05:30`). |
-| `captured_by` | string | Required. Capturing human / invocation reference (`--captured-by`). Validated like `label` (printable, control-free, ≤ 200 chars). The human snapshot approval this references is what authorizes capturing uncommitted working-tree content; the per-file digests below are its audit trail. |
+| `captured_by` | string | Required. Capturing human / invocation reference (`inventory --captured-by`). Validated like `label` (printable, control-free, ≤ 200 chars). The human reviews and approves the exact inventory file's SHA-256 digest; assembly requires and verifies that file/digest, then embeds those exact bytes unchanged. This approval authorizes capturing uncommitted working-tree content; the per-file digests below are its audit trail. |
 | `source_reference` | object | Required, **reference only** — not a fidelity claim. `{"repository": string, "branch": string, "commit": string}` from read-only `git rev-parse` (or `--source-ref` fallback). The working tree may differ from `commit`; packaged bytes are authoritative via digests. |
 | `bundle_version` | string | Required. `bundle_version` read from `scripts/speckit-portable-bundle.json` at capture (`1.1.0` at planning time). |
 | `digest_algorithm` | string | Required, declared (not assumed). Fixed `"sha256"` for schema_version 1. |
@@ -142,13 +142,17 @@ consumer ownership record (.specify/speckit-portable-manifest.json in a TARGET p
 ```
 PREFLIGHT ──refusal (non-empty dest | overlap | bad args)──► REFUSED (exit 2, zero writes)
    │ pass
-CAPTURE (in-memory; label assigned, digests computed)
+REVIEW BINDING (approved inventory SHA-256 + schema validation)
+   │ mismatch/invalid ──► REFUSED (exit 2, zero destination writes)
+   │ pass
+CAPTURE (in-memory; compare against exact reviewed bytes)
+   │ drift ──► REFUSED (exit 2, zero destination writes)
    │ read failure ──► ABORTED (exit 2, zero destination writes)
    │ pass    [--dry-run exits here: planned actions printed, zero writes]
 COPY (per-file atomic writes)
    │ write failure ──► PARTIAL (exit 1: per-file ERROR lines, "incomplete, not snapshot <label>",
    │                   nothing deleted, rerun blocked by non-empty refusal, user-directed recovery)
-WRITE SNAPSHOT.json (atomic; rendered free-text metadata now on disk, inside the screened set)
+WRITE SNAPSHOT.json (atomic; exact reviewed inventory bytes, inside the screened set)
 SCREEN (detect-secrets: cwd=destination, --all-files, explicit file list = inventory + SNAPSHOT.json;
         coverage assertion: submitted paths >= inventory count + 1)
    │ findings / scanner unavailable / coverage shortfall ──► PARTIAL-UNSCREENED (exit 1, label withheld)

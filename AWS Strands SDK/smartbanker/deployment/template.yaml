@@ -1,0 +1,186 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SmartBanker AI Agent - Lambda tool functions.
+  All 12 financial tools deployed as individual Lambda functions.
+  Tools are exposed via AgentCore Gateway (not API Gateway).
+  Agent is deployed to AgentCore Runtime via `agentcore launch`.
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 256
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+  LambdaPrefix:
+    Type: String
+    Default: smartbanker
+
+Resources:
+
+  # =========================================================================
+  # Shared IAM Role — allows Lambda execution + Bedrock AgentCore invocation
+  # =========================================================================
+
+  ToolLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${LambdaPrefix}-tool-lambda-role"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service: bedrock.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/smartbanker_*"
+
+  # =========================================================================
+  # Lambda Tool Functions (exposed via AgentCore Gateway as MCP targets)
+  # =========================================================================
+
+  TransactionFetcherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-transaction_fetcher"
+      Handler: handler.handler
+      CodeUri: ../lambdas/transaction_fetcher/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  BalanceCheckerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-balance_checker"
+      Handler: handler.handler
+      CodeUri: ../lambdas/balance_checker/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  InvestmentDataApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-investment_data_api"
+      Handler: handler.handler
+      CodeUri: ../lambdas/investment_data_api/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  BudgetingCalculatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-budgeting_calculator"
+      Handler: handler.handler
+      CodeUri: ../lambdas/budgeting_calculator/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  ServiceRequestProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-service_request_processor"
+      Handler: handler.handler
+      CodeUri: ../lambdas/service_request_processor/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  EscalationTrackerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-escalation_tracker"
+      Handler: handler.handler
+      CodeUri: ../lambdas/escalation_tracker/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  DocumentGuidanceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-document_guidance_tool"
+      Handler: handler.handler
+      CodeUri: ../lambdas/document_guidance/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  LoanProductCatalogFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-loan_product_catalog"
+      Handler: handler.handler
+      CodeUri: ../lambdas/loan_product_catalog/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  TierPricingEngineFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-tier_pricing_engine"
+      Handler: handler.handler
+      CodeUri: ../lambdas/tier_pricing_engine/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  ActivityAnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-activity_analyzer"
+      Handler: handler.handler
+      CodeUri: ../lambdas/activity_analyzer/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  TierBenefitMapperFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-tier_benefit_mapper"
+      Handler: handler.handler
+      CodeUri: ../lambdas/tier_benefit_mapper/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+  ComplianceRuleCheckerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${LambdaPrefix}-compliance_rule_checker"
+      Handler: handler.handler
+      CodeUri: ../lambdas/compliance_rule_checker/
+      Role: !GetAtt ToolLambdaRole.Arn
+
+Outputs:
+  LambdaRoleArn:
+    Description: IAM Role ARN for Lambda tools (use as Gateway execution role)
+    Value: !GetAtt ToolLambdaRole.Arn
+  TransactionFetcherArn:
+    Value: !GetAtt TransactionFetcherFunction.Arn
+  BalanceCheckerArn:
+    Value: !GetAtt BalanceCheckerFunction.Arn
+  InvestmentDataApiArn:
+    Value: !GetAtt InvestmentDataApiFunction.Arn
+  BudgetingCalculatorArn:
+    Value: !GetAtt BudgetingCalculatorFunction.Arn
+  ServiceRequestProcessorArn:
+    Value: !GetAtt ServiceRequestProcessorFunction.Arn
+  EscalationTrackerArn:
+    Value: !GetAtt EscalationTrackerFunction.Arn
+  DocumentGuidanceArn:
+    Value: !GetAtt DocumentGuidanceFunction.Arn
+  LoanProductCatalogArn:
+    Value: !GetAtt LoanProductCatalogFunction.Arn
+  TierPricingEngineArn:
+    Value: !GetAtt TierPricingEngineFunction.Arn
+  ActivityAnalyzerArn:
+    Value: !GetAtt ActivityAnalyzerFunction.Arn
+  TierBenefitMapperArn:
+    Value: !GetAtt TierBenefitMapperFunction.Arn
+  ComplianceRuleCheckerArn:
+    Value: !GetAtt ComplianceRuleCheckerFunction.Arn

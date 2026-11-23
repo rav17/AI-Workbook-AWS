@@ -59,6 +59,19 @@ python demo/trigger_scenario.py --scenario inject --alert-name HighMemoryUsage -
 # Useful for testing without waiting for Prometheus evaluation intervals
 ```
 
+### Scenario 5: P1 incident → AWS DevOps Agent RCA email (AWS dev environment)
+```powershell
+$env:AWS_PROFILE = "mfa"   # refresh MFA first (scripts/mfa_auth.ps1)
+python demo/trigger_p1_incident.py --dry-run   # preflight only, changes nothing
+python demo/trigger_p1_incident.py             # CPU + memory load, then a critical alert
+```
+
+Needs `devopsAgentEnabled=true` and `devopsAgentFindingsEnabled=true` (see
+`docs/devops-agent-integration.md`). The alert (`CriticalServiceOutage`) has no playbook, so
+the pipeline forwards it to DevOps Agent, which investigates for about 2-4 minutes, and the
+findings Lambda emails the RCA to the operator. Options: `--duration`, `--no-stress`,
+`--alert-name`, `--service-name`, `--skip-preflight`.
+
 ## Observing the Pipeline
 
 ```bash

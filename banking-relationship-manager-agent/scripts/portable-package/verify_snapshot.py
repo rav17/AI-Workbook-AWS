@@ -103,7 +103,16 @@ def _load_inventory(package: Path) -> tuple[str, list[dict[str, object]], bytes]
     except OSError as exc:
         raise InventoryError(f"cannot read {INVENTORY_NAME}: {exc}") from exc
     try:
-        document = json.loads(raw.decode("utf-8"))
+
+        def reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+            document: dict[str, object] = {}
+            for key, value in pairs:
+                if key in document:
+                    raise ValueError(f"duplicate JSON object key: {key}")
+                document[key] = value
+            return document
+
+        document = json.loads(raw.decode("utf-8"), object_pairs_hook=reject_duplicate_keys)
     except (UnicodeDecodeError, ValueError) as exc:
         raise InventoryError(f"{INVENTORY_NAME} is not valid UTF-8 JSON: {exc}") from exc
     if (
@@ -151,6 +160,7 @@ def _load_inventory(package: Path) -> tuple[str, list[dict[str, object]], bytes]
         raise InventoryError("files list is missing or empty")
     collision_keys: list[str] = [INVENTORY_NAME.casefold(), MARKER_NAME.casefold()]
     entries: list[dict[str, object]] = []
+    previous_path: str | None = None
     for item in files:
         if not isinstance(item, dict):
             raise InventoryError("every files entry must be an object")
@@ -159,6 +169,9 @@ def _load_inventory(package: Path) -> tuple[str, list[dict[str, object]], bytes]
         )
         rel = _safe_relative_path(item.get("path"), "inventory path")
         text = rel.as_posix()
+        if previous_path is not None and text <= previous_path:
+            raise InventoryError("files must be sorted by path")
+        previous_path = text
         key = text.casefold()
         for existing in collision_keys:
             if key == existing or key.startswith(existing + "/") or existing.startswith(key + "/"):
@@ -247,7 +260,11 @@ def main(argv: list[str] | None = None) -> int:
 
     listed = {str(entry["path"]) for entry in entries}
     allowed_extra = {INVENTORY_NAME, MARKER_NAME}
-    for base, dirs, names in os.walk(package, followlinks=False):
+
+    def _walk_error(error: OSError) -> None:
+        drift.append(f"DRIFT directory walk failed ({error})")
+
+    for base, dirs, names in os.walk(package, followlinks=False, onerror=_walk_error):
         base_path = Path(base)
         kept_dirs: list[str] = []
         for directory in dirs:

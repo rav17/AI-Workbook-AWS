@@ -1,0 +1,90 @@
+{
+  "Description": "SmartBanker AI Agent - AWS Deployment Configuration (AgentCore Runtime + Gateway)",
+
+  "Architecture": {
+    "Runtime": "AgentCore Runtime (Strands Agent SDK via BedrockAgentCoreApp)",
+    "ToolExposure": "AgentCore Gateway (Lambda targets exposed as MCP tools)",
+    "Memory": "DynamoDB (STM) + OpenSearch (LTM)",
+    "LLM": "AWS Bedrock (Amazon Nova Pro via inference profile + Titan Embeddings V2)"
+  },
+
+  "DynamoDB": {
+    "TableName": "smartbanker_stm",
+    "PartitionKey": "user_id (S)",
+    "SortKey": "timestamp (S)",
+    "BillingMode": "PAY_PER_REQUEST"
+  },
+
+  "LambdaTools": {
+    "Description": "12 financial tools deployed as Lambda functions, exposed as MCP targets via AgentCore Gateway",
+    "Prefix": "smartbanker",
+    "Runtime": "python3.11",
+    "MemorySize": 256,
+    "Timeout": 30,
+    "Functions": [
+      "smartbanker-transaction_fetcher",
+      "smartbanker-balance_checker",
+      "smartbanker-investment_data_api",
+      "smartbanker-budgeting_calculator",
+      "smartbanker-service_request_processor",
+      "smartbanker-escalation_tracker",
+      "smartbanker-document_guidance_tool",
+      "smartbanker-loan_product_catalog",
+      "smartbanker-tier_pricing_engine",
+      "smartbanker-activity_analyzer",
+      "smartbanker-tier_benefit_mapper",
+      "smartbanker-compliance_rule_checker"
+    ]
+  },
+
+  "AgentCoreGateway": {
+    "Name": "SmartBankerGateway",
+    "Description": "MCP Gateway exposing all 12 Lambda tools to the agent via OAuth2",
+    "TargetType": "lambda",
+    "Authentication": "OAuth2 (Cognito — auto-provisioned by agentcore gateway create-mcp-gateway)",
+    "SemanticSearch": true
+  },
+
+  "AgentCoreRuntime": {
+    "Entrypoint": "main.py",
+    "Framework": "Strands Agent SDK",
+    "Wrapper": "BedrockAgentCoreApp",
+    "ModelId": "us.amazon.nova-pro-v1:0",
+    "EmbeddingModelId": "amazon.titan-embed-text-v2:0"
+  },
+
+  "IAMPolicy": {
+    "PolicyName": "SmartBankerAgentPolicy",
+    "Statements": [
+      {
+        "Effect": "Allow",
+        "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+        "Resource": [
+          "arn:aws:bedrock:*::foundation-model/amazon.nova-pro-v1:0",
+          "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2:0",
+          "arn:aws:bedrock:us-east-1:533267042240:inference-profile/us.amazon.nova-pro-v1:0"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:Query", "dynamodb:DeleteItem"],
+        "Resource": "arn:aws:dynamodb:*:*:table/smartbanker_stm"
+      },
+      {
+        "Effect": "Allow",
+        "Action": ["lambda:InvokeFunction"],
+        "Resource": "arn:aws:lambda:*:*:function:smartbanker-*"
+      }
+    ]
+  },
+
+  "DeploymentSteps": [
+    "1. Install toolkit: pip install bedrock-agentcore-starter-toolkit",
+    "2. Deploy Lambdas + DynamoDB: python deployment/deploy.py",
+    "   (This creates S3 bucket, uploads Lambda zips, deploys CloudFormation stack,",
+    "    creates AgentCore Gateway, adds Lambda targets, deploys agent to AgentCore Runtime)",
+    "3. Test agent: agentcore invoke '{\"prompt\": \"Analyze my spending\"}'",
+    "4. Run Streamlit UI locally: streamlit run ui/app.py",
+    "5. Cleanup: agentcore destroy --dry-run (then agentcore destroy)"
+  ]
+}

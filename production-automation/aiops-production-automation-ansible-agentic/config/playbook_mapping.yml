@@ -27,4 +27,4 @@ rules:
   - name: memory-pressure
     conditions:
       alert_name: HighMemoryUsage
-    playbook_path: playbooks/restart_process.yml
+    playbook_path: playbooks/fix_high_memory.yml

@@ -1,0 +1,11 @@
+concurrency:
+  host_lock_timeout: 120
+  suppression_window: 300
+  priority_queue_max_depth: 20
+  circuit_breaker:
+    failure_threshold: 3
+    recovery_period: 600
+  blast_radius:
+    max_concurrent_hosts: 5
+    overflow_threshold: 50
+  conflict_matrix_path: config/conflict_matrix.yml

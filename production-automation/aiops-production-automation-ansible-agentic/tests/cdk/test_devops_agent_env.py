@@ -48,6 +48,15 @@ class TestDevOpsAgentTaskEnvironment:
         assert env["DEVOPS_AGENT_FORWARD_ON"] == "unmatched,failed,critical"
         assert env["DEVOPS_AGENT_MAX_PER_HOUR"] == "20"
 
+    def test_advisory_mode_is_off_by_default_and_reaches_the_task_when_on(self) -> None:
+        assert _task_environment()["DEVOPS_AGENT_ADVISORY_MODE"] == "false"
+        env = _task_environment(
+            devops_agent_enabled=True,
+            devops_agent_findings_enabled=True,
+            devops_agent_advisory_enabled=True,
+        )
+        assert env["DEVOPS_AGENT_ADVISORY_MODE"] == "true"
+
     def test_enabled_flag_and_custom_triggers_reach_the_task(self) -> None:
         env = _task_environment(
             devops_agent_enabled=True,

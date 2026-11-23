@@ -1,13 +1,13 @@
 {
   ".specify/init-options.json": {
-    "mtime": 1794901587.0098822,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.813476,
+    "seen": 1794909419.364089,
     "ast_hash": "0d889e9e42b918b62d08bdb1986b639f",
     "semantic_hash": ""
   },
   ".specify/integration.json": {
-    "mtime": 1794901587.0074718,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.8049307,
+    "seen": 1794909419.364089,
     "ast_hash": "bbfab875e956286b5053b706a8c1e56b",
     "semantic_hash": ""
   },
@@ -24,44 +24,44 @@
     "semantic_hash": ""
   },
   ".specify/integrations/speckit.manifest.json": {
-    "mtime": 1794901587.0024443,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.797853,
+    "seen": 1794909419.364089,
     "ast_hash": "6fbb2cc359837df708fa671f0cb0b753",
     "semantic_hash": ""
   },
   ".specify/scripts/powershell/check-prerequisites.ps1": {
-    "mtime": 1794901586.828407,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.4097576,
+    "seen": 1794909419.364089,
     "ast_hash": "14e6a9d0a49c8dee7276cb697e18d0d4",
     "semantic_hash": ""
   },
   ".specify/scripts/powershell/common.ps1": {
-    "mtime": 1794901586.8362546,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.4312952,
+    "seen": 1794909419.364089,
     "ast_hash": "fd09e10201fab5e4181d4ed5012bc511",
     "semantic_hash": ""
   },
   ".specify/scripts/powershell/create-new-feature.ps1": {
-    "mtime": 1794901586.8866935,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.506743,
+    "seen": 1794909419.364089,
     "ast_hash": "93f858f656c4c19f8193d49ad5d2b1a3",
     "semantic_hash": ""
   },
   ".specify/scripts/powershell/resolve-template.ps1": {
-    "mtime": 1794901586.9383633,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.569584,
+    "seen": 1794909419.364089,
     "ast_hash": "645ad018c6297df6e23949ac3e915749",
     "semantic_hash": ""
   },
   ".specify/scripts/powershell/setup-plan.ps1": {
-    "mtime": 1794901586.9453628,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.5855982,
+    "seen": 1794909419.364089,
     "ast_hash": "d1fb3697610c8aa9ce97e00bcd073ae4",
     "semantic_hash": ""
   },
   ".specify/scripts/powershell/setup-tasks.ps1": {
-    "mtime": 1794901586.9543643,
-    "seen": 1794902384.9262707,
+    "mtime": 1794907940.6054585,
+    "seen": 1794909419.364089,
     "ast_hash": "9aa2f52ce7abece8476845b1f21a0ced",
     "semantic_hash": ""
   },
@@ -588,14 +588,14 @@
     "semantic_hash": ""
   },
   ".specify/templates/checklist-template.md": {
-    "mtime": 1794901586.9603925,
-    "seen": 1794902384.9278255,
+    "mtime": 1794907940.619998,
+    "seen": 1794909419.3646986,
     "ast_hash": "5af23404f7e1314e93fab2bcfcfa5c23",
     "semantic_hash": ""
   },
   ".specify/templates/constitution-template.md": {
-    "mtime": 1794901586.9686117,
-    "seen": 1794902384.9278255,
+    "mtime": 1794907940.6375513,
+    "seen": 1794909419.3646986,
     "ast_hash": "dcefb6b60e7cb3db2e966977b6f02f18",
     "semantic_hash": ""
   },
@@ -606,8 +606,8 @@
     "semantic_hash": ""
   },
   ".specify/templates/spec-template.md": {
-    "mtime": 1794901586.9726229,
-    "seen": 1794902384.9278255,
+    "mtime": 1794907940.6561234,
+    "seen": 1794909419.3646986,
     "ast_hash": "45ac8538bc1220324c9f0d610145b53f",
     "semantic_hash": ""
   },
@@ -4392,9 +4392,9 @@
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/spec.md": {
-    "mtime": 1794853666.2233467,
-    "seen": 1794893694.640964,
-    "ast_hash": "5ac602e7561e0c0c988e86752d74fde7",
+    "mtime": 1794909469.7769008,
+    "seen": 1794919397.4975007,
+    "ast_hash": "b2fd0e457b69a8cdaedce5dc9091b8ca",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/state.md": {
@@ -4404,15 +4404,15 @@
     "semantic_hash": ""
   },
   "scripts/portable-package/verify_snapshot.py": {
-    "mtime": 1794902490.2068856,
-    "seen": 1794902555.3780253,
-    "ast_hash": "2d718378735f8e7d2e17f3501bd576db",
+    "mtime": 1794910846.8663156,
+    "seen": 1794919397.4937139,
+    "ast_hash": "7819b6267727ff1c976264d11e9750ba",
     "semantic_hash": ""
   },
   "scripts/speckit_package.py": {
-    "mtime": 1794902490.2598324,
-    "seen": 1794902555.3780253,
-    "ast_hash": "b65dc3ef65793e9147c5a2ab5b360964",
+    "mtime": 1794910353.583779,
+    "seen": 1794919397.4937139,
+    "ast_hash": "a1861702fde945ae587b2226ac186b9b",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json": {
@@ -4464,9 +4464,9 @@
     "semantic_hash": ""
   },
   "tests/unit/test_speckit_package.py": {
-    "mtime": 1794902252.0109372,
-    "seen": 1794902384.9268134,
-    "ast_hash": "5665f213ef8c09a687c9ba0a16377bc2",
+    "mtime": 1794910416.0495915,
+    "seen": 1794919397.495478,
+    "ast_hash": "2ae601186b0ff3d8ea746f60825f1513",
     "semantic_hash": ""
   },
   "scripts/portable-package/README.md": {
@@ -4476,27 +4476,27 @@
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/contracts/speckit-package-cli.md": {
-    "mtime": 1794858108.4942265,
-    "seen": 1794893694.640964,
-    "ast_hash": "14072df9f8296453512c56fa46fbd45c",
+    "mtime": 1794909094.461265,
+    "seen": 1794909419.3652256,
+    "ast_hash": "61ccff7ae434f9d9d0b228a3da27bec5",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/data-model.md": {
-    "mtime": 1794858090.0175323,
-    "seen": 1794893694.640964,
-    "ast_hash": "e9f39824f0016eb93e6b096db8b8fc7b",
+    "mtime": 1794909048.4414883,
+    "seen": 1794909419.3652256,
+    "ast_hash": "4a34456a873ec2ee530c165001c83d28",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/plan.md": {
-    "mtime": 1794858022.2497249,
-    "seen": 1794893694.640964,
-    "ast_hash": "cd0d495a6840e6f51ad03fa5b4c0c820",
+    "mtime": 1794909022.8035288,
+    "seen": 1794909419.3652256,
+    "ast_hash": "1be692f31a7999bf264070da0834289e",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/quickstart.md": {
-    "mtime": 1794865610.606052,
-    "seen": 1794893694.640964,
-    "ast_hash": "445a75df0a3613e8b6ae1e5b16162ce3",
+    "mtime": 1794907500.478682,
+    "seen": 1794909419.3652256,
+    "ast_hash": "0abacdd0099ab3cca36a334fa485d1ab",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/research.md": {
@@ -4506,9 +4506,9 @@
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/tasks.md": {
-    "mtime": 1794894227.5352192,
-    "seen": 1794895452.6672473,
-    "ast_hash": "4a6da0c0f08b8fc078edaac103466236",
+    "mtime": 1794909451.2875006,
+    "seen": 1794919397.4975007,
+    "ast_hash": "01cb6dac507db3343b5c82967cf9300a",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/reviews/implement-1.json": {
@@ -4524,9 +4524,9 @@
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/sensors/implement.json": {
-    "mtime": 1794896042.3450987,
-    "seen": 1794897630.191585,
-    "ast_hash": "48ae5a7a46ee10e5f3226542f0ad399b",
+    "mtime": 1794905174.6076245,
+    "seen": 1794909419.3646986,
+    "ast_hash": "72a9779d1b830a6e844ab74bd894e741",
     "semantic_hash": ""
   },
   "specs/039-standalone-speckit-flow-package/reviews/implement-3.json": {
@@ -4707,6 +4707,48 @@
     "mtime": 1794901291.0594616,
     "seen": 1794902384.9268134,
     "ast_hash": "4bdf7c32da7fee4cb319af937bf5b180",
+    "semantic_hash": ""
+  },
+  "specs/039-standalone-speckit-flow-package/reviews/implement-4.json": {
+    "mtime": 1794903222.7446144,
+    "seen": 1794903721.4150703,
+    "ast_hash": "c087f207807198082e675d199a67e0c3",
+    "semantic_hash": ""
+  },
+  "specs/041-explicit-delegation-assurance/reviews/implement-1.json": {
+    "mtime": 1794903126.3210783,
+    "seen": 1794903721.4150703,
+    "ast_hash": "ff73749ee4f029a834fff5bfda01f630",
+    "semantic_hash": ""
+  },
+  "specs/039-standalone-speckit-flow-package/reviews/implement-5.json": {
+    "mtime": 1794904520.1823108,
+    "seen": 1794909419.3646986,
+    "ast_hash": "9d525d96bfd0ea09075ee730d3f170d7",
+    "semantic_hash": ""
+  },
+  "specs/039-standalone-speckit-flow-package/reviews/implement-6.json": {
+    "mtime": 1794904557.8831356,
+    "seen": 1794909419.3646986,
+    "ast_hash": "5c78cd8af2975f58849279876a79abf1",
+    "semantic_hash": ""
+  },
+  "specs/039-standalone-speckit-flow-package/questions.md": {
+    "mtime": 1794909014.3047326,
+    "seen": 1794909419.3652256,
+    "ast_hash": "a91126d0bfcd840c49b814ea1de5181d",
+    "semantic_hash": ""
+  },
+  "specs/039-standalone-speckit-flow-package/reviews/implement-7.json": {
+    "mtime": 1794909911.9975872,
+    "seen": 1794919397.495478,
+    "ast_hash": "dcae4870e765926dbab62d83d3f10b40",
+    "semantic_hash": ""
+  },
+  "specs/041-explicit-delegation-assurance/reviews/implement-2.json": {
+    "mtime": 1794909787.8503096,
+    "seen": 1794919397.495478,
+    "ast_hash": "a94e956d8c8c9fe07e35e9b239845a74",
     "semantic_hash": ""
   }
 }

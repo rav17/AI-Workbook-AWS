@@ -1,0 +1,18 @@
+rules:
+  - name: high-cpu-web
+    conditions:
+      alert_name: HighCPUUsage
+      service_name: web-frontend
+    playbook_path: playbooks/restart_service.yml
+  - name: disk-full
+    conditions:
+      alert_name: DiskSpaceCritical
+    playbook_path: playbooks/clear_disk.yml
+  - name: service-down
+    conditions:
+      alert_name: ServiceDown
+    playbook_path: playbooks/restart_service.yml
+  - name: memory-pressure
+    conditions:
+      alert_name: HighMemoryUsage
+    playbook_path: playbooks/restart_service.yml

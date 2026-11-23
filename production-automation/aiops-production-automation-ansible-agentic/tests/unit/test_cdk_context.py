@@ -231,3 +231,42 @@ class TestDevOpsAgentForwardOn:
         raw["devopsAgentForwardOn"] = value
         with pytest.raises(ValueError, match="devopsAgentForwardOn"):
             validate_cdk_context(raw)
+
+
+class TestDevOpsAgentAdvisoryEnabled:
+    """devopsAgentAdvisoryEnabled lets DevOps Agent + Bedrock advise on no-playbook alerts."""
+
+    @staticmethod
+    def _raw(**overrides):
+        raw = _valid_context()
+        raw.update(overrides)
+        return raw
+
+    def test_defaults_to_off(self):
+        assert validate_cdk_context(_valid_context()).devops_agent_advisory_enabled is False
+
+    def test_accepts_true_when_forwarding_and_findings_are_on(self):
+        raw = self._raw(
+            devopsAgentAdvisoryEnabled="true",
+            devopsAgentEnabled="true",
+            devopsAgentFindingsEnabled="true",
+        )
+        assert validate_cdk_context(raw).devops_agent_advisory_enabled is True
+
+    @pytest.mark.parametrize(
+        "extra",
+        [
+            {},
+            {"devopsAgentEnabled": "true"},
+            {"devopsAgentFindingsEnabled": "true"},
+        ],
+    )
+    def test_requires_forwarding_and_findings(self, extra):
+        raw = self._raw(devopsAgentAdvisoryEnabled="true", **extra)
+        with pytest.raises(ValueError, match="devopsAgentAdvisoryEnabled requires"):
+            validate_cdk_context(raw)
+
+    @pytest.mark.parametrize("value", ["yes", "1", "enabled"])
+    def test_rejects_other_values(self, value):
+        with pytest.raises(ValueError, match="devopsAgentAdvisoryEnabled must be"):
+            validate_cdk_context(self._raw(devopsAgentAdvisoryEnabled=value))

@@ -47,6 +47,8 @@ An automated self-healing infrastructure platform that detects issues via CloudW
 
 See [DEMO-GUIDE.md](DEMO-GUIDE.md) for full deployment and testing instructions.
 
+For the DevOps Agent root cause analysis demo, follow [demo/DEMO-RUNBOOK.md](demo/DEMO-RUNBOOK.md). The architecture diagram is in [architecture/](architecture/aiops-self-healing-architecture.drawio) and the solution architect deck is [docs/AIOps-Solution-Architect-Deck.pptx](docs/AIOps-Solution-Architect-Deck.pptx).
+
 ```bash
 # Deploy to AWS
 npx aws-cdk@2 deploy --all --context environment=dev --context imageTag=v9-dev --require-approval never
@@ -56,6 +58,10 @@ python demo/break_target.py --mode cpu --duration 600
 
 # Test AI Mode (no playbook → AI suggests steps)
 aws lambda invoke --function-name aiops-network-alert-dev --cli-binary-format raw-in-base64-out --payload "{}" --region us-east-1 output.json
+
+# Test P1 incident → AWS DevOps Agent RCA email (needs devopsAgentEnabled + devopsAgentFindingsEnabled)
+python demo/trigger_p1_incident.py --dry-run   # preflight only
+python demo/trigger_p1_incident.py
 
 # Destroy
 npx aws-cdk@2 destroy --all --context environment=dev --force
@@ -107,6 +113,8 @@ npx aws-cdk@2 destroy --all --context environment=dev --force
 │
 ├── demo/
 │   ├── break_target.py        ← Trigger CPU/network stress on EC2
+│   ├── trigger_p1_incident.py ← P1 incident that triggers the DevOps Agent RCA email
+│   ├── DEMO-RUNBOOK.md        ← Step-by-step script for the RCA demo
 │   └── trigger_aws.py         ← Send alerts via SQS
 │
 ├── monitoring/                ← Prometheus, Alertmanager, Grafana (local dev)

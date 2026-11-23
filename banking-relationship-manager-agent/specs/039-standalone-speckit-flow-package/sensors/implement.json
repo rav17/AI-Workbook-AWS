@@ -1,23 +1,23 @@
 {
   "results": {
     "lint": {
-      "status": "fail",
-      "ts": "2026-11-17T06:09:28+00:00",
-      "reason": "exit code 1",
+      "status": "pass",
+      "ts": "2026-11-17T08:36:37+00:00",
+      "reason": "exit code 0",
       "fingerprints": {
         "spec.md": "e9229754cf37d88b5886a24cfca2d131e7b8aecabecfa1368e959784a8017af5",
         "plan.md": "1d9551176c771bd50e81b16c1a17ed4b5f6dd8281aa74c72a08914be25f855f3",
-        "tasks.md": "194531a17797ab5a20268752ee2bd07a5a72fd695392ef76d7ae2e5900e1e9ff"
+        "tasks.md": "7dce8812fbb6c7e1337433b888dbc98d9724f27d45b1589ed5f6a3fa8c019ed6"
       }
     },
     "unit-tests": {
-      "status": "fail",
-      "ts": "2026-11-17T06:14:02+00:00",
-      "reason": "exit code 1",
+      "status": "pass",
+      "ts": "2026-11-17T08:46:14+00:00",
+      "reason": "exit code 0",
       "fingerprints": {
         "spec.md": "e9229754cf37d88b5886a24cfca2d131e7b8aecabecfa1368e959784a8017af5",
         "plan.md": "1d9551176c771bd50e81b16c1a17ed4b5f6dd8281aa74c72a08914be25f855f3",
-        "tasks.md": "194531a17797ab5a20268752ee2bd07a5a72fd695392ef76d7ae2e5900e1e9ff"
+        "tasks.md": "7dce8812fbb6c7e1337433b888dbc98d9724f27d45b1589ed5f6a3fa8c019ed6"
       }
     }
   }

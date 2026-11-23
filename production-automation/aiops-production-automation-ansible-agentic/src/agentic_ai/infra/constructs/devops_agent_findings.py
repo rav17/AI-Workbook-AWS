@@ -32,6 +32,7 @@ from aws_cdk import (
 from constructs import Construct
 
 from ..context import CdkContext
+from .advisory_context import CONTEXT_FILENAME, write_advisory_context
 
 # Keep in sync with HANDLED_DETAIL_TYPES in the Lambda handler (a unit test enforces it).
 FINDINGS_DETAIL_TYPES = [
@@ -45,6 +46,11 @@ FINDINGS_DETAIL_TYPES = [
 PROJECT_TAG_VALUE = "aiops-self-healing"
 
 _ASSET_DIR = Path(__file__).resolve().parents[2] / "lambdas" / "devops_agent_findings"
+_REPO_ROOT = Path(__file__).resolve().parents[4]
+
+# Advisory mode: the Lambda waits for DevOps Agent's mitigation plan (up to 8 minutes) and
+# calls Bedrock, so it needs the maximum Lambda duration. Otherwise it only reads and emails.
+_ADVISORY_TIMEOUT = Duration.minutes(15)
 
 _LOG_RETENTION = {
     "dev": logs.RetentionDays.ONE_MONTH,
@@ -60,11 +66,12 @@ class _LocalPipBundling:
     Avoids needing Docker. Returning False makes CDK fall back to the Docker image.
     """
 
-    def __init__(self, source_dir: Path) -> None:
+    def __init__(self, source_dir: Path, extra_files: tuple[str, ...] = ()) -> None:
         self._source_dir = source_dir
+        self._extra_files = extra_files
 
     def try_bundle(self, output_dir: str, options: cdk.BundlingOptions) -> bool:
-        """Install requirements into ``output_dir`` and copy the handler."""
+        """Install requirements into ``output_dir`` and copy the handler (and extras)."""
         try:
             subprocess.run(
                 [
@@ -83,9 +90,10 @@ class _LocalPipBundling:
                 check=True,
                 timeout=600,
             )
-            (Path(output_dir) / "handler.py").write_bytes(
-                (self._source_dir / "handler.py").read_bytes()
-            )
+            for name in ("handler.py", *self._extra_files):
+                (Path(output_dir) / name).write_bytes(
+                    (self._source_dir / name).read_bytes()
+                )
         except (subprocess.SubprocessError, OSError) as e:
             print(f"local bundling of the findings Lambda failed, using Docker: {e}")
             return False
@@ -137,11 +145,34 @@ class DevOpsAgentFindings(Construct):
             removal_policy=RemovalPolicy.DESTROY if is_dev else RemovalPolicy.RETAIN,
         )
 
+        advisory = context.devops_agent_advisory_enabled
+        extra_files: tuple[str, ...] = ()
+        copy_command = "cp handler.py /asset-output/"
+        if advisory:
+            # Playbook catalog + denied patterns, read from the repo at synth time.
+            write_advisory_context(_REPO_ROOT, _ASSET_DIR)
+            extra_files = (CONTEXT_FILENAME,)
+            copy_command += f" && cp {CONTEXT_FILENAME} /asset-output/"
+
+        environment = {
+            "TABLE_NAME": table.table_name,
+            "SES_FROM_ADDRESS": context.cost_center_email,
+            "OPERATOR_EMAIL": context.cost_center_email,
+            "ENVIRONMENT": env_name,
+        }
+        if advisory:
+            environment["ADVISORY_MODE"] = "true"
+            environment["BEDROCK_MODEL_ID"] = context.bedrock_model_id
+
         self.function = _lambda.Function(
             self,
             "Function",
             function_name=f"aiops-devops-findings-{env_name}",
-            description="Emails AWS DevOps Agent investigation findings to the operator",
+            description=(
+                "Advises on no-playbook incidents from DevOps Agent findings and Bedrock"
+                if advisory
+                else "Emails AWS DevOps Agent investigation findings to the operator"
+            ),
             runtime=_lambda.Runtime.PYTHON_3_12,
             handler="handler.lambda_handler",
             code=_lambda.Code.from_asset(
@@ -151,22 +182,16 @@ class DevOpsAgentFindings(Construct):
                     command=[
                         "bash",
                         "-c",
-                        "pip install -r requirements.txt -t /asset-output "
-                        "&& cp handler.py /asset-output/",
+                        f"pip install -r requirements.txt -t /asset-output && {copy_command}",
                     ],
-                    local=_LocalPipBundling(_ASSET_DIR),
+                    local=_LocalPipBundling(_ASSET_DIR, extra_files),
                 ),
             ),
-            timeout=Duration.seconds(60),
+            timeout=_ADVISORY_TIMEOUT if advisory else Duration.seconds(60),
             memory_size=256,
             log_group=log_group,
             dead_letter_queue=self.dlq,
-            environment={
-                "TABLE_NAME": table.table_name,
-                "SES_FROM_ADDRESS": context.cost_center_email,
-                "OPERATOR_EMAIL": context.cost_center_email,
-                "ENVIRONMENT": env_name,
-            },
+            environment=environment,
         )
 
         # Read-only DevOps Agent access. The Agent Space id is not known at deploy time
@@ -184,6 +209,40 @@ class DevOpsAgentFindings(Construct):
                 },
             )
         )
+        if advisory:
+            # Advisory mode asks DevOps Agent for a mitigation plan, which is a write on the
+            # task (UpdateBacklogTask -> PENDING_START). Same tag-scoped resource as above.
+            self.function.add_to_role_policy(
+                iam.PolicyStatement(
+                    actions=["aidevops:ListExecutions", "aidevops:UpdateBacklogTask"],
+                    resources=[f"arn:aws:aidevops:{region}:{account}:agentspace/*"],
+                    conditions={
+                        "StringEquals": {
+                            "aws:ResourceTag/project": PROJECT_TAG_VALUE,
+                            "aws:ResourceTag/environment": env_name,
+                        }
+                    },
+                )
+            )
+            # Same scope as the ECS task role: foundation-model/* is needed for the model
+            # fallback chain, and "us." cross-region inference profiles route across US regions.
+            model_regions = (
+                ["us-east-1", "us-east-2", "us-west-2"]
+                if region.startswith("us-")
+                else [region]
+            )
+            self.function.add_to_role_policy(
+                iam.PolicyStatement(
+                    actions=["bedrock:InvokeModel"],
+                    resources=[
+                        *[
+                            f"arn:aws:bedrock:{r}::foundation-model/*"
+                            for r in model_regions
+                        ],
+                        f"arn:aws:bedrock:{region}:{account}:inference-profile/us.*",
+                    ],
+                )
+            )
         # SES identity scope per the engineering standards (sender must be verified).
         self.function.add_to_role_policy(
             iam.PolicyStatement(

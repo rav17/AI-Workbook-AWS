@@ -1,0 +1,6 @@
+{
+    "chat.agentFilesLocations": {
+        ".github/agents": true,
+        "banking-relationship-manager-agent/.github/agents": true
+    }
+}

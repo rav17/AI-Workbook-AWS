@@ -67,6 +67,7 @@ INVENTORY_NAME = "SNAPSHOT.json"
 MARKER_NAME = "SNAPSHOT.json.sha256"
 SCHEMA_VERSION = 1
 DIGEST_RE = re.compile(r"[a-f0-9]{64}")
+TIMESTAMP_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?([+-]\d{2}:\d{2}|Z)")
 COMMIT_RE = re.compile(r"[0-9a-fA-F]{7,64}")
 FAULT_ENV = "SPECKIT_PACKAGE_FAULT"
 FAULT_CORRUPT_AFTER_INVENTORY = "corrupt-after-inventory"
@@ -138,14 +139,28 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Assemble or inspect the standalone Spec Kit Flow portable package."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
-    for command in ("inventory", "assemble"):
-        sub = subparsers.add_parser(command)
-        sub.add_argument("--label", required=True, type=_free_text("--label"))
-        sub.add_argument("--captured-by", required=True, type=_free_text("--captured-by"))
-        sub.add_argument("--source-ref", type=_free_text("--source-ref"))
-        if command == "assemble":
-            sub.add_argument("--dest", required=True, help="absolute destination directory")
-            sub.add_argument("--dry-run", action="store_true")
+    inventory = subparsers.add_parser("inventory")
+    inventory.add_argument("--label", required=True, type=_free_text("--label"))
+    inventory.add_argument("--captured-by", required=True, type=_free_text("--captured-by"))
+    inventory.add_argument("--source-ref", type=_free_text("--source-ref"))
+    inventory.add_argument(
+        "--output",
+        help="write the exact inventory bytes to this new file (must not exist; "
+        "must be outside the source repository) instead of stdout",
+    )
+    assemble = subparsers.add_parser("assemble")
+    assemble.add_argument("--dest", required=True, help="absolute destination directory")
+    assemble.add_argument(
+        "--inventory",
+        required=True,
+        help="path to the human-reviewed inventory file saved from the inventory command",
+    )
+    assemble.add_argument(
+        "--inventory-sha256",
+        required=True,
+        help="inventory digest the reviewer approved (printed by the inventory command)",
+    )
+    assemble.add_argument("--dry-run", action="store_true")
     return parser
 
 
@@ -179,6 +194,11 @@ def _capture_closure() -> tuple[str, list[CaptureEntry]]:
         raise CaptureError(f"{BUNDLE_MANIFEST_REL} (bundle_version must be a non-empty string)")
 
     collected: dict[str, CaptureEntry] = {}
+    destination_keys: dict[str, str] = {}
+    reserved_destinations = (
+        ".specify/speckit-portable-manifest.json",
+        ".specify/feature.json",
+    )
 
     def _add(package_path: str, content: bytes, origin: str, source_path: str | None) -> None:
         key = package_path.casefold()
@@ -199,6 +219,7 @@ def _capture_closure() -> tuple[str, list[CaptureEntry]]:
             raise CaptureError(f"{BUNDLE_MANIFEST_REL} (each bundle entry must be an object)")
         try:
             source_rel = _relative_path(entry.get("source"), "source")
+            destination_rel = _relative_path(entry.get("destination"), "destination")
         except ValueError as exc:
             raise CaptureError(f"{BUNDLE_MANIFEST_REL} ({exc})") from exc
         category = entry.get("category")
@@ -237,6 +258,25 @@ def _capture_closure() -> tuple[str, list[CaptureEntry]]:
                 _relative_path(rel_text, "captured path")
             except ValueError as exc:
                 raise CaptureError(f"{rel_text} ({exc})") from exc
+            suffix = source_file.relative_to(source) if source.is_dir() else Path()
+            destination = destination_rel.joinpath(*suffix.parts)
+            destination_text = destination.as_posix()
+            try:
+                _relative_path(destination_text, "destination")
+            except ValueError as exc:
+                raise CaptureError(f"{BUNDLE_MANIFEST_REL} ({exc})") from exc
+            destination_key = destination_text.casefold()
+            for existing in [*destination_keys, *reserved_destinations]:
+                if (
+                    destination_key == existing
+                    or destination_key.startswith(existing + "/")
+                    or existing.startswith(destination_key + "/")
+                ):
+                    raise CaptureError(
+                        f"{BUNDLE_MANIFEST_REL} (bundle destination collision: "
+                        f"{destination_text} / {existing})"
+                    )
+            destination_keys[destination_key] = destination_text
             _add(rel_text, _read_source(source_file, rel_text), "source", None)
 
     for entry_point in ENTRY_POINTS:
@@ -568,7 +608,11 @@ def _verify_destination(
     expected[INVENTORY_NAME] = (_sha256(inventory_bytes), len(inventory_bytes))
     drift: list[str] = []
     seen: set[str] = set()
-    for base, dirs, names in os.walk(dest, followlinks=False):
+
+    def _walk_error(error: OSError) -> None:
+        drift.append(f"directory walk failed ({error})")
+
+    for base, dirs, names in os.walk(dest, followlinks=False, onerror=_walk_error):
         base_path = Path(base)
         kept_dirs: list[str] = []
         for directory in dirs:
@@ -630,12 +674,35 @@ def _print_failure_summary(label: str, what: str) -> None:
     )
 
 
+def _write_inventory_output(output_argument: str, data: bytes) -> None:
+    """Exclusive-create the review file so the saved bytes equal the printed
+    digest (shell redirection can re-encode). Never overwrites; never writes
+    inside the source repository."""
+    output = Path(output_argument).resolve()
+    root = ROOT.resolve()
+    if output == root or root in output.parents:
+        raise CaptureError(f"{output_argument} (--output must be outside the source repository)")
+    try:
+        with output.open("xb") as handle:
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except FileExistsError as exc:
+        raise CaptureError(f"{output_argument} (already exists; refusing to overwrite)") from exc
+    except OSError as exc:
+        raise CaptureError(f"{output_argument} ({exc})") from exc
+
+
 def _cmd_inventory(args: argparse.Namespace) -> int:
     version, entries = _capture_closure()
     snapshot = _snapshot_object(args.label, args.captured_by, args.source_ref, version)
     data = _inventory_bytes(entries, snapshot)
-    sys.stdout.buffer.write(data)  # exact document bytes, no newline translation
-    sys.stdout.buffer.flush()
+    if args.output:
+        _write_inventory_output(args.output, data)
+        print(f"inventory written to {args.output}", file=sys.stderr)
+    else:
+        sys.stdout.buffer.write(data)  # exact document bytes, no newline translation
+        sys.stdout.buffer.flush()
     print(f"{len(entries)} files inventoried", file=sys.stderr)
     print(f"inventory sha256 {_sha256(data)}", file=sys.stderr)
     return EXIT_OK
@@ -712,15 +779,181 @@ def _assemble_into_destination(
     return EXIT_OK
 
 
+def _load_reviewed_inventory(
+    inventory_path: str, expected_sha256: str
+) -> tuple[bytes, dict[str, object]]:
+    """Read the human-reviewed inventory and bind it to the approved digest.
+    Raises :class:`CaptureError` (exit 2, zero writes) on any mismatch."""
+    expected = expected_sha256.strip().lower()
+    if not DIGEST_RE.fullmatch(expected):
+        raise CaptureError("--inventory-sha256 (not a 64-character lowercase hex digest)")
+    try:
+        data = Path(inventory_path).read_bytes()
+    except OSError as exc:
+        raise CaptureError(f"{inventory_path} ({exc})") from exc
+    actual = _sha256(data)
+    if actual != expected:
+        raise CaptureError(
+            f"{inventory_path} (reviewed inventory digest {actual} does not match "
+            f"approved digest {expected})"
+        )
+    try:
+        document = json.loads(data.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise CaptureError(f"{inventory_path} (not a valid inventory: {exc})") from exc
+    if not isinstance(document, dict):
+        raise CaptureError(f"{inventory_path} (not a valid inventory object)")
+
+    def reject_unknown(mapping: dict[str, object], allowed: set[str], owner: str) -> None:
+        unknown = mapping.keys() - allowed
+        if unknown:
+            raise CaptureError(
+                f"{inventory_path} ({owner} has unknown properties: "
+                f"{', '.join(sorted(unknown))})"
+            )
+
+    def require_text(
+        mapping: dict[str, object], field: str, owner: str, *, bounded: bool = False
+    ) -> str:
+        value = mapping.get(field)
+        if not isinstance(value, str) or not value or (bounded and not value.isprintable()):
+            raise CaptureError(f"{inventory_path} ({owner}.{field} missing or invalid)")
+        if bounded and len(value) > 200:
+            raise CaptureError(f"{inventory_path} ({owner}.{field} missing or invalid)")
+        return value
+
+    if type(document.get("schema_version")) is not int or document["schema_version"] != 1:
+        raise CaptureError(f"{inventory_path} (schema_version missing or unsupported)")
+    reject_unknown(document, {"schema_version", "snapshot", "files"}, "inventory")
+
+    snapshot_value = document.get("snapshot")
+    if not isinstance(snapshot_value, dict):
+        raise CaptureError(f"{inventory_path} (snapshot identifier missing or invalid)")
+    snapshot = snapshot_value
+    reject_unknown(
+        snapshot,
+        {
+            "label",
+            "captured_at",
+            "captured_by",
+            "source_reference",
+            "bundle_version",
+            "digest_algorithm",
+        },
+        "snapshot",
+    )
+    require_text(snapshot, "label", "snapshot", bounded=True)
+    captured_at = require_text(snapshot, "captured_at", "snapshot")
+    if not TIMESTAMP_RE.fullmatch(captured_at):
+        raise CaptureError(f"{inventory_path} (snapshot.captured_at missing or invalid)")
+    require_text(snapshot, "captured_by", "snapshot", bounded=True)
+    require_text(snapshot, "bundle_version", "snapshot")
+    if snapshot.get("digest_algorithm") != "sha256":
+        raise CaptureError(f"{inventory_path} (snapshot.digest_algorithm must be sha256)")
+
+    reference = snapshot.get("source_reference")
+    if not isinstance(reference, dict):
+        raise CaptureError(f"{inventory_path} (snapshot.source_reference missing or invalid)")
+    reject_unknown(reference, {"repository", "branch", "commit"}, "snapshot.source_reference")
+    for field in ("repository", "branch", "commit"):
+        require_text(reference, field, "snapshot.source_reference")
+
+    reviewed_files = document.get("files")
+    if not isinstance(reviewed_files, list) or not reviewed_files:
+        raise CaptureError(f"{inventory_path} (files missing or empty)")
+    previous_path: str | None = None
+    collision_keys = [INVENTORY_NAME.casefold(), MARKER_NAME.casefold()]
+    for item in reviewed_files:
+        if not isinstance(item, dict):
+            raise CaptureError(f"{inventory_path} (files entry must be an object)")
+        reject_unknown(item, {"path", "sha256", "bytes", "origin", "source_path"}, "files entry")
+        try:
+            relative = _relative_path(item.get("path"), "inventory path")
+        except ValueError as exc:
+            raise CaptureError(f"{inventory_path} ({exc})") from exc
+        path_text = relative.as_posix()
+        if previous_path is not None and path_text <= previous_path:
+            raise CaptureError(f"{inventory_path} (files must be sorted by path)")
+        previous_path = path_text
+        collision_key = path_text.casefold()
+        if any(
+            collision_key == existing
+            or collision_key.startswith(existing + "/")
+            or existing.startswith(collision_key + "/")
+            for existing in collision_keys
+        ):
+            raise CaptureError(f"{inventory_path} (inventory path collision: {path_text})")
+        collision_keys.append(collision_key)
+        digest = item.get("sha256")
+        if not isinstance(digest, str) or not DIGEST_RE.fullmatch(digest):
+            raise CaptureError(f"{inventory_path} (invalid sha256 for {path_text})")
+        length = item.get("bytes")
+        if not isinstance(length, int) or isinstance(length, bool) or length < 0:
+            raise CaptureError(f"{inventory_path} (invalid byte length for {path_text})")
+        origin = item.get("origin")
+        if not isinstance(origin, str) or origin not in {"source", "package-doc"}:
+            raise CaptureError(f"{inventory_path} (invalid origin for {path_text})")
+        if "source_path" in item:
+            if origin != "package-doc":
+                raise CaptureError(
+                    f"{inventory_path} (source_path is only allowed on package-doc entries)"
+                )
+            try:
+                _relative_path(item["source_path"], "source_path")
+            except ValueError as exc:
+                raise CaptureError(f"{inventory_path} ({exc})") from exc
+    return data, snapshot
+
+
+def _reviewed_drift(
+    reviewed_bytes: bytes,
+    snapshot: dict[str, object],
+    entries: Sequence[CaptureEntry],
+    bundle_version: str,
+) -> list[str]:
+    """Differences between the reviewed inventory and the files that would be
+    copied now. Empty list means the capture is byte-identical to the review."""
+    if snapshot.get("bundle_version") != bundle_version:
+        return ["snapshot.bundle_version (does not match current bundle manifest)"]
+    fresh = _inventory_bytes(entries, snapshot)
+    if fresh == reviewed_bytes:
+        return []
+    reviewed: dict[str, tuple[object, object]] = {
+        str(item.get("path")): (item.get("sha256"), item.get("bytes"))
+        for item in json.loads(reviewed_bytes)["files"]
+        if isinstance(item, dict)
+    }
+    current: dict[str, tuple[object, object]] = {
+        entry.path: (entry.sha256, entry.bytes) for entry in entries
+    }
+    lines = [f"{path} (not in reviewed inventory)" for path in sorted(current.keys() - reviewed)]
+    lines += [f"{path} (missing from current source)" for path in sorted(reviewed.keys() - current)]
+    lines += [
+        f"{path} (changed since review)"
+        for path in sorted(set(current) & set(reviewed))
+        if current[path] != reviewed[path]
+    ]
+    return lines or ["inventory (metadata or format differs from current capture)"]
+
+
 def _cmd_assemble(args: argparse.Namespace, fault: str) -> int:
     conflicts = _preflight_destination(args.dest, ROOT)
     if conflicts:
         for conflict in conflicts:
             print(f"CONFLICT {conflict}")
         return EXIT_REFUSED
-    version, entries = _capture_closure()
-    label: str = args.label
-    snapshot = _snapshot_object(label, args.captured_by, args.source_ref, version)
+    reviewed_bytes, snapshot = _load_reviewed_inventory(args.inventory, args.inventory_sha256)
+    bundle_version, entries = _capture_closure()
+    drift = _reviewed_drift(reviewed_bytes, snapshot, entries, bundle_version)
+    if drift:
+        for line in drift:
+            print(f"DRIFT {line}")
+        print(
+            "Refused: current source differs from the reviewed inventory; "
+            "nothing was written. Re-run inventory, review, and approve again."
+        )
+        return EXIT_REFUSED
+    label = str(snapshot.get("label", ""))
 
     if args.dry_run:
         for entry in entries:

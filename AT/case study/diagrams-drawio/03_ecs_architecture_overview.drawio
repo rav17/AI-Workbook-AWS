@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-01T00:00:00.000Z" agent="IBM AT Guide" version="21.0.0">
+  <diagram name="ECS Architecture Overview" id="ecs_aod">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="ECS — Architecture Overview Diagram (Exercise 02)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1F2328;" vertex="1" parent="1">
+          <mxGeometry x="184" y="20" width="800" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ========= USER TIER ========= -->
+        <mxCell id="user_band" value="USER CHANNELS" style="swimlane;fontStyle=1;startSize=25;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="1090" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="respondent_browser" value="🖥️ Respondent&lt;br/&gt;Desktop Browser&lt;br/&gt;&lt;i&gt;HTTPS&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="user_band">
+          <mxGeometry x="40" y="40" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="respondent_mobile" value="📱 Respondent&lt;br/&gt;Mobile App&lt;br/&gt;&lt;i&gt;HTTPS/4G/5G&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="user_band">
+          <mxGeometry x="230" y="40" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="admin_portal" value="🔧 DoS Admin&lt;br/&gt;Portal&lt;br/&gt;&lt;i&gt;HTTPS (internal)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="user_band">
+          <mxGeometry x="440" y="40" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="support_portal" value="🛠️ Support Staff&lt;br/&gt;Monitoring&lt;br/&gt;&lt;i&gt;HTTPS (internal)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="user_band">
+          <mxGeometry x="640" y="40" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="helpdesk_ch" value="📞 Census Help Desk&lt;br/&gt;(DoS operated)&lt;br/&gt;&lt;i&gt;Reports only&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="user_band">
+          <mxGeometry x="860" y="40" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ========= CLOUD BOUNDARY ========= -->
+        <mxCell id="cloud_boundary" value="ECS CLOUD HOSTING ENVIRONMENT (IBM Cloud — Bolumbia Region)" style="swimlane;fontStyle=1;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="1090" height="360" as="geometry" />
+        </mxCell>
+
+        <!-- HA annotation -->
+        <mxCell id="ha_ann" value="🔁 HA: Auto-scaled&lt;br/&gt;(Census Night)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="cloud_boundary">
+          <mxGeometry x="920" y="40" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Web Tier -->
+        <mxCell id="web_tier" value="WEB TIER (Auto-scaled 2–20 pods)" style="swimlane;fontStyle=1;startSize=22;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="cloud_boundary">
+          <mxGeometry x="30" y="50" width="840" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lb" value="Load Balancer&lt;br/&gt;&lt;i&gt;(IBM Cloud LB)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="web_tier">
+          <mxGeometry x="20" y="30" width="150" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="dialog_ctrl" value="DialogControl&lt;br/&gt;&lt;i&gt;(React + Node.js)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="web_tier">
+          <mxGeometry x="210" y="30" width="160" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="waf" value="WAF / TLS Termination&lt;br/&gt;&lt;i&gt;(Security Layer)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="web_tier">
+          <mxGeometry x="420" y="30" width="180" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- App Tier -->
+        <mxCell id="app_tier" value="APPLICATION TIER (Auto-scaled 4–40 pods)" style="swimlane;fontStyle=1;startSize=22;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="cloud_boundary">
+          <mxGeometry x="30" y="155" width="840" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_svc" value="AuthService&lt;br/&gt;&lt;i&gt;IBM App ID&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="app_tier">
+          <mxGeometry x="20" y="30" width="140" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="form_eng" value="FormEngine&lt;br/&gt;&lt;i&gt;(Node.js svc)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="app_tier">
+          <mxGeometry x="190" y="30" width="140" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="sub_svc" value="SubmissionService&lt;br/&gt;&lt;i&gt;(Node.js svc)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="app_tier">
+          <mxGeometry x="360" y="30" width="145" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="notif_svc" value="NotificationService&lt;br/&gt;&lt;i&gt;(SMS dispatch)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="app_tier">
+          <mxGeometry x="530" y="30" width="145" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="rep_svc" value="ReportingService&lt;br/&gt;&lt;i&gt;(Daily reports)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="app_tier">
+          <mxGeometry x="700" y="30" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Data Tier -->
+        <mxCell id="data_tier" value="DATA TIER (HA Pair + DR Replica)" style="swimlane;fontStyle=1;startSize=22;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="cloud_boundary">
+          <mxGeometry x="30" y="260" width="840" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="redis" value="Session Cache&lt;br/&gt;&lt;i&gt;IBM Redis (HA)&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="data_tier">
+          <mxGeometry x="20" y="22" width="130" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="postgres" value="PostgreSQL&lt;br/&gt;&lt;i&gt;IBM Databases (HA)&lt;br/&gt;Credentials + Forms&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="data_tier">
+          <mxGeometry x="200" y="15" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="dr_db" value="PostgreSQL DR Replica&lt;br/&gt;&lt;i&gt;(Secondary region)&lt;br/&gt;RPO ≤ 1h&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="data_tier">
+          <mxGeometry x="430" y="15" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="api_gw" value="API Gateway&lt;br/&gt;&lt;i&gt;IBM API Connect&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="data_tier">
+          <mxGeometry x="660" y="22" width="150" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ========= EXTERNAL SYSTEMS ========= -->
+        <mxCell id="dos_backend" value="&lt;b&gt;DoS Electronic Census&lt;br/&gt;Processing System&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Existing DoS Backend&lt;/i&gt;&lt;br/&gt;(Census database)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="sms_ext" value="&lt;b&gt;SMS Gateway&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Mobile phone network&lt;/i&gt;&lt;br/&gt;(Collector notifications)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="650" width="200" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows user tier to cloud -->
+        <mxCell id="e_browser_cloud" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="respondent_browser" target="lb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_mobile_cloud" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="respondent_mobile" target="lb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows cloud to external -->
+        <mxCell id="e_api_dos" value="Census returns&lt;br/&gt;(REST API / batch)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="api_gw" target="dos_backend" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notif_sms" value="SMS dispatch" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" source="notif_svc" target="sms_ext" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Vertical arrows between tiers -->
+        <mxCell id="e_web_app" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="web_tier" target="app_tier" parent="cloud_boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_app_data" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="app_tier" target="data_tier" parent="cloud_boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

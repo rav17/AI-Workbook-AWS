@@ -1,0 +1,42 @@
+{
+  "id": "implement-7",
+  "stage": "implement",
+  "reviewer": "code",
+  "author": "agent:developer",
+  "verdict": "concerns",
+  "created_at": "2026-11-17T10:05:11+00:00",
+  "files": {
+    ".specify/memory/constitution.md": "08df8b1312387b6843fb4295f9daab34b7b26eee6f9ac777809c7e7b721e262e",
+    "specs/039-standalone-speckit-flow-package/spec.md": "887c0357a2a290317b008ccd87ade676bf2a5b5526ea80d9d4c13693ae12fd8d",
+    "specs/039-standalone-speckit-flow-package/plan.md": "e57490748dad03461c2ae5acb93883c355d7e64ca0383133704dd07f545f6d3f",
+    "specs/039-standalone-speckit-flow-package/tasks.md": "0346713d78dbc0a7495905ccb9f9773a5266c9e62c2b9d5e88e08779de9ffb90",
+    "specs/039-standalone-speckit-flow-package/data-model.md": "861db2fcf4e18036760c2c59f5b43c725d718ce900be50c8c5a81dc9bcccd992",
+    "specs/039-standalone-speckit-flow-package/research.md": "4eb5e3841221e7dcbce849c7371b9984f32678c29dbaeeda18bce31f54129156",
+    "specs/039-standalone-speckit-flow-package/quickstart.md": "0cc69291752ebe44a11e364954a31c66188b7249b1452e16ea0374416e167c65",
+    "specs/039-standalone-speckit-flow-package/contracts/speckit-package-cli.md": "4455f24e79c15b9972a4001d89d2813f950629dee0ad37fb4b0fbe1100f53135",
+    "specs/039-standalone-speckit-flow-package/contracts/snapshot-inventory.schema.json": "ca31d946baa0bff7a619b249fb7a4131128ab6ba41518f78dd2b187210b140f0",
+    "scripts/speckit_package.py": "1fec5573905ae8eee9eb36a138e5f9c7156c3d3a00daede31f37697ea1cbc919",
+    "scripts/portable-package/verify_snapshot.py": "364df872d9f7fe17bada76c24ec9d3ae8ae8aab5329d6dad36380ab42792c025",
+    "tests/unit/test_speckit_package.py": "2185d9278fdc59caa9921f8b319dc96cdba8c3e0dc2574c4ec5e626eb85e25b7"
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "file": "scripts/speckit_package.py",
+      "section": "_cmd_assemble / _reviewed_drift",
+      "note": "Assembly does not verify that the approved snapshot.bundle_version matches the current manifest version; a digest-approved but internally inconsistent inventory can be completed under a false version. Compare current version before writes and test mismatch."
+    },
+    {
+      "severity": "warning",
+      "file": "scripts/portable-package/verify_snapshot.py",
+      "section": "_load_inventory",
+      "note": "The verifier accepts duplicate JSON object keys and does not enforce ascending inventory file order, despite the inventory contract/schema description. Reject duplicates and unsorted entries and add malformed-input tests."
+    },
+    {
+      "severity": "warning",
+      "file": "specs/039-standalone-speckit-flow-package/tasks.md",
+      "section": "T029-T044 manual acceptance and traceability",
+      "note": "Real-source assembly/preservation, package-only verification, consumer install/defaults/update, human docs review, boundary/scan sweeps and traceability remain unchecked. Fixture tests do not establish these results; report as unverified."
+    }
+  ]
+}
